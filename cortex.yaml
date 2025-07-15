@@ -1,0 +1,17 @@
+openapi: 3.0.0
+info:
+  title: r7-surcom-connectors
+  description: Surface Command Connectors source code Created by Shane Curtin via the GitHub Connector
+  x-cortex-git:
+    github:
+      alias: r7org
+      repository: rapid7/r7-surcom-connectors
+  x-cortex-tag: r7-surcom-connectors
+  x-cortex-type: service
+  x-cortex-domain-parents:
+    - tag: surface-command
+  x-cortex-groups:
+    - target:not-deployed
+    - strategy:cloud
+    - exposure:external-ship
+    
