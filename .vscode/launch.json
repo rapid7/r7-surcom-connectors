@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [{
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug: request_response_demo (Attach)",
+            "type": "debugpy",
+            "request": "attach",
+            "justMyCode": true,
+            "connect": {
+                "host": "localhost",
+                "port": 5678
+            },
+            "pathMappings": [
+                {
+                "localRoot": "${workspaceFolder}/connectors/rapid7/request_response_demo/functions",
+                "remoteRoot": "/app/functions"
+                }
+            ]
+        },
+    ]
+}

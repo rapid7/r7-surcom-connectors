@@ -64,9 +64,6 @@ venv.bak/
 # PyCharm
 .idea/
 
-# VS Code
-.vscode/
-
 # macOS
 .DS_Store
 .AppleDouble
