@@ -12,7 +12,7 @@ def test(
     Test the Connection for this Connector
     """
 
-    client = helpers.RequestResponseDemoClient(user_log, **settings)
+    client = helpers.RequestResponseDemoClient(user_log, settings)
 
     client.test_connection()
 
