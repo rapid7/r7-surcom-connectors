@@ -1,0 +1,78 @@
+
+id: request.response.demo
+name: Request Response Demo
+author: Rapid7
+version: 1.1.0
+notice: Copyright © 2025 Rapid7
+
+# One or two entries describing the changes in this version.
+# (Previous changelog is maintained by the publishing process)
+current_changes:
+  - Initial release
+
+# IDs of the Surface Command types that are part of this connector.
+# Type IDs must be unique across all Connectors,
+# by prefixing with a SnakeCased version of the Connector ID.
+types:
+  - RequestResponseDemoDevice
+  - RequestResponseDemoUser
+
+# The functions that this Connector will provide. Each Connector
+# should have a `test` function and at least one other function that
+# returns one or more types that are defined in the `types` section above.
+functions:
+  - id: test
+
+  - id: import_all
+    return_types:
+      - RequestResponseDemoDevice
+      - RequestResponseDemoUser
+
+# Settings that will be used to configure this Connector.
+settings:
+  url:
+    type: string
+    title: URL
+    example: https://example.com
+    default: https://reqres.in
+
+  api_key:
+    type: string
+    title: API Key
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+  page_limit:
+    type: integer
+    title: Page Limit
+    description: Maximum number of items to return per page
+    enum:
+      - 2
+      - 4
+      - 6
+    default: 2
+
+  # This is an optional setting that can be used to control pagination.
+  total_pages:
+    type: integer
+    title: Total Pages
+    description: Total number of pages to retrieve
+    default: 1
+    nullable: true
+
+# The runtime platform for this connector.
+runtime: py311
+
+# Add any Python dependencies here that your Connector needs to run.
+# Each dependency should be pinned to a specific version.
+# python_dependencies:
+#  - "another_dependency==1.0.0"
+
+# The list of categories for this Connector in the Extension Library.
+categories:
+  - vulnerability_management
