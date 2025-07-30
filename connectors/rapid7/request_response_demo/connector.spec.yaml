@@ -61,7 +61,8 @@ settings:
   total_pages:
     type: integer
     title: Total Pages
-    description: Total number of pages to retrieve
+    description: >-
+      Total number of pages to retrieve. Set it to 0 to retrieve all pages.
     default: 1
     nullable: true
 
