@@ -1,0 +1,51 @@
+id: delinea.privilege.manager
+name: Delinea Privilege Manager (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+types:
+  - DelineaPrivilegeManagerAgent
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Delinea Privilege Manager Agents
+    description: Import Agents from Delinea Privilege Manager
+    return_types:
+      - DelineaPrivilegeManagerAgent
+
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: The base url used when logged into Delinea Privilege Manager
+    example: https://yourinstancename.privilegemanagercloud.com
+
+  client_id:
+    type: string
+    title: Client ID
+    description: The Client ID for the Delinea Privilege Manager API
+
+  client_secret:
+    type: string
+    title: Client Secret
+    description: The Client Secret for the Delinea Privilege Manager API
+    format: password
+
+  report_id:
+    type: string
+    title: Report ID
+    description: ID of the report to use when importing the Agents
+    example: 1ee525af-6203-48e2-843f-88221e2434ac
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - credential_management

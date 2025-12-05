@@ -1,0 +1,82 @@
+﻿id: solarwinds.orion
+name: SolarWinds Orion (Beta)
+author: Rapid7
+version: 0.3.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+current_changes:
+  - Improved connector setup instructions
+
+reference-schemas:
+  - url: https://solarwinds.github.io/OrionSDK/2024.4
+    file: refdocs/swagger.json
+
+types:
+  - SolarWindsOrionNode
+  - SolarWindsOrionAgent
+  - SolarWindsOrionApplication
+  - SolarWindsOrionApplicationTemplate
+
+functions:
+  - id: test
+  - id: import_all
+    title: SolarWinds Orion Agents, Nodes, and Applications
+    description: Imports all agents, nodes, applications and application templates from SolarWinds Orion
+    return_types:
+      - SolarWindsOrionNode
+      - SolarWindsOrionApplication
+      - SolarWindsOrionApplicationTemplate
+      - SolarWindsOrionAgent
+
+# Settings that will be used to configure this Connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    example: https://10.17.88.100:1774
+    description: The Base URL for the SolarWinds Orion API
+
+  username:
+    type: string
+    title: Username
+    example: admin
+    description: Username for the SolarWinds Orion API
+
+  password:
+    type: string
+    title: Password
+    format: password
+    description: Password for the SolarWinds Orion API
+
+  node_sub_type:
+    type: array
+    title: Node Type(s)
+    description: The types of nodes to import from SolarWinds Orion
+    items:
+      type: string
+      enum:
+        - Agent
+        - SNMP
+        - ICMP
+        - Other
+    default:
+      - Agent
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+# The runtime platform for this connector.
+runtime: py311
+
+# Add any Python dependencies here that your Connector needs to run.
+# Each dependency should be pinned to a specific version.
+python_dependencies:
+  - 'orionsdk==0.4.0'
+
+# The list of categories for this Connector in the Extension Library.
+categories:
+  - asset_management
+  - security_operations

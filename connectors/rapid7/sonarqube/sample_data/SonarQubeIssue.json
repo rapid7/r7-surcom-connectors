@@ -1,0 +1,1001 @@
+[
+  {
+    "key": "AZkEB4b0aeHR5jXm346n",
+    "rule": "secrets:S6687",
+    "severity": "BLOCKER",
+    "component": "user-git_Django-Projects:API/Employee/Employee/settings.py",
+    "project": "user-git_Django-Projects",
+    "line": 23,
+    "hash": "2a7e24621d46c65b39ab6dc69b913d31",
+    "textRange": {
+      "startLine": 23,
+      "endLine": 23,
+      "startOffset": 14,
+      "endOffset": 80
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Make sure this Django key gets revoked, changed, and removed from the code.",
+    "effort": "30min",
+    "debt": "30min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["cwe"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "VULNERABILITY",
+    "organization": "user-git",
+    "cleanCodeAttribute": "TRUSTWORTHY",
+    "cleanCodeAttributeCategory": "RESPONSIBLE",
+    "impacts": [
+      {
+        "softwareQuality": "SECURITY",
+        "severity": "BLOCKER"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4b6aeHR5jXm346p",
+    "rule": "python:S1542",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:API/Employee/emp_app/views.py",
+    "project": "user-git_Django-Projects",
+    "line": 8,
+    "hash": "6471d1158edf9a163c40f6aced360070",
+    "textRange": {
+      "startLine": 8,
+      "endLine": 8,
+      "startOffset": 4,
+      "endOffset": 11
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Rename function \"empList\" to match the regular expression ^[a-z_][a-z0-9_]*$.",
+    "effort": "10min",
+    "debt": "10min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["convention", "pep"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "IDENTIFIABLE",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4biaeHR5jXm346f",
+    "rule": "python:S125",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:API/flite_booking/deco.py",
+    "project": "user-git_Django-Projects",
+    "line": 1,
+    "hash": "79f606f3a94c884406fcced79a58dcc8",
+    "textRange": {
+      "startLine": 1,
+      "endLine": 1,
+      "startOffset": 0,
+      "endOffset": 48
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Remove this commented out code.",
+    "effort": "5min",
+    "debt": "5min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["unused"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4biaeHR5jXm346g",
+    "rule": "pythonbugs:S2589",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:API/flite_booking/deco.py",
+    "project": "user-git_Django-Projects",
+    "line": 8,
+    "hash": "d9d0cc714a0473983a92db3bab6921a3",
+    "textRange": {
+      "startLine": 8,
+      "endLine": 8,
+      "startOffset": 0,
+      "endOffset": 11
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Fix this condition that always evaluates to true.",
+    "effort": "10min",
+    "debt": "10min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["cwe", "redundant", "suspicious"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "LOGICAL",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4buaeHR5jXm346l",
+    "rule": "secrets:S6687",
+    "severity": "BLOCKER",
+    "component": "user-git_Django-Projects:API/flite_booking/flight_service/settings.py",
+    "project": "user-git_Django-Projects",
+    "line": 23,
+    "hash": "8dcc902b11ca577cf2049b69da28e334",
+    "textRange": {
+      "startLine": 23,
+      "endLine": 23,
+      "startOffset": 14,
+      "endOffset": 80
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Make sure this Django key gets revoked, changed, and removed from the code.",
+    "effort": "30min",
+    "debt": "30min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["cwe"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "VULNERABILITY",
+    "organization": "user-git",
+    "cleanCodeAttribute": "TRUSTWORTHY",
+    "cleanCodeAttributeCategory": "RESPONSIBLE",
+    "impacts": [
+      {
+        "softwareQuality": "SECURITY",
+        "severity": "BLOCKER"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4bLaeHR5jXm346Q",
+    "rule": "python:S101",
+    "severity": "MINOR",
+    "component": "user-git_Django-Projects:API/stu_pro/stu_app/models.py",
+    "project": "user-git_Django-Projects",
+    "line": 4,
+    "hash": "a0ff1bc99f4ccecb51ec740428f4268d",
+    "textRange": {
+      "startLine": 4,
+      "endLine": 4,
+      "startOffset": 6,
+      "endOffset": 17
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Rename class \"Stu_details\" to match the regular expression ^_?([A-Z_][a-zA-Z0-9]*|[a-z_][a-z0-9_]*)$.",
+    "effort": "5min",
+    "debt": "5min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["convention"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "IDENTIFIABLE",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4bRaeHR5jXm346R",
+    "rule": "python:S101",
+    "severity": "MINOR",
+    "component": "user-git_Django-Projects:API/stu_pro/stu_app/serializers.py",
+    "project": "user-git_Django-Projects",
+    "line": 4,
+    "hash": "7038e2d1ac1df4cfda9d296a83ebe4ae",
+    "textRange": {
+      "startLine": 4,
+      "endLine": 4,
+      "startOffset": 6,
+      "endOffset": 20
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Rename class \"Stu_serializer\" to match the regular expression ^_?([A-Z_][a-zA-Z0-9]*|[a-z_][a-z0-9_]*)$.",
+    "effort": "5min",
+    "debt": "5min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["convention"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "IDENTIFIABLE",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4bXaeHR5jXm346U",
+    "rule": "python:S1542",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:API/stu_pro/stu_app/views.py",
+    "project": "user-git_Django-Projects",
+    "line": 20,
+    "hash": "da7b1a157a606f2137885521bc8edc78",
+    "textRange": {
+      "startLine": 20,
+      "endLine": 20,
+      "startOffset": 4,
+      "endOffset": 12
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Rename function \"taskList\" to match the regular expression ^[a-z_][a-z0-9_]*$.",
+    "effort": "10min",
+    "debt": "10min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["convention", "pep"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "IDENTIFIABLE",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4bXaeHR5jXm346W",
+    "rule": "python:S1542",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:API/stu_pro/stu_app/views.py",
+    "project": "user-git_Django-Projects",
+    "line": 26,
+    "hash": "9e1967a5765ad95edcce3dc1ca94dcff",
+    "textRange": {
+      "startLine": 26,
+      "endLine": 26,
+      "startOffset": 4,
+      "endOffset": 14
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Rename function \"createTask\" to match the regular expression ^[a-z_][a-z0-9_]*$.",
+    "effort": "10min",
+    "debt": "10min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["convention", "pep"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "IDENTIFIABLE",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4bXaeHR5jXm346Y",
+    "rule": "python:S1542",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:API/stu_pro/stu_app/views.py",
+    "project": "user-git_Django-Projects",
+    "line": 33,
+    "hash": "9b1e2fc23bfbc3310abaab3f3b177059",
+    "textRange": {
+      "startLine": 33,
+      "endLine": 33,
+      "startOffset": 4,
+      "endOffset": 14
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Rename function \"updateTask\" to match the regular expression ^[a-z_][a-z0-9_]*$.",
+    "effort": "10min",
+    "debt": "10min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["convention", "pep"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "IDENTIFIABLE",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4bXaeHR5jXm346a",
+    "rule": "python:S1542",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:API/stu_pro/stu_app/views.py",
+    "project": "user-git_Django-Projects",
+    "line": 41,
+    "hash": "1782b20238e6fadc451daf7505e4e20e",
+    "textRange": {
+      "startLine": 41,
+      "endLine": 41,
+      "startOffset": 4,
+      "endOffset": 14
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Rename function \"taskDetail\" to match the regular expression ^[a-z_][a-z0-9_]*$.",
+    "effort": "10min",
+    "debt": "10min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["convention", "pep"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "IDENTIFIABLE",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4bXaeHR5jXm346c",
+    "rule": "python:S1542",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:API/stu_pro/stu_app/views.py",
+    "project": "user-git_Django-Projects",
+    "line": 47,
+    "hash": "b7a53d9a2ee28c2974bd2116ff518048",
+    "textRange": {
+      "startLine": 47,
+      "endLine": 47,
+      "startOffset": 4,
+      "endOffset": 14
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Rename function \"taskDelete\" to match the regular expression ^[a-z_][a-z0-9_]*$.",
+    "effort": "10min",
+    "debt": "10min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["convention", "pep"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "IDENTIFIABLE",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4bdaeHR5jXm346e",
+    "rule": "secrets:S6687",
+    "severity": "BLOCKER",
+    "component": "user-git_Django-Projects:API/stu_pro/stu_pro/settings.py",
+    "project": "user-git_Django-Projects",
+    "line": 23,
+    "hash": "932479d4bc5dcceec408703bb4797f13",
+    "textRange": {
+      "startLine": 23,
+      "endLine": 23,
+      "startOffset": 14,
+      "endOffset": 80
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Make sure this Django key gets revoked, changed, and removed from the code.",
+    "effort": "30min",
+    "debt": "30min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["cwe"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "VULNERABILITY",
+    "organization": "user-git",
+    "cleanCodeAttribute": "TRUSTWORTHY",
+    "cleanCodeAttributeCategory": "RESPONSIBLE",
+    "impacts": [
+      {
+        "softwareQuality": "SECURITY",
+        "severity": "BLOCKER"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4fraeHR5jXm348l",
+    "rule": "python:S2208",
+    "severity": "CRITICAL",
+    "component": "user-git_Django-Projects:Blog_2/blog_app/forms.py",
+    "project": "user-git_Django-Projects",
+    "line": 4,
+    "hash": "1e386ab626797bb2e291c3b94e02efe1",
+    "textRange": {
+      "startLine": 4,
+      "endLine": 4,
+      "startOffset": 0,
+      "endOffset": 21
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Import only needed names or import the module and then use its members.",
+    "effort": "5min",
+    "debt": "5min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["bad-practice", "pitfall"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4fraeHR5jXm348m",
+    "rule": "python:S6559",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:Blog_2/blog_app/forms.py",
+    "project": "user-git_Django-Projects",
+    "line": 9,
+    "hash": "f714bd8a34ff7b7eb4341148dd0b99fc",
+    "textRange": {
+      "startLine": 9,
+      "endLine": 9,
+      "startOffset": 8,
+      "endOffset": 26
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Set the fields of this form explicitly instead of using \"__all__\".",
+    "effort": "5min",
+    "debt": "5min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["django"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4fbaeHR5jXm348b",
+    "rule": "Web:AvoidCommentedOutCodeCheck",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:Blog_2/blog_app/templates/base.html",
+    "project": "user-git_Django-Projects",
+    "line": 56,
+    "hash": "c11bb7eec8b60626961f63cda07648ac",
+    "textRange": {
+      "startLine": 56,
+      "endLine": 56,
+      "startOffset": 0,
+      "endOffset": 8
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Remove this commented out code.",
+    "effort": "5min",
+    "debt": "5min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["unused"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4fhaeHR5jXm348c",
+    "rule": "Web:UnsupportedTagsInHtml5Check",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:Blog_2/blog_app/templates/register.html",
+    "project": "user-git_Django-Projects",
+    "line": 9,
+    "hash": "59e093c330679d73dca0606543c32755",
+    "textRange": {
+      "startLine": 9,
+      "endLine": 9,
+      "startOffset": 7,
+      "endOffset": 15
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Remove this deprecated \"center\" element.",
+    "effort": "20min",
+    "debt": "20min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["html5", "obsolete", "user-experience"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "BUG",
+    "organization": "user-git",
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "RELIABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4fmaeHR5jXm348d",
+    "rule": "python:S2208",
+    "severity": "CRITICAL",
+    "component": "user-git_Django-Projects:Blog_2/blog_app/views.py",
+    "project": "user-git_Django-Projects",
+    "line": 5,
+    "hash": "b21229455557e8e26f83c15d80341288",
+    "textRange": {
+      "startLine": 5,
+      "endLine": 5,
+      "startOffset": 0,
+      "endOffset": 20
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Import only needed names or import the module and then use its members.",
+    "effort": "5min",
+    "debt": "5min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["bad-practice", "pitfall"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4fmaeHR5jXm348h",
+    "rule": "python:S1542",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:Blog_2/blog_app/views.py",
+    "project": "user-git_Django-Projects",
+    "line": 29,
+    "hash": "f8d4f0364b9d42ebe530ff8e4f81cd72",
+    "textRange": {
+      "startLine": 29,
+      "endLine": 29,
+      "startOffset": 4,
+      "endOffset": 9
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Rename function \"logIn\" to match the regular expression ^[a-z_][a-z0-9_]*$.",
+    "effort": "10min",
+    "debt": "10min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["convention", "pep"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "IDENTIFIABLE",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4fmaeHR5jXm348i",
+    "rule": "python:S125",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:Blog_2/blog_app/views.py",
+    "project": "user-git_Django-Projects",
+    "line": 31,
+    "hash": "7f4cebbbca0461bce53b7603d2a05000",
+    "textRange": {
+      "startLine": 31,
+      "endLine": 31,
+      "startOffset": 0,
+      "endOffset": 24
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Remove this commented out code.",
+    "effort": "5min",
+    "debt": "5min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["unused"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4fmaeHR5jXm348j",
+    "rule": "python:S125",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:Blog_2/blog_app/views.py",
+    "project": "user-git_Django-Projects",
+    "line": 57,
+    "hash": "e061b2069bdc74d25d85a67b67da2a27",
+    "textRange": {
+      "startLine": 57,
+      "endLine": 57,
+      "startOffset": 0,
+      "endOffset": 21
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Remove this commented out code.",
+    "effort": "5min",
+    "debt": "5min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["unused"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4fxaeHR5jXm348o",
+    "rule": "secrets:S6687",
+    "severity": "BLOCKER",
+    "component": "user-git_Django-Projects:Blog_2/blog_project/settings.py",
+    "project": "user-git_Django-Projects",
+    "line": 23,
+    "hash": "689a3cff16d943f35fef020c29e80ce2",
+    "textRange": {
+      "startLine": 23,
+      "endLine": 23,
+      "startOffset": 14,
+      "endOffset": 80
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Make sure this Django key gets revoked, changed, and removed from the code.",
+    "effort": "30min",
+    "debt": "30min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["cwe"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "VULNERABILITY",
+    "organization": "user-git",
+    "cleanCodeAttribute": "TRUSTWORTHY",
+    "cleanCodeAttributeCategory": "RESPONSIBLE",
+    "impacts": [
+      {
+        "softwareQuality": "SECURITY",
+        "severity": "BLOCKER"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4fTaeHR5jXm348a",
+    "rule": "secrets:S6687",
+    "severity": "BLOCKER",
+    "component": "user-git_Django-Projects:Event_Organizer/Event_Organizer/settings.py",
+    "project": "user-git_Django-Projects",
+    "line": 25,
+    "hash": "b4679916384ffe6e39c8d6d2f6a4f4c9",
+    "textRange": {
+      "startLine": 25,
+      "endLine": 25,
+      "startOffset": 14,
+      "endOffset": 80
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Make sure this Django key gets revoked, changed, and removed from the code.",
+    "effort": "30min",
+    "debt": "30min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["cwe"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "VULNERABILITY",
+    "organization": "user-git",
+    "cleanCodeAttribute": "TRUSTWORTHY",
+    "cleanCodeAttributeCategory": "RESPONSIBLE",
+    "impacts": [
+      {
+        "softwareQuality": "SECURITY",
+        "severity": "BLOCKER"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4ewaeHR5jXm348B",
+    "rule": "python:S101",
+    "severity": "MINOR",
+    "component": "user-git_Django-Projects:Event_Organizer/event_app/forms.py",
+    "project": "user-git_Django-Projects",
+    "line": 6,
+    "hash": "2febbdf7f73ab96490e81c2fc546cbdf",
+    "textRange": {
+      "startLine": 6,
+      "endLine": 6,
+      "startOffset": 6,
+      "endOffset": 14
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Rename class \"bookForm\" to match the regular expression ^_?([A-Z_][a-zA-Z0-9]*|[a-z_][a-z0-9_]*)$.",
+    "effort": "5min",
+    "debt": "5min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["convention"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "IDENTIFIABLE",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4fNaeHR5jXm348X",
+    "rule": "css:S125",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:Event_Organizer/event_app/static/css/style.css",
+    "project": "user-git_Django-Projects",
+    "line": 12,
+    "hash": "9ebd1b1ecc9189440a592686720b514f",
+    "textRange": {
+      "startLine": 12,
+      "endLine": 12,
+      "startOffset": 0,
+      "endOffset": 24
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Remove this commented out code.",
+    "effort": "5min",
+    "debt": "5min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["unused"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4fNaeHR5jXm348Y",
+    "rule": "css:S125",
+    "severity": "MAJOR",
+    "component": "user-git_Django-Projects:Event_Organizer/event_app/static/css/style.css",
+    "project": "user-git_Django-Projects",
+    "line": 31,
+    "hash": "b820cd1a4410f6fa3b25e745b3e8f219",
+    "textRange": {
+      "startLine": 31,
+      "endLine": 31,
+      "startOffset": 0,
+      "endOffset": 84
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Remove this commented out code.",
+    "effort": "5min",
+    "debt": "5min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["unused"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "CODE_SMELL",
+    "organization": "user-git",
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  },
+  {
+    "key": "AZkEB4ekaeHR5jXm3471",
+    "rule": "Web:MouseEventWithoutKeyboardEquivalentCheck",
+    "severity": "MINOR",
+    "component": "user-git_Django-Projects:Event_Organizer/event_app/templates/base.html",
+    "project": "user-git_Django-Projects",
+    "line": 68,
+    "hash": "c966273979e2bccf57399d2ec9572763",
+    "textRange": {
+      "startLine": 68,
+      "endLine": 69,
+      "startOffset": 10,
+      "endOffset": 34
+    },
+    "flows": [],
+    "status": "OPEN",
+    "message": "Add a 'onKeyPress|onKeyDown|onKeyUp' attribute to this <a> tag.",
+    "effort": "5min",
+    "debt": "5min",
+    "assignee": "user12@github",
+    "author": "user12@example.com",
+    "tags": ["accessibility"],
+    "creationDate": "2022-08-19T18:09:32+0000",
+    "updateDate": "2025-09-01T06:46:30+0000",
+    "type": "BUG",
+    "organization": "user-git",
+    "cleanCodeAttribute": "COMPLETE",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "RELIABILITY",
+        "severity": "LOW"
+      }
+    ],
+    "issueStatus": "OPEN",
+    "projectName": "Django-Projects"
+  }
+]

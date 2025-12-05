@@ -1,0 +1,115 @@
+id: asimily
+name: Asimily Risk Management (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2025 Rapid7, All rights reserved.
+
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+types:
+  - AsimilyDevice
+  - AsimilyVulnerability
+  - AsimilyVulnerabilityFinding
+  - AsimilyAnomaly
+  - AsimilyAnomalyFinding
+  - AsimilyVulnerabilitySeverityEnum
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Asimily Assets, Anomalies and Vulnerabilities
+    description: Import all assets, anomalies, vulnerabilities and findings from Asimily.
+    return_types:
+      - AsimilyDevice
+      - AsimilyVulnerability
+      - AsimilyVulnerabilityFinding
+      - AsimilyAnomaly
+      - AsimilyAnomalyFinding
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: The Base URL is the address of your Asimily UI
+    example: https://customer-portal.asimily.com
+
+  username:
+    type: string
+    title: Username
+    description: The username for Asimily account used to authenticate API
+
+  password:
+    type: string
+    title: Password
+    format: password
+    description: The password for Asimily account used to authenticate API.
+
+  look_back_days:
+    type: integer
+    title: Assets Look Back Days
+    description: Number of days to look back for Assets
+    default: 30
+
+  device_families:
+    type: array
+    title: Device Families
+    description: >-
+      Select which device families to import. Only findings matching the selected device families will be included.
+    items:
+      type: string
+      enum:
+        - Imaging Devices
+        - IoT Devices
+        - IT Systems
+        - Laboratory Devices
+        - Medical Devices
+        - Mobile Devices
+        - OT Devices
+        - Servers
+        - Workstations
+    default:
+      - IoT Devices
+      - Servers
+      - Workstations
+
+  device_in_use:
+    type: boolean
+    title: Device Currently in Use?
+    description: >-
+      If enabled, only devices currently in use will be imported. if disabled, all devices will be imported.
+    default: false
+
+  cve_score:
+    type: integer
+    title: Minimum CVE Score
+    description: Minimum vulnerability and findings score to provide
+    minimum: 0
+    maximum: 10
+    default: 8
+
+  anomaly_severity:
+    title: Minimum Anomaly Severity
+    type: string
+    description: >-
+      Select the minimum severity levels of anomalies to import. Only findings with a severity equal to or higher than the selected values will be included.
+    enum:
+      - LOW
+      - MEDIUM
+      - HIGH
+    default: MEDIUM
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - vulnerability_management
+
+depends-on:
+  - mitre.attack.app

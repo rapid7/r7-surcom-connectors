@@ -1,0 +1,47 @@
+x-samos-type-name: RequestResponseDemoDevice
+x-samos-namespace: request.response.demo
+
+title: Request Response Demo Device
+description: A Demo Device
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: id
+  - name: name
+  - name: year
+  - name: color
+  - name: pantone_value
+
+x-samos-detail:
+  - name: id
+  - name: name
+  - name: year
+  - name: color
+  - name: pantone_value
+
+properties:
+  id:
+    type: string
+    title: Id
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  name:
+    type: string
+    title: Name
+  year:
+    type: integer
+    title: Year
+  color:
+    type: string
+    title: Color
+  pantone_value:
+    type: string
+    title: Pantone Value

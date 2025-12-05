@@ -1,0 +1,639 @@
+[
+  {
+    "key": "secrets:S6687",
+    "repo": "secrets",
+    "name": "Django secret keys should not be disclosed",
+    "createdAt": "2023-12-13T13:47:21+0000",
+    "severity": "BLOCKER",
+    "status": "READY",
+    "isTemplate": false,
+    "tags": [],
+    "sysTags": ["cwe"],
+    "lang": "secrets",
+    "langName": "Secrets",
+    "params": [],
+    "defaultDebtRemFnType": "CONSTANT_ISSUE",
+    "debtRemFnType": "CONSTANT_ISSUE",
+    "type": "VULNERABILITY",
+    "defaultRemFnType": "CONSTANT_ISSUE",
+    "defaultRemFnBaseEffort": "30min",
+    "remFnType": "CONSTANT_ISSUE",
+    "remFnBaseEffort": "30min",
+    "remFnOverloaded": false,
+    "scope": "ALL",
+    "isExternal": false,
+    "descriptionSections": [
+      {
+        "key": "resources",
+        "content": "<h3>Standards</h3>\n<ul>\n  <li> OWASP - <a href=\"https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/\">Top 10 2021 Category A7 - Identification and\n  Authentication Failures</a> </li>\n  <li> OWASP - <a href=\"https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure\">Top 10 2017 Category A3 - Sensitive Data\n  Exposure</a> </li>\n  <li> CWE - <a href=\"https://cwe.mitre.org/data/definitions/798\">CWE-798 - Use of Hard-coded Credentials</a> </li>\n  <li> CWE - <a href=\"https://cwe.mitre.org/data/definitions/259\">CWE-259 - Use of Hard-coded Password</a> </li>\n  <li> STIG Viewer - <a href=\"https://stigviewer.com/stigs/application_security_and_development/2024-12-06/finding/V-222642\">Application Security and\n  Development: V-222642</a> - The application must not contain embedded authentication data. </li>\n</ul>\n<h3>Documentation</h3>\n<ul>\n  <li> <a href=\"https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-SECRET_KEY\">Django documentation</a> - Settings - SECRET_KEY </li>\n</ul>"
+      },
+      {
+        "key": "how_to_fix",
+        "content": "<p><strong>Revoke the secret</strong></p>\n<p>Revoke any leaked secrets and remove them from the application source code.</p>\n<p>Before revoking the secret, ensure that no other applications or processes are using it. Other usages of the secret will also be impacted when the\nsecret is revoked.</p>\n<p>In Django, changing the secret value is sufficient to invalidate any data that it protected. It is important to not add the revoked secret to the\n<code>SECRET_KEY_FALLBACKS</code> list. Doing so would not prevent previously protected data from being used.</p>\n<p><strong>Use a secret vault</strong></p>\n<p>A secret vault should be used to generate and store the new secret. This will ensure the secret\u2019s security and prevent any further unexpected\ndisclosure.</p>\n<p>Depending on the development platform and the leaked secret type, multiple solutions are currently available.</p>\n\n<h4>Noncompliant code example</h4>\n<pre data-diff-id=\"1\" data-diff-type=\"noncompliant\">\nSECRET_KEY = 'r&amp;lvybzry1*k+qq)=x-!=0yd5l5#1gxzk!82@ru25*ntos3_9^'\n</pre>\n<h4>Compliant solution</h4>\n<pre data-diff-id=\"1\" data-diff-type=\"compliant\">\nimport os\n\nSECRET_KEY = os.environ[\"SECRET_KEY\"]\n</pre>"
+      },
+      {
+        "key": "root_cause",
+        "content": "<p>In most cases, trust boundaries are violated when a secret is exposed in a source code repository or an uncontrolled deployment environment.\nUnintended people who don\u2019t need to know the secret might get access to it. They might then be able to use it to gain unwanted access to associated\nservices or resources.</p>\n<p>The trust issue can be more or less severe depending on the people\u2019s role and entitlement.</p>\n<h3>What is the potential impact?</h3>\n<p>If a Django secret key leaks to an unintended audience, it can have serious security implications for the corresponding application. The secret key\nis used to sign cookies and other sensitive data so that an attacker could potentially use it to perform malicious actions.</p>\n<p>For example, an attacker could use the secret key to create their own cookies that appear to be legitimate, allowing them to bypass authentication\nand gain access to sensitive data or functionality.</p>\n<p>In the worst-case scenario, an attacker could be able to execute arbitrary code on the application and take over its hosting server.</p>"
+      },
+      {
+        "key": "introduction",
+        "content": "<p>Secret leaks often occur when a sensitive piece of authentication data is stored with the source code of an application. Considering the source\ncode is intended to be deployed across multiple assets, including source code repositories or application hosting servers, the secrets might get\nexposed to an unintended audience.</p>"
+      }
+    ],
+    "x_solution": "<p><strong>Revoke the secret</strong></p>\n<p>Revoke any leaked secrets and remove them from the application source code.</p>\n<p>Before revoking the secret, ensure that no other applications or processes are using it. Other usages of the secret will also be impacted when the\nsecret is revoked.</p>\n<p>In Django, changing the secret value is sufficient to invalidate any data that it protected. It is important to not add the revoked secret to the\n<code>SECRET_KEY_FALLBACKS</code> list. Doing so would not prevent previously protected data from being used.</p>\n<p><strong>Use a secret vault</strong></p>\n<p>A secret vault should be used to generate and store the new secret. This will ensure the secret\u2019s security and prevent any further unexpected\ndisclosure.</p>\n<p>Depending on the development platform and the leaked secret type, multiple solutions are currently available.</p>\n\n<h4>Noncompliant code example</h4>\n<pre data-diff-id=\"1\" data-diff-type=\"noncompliant\">\nSECRET_KEY = 'r&amp;lvybzry1*k+qq)=x-!=0yd5l5#1gxzk!82@ru25*ntos3_9^'\n</pre>\n<h4>Compliant solution</h4>\n<pre data-diff-id=\"1\" data-diff-type=\"compliant\">\nimport os\n\nSECRET_KEY = os.environ[\"SECRET_KEY\"]\n</pre>",
+    "educationPrinciples": [],
+    "updatedAt": "2025-06-10T10:04:57+0000",
+    "cleanCodeAttribute": "TRUSTWORTHY",
+    "cleanCodeAttributeCategory": "RESPONSIBLE",
+    "impacts": [
+      {
+        "softwareQuality": "SECURITY",
+        "severity": "BLOCKER"
+      }
+    ]
+  },
+  {
+    "key": "python:S1542",
+    "repo": "python",
+    "name": "Function names should comply with a naming convention",
+    "createdAt": "2023-12-13T13:47:11+0000",
+    "severity": "MAJOR",
+    "status": "READY",
+    "isTemplate": false,
+    "tags": [],
+    "sysTags": ["convention", "pep"],
+    "lang": "py",
+    "langName": "Python",
+    "params": [
+      {
+        "key": "format",
+        "htmlDesc": "Regular expression used to check the names against.",
+        "defaultValue": "^[a-z_][a-z0-9_]*$",
+        "type": "STRING"
+      }
+    ],
+    "defaultDebtRemFnType": "CONSTANT_ISSUE",
+    "debtRemFnType": "CONSTANT_ISSUE",
+    "type": "CODE_SMELL",
+    "defaultRemFnType": "CONSTANT_ISSUE",
+    "defaultRemFnBaseEffort": "10min",
+    "remFnType": "CONSTANT_ISSUE",
+    "remFnBaseEffort": "10min",
+    "remFnOverloaded": false,
+    "scope": "MAIN",
+    "isExternal": false,
+    "descriptionSections": [
+      {
+        "key": "root_cause",
+        "content": "<p>Shared coding conventions allow teams to collaborate efficiently. This rule checks that all function names match a provided regular expression.</p>\n<p>According to PEP8, function names should be lowercase, with words separated by underscores as necessary to improve readability. This convention is\nknown as \"snake_case.\" For example: <code>calculate_area</code>, <code>print_hello</code>, <code>process_data</code></p>\n<p>To fix this, respect the naming convention for the function. The default naming convention is snake case, as recommended by PEP8. Other naming\nconventions can be defined through the <code>format</code> rule parameter.</p>\n\n<h4>Noncompliant code example</h4>\n<p>With the default provided regular expression: <code>^[a-z_][a-z0-9_]*$</code></p>\n<pre data-diff-id=\"1\" data-diff-type=\"noncompliant\">\ndef MyFunction(a,b):\n    ...\n</pre>\n<h4>Compliant solution</h4>\n<pre data-diff-id=\"1\" data-diff-type=\"compliant\">\ndef my_function(a,b):\n    ...\n</pre>"
+      },
+      {
+        "key": "introduction",
+        "content": "<p>This rule raises an issue when a function name doesn\u2019t respect the naming convention.</p>"
+      },
+      {
+        "key": "resources",
+        "content": "<h3>Documentation</h3>\n<ul>\n  <li> PEP8 - <a href=\"https://peps.python.org/pep-0008/#function-and-variable-names\">Function and Variable Names</a> </li>\n</ul>"
+      }
+    ],
+    "educationPrinciples": [],
+    "updatedAt": "2025-01-30T11:21:22+0000",
+    "cleanCodeAttribute": "IDENTIFIABLE",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ]
+  },
+  {
+    "key": "python:S125",
+    "repo": "python",
+    "name": "Sections of code should not be commented out",
+    "createdAt": "2023-12-13T13:47:11+0000",
+    "severity": "MAJOR",
+    "status": "READY",
+    "isTemplate": false,
+    "tags": [],
+    "sysTags": ["unused"],
+    "lang": "py",
+    "langName": "Python",
+    "params": [
+      {
+        "key": "exception",
+        "htmlDesc": "Regular expression used to ignore commented out code. Only a full match is excluded.",
+        "defaultValue": "(fmt|py\\w+):.*",
+        "type": "STRING"
+      }
+    ],
+    "defaultDebtRemFnType": "CONSTANT_ISSUE",
+    "debtRemFnType": "CONSTANT_ISSUE",
+    "type": "CODE_SMELL",
+    "defaultRemFnType": "CONSTANT_ISSUE",
+    "defaultRemFnBaseEffort": "5min",
+    "remFnType": "CONSTANT_ISSUE",
+    "remFnBaseEffort": "5min",
+    "remFnOverloaded": false,
+    "scope": "ALL",
+    "isExternal": false,
+    "descriptionSections": [
+      {
+        "key": "root_cause",
+        "content": "<p>Commented-out code distracts the focus from the actual executed code. It creates a noise that increases maintenance code. And because it is never\nexecuted, it quickly becomes out of date and invalid.</p>\n<p>Commented-out code should be deleted and can be retrieved from source control history if required.</p>"
+      }
+    ],
+    "educationPrinciples": [],
+    "updatedAt": "2024-10-31T11:28:25+0000",
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ]
+  },
+  {
+    "key": "pythonbugs:S2589",
+    "repo": "pythonbugs",
+    "name": "Boolean expressions should not be gratuitous",
+    "createdAt": "2024-01-19T13:58:52+0000",
+    "severity": "MAJOR",
+    "status": "READY",
+    "isTemplate": false,
+    "tags": [],
+    "sysTags": ["cwe", "suspicious", "redundant"],
+    "lang": "py",
+    "langName": "Python",
+    "params": [],
+    "defaultDebtRemFnType": "CONSTANT_ISSUE",
+    "debtRemFnType": "CONSTANT_ISSUE",
+    "type": "CODE_SMELL",
+    "defaultRemFnType": "CONSTANT_ISSUE",
+    "defaultRemFnBaseEffort": "10min",
+    "remFnType": "CONSTANT_ISSUE",
+    "remFnBaseEffort": "10min",
+    "remFnOverloaded": false,
+    "scope": "ALL",
+    "isExternal": false,
+    "descriptionSections": [
+      {
+        "key": "root_cause",
+        "content": "<p>Control flow constructs like <code>if</code>-statements allow the programmer to direct the flow of a program depending on a boolean expression.\nHowever, if the condition is always true or always false, only one of the branches will ever be executed. In that case, the control flow construct and\nthe condition no longer serve a purpose; they become <em>gratuitous</em>.</p>\n<h3>What is the potential impact?</h3>\n<p>The presence of gratuitous conditions can indicate a logical error. For example, the programmer <em>intended</em> to have the program branch into\ndifferent paths but made a mistake when formulating the branching condition. In this case, this issue might result in a bug and thus affect the\nreliability of the application. For instance, it might lead to the computation of incorrect results.</p>\n<p>Additionally, gratuitous conditions and control flow constructs introduce unnecessary complexity. The source code becomes harder to understand, and\nthus, the application becomes more difficult to maintain.</p>"
+      },
+      {
+        "key": "resources",
+        "content": "<h3>Articles &amp; blog posts</h3>\n<ul>\n  <li> CWE - <a href=\"https://cwe.mitre.org/data/definitions/571\">CWE-571 - Expression is Always True</a> </li>\n  <li> CWE - <a href=\"https://cwe.mitre.org/data/definitions/570\">CWE-570 - Expression is Always False</a> </li>\n</ul>"
+      },
+      {
+        "key": "introduction",
+        "content": "<p>Gratuitous boolean expressions are conditions that do not change the evaluation of a program. This issue can indicate logical errors and affect the\ncorrectness of an application, as well as its maintainability.</p>"
+      },
+      {
+        "key": "how_to_fix",
+        "content": "<p>Gratuitous boolean expressions are suspicious and should be carefully removed from the code.</p>\n<p>First, the boolean expression in question should be closely inspected for logical errors. If a mistake was made, it can be corrected so the\ncondition is no longer gratuitous.</p>\n<p>If it becomes apparent that the condition is actually unnecessary, it can be removed. The associated control flow construct (e.g., the\n<code>if</code>-statement containing the condition) will be adapted or even removed, leaving only the necessary branches.</p>\n\n<h4>Noncompliant code example</h4>\n<pre data-diff-id=\"1\" data-diff-type=\"noncompliant\">\ndef f(b):\n    a = True\n    if a:  # Noncompliant\n        do_something()\n\n    if a and b:  # Noncompliant; \"a\" is always \"True\"\n        do_something_else()\n</pre>\n<h4>Compliant solution</h4>\n<pre data-diff-id=\"1\" data-diff-type=\"compliant\">\ndef f(b):\n    do_something()\n\n    if b:\n        do_something_else()\n</pre>\n<h4>Noncompliant code example</h4>\n<pre data-diff-id=\"2\" data-diff-type=\"noncompliant\">\ndef f(a, b):\n    if a is None and b is None:\n        do_something()\n    elif a is not None or b is not None: # Noncompliant\n        do_something_else()\n</pre>\n<h4>Compliant solution</h4>\n<pre data-diff-id=\"2\" data-diff-type=\"compliant\">\ndef f(a, b):\n    if a is None and b is None:\n        do_something()\n    else:\n        do_something_else()\n</pre>\n<h3>How does this work?</h3>\n<p>In the first example, the gratuitous condition <code>a</code> is simply <code>True</code>. Hence, the first <code>if</code>-statement can be\nremoved, as <code>do_something()</code> is always executed. Additionally, the second <code>if</code>-statement can be simplified since the execution\nof <code>do_something_else()</code> actually only depends on <code>b</code>.</p>\n<p>In the second example, the condition on the <code>elif</code>-branch is gratuitous because it is a logical consequence of a condition that already\nhas been confirmed to hold: The condition of the <code>elif</code>-branch is only evaluated if the condition on the <code>if</code>-branch evaluates\nto <code>False</code>. If that condition is <code>False</code>, then as a consequence, at least one of <code>a</code> or <code>b</code> is not\n<code>None</code>. This is exactly the circumstance that is formalized by the second condition. Thus it always evaluates to <code>True</code> when\nchecked. Therefore, the <code>elif</code>-branch can be simplified to an <code>else</code>-branch without a condition.</p>"
+      }
+    ],
+    "x_solution": "<p>Gratuitous boolean expressions are suspicious and should be carefully removed from the code.</p>\n<p>First, the boolean expression in question should be closely inspected for logical errors. If a mistake was made, it can be corrected so the\ncondition is no longer gratuitous.</p>\n<p>If it becomes apparent that the condition is actually unnecessary, it can be removed. The associated control flow construct (e.g., the\n<code>if</code>-statement containing the condition) will be adapted or even removed, leaving only the necessary branches.</p>\n\n<h4>Noncompliant code example</h4>\n<pre data-diff-id=\"1\" data-diff-type=\"noncompliant\">\ndef f(b):\n    a = True\n    if a:  # Noncompliant\n        do_something()\n\n    if a and b:  # Noncompliant; \"a\" is always \"True\"\n        do_something_else()\n</pre>\n<h4>Compliant solution</h4>\n<pre data-diff-id=\"1\" data-diff-type=\"compliant\">\ndef f(b):\n    do_something()\n\n    if b:\n        do_something_else()\n</pre>\n<h4>Noncompliant code example</h4>\n<pre data-diff-id=\"2\" data-diff-type=\"noncompliant\">\ndef f(a, b):\n    if a is None and b is None:\n        do_something()\n    elif a is not None or b is not None: # Noncompliant\n        do_something_else()\n</pre>\n<h4>Compliant solution</h4>\n<pre data-diff-id=\"2\" data-diff-type=\"compliant\">\ndef f(a, b):\n    if a is None and b is None:\n        do_something()\n    else:\n        do_something_else()\n</pre>\n<h3>How does this work?</h3>\n<p>In the first example, the gratuitous condition <code>a</code> is simply <code>True</code>. Hence, the first <code>if</code>-statement can be\nremoved, as <code>do_something()</code> is always executed. Additionally, the second <code>if</code>-statement can be simplified since the execution\nof <code>do_something_else()</code> actually only depends on <code>b</code>.</p>\n<p>In the second example, the condition on the <code>elif</code>-branch is gratuitous because it is a logical consequence of a condition that already\nhas been confirmed to hold: The condition of the <code>elif</code>-branch is only evaluated if the condition on the <code>if</code>-branch evaluates\nto <code>False</code>. If that condition is <code>False</code>, then as a consequence, at least one of <code>a</code> or <code>b</code> is not\n<code>None</code>. This is exactly the circumstance that is formalized by the second condition. Thus it always evaluates to <code>True</code> when\nchecked. Therefore, the <code>elif</code>-branch can be simplified to an <code>else</code>-branch without a condition.</p>",
+    "educationPrinciples": [],
+    "updatedAt": "2024-10-31T11:28:45+0000",
+    "cleanCodeAttribute": "LOGICAL",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ]
+  },
+  {
+    "key": "secrets:S6687",
+    "repo": "secrets",
+    "name": "Django secret keys should not be disclosed",
+    "createdAt": "2023-12-13T13:47:21+0000",
+    "severity": "BLOCKER",
+    "status": "READY",
+    "isTemplate": false,
+    "tags": [],
+    "sysTags": ["cwe"],
+    "lang": "secrets",
+    "langName": "Secrets",
+    "params": [],
+    "defaultDebtRemFnType": "CONSTANT_ISSUE",
+    "debtRemFnType": "CONSTANT_ISSUE",
+    "type": "VULNERABILITY",
+    "defaultRemFnType": "CONSTANT_ISSUE",
+    "defaultRemFnBaseEffort": "30min",
+    "remFnType": "CONSTANT_ISSUE",
+    "remFnBaseEffort": "30min",
+    "remFnOverloaded": false,
+    "scope": "ALL",
+    "isExternal": false,
+    "descriptionSections": [
+      {
+        "key": "resources",
+        "content": "<h3>Standards</h3>\n<ul>\n  <li> OWASP - <a href=\"https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/\">Top 10 2021 Category A7 - Identification and\n  Authentication Failures</a> </li>\n  <li> OWASP - <a href=\"https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure\">Top 10 2017 Category A3 - Sensitive Data\n  Exposure</a> </li>\n  <li> CWE - <a href=\"https://cwe.mitre.org/data/definitions/798\">CWE-798 - Use of Hard-coded Credentials</a> </li>\n  <li> CWE - <a href=\"https://cwe.mitre.org/data/definitions/259\">CWE-259 - Use of Hard-coded Password</a> </li>\n  <li> STIG Viewer - <a href=\"https://stigviewer.com/stigs/application_security_and_development/2024-12-06/finding/V-222642\">Application Security and\n  Development: V-222642</a> - The application must not contain embedded authentication data. </li>\n</ul>\n<h3>Documentation</h3>\n<ul>\n  <li> <a href=\"https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-SECRET_KEY\">Django documentation</a> - Settings - SECRET_KEY </li>\n</ul>"
+      },
+      {
+        "key": "how_to_fix",
+        "content": "<p><strong>Revoke the secret</strong></p>\n<p>Revoke any leaked secrets and remove them from the application source code.</p>\n<p>Before revoking the secret, ensure that no other applications or processes are using it. Other usages of the secret will also be impacted when the\nsecret is revoked.</p>\n<p>In Django, changing the secret value is sufficient to invalidate any data that it protected. It is important to not add the revoked secret to the\n<code>SECRET_KEY_FALLBACKS</code> list. Doing so would not prevent previously protected data from being used.</p>\n<p><strong>Use a secret vault</strong></p>\n<p>A secret vault should be used to generate and store the new secret. This will ensure the secret\u2019s security and prevent any further unexpected\ndisclosure.</p>\n<p>Depending on the development platform and the leaked secret type, multiple solutions are currently available.</p>\n\n<h4>Noncompliant code example</h4>\n<pre data-diff-id=\"1\" data-diff-type=\"noncompliant\">\nSECRET_KEY = 'r&amp;lvybzry1*k+qq)=x-!=0yd5l5#1gxzk!82@ru25*ntos3_9^'\n</pre>\n<h4>Compliant solution</h4>\n<pre data-diff-id=\"1\" data-diff-type=\"compliant\">\nimport os\n\nSECRET_KEY = os.environ[\"SECRET_KEY\"]\n</pre>"
+      },
+      {
+        "key": "root_cause",
+        "content": "<p>In most cases, trust boundaries are violated when a secret is exposed in a source code repository or an uncontrolled deployment environment.\nUnintended people who don\u2019t need to know the secret might get access to it. They might then be able to use it to gain unwanted access to associated\nservices or resources.</p>\n<p>The trust issue can be more or less severe depending on the people\u2019s role and entitlement.</p>\n<h3>What is the potential impact?</h3>\n<p>If a Django secret key leaks to an unintended audience, it can have serious security implications for the corresponding application. The secret key\nis used to sign cookies and other sensitive data so that an attacker could potentially use it to perform malicious actions.</p>\n<p>For example, an attacker could use the secret key to create their own cookies that appear to be legitimate, allowing them to bypass authentication\nand gain access to sensitive data or functionality.</p>\n<p>In the worst-case scenario, an attacker could be able to execute arbitrary code on the application and take over its hosting server.</p>"
+      },
+      {
+        "key": "introduction",
+        "content": "<p>Secret leaks often occur when a sensitive piece of authentication data is stored with the source code of an application. Considering the source\ncode is intended to be deployed across multiple assets, including source code repositories or application hosting servers, the secrets might get\nexposed to an unintended audience.</p>"
+      }
+    ],
+    "x_solution": "<p><strong>Revoke the secret</strong></p>\n<p>Revoke any leaked secrets and remove them from the application source code.</p>\n<p>Before revoking the secret, ensure that no other applications or processes are using it. Other usages of the secret will also be impacted when the\nsecret is revoked.</p>\n<p>In Django, changing the secret value is sufficient to invalidate any data that it protected. It is important to not add the revoked secret to the\n<code>SECRET_KEY_FALLBACKS</code> list. Doing so would not prevent previously protected data from being used.</p>\n<p><strong>Use a secret vault</strong></p>\n<p>A secret vault should be used to generate and store the new secret. This will ensure the secret\u2019s security and prevent any further unexpected\ndisclosure.</p>\n<p>Depending on the development platform and the leaked secret type, multiple solutions are currently available.</p>\n\n<h4>Noncompliant code example</h4>\n<pre data-diff-id=\"1\" data-diff-type=\"noncompliant\">\nSECRET_KEY = 'r&amp;lvybzry1*k+qq)=x-!=0yd5l5#1gxzk!82@ru25*ntos3_9^'\n</pre>\n<h4>Compliant solution</h4>\n<pre data-diff-id=\"1\" data-diff-type=\"compliant\">\nimport os\n\nSECRET_KEY = os.environ[\"SECRET_KEY\"]\n</pre>",
+    "educationPrinciples": [],
+    "updatedAt": "2025-06-10T10:04:57+0000",
+    "cleanCodeAttribute": "TRUSTWORTHY",
+    "cleanCodeAttributeCategory": "RESPONSIBLE",
+    "impacts": [
+      {
+        "softwareQuality": "SECURITY",
+        "severity": "BLOCKER"
+      }
+    ]
+  },
+  {
+    "key": "python:S101",
+    "repo": "python",
+    "name": "Class names should comply with a naming convention",
+    "createdAt": "2023-12-13T13:47:11+0000",
+    "severity": "MINOR",
+    "status": "READY",
+    "isTemplate": false,
+    "tags": [],
+    "sysTags": ["convention"],
+    "lang": "py",
+    "langName": "Python",
+    "params": [
+      {
+        "key": "format",
+        "htmlDesc": "Regular expression used to check the class names against",
+        "defaultValue": "^_?([A-Z_][a-zA-Z0-9]*|[a-z_][a-z0-9_]*)$",
+        "type": "STRING"
+      }
+    ],
+    "defaultDebtRemFnType": "CONSTANT_ISSUE",
+    "debtRemFnType": "CONSTANT_ISSUE",
+    "type": "CODE_SMELL",
+    "defaultRemFnType": "CONSTANT_ISSUE",
+    "defaultRemFnBaseEffort": "5min",
+    "remFnType": "CONSTANT_ISSUE",
+    "remFnBaseEffort": "5min",
+    "remFnOverloaded": false,
+    "scope": "ALL",
+    "isExternal": false,
+    "descriptionSections": [
+      {
+        "key": "root_cause",
+        "content": "<p>Shared naming conventions allow teams to collaborate efficiently.</p>\n<p>This rule raises an issue when a class name does not match a provided regular expression.</p>\n<p>The default regular expression allows the \"CapWords\" convention and the \"snake_case\" in lowercase. The style guide PEP-8 recommends using the\n\"CapWords\" convention in every case but also accepts the \"snake_case\" convention when the class is primarily used as a callable (ex: decorator,\ncontext manager, etc\u2026\u200b).</p>\n<p>For example, with the default provided regular expression <code>^_?([A-Z_][a-zA-Z0-9]*|[a-z_][a-z0-9_]*)$</code>, the classes:</p>\n<pre>\nclass myClass:  # Noncompliant\n   ...\n\nclass my_CONTEXT_manager:  # Noncompliant\n    def __enter__(self):\n        pass\n    def __exit__(self, type, value, traceback):\n        pass\n</pre>\n<p>should be renamed to</p>\n<pre>\nclass MyClass:\n   ...\n\nclass my_context_manager:\n    def __enter__(self):\n        pass\n    def __exit__(self, type, value, traceback):\n        pass\n</pre>"
+      },
+      {
+        "key": "resources",
+        "content": "<h3>Documentation</h3>\n<ul>\n  <li> <a href=\"https://peps.python.org/pep-0008/#class-names\">PEP 8 \u2013 Style Guide for Python Code</a> </li>\n  <li> <a href=\"https://en.wikipedia.org/wiki/Snake_case\">Wikipedia: Snake case</a> </li>\n</ul>"
+      }
+    ],
+    "educationPrinciples": [],
+    "updatedAt": "2024-10-31T11:28:25+0000",
+    "cleanCodeAttribute": "IDENTIFIABLE",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "LOW"
+      }
+    ]
+  },
+  {
+    "key": "ipython:S1542",
+    "repo": "ipython",
+    "name": "Function names should comply with a naming convention",
+    "createdAt": "2024-10-31T11:28:37+0000",
+    "severity": "MAJOR",
+    "status": "READY",
+    "isTemplate": false,
+    "tags": [],
+    "sysTags": ["convention", "pep"],
+    "lang": "ipynb",
+    "langName": "IPython Notebooks",
+    "params": [
+      {
+        "key": "format",
+        "htmlDesc": "Regular expression used to check the names against.",
+        "defaultValue": "^[a-z_][a-z0-9_]*$",
+        "type": "STRING"
+      }
+    ],
+    "defaultDebtRemFnType": "CONSTANT_ISSUE",
+    "debtRemFnType": "CONSTANT_ISSUE",
+    "type": "CODE_SMELL",
+    "defaultRemFnType": "CONSTANT_ISSUE",
+    "defaultRemFnBaseEffort": "10min",
+    "remFnType": "CONSTANT_ISSUE",
+    "remFnBaseEffort": "10min",
+    "remFnOverloaded": false,
+    "scope": "MAIN",
+    "isExternal": false,
+    "descriptionSections": [
+      {
+        "key": "root_cause",
+        "content": "<p>Shared coding conventions allow teams to collaborate efficiently. This rule checks that all function names match a provided regular expression.</p>\n<p>According to PEP8, function names should be lowercase, with words separated by underscores as necessary to improve readability. This convention is\nknown as \"snake_case.\" For example: <code>calculate_area</code>, <code>print_hello</code>, <code>process_data</code></p>\n<p>To fix this, respect the naming convention for the function. The default naming convention is snake case, as recommended by PEP8. Other naming\nconventions can be defined through the <code>format</code> rule parameter.</p>\n\n<h4>Noncompliant code example</h4>\n<p>With the default provided regular expression: <code>^[a-z_][a-z0-9_]*$</code></p>\n<pre data-diff-id=\"1\" data-diff-type=\"noncompliant\">\ndef MyFunction(a,b):\n    ...\n</pre>\n<h4>Compliant solution</h4>\n<pre data-diff-id=\"1\" data-diff-type=\"compliant\">\ndef my_function(a,b):\n    ...\n</pre>"
+      },
+      {
+        "key": "introduction",
+        "content": "<p>This rule raises an issue when a function name doesn\u2019t respect the naming convention.</p>"
+      },
+      {
+        "key": "resources",
+        "content": "<h3>Documentation</h3>\n<ul>\n  <li> PEP8 - <a href=\"https://peps.python.org/pep-0008/#function-and-variable-names\">Function and Variable Names</a> </li>\n</ul>"
+      }
+    ],
+    "educationPrinciples": [],
+    "updatedAt": "2025-01-30T11:21:24+0000",
+    "cleanCodeAttribute": "IDENTIFIABLE",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ]
+  },
+  {
+    "key": "python:S2208",
+    "repo": "python",
+    "name": "Wildcard imports should not be used",
+    "createdAt": "2023-12-13T13:47:11+0000",
+    "severity": "CRITICAL",
+    "status": "READY",
+    "isTemplate": false,
+    "tags": [],
+    "sysTags": ["bad-practice", "pitfall"],
+    "lang": "py",
+    "langName": "Python",
+    "params": [],
+    "defaultDebtRemFnType": "CONSTANT_ISSUE",
+    "debtRemFnType": "CONSTANT_ISSUE",
+    "type": "CODE_SMELL",
+    "defaultRemFnType": "CONSTANT_ISSUE",
+    "defaultRemFnBaseEffort": "5min",
+    "remFnType": "CONSTANT_ISSUE",
+    "remFnBaseEffort": "5min",
+    "remFnOverloaded": false,
+    "scope": "ALL",
+    "isExternal": false,
+    "descriptionSections": [
+      {
+        "key": "how_to_fix",
+        "content": "<p>There are two ways to avoid a wildcard import:</p>\n<ul>\n  <li> Replace it with <code>import mymodule</code> and access module members as <code>mymodule.myfunction</code>. If the module name is too long,\n  alias it to a shorter name. Example: <code>import pandas as pd</code> </li>\n  <li> List every imported name. If necessary import statements can be split on multiple lines using parentheses (preferred solution) or backslashes.\n  </li>\n</ul>\n\n<h4>Noncompliant code example</h4>\n<pre>\nfrom math import *  # Noncompliant\ndef exp(x):\n    pass\nprint(exp(0))   # \"None\" will be printed\n</pre>\n<h4>Compliant solution</h4>\n<pre>\nimport math\ndef exp(x):\n    pass\nprint(math.exp(0))   # \"1.0\" will be printed\n</pre>\n<p>Or</p>\n<pre>\nfrom math import exp as m_exp\ndef exp(x):\n    pass\nprint(m_exp(0))   # \"1.0\" will be printed\n</pre>"
+      },
+      {
+        "key": "root_cause",
+        "content": "<p>Importing every public name from a module using a wildcard (<code>from mymodule import *</code>) is a bad idea because:</p>\n<ul>\n  <li> It could lead to conflicts between names defined locally and the ones imported. </li>\n  <li> It reduces code readability as developers will have a hard time knowing where names come from. </li>\n  <li> It clutters the local namespace, which makes debugging more difficult. </li>\n</ul>\n<p>Remember that imported names can change when you update your dependencies. A wildcard import that works today might be broken tomorrow.</p>\n<h3>Exceptions</h3>\n<p>No issue will be raised in <code>__init__.py</code> files. Wildcard imports are a common way of populating these modules.</p>\n<p>No issue will be raised in modules doing only imports. Local modules are sometimes created as a proxy for third-party modules.</p>\n<pre>\n# file: mylibrary/pyplot.py\ntry:\n    from guiqwt.pyplot import *  # Ok\nexcept Exception:\n    from matplotlib.pyplot import *  # Ok\n</pre>\n<p>Just keep in mind that wildcard imports might still create issues in these cases. It\u2019s always better to import only what you need.</p>"
+      },
+      {
+        "key": "resources",
+        "content": "<ul>\n  <li> <a href=\"https://docs.python.org/3.8/reference/simple_stmts.html#import\">Python documentation - The import statement</a> </li>\n</ul>"
+      }
+    ],
+    "x_solution": "<p>There are two ways to avoid a wildcard import:</p>\n<ul>\n  <li> Replace it with <code>import mymodule</code> and access module members as <code>mymodule.myfunction</code>. If the module name is too long,\n  alias it to a shorter name. Example: <code>import pandas as pd</code> </li>\n  <li> List every imported name. If necessary import statements can be split on multiple lines using parentheses (preferred solution) or backslashes.\n  </li>\n</ul>\n\n<h4>Noncompliant code example</h4>\n<pre>\nfrom math import *  # Noncompliant\ndef exp(x):\n    pass\nprint(exp(0))   # \"None\" will be printed\n</pre>\n<h4>Compliant solution</h4>\n<pre>\nimport math\ndef exp(x):\n    pass\nprint(math.exp(0))   # \"1.0\" will be printed\n</pre>\n<p>Or</p>\n<pre>\nfrom math import exp as m_exp\ndef exp(x):\n    pass\nprint(m_exp(0))   # \"1.0\" will be printed\n</pre>",
+    "educationPrinciples": [],
+    "updatedAt": "2025-01-30T11:21:22+0000",
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "HIGH"
+      }
+    ]
+  },
+  {
+    "key": "python:S6559",
+    "repo": "python",
+    "name": "Fields of a Django ModelFom should be defined explicitly",
+    "createdAt": "2023-12-13T13:47:11+0000",
+    "severity": "MAJOR",
+    "status": "READY",
+    "isTemplate": false,
+    "tags": [],
+    "sysTags": ["django"],
+    "lang": "py",
+    "langName": "Python",
+    "params": [],
+    "defaultDebtRemFnType": "CONSTANT_ISSUE",
+    "debtRemFnType": "CONSTANT_ISSUE",
+    "type": "CODE_SMELL",
+    "defaultRemFnType": "CONSTANT_ISSUE",
+    "defaultRemFnBaseEffort": "5min",
+    "remFnType": "CONSTANT_ISSUE",
+    "remFnBaseEffort": "5min",
+    "remFnOverloaded": false,
+    "scope": "ALL",
+    "isExternal": false,
+    "descriptionSections": [
+      {
+        "key": "resources",
+        "content": "<h3>Documentation</h3>\n<p><a href=\"https://docs.djangoproject.com/en/4.1/topics/forms/modelforms/\">Django ModelForm documentation</a> <a\nhref=\"https://docs.djangoproject.com/en/4.1/ref/forms/fields/\">Django form fields documentation</a></p>"
+      },
+      {
+        "key": "introduction",
+        "content": "<p>This rule discourages the use of <code>exclude</code> or <code>__all__</code> with ModelForm in Django and suggests using fields instead.</p>"
+      },
+      {
+        "key": "how_to_fix",
+        "content": "<p>Developers should use the \"fields\" attribute instead of \"exclude\" or \"all\" when creating ModelForms in Django. This ensures that all fields are\nexplicitly listed and makes it clear what fields are included in the form.</p>\n\n<h4>Noncompliant code example</h4>\n<pre>\nfrom django import forms\n\nclass MyForm(forms.ModelForm):\n    class Meta:\n        model = MyModel\n        exclude = ['field1', 'field2']  # Noncompliant\n\n\nclass MyOtherForm(forms.ModelForm):\n    class Meta:\n        model = Post\n        fields = '__all__'  # Noncompliant\n</pre>\n<h4>Compliant solution</h4>\n<pre>\nfrom django import forms\n\nclass MyForm(forms.ModelForm):\n    class Meta:\n        model = MyModel\n        fields = ['field3', 'field4']\n</pre>"
+      },
+      {
+        "key": "root_cause",
+        "content": "<p>In Django, when creating a <code>ModelForm</code>, it is common to use <code>exclude</code> to remove fields from the form. It is also possible to\nset the <code>fields</code> value to <code>__all__</code> to conveniently indicate that all the model fields should be included in the form. However,\nthis can lead to security issues when new fields are added to the model, as they will automatically be included in the form, which may not be\nintended. Additionally, <code>exclude</code> or <code>__all__</code> can make it harder to maintain the codebase by hiding the dependencies between\nthe model and the form.</p>"
+      }
+    ],
+    "x_solution": "<p>Developers should use the \"fields\" attribute instead of \"exclude\" or \"all\" when creating ModelForms in Django. This ensures that all fields are\nexplicitly listed and makes it clear what fields are included in the form.</p>\n\n<h4>Noncompliant code example</h4>\n<pre>\nfrom django import forms\n\nclass MyForm(forms.ModelForm):\n    class Meta:\n        model = MyModel\n        exclude = ['field1', 'field2']  # Noncompliant\n\n\nclass MyOtherForm(forms.ModelForm):\n    class Meta:\n        model = Post\n        fields = '__all__'  # Noncompliant\n</pre>\n<h4>Compliant solution</h4>\n<pre>\nfrom django import forms\n\nclass MyForm(forms.ModelForm):\n    class Meta:\n        model = MyModel\n        fields = ['field3', 'field4']\n</pre>",
+    "educationPrinciples": [],
+    "updatedAt": "2025-01-30T11:21:22+0000",
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ]
+  },
+  {
+    "key": "Web:AvoidCommentedOutCodeCheck",
+    "repo": "Web",
+    "name": "Sections of code should not be commented out",
+    "createdAt": "2023-12-13T13:47:25+0000",
+    "severity": "MAJOR",
+    "status": "READY",
+    "isTemplate": false,
+    "tags": [],
+    "sysTags": ["unused"],
+    "lang": "web",
+    "langName": "HTML",
+    "params": [],
+    "defaultDebtRemFnType": "CONSTANT_ISSUE",
+    "debtRemFnType": "CONSTANT_ISSUE",
+    "type": "CODE_SMELL",
+    "defaultRemFnType": "CONSTANT_ISSUE",
+    "defaultRemFnBaseEffort": "5min",
+    "remFnType": "CONSTANT_ISSUE",
+    "remFnBaseEffort": "5min",
+    "remFnOverloaded": false,
+    "scope": "ALL",
+    "isExternal": false,
+    "descriptionSections": [
+      {
+        "key": "root_cause",
+        "content": "<p>Commented-out code distracts the focus from the actual executed code. It creates a noise that increases maintenance code. And because it is never\nexecuted, it quickly becomes out of date and invalid.</p>\n<p>Commented-out code should be deleted and can be retrieved from source control history if required.</p>"
+      }
+    ],
+    "educationPrinciples": [],
+    "updatedAt": "2024-10-31T11:28:29+0000",
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ]
+  },
+  {
+    "key": "Web:UnsupportedTagsInHtml5Check",
+    "repo": "Web",
+    "name": "Elements deprecated in HTML5 should not be used",
+    "createdAt": "2023-12-13T13:47:25+0000",
+    "severity": "MAJOR",
+    "status": "READY",
+    "isTemplate": false,
+    "tags": [],
+    "sysTags": ["html5", "obsolete", "user-experience"],
+    "lang": "web",
+    "langName": "HTML",
+    "params": [],
+    "defaultDebtRemFnType": "CONSTANT_ISSUE",
+    "debtRemFnType": "CONSTANT_ISSUE",
+    "type": "BUG",
+    "defaultRemFnType": "CONSTANT_ISSUE",
+    "defaultRemFnBaseEffort": "20min",
+    "remFnType": "CONSTANT_ISSUE",
+    "remFnBaseEffort": "20min",
+    "remFnOverloaded": false,
+    "scope": "MAIN",
+    "isExternal": false,
+    "descriptionSections": [
+      {
+        "key": "resources",
+        "content": "<ul>\n  <li> W3C, <a href=\"https://www.w3.org/TR/html5-diff\">Obsolete Features</a> </li>\n  <li> WHATWG, <a href=\"https://html.spec.whatwg.org/multipage/obsolete.html\">Obsolete Features</a> </li>\n</ul>"
+      },
+      {
+        "key": "root_cause",
+        "content": "<p>With the advent of HTML5, many old elements were deprecated. To ensure the best user experience, deprecated elements should not be used. This rule\nchecks for the following deprecated elements:</p>\n<table>\n  <colgroup>\n    <col style=\"width: 50%;\">\n    <col style=\"width: 50%;\">\n  </colgroup>\n  <thead>\n    <tr>\n      <th>Element</th>\n      <th>Remediation Action</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><p><code>basefont</code>, <code>big</code>, <code>blink</code>, <code>center</code>, <code>font</code>, <code>marquee</code>,\n      <code>multicol</code>, <code>nobr</code>, <code>spacer</code>, <code>tt</code></p></td>\n      <td><p>use CSS</p></td>\n    </tr>\n    <tr>\n      <td><p><code>acronym</code></p></td>\n      <td><p>use <code>abbr</code></p></td>\n    </tr>\n    <tr>\n      <td><p><code>applet</code></p></td>\n      <td><p>use <code>embed</code> or <code>object</code></p></td>\n    </tr>\n    <tr>\n      <td><p><code>bgsound</code></p></td>\n      <td><p>use <code>audio</code></p></td>\n    </tr>\n    <tr>\n      <td><p><code>frame</code>, <code>frameset</code>, <code>noframes</code></p></td>\n      <td><p>restructure the page to remove frames</p></td>\n    </tr>\n    <tr>\n      <td><p><code>isindex</code></p></td>\n      <td><p>use form controls</p></td>\n    </tr>\n    <tr>\n      <td><p><code>dir</code></p></td>\n      <td><p>use <code>ul</code></p></td>\n    </tr>\n    <tr>\n      <td><p><code>hgroup</code></p></td>\n      <td><p>use <code>header</code> or <code>div</code></p></td>\n    </tr>\n    <tr>\n      <td><p><code>listing</code></p></td>\n      <td><p>use <code>pre</code> and <code>code</code></p></td>\n    </tr>\n    <tr>\n      <td><p><code>nextid</code></p></td>\n      <td><p>use GUIDS</p></td>\n    </tr>\n    <tr>\n      <td><p><code>noembed</code></p></td>\n      <td><p>use <code>object</code> instead of <code>embed</code> when fallback is necessary</p></td>\n    </tr>\n    <tr>\n      <td><p><code>plaintext</code></p></td>\n      <td><p>use the \"text/plain\" MIME type</p></td>\n    </tr>\n    <tr>\n      <td><p><code>strike</code></p></td>\n      <td><p>use <code>del</code> or <code>s</code></p></td>\n    </tr>\n    <tr>\n      <td><p><code>xmp</code></p></td>\n      <td><p>use <code>pre</code> or <code>code</code>, and escape \"&lt;\" and \"&amp;\" characters</p></td>\n    </tr>\n  </tbody>\n</table>"
+      }
+    ],
+    "educationPrinciples": [],
+    "updatedAt": "2024-10-31T11:28:29+0000",
+    "cleanCodeAttribute": "CONVENTIONAL",
+    "cleanCodeAttributeCategory": "CONSISTENT",
+    "impacts": [
+      {
+        "softwareQuality": "RELIABILITY",
+        "severity": "MEDIUM"
+      }
+    ]
+  },
+  {
+    "key": "css:S125",
+    "repo": "css",
+    "name": "Sections of code should not be commented out",
+    "createdAt": "2024-04-11T10:18:59+0000",
+    "severity": "MAJOR",
+    "status": "READY",
+    "isTemplate": false,
+    "tags": [],
+    "sysTags": ["unused"],
+    "lang": "css",
+    "langName": "CSS",
+    "params": [],
+    "defaultDebtRemFnType": "CONSTANT_ISSUE",
+    "debtRemFnType": "CONSTANT_ISSUE",
+    "type": "CODE_SMELL",
+    "defaultRemFnType": "CONSTANT_ISSUE",
+    "defaultRemFnBaseEffort": "5min",
+    "remFnType": "CONSTANT_ISSUE",
+    "remFnBaseEffort": "5min",
+    "remFnOverloaded": false,
+    "scope": "ALL",
+    "isExternal": false,
+    "descriptionSections": [
+      {
+        "key": "root_cause",
+        "content": "<p>Commented-out code distracts the focus from the actual executed code. It creates a noise that increases maintenance code. And because it is never\nexecuted, it quickly becomes out of date and invalid.</p>\n<p>Commented-out code should be deleted and can be retrieved from source control history if required.</p>"
+      }
+    ],
+    "educationPrinciples": [],
+    "updatedAt": "2024-10-31T11:28:11+0000",
+    "cleanCodeAttribute": "CLEAR",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "MAINTAINABILITY",
+        "severity": "MEDIUM"
+      }
+    ]
+  },
+  {
+    "key": "Web:MouseEventWithoutKeyboardEquivalentCheck",
+    "repo": "Web",
+    "name": "Mouse events should have corresponding keyboard events",
+    "createdAt": "2023-12-13T13:47:25+0000",
+    "severity": "MINOR",
+    "status": "READY",
+    "isTemplate": false,
+    "tags": [],
+    "sysTags": ["accessibility"],
+    "lang": "web",
+    "langName": "HTML",
+    "params": [],
+    "defaultDebtRemFnType": "CONSTANT_ISSUE",
+    "debtRemFnType": "CONSTANT_ISSUE",
+    "type": "BUG",
+    "defaultRemFnType": "CONSTANT_ISSUE",
+    "defaultRemFnBaseEffort": "5min",
+    "remFnType": "CONSTANT_ISSUE",
+    "remFnBaseEffort": "5min",
+    "remFnOverloaded": false,
+    "scope": "MAIN",
+    "isExternal": false,
+    "descriptionSections": [
+      {
+        "key": "root_cause",
+        "content": "<p>Offering the same experience with the mouse and the keyboard allow users to pick their preferred devices.</p>\n<p>Additionally, users of assistive technology will also be able to browse the site even if they cannot use the mouse.</p>\n<p>This rule raises an issue when:</p>\n<ul>\n  <li> an HTML element with an <code>onMouseover</code> attribute doesn\u2019t also have an&nbsp;<code>onFocus&nbsp;attribute.</code> </li>\n  <li> an HTML element with an <code>onMouseout</code> attribute doesn\u2019t also have an&nbsp;<code>onBlur&nbsp;attribute.</code> </li>\n  <li> an HTML element with an <code>onClick</code> attribute doesn\u2019t also have one of the following attributes: <code>onKeyDown</code>,\n  <code>onKeyUp</code>, <code>onKeyPress</code>. </li>\n</ul>\n<p>Note that in the case of&nbsp;<code>onClick</code>, the equivalent keyboard handler should support both the \"Enter\" and \"Space\" keys as these are\nusually used by screen-readers.</p>\n<h3>Noncompliant code example</h3>\n<pre>\n&lt;div onClick=\"doSomething();\" ...&gt;                                &lt;!-- Noncompliant - 'onKeyDown/onKeyUp/onKeyPress' missing --&gt;\n&lt;a onMouseover=\"doSomething();\" ...&gt;                            &lt;!-- Noncompliant - 'onFocus' missing --&gt;\n&lt;a onMouseout=\"doSomething();\" ...&gt;                             &lt;!-- Noncompliant - 'onBlur' missing --&gt;\n</pre>\n<h3>Compliant solution</h3>\n<p>Note that setting the <code>tabindex</code> attribute is necessary to make the <code>&lt;div&gt;</code> element focusable.</p>\n<pre>\n&lt;div onClick=\"doSomething();\" onKeyDown=\"doSomething();\" tabindex=\"0\" ...&gt;    &lt;!-- Compliant --&gt;\n&lt;a onMouseover=\"doSomething();\" onFocus=\"doSomething();\" ...&gt;   &lt;!-- Compliant --&gt;\n&lt;a onMouseout=\"doSomething();\" onBlur=\"doSomething();\" ...&gt;     &lt;!-- Compliant --&gt;\n</pre>\n<h3>Exceptions</h3>\n<p>For the following elements, <a href=\"https://www.w3.org/TR/WCAG20-TECHS/SCR35.html\">pressing a key will trigger the <code>onClick</code>\nattribute</a>: <code>&lt;input type=\"button\"&gt;</code>, <code>&lt;input type=\"submit\"&gt;</code>, <code>&lt;button&gt;</code>,\n<code>&lt;a&gt;</code>. Thus no issue will be raised when an <code>onClick</code> attribute is found in these elements without a\n<code>onKeyDown/onKeyUp/onKeyPress</code>.</p>\n<p>An issue will still be raised for <a href=\"https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/button_role\">elements with the\n<code>role=\"button\"</code> attribute</a> as they don\u2019t behave the same way.</p>"
+      },
+      {
+        "key": "resources",
+        "content": "<ul>\n  <li> <a href=\"https://www.w3.org/TR/WCAG20-TECHS/SCR2.html\">SCR2: Using redundant keyboard and mouse event handlers</a> </li>\n</ul>"
+      }
+    ],
+    "educationPrinciples": [],
+    "updatedAt": "2024-10-31T11:28:29+0000",
+    "cleanCodeAttribute": "COMPLETE",
+    "cleanCodeAttributeCategory": "INTENTIONAL",
+    "impacts": [
+      {
+        "softwareQuality": "RELIABILITY",
+        "severity": "LOW"
+      }
+    ]
+  }
+]

@@ -1,0 +1,135 @@
+﻿x-samos-type-name: SolarWindsOrionApplication
+x-samos-namespace: solarwinds.orion
+title: SolarWinds Orion Application
+description: A cross-reference between the Machine and the Application Template
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: FullyQualifiedName
+  - name: Name
+  - name: StatusDescription
+  - name: Created
+  - name: LastModified
+
+x-samos-detail:
+  - name: FullyQualifiedName
+  - name: Name
+  - name: NodeID
+  - name: d_application_template
+  - name: Status
+  - name: StatusDescription
+  - name: Created
+  - name: LastModified
+  - name: UnManaged
+  - name: UnManageFrom
+  - name: UnManageUntil
+  - name: CustomApplicationType
+  - name: HasCredentials
+  - name: InstanceSiteId
+  - name: Description
+  - name: Image
+
+x-samos-derived-properties:
+  d_id:
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: '{ApplicationID}_{ID}'
+    x-samos-immutable: true
+
+  d_application_template:
+    type: string
+    title: Application Template
+    syntax: jmespath
+    value: 'ApplicationTemplateID'
+    x-samos-ref-types:
+      - type-name: SolarWindsOrionApplicationTemplate
+        key-name: d_application_template_id
+
+properties:
+  ApplicationID:
+    title: Application
+    type: integer
+    x-samos-immutable: true
+  Name:
+    title: Name
+    type: string
+  DisplayName:
+    title: Display Name
+    type: string
+  NodeID:
+    title: Node
+    type: integer
+    x-samos-ref-types:
+      - type-name: SolarWindsOrionNode
+        key-name: NodeID
+  ApplicationTemplateID:
+    x-samos-hidden: true
+    title: Application Template ID
+    type: integer
+  UnManaged:
+    title: Unmanaged?
+    type: boolean
+  UnManageFrom:
+    title: Unmanage From
+    type: string
+    format: date-time
+  UnManageUntil:
+    title: Unmanage Until
+    type: string
+    format: date-time
+  Created:
+    title: Created
+    type: string
+    format: date-time
+  LastModified:
+    title: Last Modified
+    type: string
+    format: date-time
+  ID:
+    x-samos-hidden: true
+    title: ID
+    type: integer
+  DetailsUrl:
+    title: Details URL
+    type: string
+  FullyQualifiedName:
+    title: Fully Qualified Name
+    type: string
+  ComponentOrderSettingLevel:
+    title: Component Order Setting Level
+    type: integer
+  CustomApplicationType:
+    title: Custom Application Type
+    type: string
+  HasCredentials:
+    title: Credentials?
+    type: boolean
+  Description:
+    title: Description
+    type: string
+  Status:
+    title: Status
+    type: integer
+  StatusDescription:
+    title: Status Description
+    type: string
+  Image:
+    title: Image
+    type: string
+  Uri:
+    title: URI
+    type: string
+  PrimaryGroupID:
+    title: Primary Group
+    type: integer
+  InstanceType:
+    title: Instance Type
+    type: string
+  InstanceSiteId:
+    title: Instance Site
+    type: integer
+  ModernIcon:
+    title: Modern Icon
+    type: string

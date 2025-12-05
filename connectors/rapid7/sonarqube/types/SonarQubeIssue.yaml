@@ -1,0 +1,216 @@
+x-samos-type-name: SonarQubeIssue
+x-samos-namespace: sonarqube
+title: SonarQube Issue
+description: An Issue cross-referencing rule and project type in SonarQube.
+
+x-samos-extends-types:
+  - type-name: Finding
+    subtype-priority: 4
+
+x-samos-keys:
+  - key
+
+x-samos-table:
+  - name: project
+  - name: rule
+  - name: component
+  - name: severity
+  - name: status
+  - name: author
+  - name: type
+  - name: creationDate
+  - name: updateDate
+
+x-samos-detail:
+  - name: project
+  - name: rule
+  - name: component
+  - name: message
+  - name: severity
+  - name: line
+  - name: status
+  - name: issueStatus
+  - name: type
+  - name: hash
+  - name: textRange
+  - name: flows
+  - name: effort
+  - name: debt
+  - name: assignee
+  - name: author
+  - name: tags
+  - name: organization
+  - name: cleanCodeAttribute
+  - name: cleanCodeAttributeCategory
+  - name: impacts
+  - name: creationDate
+  - name: updateDate
+
+x-samos-derived-properties:
+  d_rule:
+    # rule is alredy fulfills `Finding:vulnerability`
+    # so fulfills `core.named-object:name` derived the property
+    type: string
+    x-samos-hidden: true
+    syntax: expression
+    value: '{rule}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  key:
+    x-samos-hidden: true
+    type: string
+    title: Key
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+  rule:
+    type: string
+    title: Rule
+    x-samos-ref-types:
+      - type-name: SonarQubeRule
+        key-name: key
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability
+  severity:
+    type: string
+    title: Severity
+  component:
+    type: string
+    title: Component
+  project:
+    type: string
+    title: Project
+    x-samos-ref-types:
+      - type-name: SonarQubeProject
+        key-name: key
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to
+  line:
+    type: integer
+    title: Line
+  hash:
+    type: string
+    title: Hash
+  textRange:
+    type: object
+    title: Text Range
+    properties:
+      startLine:
+        type: integer
+        title: Start Line
+      endLine:
+        type: integer
+        title: End Line
+      startOffset:
+        type: integer
+        title: Start Offset
+      endOffset:
+        type: integer
+        title: End Offset
+  flows:
+    type: array
+    title: Flows
+    items:
+      type: object
+  status:
+    type: string
+    title: Status
+  message:
+    type: string
+    title: Message
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  effort:
+    type: string
+    title: Effort
+  debt:
+    type: string
+    title: Debt
+  assignee:
+    type: string
+    title: Assignee
+  author:
+    type: string
+    title: Author
+  tags:
+    type: array
+    title: Tags
+    items:
+      type: string
+  creationDate:
+    type: string
+    title: Created On
+    format: date-time
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: first_seen
+  updateDate:
+    type: string
+    title: Updated On
+    format: date-time
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: last_seen
+  type:
+    type: string
+    title: Type
+  organization:
+    type: string
+    title: Organization
+  cleanCodeAttribute:
+    type: string
+    title: Clean Code Attribute
+  cleanCodeAttributeCategory:
+    type: string
+    title: Clean Code Attribute Category
+  impacts:
+    type: array
+    title: Impacts
+    items:
+      type: object
+      properties:
+        softwareQuality:
+          type: string
+          title: Software Quality
+        severity:
+          type: string
+          title: Severity
+  issueStatus:
+    type: string
+    title: Issue Status
+  projectName:
+    type: string
+    title: Project Name
+  scope:
+    type: string
+    title: Scope
+  messageFormattings:
+    type: array
+    title: Message Formattings
+    items:
+      type: object
+  quickFixAvailable:
+    type: boolean
+    title: Quick Fix Available?
+  codeVariants:
+    type: array
+    title: Code Variants
+    items:
+      type: string
+  prioritizedRule:
+    type: boolean
+    title: Prioritized Rule?
+  resolution:
+    type: string
+    title: Resolution
+  closeDate:
+    type: string
+    title: Close Date
+    format: date-time

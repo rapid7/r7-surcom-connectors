@@ -1,0 +1,34 @@
+[
+  {
+    "scan_id": "2d76baa4df4c4231",
+    "tags": [],
+    "user_name": "John Doe",
+    "name": "AdHoc | support.test.com | Unauthenticated",
+    "x_target_domains": ["support.test.com"],
+    "x_target_ips": [],
+    "x_target_urls": ["https://support.test.com"]
+  },
+  {
+    "scan_id": "5c17215b6bca4a62",
+    "tags": [],
+    "user_name": "Jane Doe",
+    "name": "AdHoc | api.everythinglocation.com | Unauthenticated",
+    "x_target_domains": ["api.everythinglocation.com"],
+    "x_target_ips": [],
+    "x_target_urls": ["https://api.everythinglocation.com"]
+  },
+  {
+    "scan_id": "ac72dc88acb84be7",
+    "tags": [],
+    "user_name": "Alice Smith",
+    "name": "Annual Pentest | GreenID | WebApp | GreenID Web (https://test-au.vixverify.com) | Unauthenticated",
+    "x_target_domains": ["docs.go.gb12gplc.com", "webstore.go.gb12gplc.com"],
+    "x_target_ips": ["50.168.228.2", "209.10.144.52"],
+    "x_target_urls": [
+      "https://test-au.vixverify.com/verification/register.seam?customer=greenid-pentest-core-1\ufeffhttps",
+      "https://test-au.vixverify.com/df/html/biostart-mvp-test",
+      "https://test-au.vixverify.com/verification/customers/greenid-pentest-core-1/simpleui-demo.html",
+      "https://verify.gbgid.me/10d33cdfd3e7b0222b4ad8e032a7de76/hosted-landing-page"
+    ]
+  }
+]

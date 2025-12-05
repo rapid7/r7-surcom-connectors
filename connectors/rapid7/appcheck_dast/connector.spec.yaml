@@ -1,0 +1,76 @@
+id: appcheck.dast
+name: AppCheck DAST (Beta)
+description: Connector for AppCheck DAST
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+# One or two entries describing the changes in this version.
+# (Previous changelog is maintained by the publishing process)
+current_changes:
+  - Initial release
+
+# IDs of the Surface Command types that are part of this connector.
+# Type IDs must be unique across all Connectors,
+# by prefixing with a SnakeCased version of the Connector ID.
+types:
+  - AppCheckDastScan
+  - AppCheckDastDomain
+  - AppCheckDastExposure
+  - AppCheckDastFinding
+  - AppCheckDastExposureSeverityEnum
+
+# The functions that this Connector will provide. Each Connector
+# should have a `test` function and at least one other function that
+# returns one or more types that are defined in the `types` section above.
+functions:
+  - id: test
+
+  - id: import_all
+    title: AppCheck DAST Scans and Vulnerabilities
+    description: Import all scans and vulnerabilities from AppCheck DAST
+    return_types:
+      - AppCheckDastScan
+      - AppCheckDastDomain
+      - AppCheckDastExposure
+      - AppCheckDastFinding
+
+# Settings that will be used to configure this Connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: Base URL for the AppCheck DAST
+    example: https://api.appcheck_domain.com
+
+  api_key:
+    type: string
+    title: API Key
+    description: API Key used to authenticate with the AppCheck DAST
+    format: password
+
+  cvss_score:
+    title: Minimum Vulnerability Score
+    description: Only import vulnerability findings with this CVSS score or greater.
+    type: integer
+    minimum: 0
+    maximum: 10
+    default: 8
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+# The runtime platform for this connector.
+runtime: py311
+
+# Add any Python dependencies here that your Connector needs to run.
+# Each dependency should be pinned to a specific version.
+# python_dependencies:
+#  - "another_dependency==1.0.0"
+
+# The list of categories for this Connector in the Extension Library.
+categories:
+  - application_development

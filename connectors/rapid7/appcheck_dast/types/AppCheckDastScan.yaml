@@ -1,0 +1,68 @@
+x-samos-type-name: AppCheckDastScan
+x-samos-namespace: appcheck.dast
+title: AppCheck DAST Scan
+description: A scan from AppCheck DAST
+
+x-samos-extends-types:
+  - type-name: core.named-object
+
+x-samos-keys:
+  - scan_id
+
+x-samos-table:
+  - name: name
+  - name: user_name
+  - name: tags
+
+x-samos-detail:
+  - name: name
+  - name: user_name
+  - name: x_target_domains
+  - name: x_target_ips
+  - name: x_target_urls
+  - name: tags
+
+properties:
+  scan_id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+
+  tags:
+    title: Tags
+    type: array
+    items:
+      type: string
+
+  user_name:
+    title: User Name
+    type: string
+
+  x_target_domains:
+    title: Target Domains
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: AppCheckDastDomain
+          key-name: domain
+
+  x_target_ips:
+    title: Target IP Addresses
+    type: array
+    items:
+      type: string
+
+  x_target_urls:
+    title: Target URLs
+    type: array
+    items:
+      type: string
+      format: url
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name

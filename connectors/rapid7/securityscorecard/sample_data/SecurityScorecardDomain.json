@@ -1,0 +1,35 @@
+[
+  {
+    "domain": "academy.company.com",
+    "status": "ATTRIBUTED",
+    "issues": 0,
+    "findings": 0,
+    "scoreImpact": 0.0,
+    "ipsCount": 4,
+    "criticality": "Medium",
+    "tags": ["Dummy2", "Dummt Test"],
+    "assignee": null
+  },
+  {
+    "domain": "info.company.com",
+    "status": "ATTRIBUTED",
+    "issues": 0,
+    "findings": 0,
+    "scoreImpact": 0.0,
+    "ipsCount": 5,
+    "criticality": "Medium",
+    "tags": null,
+    "assignee": null
+  },
+  {
+    "domain": "information.company.com",
+    "status": "ATTRIBUTED",
+    "issues": 0,
+    "findings": 0,
+    "scoreImpact": 0.0,
+    "ipsCount": 5,
+    "criticality": "Medium",
+    "tags": null,
+    "assignee": "user_name@company.com"
+  }
+]

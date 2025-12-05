@@ -1,0 +1,97 @@
+id: beyondtrust.beyondinsight
+name: BeyondTrust BeyondInsight and Password Safe (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCaked
+# version of the connector ID.
+types:
+  - BeyondTrustBeyondInsightCloud
+  - BeyondTrustBeyondInsightAsset
+  - BeyondTrustBeyondInsightDatabase
+  - BeyondTrustBeyondInsightDirectory
+  - BeyondTrustBeyondInsightFunctionalAccount
+  - BeyondTrustBeyondInsightPlatform
+  - BeyondTrustBeyondInsightWorkgroup
+  - BeyondTrustBeyondInsightUser
+  - BeyondTrustBeyondInsightUserGroup
+  - BeyondTrustBeyondInsightManagedAccount
+  - BeyondTrustBeyondInsightOrganization
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: BeyondTrust BeyondInsight Assets and Organizations.
+    description: Import all managed systems from BeyondTrust BeyondInsight Password Safe.
+    return_types:
+      - BeyondTrustBeyondInsightCloud
+      - BeyondTrustBeyondInsightAsset
+      - BeyondTrustBeyondInsightDatabase
+      - BeyondTrustBeyondInsightDirectory
+      - BeyondTrustBeyondInsightFunctionalAccount
+      - BeyondTrustBeyondInsightPlatform
+      - BeyondTrustBeyondInsightWorkgroup
+      - BeyondTrustBeyondInsightUser
+      - BeyondTrustBeyondInsightManagedAccount
+      - BeyondTrustBeyondInsightOrganization
+      - BeyondTrustBeyondInsightUserGroup
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    example: https://example.ps.beyondtrustcloud.com
+    description: The base URL for your BeyondTrust BeyondInsight instance.
+
+  api_key:
+    type: string
+    title: API Key
+    format: password
+    description: The API Key for your BeyondTrust BeyondInsight instance.
+
+  username:
+    type: string
+    title: Username
+    description: The username/email for your BeyondTrust BeyondInsight instance.
+
+  password:
+    type: string
+    title: Password
+    description: The password for your BeyondTrust BeyondInsight instance.
+    format: password
+    nullable: true
+
+  url_key:
+    type: string
+    title: One-Time Password (OTP) Authentication Key or URL
+    description: OTP Authenticator Secret Key or URL, for Two-Factor Authentication (2FA)
+    nullable: true
+    format: password
+    example: ASFGHWABCD... or otpauth://...  (refer to configuration instructions)
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Add required Python dependencies here. Pin each dependency to a specific
+# version.
+python_dependencies:
+  - 'pyotp==2.9.0'
+
+# Categories for this connector in the Extension Library.
+categories:
+  - credential_management
+
+# If true, when installing in Surface Command, the user
+# gets specific installation instructions
+show_orchestrator_ui: false

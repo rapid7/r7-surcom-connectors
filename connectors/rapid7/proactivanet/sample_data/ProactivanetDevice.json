@@ -1,0 +1,917 @@
+[
+  {
+    "Code": "A-0001",
+    "Hostname": "Host1",
+    "Description": null,
+    "Notes": null,
+    "Label": null,
+    "ServiceTag": "j9v4b24",
+    "FromAgent": true,
+    "AgentType": "Win32",
+    "AgentVersion": "4.20.0.0",
+    "TradeMark": "Dell",
+    "PanComputerModels_id": "62f68a0c-8449-4de3-bf60-8ff3d7a28bce",
+    "ComputerModelName": "Latitude 3440",
+    "PanUsers_idResponsible": null,
+    "UserNameResponsable": null,
+    "FullNameResponsable": null,
+    "PanUsers_idHabitual": "821564d0-329c-4a8d-8a68-000237afab33",
+    "UserNameHabitual": "Queen Roma",
+    "FullNameHabitual": "Queen Roman, Javad",
+    "ManualClassification": false,
+    "ManualLocation": false,
+    "PanLocations_id": "14897e5f-4443-466a-bfe1-044d7ef2f515",
+    "PanLocationsName": "Sun Direct",
+    "LocationTranslatedPath": "/admin/Sun Direct",
+    "PanDomains_id": "5138804e-6581-42fa-818e-00166944be6d",
+    "ComputerDomainName": "domainname1",
+    "PanHardwareStatus_id": "d448681b-2d61-43d3-a050-0ec237782c38",
+    "StatusName": "Alta",
+    "PanOS_id": "5e811e76-8e32-444d-a979-34e580b53eed",
+    "PanOSFamily_id": "b3e4df77-d6cb-42c8-bbd1-fe5ee1f5166c",
+    "OsName": "Windows 11 Pro",
+    "PanOSFamilyName": "Windows 11",
+    "PanProcessors_id": "7a11f0aa-f472-4cc5-83e8-431bbe653889",
+    "ProcessorName": "13th Gen Intel(R) Core(TM) i7-1355U",
+    "ProcSpeed": 2865,
+    "ProcPhysicalCount": 1,
+    "ProcCoreCount": 10,
+    "ProcHTEnabled": true,
+    "ProcCount": 12,
+    "MemoryInstalledMB": 16069.0,
+    "HdSizeGB": 473.79,
+    "PhysicalDiskCount": 1,
+    "CDCount": 0,
+    "IsServer": false,
+    "ChassisType": "Laptop",
+    "RDSEnabled": false,
+    "RDSPort": 3389,
+    "FirewallStatus": "Off",
+    "FirewallProvider": "Microsoft Defender",
+    "FirewallIsSystem": true,
+    "FirewallEnabled": false,
+    "IsVM": false,
+    "IsVirtualizer": false,
+    "VMPlatform": null,
+    "IsClusterized": false,
+    "x_ips": ["10.81.12.52"],
+    "x_macs": ["00080FBA00023", "00090FCAE001", "E8788D1C096EE"],
+    "clientLastAuditDate": "2025-08-11T13:41:55",
+    "serverLastAuditDate": "2025-08-11T13:43:23.397",
+    "LastEventDate": "2025-08-11T13:43:23.397",
+    "AssociatedCI": null,
+    "AssociatedCIName": null,
+    "PadSuppliers_id": null,
+    "PadSuppliersName": null,
+    "PadContracts_id": null,
+    "PadContractsName": null,
+    "UBR": 5624,
+    "ManualWarranty": false,
+    "WarrantyEndDate": "2030-10-25T00:00:00",
+    "Id": "cfd47b9a-5a43-4bfd-ba38-7787c1809a55",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/2c46238d-cac7-4e1e-958e-00068ac5143d",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/2c46238d-cac7-4e1e-958e-00068ac5143d/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "distributions",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/2c46238d-cac7-4e1e-958e-00068ac5143d/distributions",
+        "Action": "GET"
+      },
+      {
+        "Rel": "commands",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/2c46238d-cac7-4e1e-958e-00068ac5143d/commands",
+        "Action": "GET"
+      },
+      {
+        "Rel": "logins",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/2c46238d-cac7-4e1e-958e-00068ac5143d/logins",
+        "Action": "GET"
+      },
+      {
+        "Rel": "software",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/2c46238d-cac7-4e1e-958e-00068ac5143d/software",
+        "Action": "GET"
+      },
+      {
+        "Rel": "services",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/2c46238d-cac7-4e1e-958e-00068ac5143d/services",
+        "Action": "GET"
+      },
+      {
+        "Rel": "serverRoles",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/2c46238d-cac7-4e1e-958e-00068ac5143d/serverRoles",
+        "Action": "GET"
+      },
+      {
+        "Rel": "windowsUpdatesPending",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/2c46238d-cac7-4e1e-958e-00068ac5143d/windowsUpdatesPending",
+        "Action": "GET"
+      },
+      {
+        "Rel": "events",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/2c46238d-cac7-4e1e-958e-00068ac5143d/events",
+        "Action": "GET"
+      },
+      {
+        "Rel": "classifications",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/2c46238d-cac7-4e1e-958e-00068ac5143d/classifications",
+        "Action": "GET"
+      },
+      {
+        "Rel": "network adapters",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/2c46238d-cac7-4e1e-958e-00068ac5143d/networkAdapters",
+        "Action": "GET"
+      },
+      {
+        "Rel": "copyfiles",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/2c46238d-cac7-4e1e-958e-00068ac5143d/copyfiles",
+        "Action": "GET"
+      },
+      {
+        "Rel": "suppliersElements",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/2c46238d-cac7-4e1e-958e-00068ac5143d/suppliersElements",
+        "Action": "GET"
+      },
+      {
+        "Rel": "computer model",
+        "Href": "https://demo.proactive.com/proactivanet/api/computerModels/62f68a0c-8449-4de3-bf60-8ff3d7a28bce",
+        "Action": "GET"
+      },
+      {
+        "Rel": "processor",
+        "Href": "https://demo.proactive.com/proactivanet/api/processors/7a11f0aa-f472-4cc5-83e8-431bbe653889",
+        "Action": "GET"
+      },
+      {
+        "Rel": "domain",
+        "Href": "https://demo.proactive.com/proactivanet/api/domains/6c874426-874b-4592-a0be-f2b828c85563",
+        "Action": "GET"
+      },
+      {
+        "Rel": "hardware status",
+        "Href": "https://demo.proactive.com/proactivanet/api/hardwareStatus/d448681b-2d61-43d3-a050-0ec237782c38",
+        "Action": "GET"
+      },
+      {
+        "Rel": "habitual user",
+        "Href": "https://demo.proactive.com/proactivanet/api/users/f267cca1-dd2e-435f-b6d7-90f20eac8d4f",
+        "Action": "GET"
+      },
+      {
+        "Rel": "location",
+        "Href": "https://demo.proactive.com/proactivanet/api/locations/29bfbff8-b12e-41af-91f9-3d36db5274c6",
+        "Action": "GET"
+      },
+      {
+        "Rel": "operating system",
+        "Href": "https://demo.proactive.com/proactivanet/api/os/5e811e76-8e32-444d-a979-34e580b53eed",
+        "Action": "GET"
+      },
+      {
+        "Rel": "operating system family",
+        "Href": "https://demo.proactive.com/proactivanet/api/osfamilies/b3e4df77-d6cb-42c8-bbd1-fe5ee1f5166c",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Code": "A-0002",
+    "Hostname": "Host2",
+    "Description": null,
+    "Notes": null,
+    "Label": null,
+    "ServiceTag": "mj0dzv8y",
+    "FromAgent": true,
+    "AgentType": "Win32",
+    "AgentVersion": "4.18.0.0",
+    "TradeMark": "Lenovo",
+    "PanComputerModels_id": "ad5ef72d-26ef-4fcc-9eb1-c62de6da0fa7",
+    "ComputerModelName": "ThinkCentre M70q",
+    "PanUsers_idResponsible": null,
+    "UserNameResponsable": null,
+    "FullNameResponsable": null,
+    "PanUsers_idHabitual": "fefaade4-4946-43c0-91a5-00095becad74",
+    "UserNameHabitual": "ECUSTOCEPCxyz\\lifeinsurance",
+    "FullNameHabitual": null,
+    "ManualClassification": false,
+    "ManualLocation": false,
+    "PanLocations_id": "dfe7627a-2240-4b44-9d21-043d611448c7",
+    "PanLocationsName": "Los Angels",
+    "LocationTranslatedPath": "/Los Angels",
+    "PanDomains_id": "4b0d9788-eb57-46f5-8f5b-002780e00851",
+    "ComputerDomainName": "domainname12",
+    "PanHardwareStatus_id": "d448681b-2d61-43d3-a050-0ec237782c38",
+    "StatusName": "Alta",
+    "PanOS_id": "44756816-4f3c-442f-9fa5-33fb1035281b",
+    "PanOSFamily_id": "595c5916-d16c-4f47-a220-94d288f4badc",
+    "OsName": "Windows 10 Pro x64",
+    "PanOSFamilyName": "Windows 10",
+    "PanProcessors_id": "b01ca160-6420-4950-bde1-105a70217671",
+    "ProcessorName": "Intel(R) Core(TM) i5-10400T CPU @ 2.00GHz",
+    "ProcSpeed": 1988,
+    "ProcPhysicalCount": 1,
+    "ProcCoreCount": 6,
+    "ProcHTEnabled": true,
+    "ProcCount": 12,
+    "MemoryInstalledMB": 16129.0,
+    "HdSizeGB": 1407.2,
+    "PhysicalDiskCount": 2,
+    "CDCount": 0,
+    "IsServer": false,
+    "ChassisType": "Desktop",
+    "RDSEnabled": false,
+    "RDSPort": 3389,
+    "FirewallStatus": "Off",
+    "FirewallProvider": "Microsoft Defender",
+    "FirewallIsSystem": true,
+    "FirewallEnabled": false,
+    "IsVM": false,
+    "IsVirtualizer": false,
+    "VMPlatform": null,
+    "IsClusterized": false,
+    "x_ips": ["10.136.154.126"],
+    "x_macs": ["74A6E2C220D6"],
+    "clientLastAuditDate": "2023-10-11T15:01:53",
+    "serverLastAuditDate": "2023-10-11T15:02:16.663",
+    "LastEventDate": null,
+    "AssociatedCI": null,
+    "AssociatedCIName": null,
+    "PadSuppliers_id": null,
+    "PadSuppliersName": null,
+    "PadContracts_id": null,
+    "PadContractsName": null,
+    "UBR": null,
+    "ManualWarranty": false,
+    "WarrantyEndDate": "2024-04-12T00:00:00",
+    "Id": "f3818c95-2a1b-4f96-85c9-3fb2e",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/bdf5cc63-1735-47d6-ba1b-002299558398",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/bdf5cc63-1735-47d6-ba1b-002299558398/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "distributions",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/bdf5cc63-1735-47d6-ba1b-002299558398/distributions",
+        "Action": "GET"
+      },
+      {
+        "Rel": "commands",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/bdf5cc63-1735-47d6-ba1b-002299558398/commands",
+        "Action": "GET"
+      },
+      {
+        "Rel": "logins",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/bdf5cc63-1735-47d6-ba1b-002299558398/logins",
+        "Action": "GET"
+      },
+      {
+        "Rel": "software",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/bdf5cc63-1735-47d6-ba1b-002299558398/software",
+        "Action": "GET"
+      },
+      {
+        "Rel": "services",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/bdf5cc63-1735-47d6-ba1b-002299558398/services",
+        "Action": "GET"
+      },
+      {
+        "Rel": "serverRoles",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/bdf5cc63-1735-47d6-ba1b-002299558398/serverRoles",
+        "Action": "GET"
+      },
+      {
+        "Rel": "windowsUpdatesPending",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/bdf5cc63-1735-47d6-ba1b-002299558398/windowsUpdatesPending",
+        "Action": "GET"
+      },
+      {
+        "Rel": "events",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/bdf5cc63-1735-47d6-ba1b-002299558398/events",
+        "Action": "GET"
+      },
+      {
+        "Rel": "classifications",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/bdf5cc63-1735-47d6-ba1b-002299558398/classifications",
+        "Action": "GET"
+      },
+      {
+        "Rel": "network adapters",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/bdf5cc63-1735-47d6-ba1b-002299558398/networkAdapters",
+        "Action": "GET"
+      },
+      {
+        "Rel": "copyfiles",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/bdf5cc63-1735-47d6-ba1b-002299558398/copyfiles",
+        "Action": "GET"
+      },
+      {
+        "Rel": "suppliersElements",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/bdf5cc63-1735-47d6-ba1b-002299558398/suppliersElements",
+        "Action": "GET"
+      },
+      {
+        "Rel": "computer model",
+        "Href": "https://demo.proactive.com/proactivanet/api/computerModels/ad5ef72d-26ef-4fcc-9eb1-c62de6da0fa7",
+        "Action": "GET"
+      },
+      {
+        "Rel": "processor",
+        "Href": "https://demo.proactive.com/proactivanet/api/processors/b01ca160-6420-4950-bde1-105a70217671",
+        "Action": "GET"
+      },
+      {
+        "Rel": "domain",
+        "Href": "https://demo.proactive.com/proactivanet/api/domains/6c874426-874b-4592-a0be-f2b828c85563",
+        "Action": "GET"
+      },
+      {
+        "Rel": "hardware status",
+        "Href": "https://demo.proactive.com/proactivanet/api/hardwareStatus/d448681b-2d61-43d3-a050-0ec237782c38",
+        "Action": "GET"
+      },
+      {
+        "Rel": "habitual user",
+        "Href": "https://demo.proactive.com/proactivanet/api/users/dae998f1-72a9-4c64-b53c-3fa913ea3a0f",
+        "Action": "GET"
+      },
+      {
+        "Rel": "location",
+        "Href": "https://demo.proactive.com/proactivanet/api/locations/13694e62-4e5d-4cc6-8ee9-eac6a92721b0",
+        "Action": "GET"
+      },
+      {
+        "Rel": "operating system",
+        "Href": "https://demo.proactive.com/proactivanet/api/os/44756816-4f3c-442f-9fa5-33fb1035281b",
+        "Action": "GET"
+      },
+      {
+        "Rel": "operating system family",
+        "Href": "https://demo.proactive.com/proactivanet/api/osfamilies/595c5916-d16c-4f47-a220-94d288f4badc",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Code": "A-0003",
+    "Hostname": "Host3",
+    "Description": null,
+    "Notes": null,
+    "Label": null,
+    "ServiceTag": "mz01bb86",
+    "FromAgent": true,
+    "AgentType": "Win32",
+    "AgentVersion": "4.20.0.0",
+    "TradeMark": "Lenovo",
+    "PanComputerModels_id": "808a6b93-e1c8-44bf-8fce-e6d402ece63a",
+    "ComputerModelName": "ThinkCentre M70q Gen 5",
+    "PanUsers_idResponsible": null,
+    "UserNameResponsable": null,
+    "FullNameResponsable": null,
+    "PanUsers_idHabitual": "835cfc8c-bdf7-4449-8b6e-000b426714cf",
+    "UserNameHabitual": null,
+    "FullNameHabitual": null,
+    "ManualClassification": false,
+    "ManualLocation": false,
+    "PanLocations_id": "188f111a-b753-4ef4-93ee-03eca974b54f",
+    "PanLocationsName": "Market",
+    "LocationTranslatedPath": "/Market",
+    "PanDomains_id": "7c3ab700-7b56-4e10-9eb9-003351bd30cf",
+    "ComputerDomainName": "domainname123",
+    "PanHardwareStatus_id": "d448681b-2d61-43d3-a050-0ec237782c38",
+    "StatusName": "Alta",
+    "PanOS_id": "f876ba46-317a-4934-b3ed-042530381a2a",
+    "PanOSFamily_id": "b3e4df77-d6cb-42c8-bbd1-fe5ee1f5166c",
+    "OsName": "Windows 11 Pro",
+    "PanOSFamilyName": "Windows 11",
+    "PanProcessors_id": "cb9de745-5b61-4ecf-9572-ecaa6d189d7a",
+    "ProcessorName": "Intel(R) Core(TM) i5-14400T",
+    "ProcSpeed": 1499,
+    "ProcPhysicalCount": 1,
+    "ProcCoreCount": 10,
+    "ProcHTEnabled": true,
+    "ProcCount": 16,
+    "MemoryInstalledMB": 7830.0,
+    "HdSizeGB": 474.72,
+    "PhysicalDiskCount": 1,
+    "CDCount": 0,
+    "IsServer": false,
+    "ChassisType": "Desktop",
+    "RDSEnabled": false,
+    "RDSPort": 3389,
+    "FirewallStatus": "Off",
+    "FirewallProvider": "Microsoft Defender",
+    "FirewallIsSystem": true,
+    "FirewallEnabled": false,
+    "IsVM": false,
+    "IsVirtualizer": false,
+    "VMPlatform": null,
+    "IsClusterized": false,
+    "x_ips": ["102.166.164.166", "11.126.144.226"],
+    "x_macs": ["01080FBA00023", "01090FCAE001"],
+    "clientLastAuditDate": "2025-08-23T12:13:46",
+    "serverLastAuditDate": "2025-08-23T12:14:41.38",
+    "LastEventDate": "2025-08-21T12:08:50.197",
+    "AssociatedCI": null,
+    "AssociatedCIName": null,
+    "PadSuppliers_id": null,
+    "PadSuppliersName": null,
+    "PadContracts_id": null,
+    "PadContractsName": null,
+    "UBR": 4946,
+    "ManualWarranty": false,
+    "WarrantyEndDate": "2028-06-29T00:00:00",
+    "Id": "7dc7bff8-fa5a-430b-b60c-b7ba9a0c33b8",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/be5fb631-6928-4e18-a2b8-00238b2d5e3c",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/be5fb631-6928-4e18-a2b8-00238b2d5e3c/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "distributions",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/be5fb631-6928-4e18-a2b8-00238b2d5e3c/distributions",
+        "Action": "GET"
+      },
+      {
+        "Rel": "commands",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/be5fb631-6928-4e18-a2b8-00238b2d5e3c/commands",
+        "Action": "GET"
+      },
+      {
+        "Rel": "logins",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/be5fb631-6928-4e18-a2b8-00238b2d5e3c/logins",
+        "Action": "GET"
+      },
+      {
+        "Rel": "software",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/be5fb631-6928-4e18-a2b8-00238b2d5e3c/software",
+        "Action": "GET"
+      },
+      {
+        "Rel": "services",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/be5fb631-6928-4e18-a2b8-00238b2d5e3c/services",
+        "Action": "GET"
+      },
+      {
+        "Rel": "serverRoles",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/be5fb631-6928-4e18-a2b8-00238b2d5e3c/serverRoles",
+        "Action": "GET"
+      },
+      {
+        "Rel": "windowsUpdatesPending",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/be5fb631-6928-4e18-a2b8-00238b2d5e3c/windowsUpdatesPending",
+        "Action": "GET"
+      },
+      {
+        "Rel": "events",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/be5fb631-6928-4e18-a2b8-00238b2d5e3c/events",
+        "Action": "GET"
+      },
+      {
+        "Rel": "classifications",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/be5fb631-6928-4e18-a2b8-00238b2d5e3c/classifications",
+        "Action": "GET"
+      },
+      {
+        "Rel": "network adapters",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/be5fb631-6928-4e18-a2b8-00238b2d5e3c/networkAdapters",
+        "Action": "GET"
+      },
+      {
+        "Rel": "copyfiles",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/be5fb631-6928-4e18-a2b8-00238b2d5e3c/copyfiles",
+        "Action": "GET"
+      },
+      {
+        "Rel": "suppliersElements",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/be5fb631-6928-4e18-a2b8-00238b2d5e3c/suppliersElements",
+        "Action": "GET"
+      },
+      {
+        "Rel": "computer model",
+        "Href": "https://demo.proactive.com/proactivanet/api/computerModels/808a6b93-e1c8-44bf-8fce-e6d402ece63a",
+        "Action": "GET"
+      },
+      {
+        "Rel": "processor",
+        "Href": "https://demo.proactive.com/proactivanet/api/processors/cb9de745-5b61-4ecf-9572-ecaa6d189d7a",
+        "Action": "GET"
+      },
+      {
+        "Rel": "domain",
+        "Href": "https://demo.proactive.com/proactivanet/api/domains/6c874426-874b-4592-a0be-f2b828c85563",
+        "Action": "GET"
+      },
+      {
+        "Rel": "hardware status",
+        "Href": "https://demo.proactive.com/proactivanet/api/hardwareStatus/d448681b-2d61-43d3-a050-0ec237782c38",
+        "Action": "GET"
+      },
+      {
+        "Rel": "habitual user",
+        "Href": "https://demo.proactive.com/proactivanet/api/users/4ac05bf7-ff73-4d95-8a3a-49788709c335",
+        "Action": "GET"
+      },
+      {
+        "Rel": "location",
+        "Href": "https://demo.proactive.com/proactivanet/api/locations/611d5e12-cddd-4ef8-baa5-312ca2393167",
+        "Action": "GET"
+      },
+      {
+        "Rel": "operating system",
+        "Href": "https://demo.proactive.com/proactivanet/api/os/f876ba46-317a-4934-b3ed-042530381a2a",
+        "Action": "GET"
+      },
+      {
+        "Rel": "operating system family",
+        "Href": "https://demo.proactive.com/proactivanet/api/osfamilies/b3e4df77-d6cb-42c8-bbd1-fe5ee1f5166c",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Code": "B-0004",
+    "Hostname": "Host4",
+    "Description": null,
+    "Notes": null,
+    "Label": null,
+    "ServiceTag": "mj0h4880",
+    "FromAgent": true,
+    "AgentType": "Win32",
+    "AgentVersion": "4.20.0.0",
+    "TradeMark": "Lenovo",
+    "PanComputerModels_id": "ad5ef72d-26ef-4fcc-9eb1-c62de6da0fa7",
+    "ComputerModelName": "ThinkCentre M70q",
+    "PanUsers_idResponsible": null,
+    "UserNameResponsable": null,
+    "FullNameResponsable": null,
+    "PanUsers_idHabitual": "d865d938-2945-4f2c-8b94-000d21b7d97c",
+    "UserNameHabitual": null,
+    "FullNameHabitual": null,
+    "ManualClassification": false,
+    "ManualLocation": false,
+    "PanLocations_id": "f2733111-138a-4da0-a70c-035211e1f581",
+    "PanLocationsName": "Xyz",
+    "LocationTranslatedPath": "/Xyz",
+    "PanDomains_id": "77246165-47d4-41d0-a4a6-00600c24bd19",
+    "ComputerDomainName": "domainname1234",
+    "PanHardwareStatus_id": "d448681b-2d61-43d3-a050-0ec237782c38",
+    "StatusName": "Alta",
+    "PanOS_id": "b27cebe0-66c6-4b1c-b700-c42a5d124209",
+    "PanOSFamily_id": "b3e4df77-d6cb-42c8-bbd1-fe5ee1f5166c",
+    "OsName": "Windows 11 Pro",
+    "PanOSFamilyName": "Windows 11",
+    "PanProcessors_id": "71242ba1-2645-4144-9ea1-b425195b38d1",
+    "ProcessorName": "Intel(R) Core(TM) i7-10700T CPU @ 2.00GHz",
+    "ProcSpeed": 1987,
+    "ProcPhysicalCount": 1,
+    "ProcCoreCount": 8,
+    "ProcHTEnabled": true,
+    "ProcCount": 16,
+    "MemoryInstalledMB": 16118.0,
+    "HdSizeGB": 475.49,
+    "PhysicalDiskCount": 1,
+    "CDCount": 1,
+    "IsServer": false,
+    "ChassisType": "Desktop",
+    "RDSEnabled": false,
+    "RDSPort": 3389,
+    "FirewallStatus": "Off",
+    "FirewallProvider": "Microsoft Defender",
+    "FirewallIsSystem": true,
+    "FirewallEnabled": false,
+    "IsVM": false,
+    "IsVirtualizer": false,
+    "VMPlatform": null,
+    "IsClusterized": false,
+    "x_ips": ["172.176.174.176", "112.125.146.256"],
+    "x_macs": ["11080FBA00123", "02090FCAE0014"],
+    "clientLastAuditDate": "2025-01-02T09:11:12",
+    "serverLastAuditDate": "2025-01-02T09:14:39.77",
+    "LastEventDate": "2024-12-31T14:56:38.143",
+    "AssociatedCI": null,
+    "AssociatedCIName": null,
+    "PadSuppliers_id": null,
+    "PadSuppliersName": null,
+    "PadContracts_id": null,
+    "PadContractsName": null,
+    "UBR": 2428,
+    "ManualWarranty": false,
+    "WarrantyEndDate": "2025-05-04T00:00:00",
+    "Id": "dd5e13e3-5f4f-45c3-8174-6a6b64c7fdda",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/c86bd986-87ac-4b0a-b5fd-0028ab5aaf64",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/c86bd986-87ac-4b0a-b5fd-0028ab5aaf64/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "distributions",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/c86bd986-87ac-4b0a-b5fd-0028ab5aaf64/distributions",
+        "Action": "GET"
+      },
+      {
+        "Rel": "commands",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/c86bd986-87ac-4b0a-b5fd-0028ab5aaf64/commands",
+        "Action": "GET"
+      },
+      {
+        "Rel": "logins",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/c86bd986-87ac-4b0a-b5fd-0028ab5aaf64/logins",
+        "Action": "GET"
+      },
+      {
+        "Rel": "software",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/c86bd986-87ac-4b0a-b5fd-0028ab5aaf64/software",
+        "Action": "GET"
+      },
+      {
+        "Rel": "services",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/c86bd986-87ac-4b0a-b5fd-0028ab5aaf64/services",
+        "Action": "GET"
+      },
+      {
+        "Rel": "serverRoles",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/c86bd986-87ac-4b0a-b5fd-0028ab5aaf64/serverRoles",
+        "Action": "GET"
+      },
+      {
+        "Rel": "windowsUpdatesPending",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/c86bd986-87ac-4b0a-b5fd-0028ab5aaf64/windowsUpdatesPending",
+        "Action": "GET"
+      },
+      {
+        "Rel": "events",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/c86bd986-87ac-4b0a-b5fd-0028ab5aaf64/events",
+        "Action": "GET"
+      },
+      {
+        "Rel": "classifications",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/c86bd986-87ac-4b0a-b5fd-0028ab5aaf64/classifications",
+        "Action": "GET"
+      },
+      {
+        "Rel": "network adapters",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/c86bd986-87ac-4b0a-b5fd-0028ab5aaf64/networkAdapters",
+        "Action": "GET"
+      },
+      {
+        "Rel": "copyfiles",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/c86bd986-87ac-4b0a-b5fd-0028ab5aaf64/copyfiles",
+        "Action": "GET"
+      },
+      {
+        "Rel": "suppliersElements",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/c86bd986-87ac-4b0a-b5fd-0028ab5aaf64/suppliersElements",
+        "Action": "GET"
+      },
+      {
+        "Rel": "computer model",
+        "Href": "https://demo.proactive.com/proactivanet/api/computerModels/ad5ef72d-26ef-4fcc-9eb1-c62de6da0fa7",
+        "Action": "GET"
+      },
+      {
+        "Rel": "processor",
+        "Href": "https://demo.proactive.com/proactivanet/api/processors/71242ba1-2645-4144-9ea1-b425195b38d1",
+        "Action": "GET"
+      },
+      {
+        "Rel": "domain",
+        "Href": "https://demo.proactive.com/proactivanet/api/domains/6c874426-874b-4592-a0be-f2b828c85563",
+        "Action": "GET"
+      },
+      {
+        "Rel": "hardware status",
+        "Href": "https://demo.proactive.com/proactivanet/api/hardwareStatus/d448681b-2d61-43d3-a050-0ec237782c38",
+        "Action": "GET"
+      },
+      {
+        "Rel": "habitual user",
+        "Href": "https://demo.proactive.com/proactivanet/api/users/4e3587de-1d4f-40bd-a1c9-ad14b6f621db",
+        "Action": "GET"
+      },
+      {
+        "Rel": "location",
+        "Href": "https://demo.proactive.com/proactivanet/api/locations/13694e62-4e5d-4cc6-8ee9-eac6a92721b0",
+        "Action": "GET"
+      },
+      {
+        "Rel": "operating system",
+        "Href": "https://demo.proactive.com/proactivanet/api/os/b27cebe0-66c6-4b1c-b700-c42a5d124209",
+        "Action": "GET"
+      },
+      {
+        "Rel": "operating system family",
+        "Href": "https://demo.proactive.com/proactivanet/api/osfamilies/b3e4df77-d6cb-42c8-bbd1-fe5ee1f5166c",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Code": "B-0005",
+    "Hostname": "Host5",
+    "Description": null,
+    "Notes": null,
+    "Label": "3268",
+    "ServiceTag": "mz0109ca",
+    "FromAgent": true,
+    "AgentType": "Win32",
+    "AgentVersion": "4.20.0.0",
+    "TradeMark": "Lenovo",
+    "PanComputerModels_id": "808a6b93-e1c8-44bf-8fce-e6d402ece63a",
+    "ComputerModelName": "ThinkCentre M70q Gen 5",
+    "PanUsers_idResponsible": null,
+    "UserNameResponsable": null,
+    "FullNameResponsable": null,
+    "PanUsers_idHabitual": "c39ad382-6fb0-44f8-849f-000f3597cddf",
+    "UserNameHabitual": null,
+    "FullNameHabitual": null,
+    "ManualClassification": false,
+    "ManualLocation": false,
+    "PanLocations_id": "fb2ca790-1bce-4abc-ad54-028636f80b08",
+    "PanLocationsName": "Abcd",
+    "LocationTranslatedPath": "/Abcd",
+    "PanDomains_id": "d88fbf9f-5b68-4f2b-94ea-00814b518f1f",
+    "ComputerDomainName": "domainname12345",
+    "PanHardwareStatus_id": "d448681b-2d61-43d3-a050-0ec237782c38",
+    "StatusName": "Alta",
+    "PanOS_id": "f876ba46-317a-4934-b3ed-042530381a2a",
+    "PanOSFamily_id": "b3e4df77-d6cb-42c8-bbd1-fe5ee1f5166c",
+    "OsName": "Windows 11 Pro",
+    "PanOSFamilyName": "Windows 11",
+    "PanProcessors_id": "cb9de745-5b61-4ecf-9572-ecaa6d189d7a",
+    "ProcessorName": "Intel(R) Core(TM) i5-14400T",
+    "ProcSpeed": 1544,
+    "ProcPhysicalCount": 1,
+    "ProcCoreCount": 10,
+    "ProcHTEnabled": true,
+    "ProcCount": 16,
+    "MemoryInstalledMB": 16014.0,
+    "HdSizeGB": 474.72,
+    "PhysicalDiskCount": 2,
+    "CDCount": 0,
+    "IsServer": false,
+    "ChassisType": "Desktop",
+    "RDSEnabled": false,
+    "RDSPort": 3389,
+    "FirewallStatus": "Off",
+    "FirewallProvider": "Microsoft Defender",
+    "FirewallIsSystem": true,
+    "FirewallEnabled": false,
+    "IsVM": false,
+    "IsVirtualizer": false,
+    "VMPlatform": null,
+    "IsClusterized": false,
+    "x_ips": ["192.194.182.196", "12.13.14.145"],
+    "x_macs": ["01260FBA00023", "013490FCAE001"],
+    "clientLastAuditDate": "2025-08-23T12:08:16",
+    "serverLastAuditDate": "2025-08-23T12:08:55.187",
+    "LastEventDate": "2025-08-08T18:35:28.81",
+    "AssociatedCI": null,
+    "AssociatedCIName": null,
+    "PadSuppliers_id": null,
+    "PadSuppliersName": null,
+    "PadContracts_id": null,
+    "PadContractsName": null,
+    "UBR": 4946,
+    "ManualWarranty": false,
+    "WarrantyEndDate": "2028-03-31T00:00:00",
+    "Id": "1f9e4ea6-2714-4a45-aa8f-781718be285d",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/1f9e4ea6-2714-4a45-aa8f-781718be285d",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/1f9e4ea6-2714-4a45-aa8f-781718be285d/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "distributions",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/1f9e4ea6-2714-4a45-aa8f-781718be285d/distributions",
+        "Action": "GET"
+      },
+      {
+        "Rel": "commands",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/1f9e4ea6-2714-4a45-aa8f-781718be285d/commands",
+        "Action": "GET"
+      },
+      {
+        "Rel": "logins",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/1f9e4ea6-2714-4a45-aa8f-781718be285d/logins",
+        "Action": "GET"
+      },
+      {
+        "Rel": "software",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/80c99099-7ef3-4e77-a96d-0029b73d9b45/software",
+        "Action": "GET"
+      },
+      {
+        "Rel": "services",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/80c99099-7ef3-4e77-a96d-0029b73d9b45/services",
+        "Action": "GET"
+      },
+      {
+        "Rel": "serverRoles",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/80c99099-7ef3-4e77-a96d-0029b73d9b45/serverRoles",
+        "Action": "GET"
+      },
+      {
+        "Rel": "windowsUpdatesPending",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/80c99099-7ef3-4e77-a96d-0029b73d9b45/windowsUpdatesPending",
+        "Action": "GET"
+      },
+      {
+        "Rel": "events",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/80c99099-7ef3-4e77-a96d-0029b73d9b45/events",
+        "Action": "GET"
+      },
+      {
+        "Rel": "classifications",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/80c99099-7ef3-4e77-a96d-0029b73d9b45/classifications",
+        "Action": "GET"
+      },
+      {
+        "Rel": "network adapters",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/80c99099-7ef3-4e77-a96d-0029b73d9b45/networkAdapters",
+        "Action": "GET"
+      },
+      {
+        "Rel": "copyfiles",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/80c99099-7ef3-4e77-a96d-0029b73d9b45/copyfiles",
+        "Action": "GET"
+      },
+      {
+        "Rel": "suppliersElements",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/80c99099-7ef3-4e77-a96d-0029b73d9b45/suppliersElements",
+        "Action": "GET"
+      },
+      {
+        "Rel": "computer model",
+        "Href": "https://demo.proactive.com/proactivanet/api/computerModels/808a6b93-e1c8-44bf-8fce-e6d402ece63a",
+        "Action": "GET"
+      },
+      {
+        "Rel": "processor",
+        "Href": "https://demo.proactive.com/proactivanet/api/processors/cb9de745-5b61-4ecf-9572-ecaa6d189d7a",
+        "Action": "GET"
+      },
+      {
+        "Rel": "domain",
+        "Href": "https://demo.proactive.com/proactivanet/api/domains/6c874426-874b-4592-a0be-f2b828c85563",
+        "Action": "GET"
+      },
+      {
+        "Rel": "hardware status",
+        "Href": "https://demo.proactive.com/proactivanet/api/hardwareStatus/d448681b-2d61-43d3-a050-0ec237782c38",
+        "Action": "GET"
+      },
+      {
+        "Rel": "habitual user",
+        "Href": "https://demo.proactive.com/proactivanet/api/users/80ee8429-9bfd-4d6e-82b7-55af56098915",
+        "Action": "GET"
+      },
+      {
+        "Rel": "location",
+        "Href": "https://demo.proactive.com/proactivanet/api/locations/9787dcff-f927-4eba-82bd-d4e4080e58ec",
+        "Action": "GET"
+      },
+      {
+        "Rel": "operating system",
+        "Href": "https://demo.proactive.com/proactivanet/api/os/f876ba46-317a-4934-b3ed-042530381a2a",
+        "Action": "GET"
+      },
+      {
+        "Rel": "operating system family",
+        "Href": "https://demo.proactive.com/proactivanet/api/osfamilies/b3e4df77-d6cb-42c8-bbd1-fe5ee1f5166c",
+        "Action": "GET"
+      }
+    ]
+  }
+]

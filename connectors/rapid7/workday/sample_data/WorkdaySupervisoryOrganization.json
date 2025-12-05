@@ -1,0 +1,132 @@
+[
+  {
+    "id": "a1f92c7e4b3a45e2b9c8d1f6a7e5c3b2",
+    "descriptor": "Engineering Organization (John Doe)",
+    "href": "https://workday.example.com/api/supervisoryOrganizations/a1f92c7e4b3a45e2b9c8d1f6a7e5c3b2",
+    "name": "Engineering Department",
+    "workers": "https://workday.example.com/api/workers?org=a1f92c7e4b3a45e2b9c8d1f6a7e5c3b2",
+    "code": "ENG",
+    "manager": {
+      "descriptor": "John Doe",
+      "id": "b27f93e1a1d44b9aa2f4a5c7e8d1f4b2",
+      "href": "https://workday.example.com/api/workers/b27f93e1a1d44b9aa2f4a5c7e8d1f4b2"
+    }
+  },
+  {
+    "id": "b3e91d4f5c7a48e6a9b2d3f8e4a6c7b1",
+    "descriptor": "Finance Organization (Jane Smith)",
+    "href": "https://workday.example.com/api/supervisoryOrganizations/b3e91d4f5c7a48e6a9b2d3f8e4a6c7b1",
+    "name": "Finance Department",
+    "workers": "https://workday.example.com/api/workers?org=b3e91d4f5c7a48e6a9b2d3f8e4a6c7b1",
+    "code": "FIN",
+    "manager": {
+      "descriptor": "Jane Smith",
+      "id": "e9d83c5a4f25432baf93b1a7c9d8e671",
+      "href": "https://workday.example.com/api/workers/e9d83c5a4f25432baf93b1a7c9d8e671"
+    }
+  },
+  {
+    "id": "c9d84b7e3a2f45b19a8d6e5f1c7a9b4e",
+    "descriptor": "Human Resources Organization (Michael Johnson)",
+    "href": "https://workday.example.com/api/supervisoryOrganizations/c9d84b7e3a2f45b19a8d6e5f1c7a9b4e",
+    "name": "Human Resources Department",
+    "workers": "https://workday.example.com/api/workers?org=c9d84b7e3a2f45b19a8d6e5f1c7a9b4e",
+    "code": "HR",
+    "manager": {
+      "descriptor": "Michael Johnson",
+      "id": "a6b42c9d3d2e49e8a9f33b7a8d9c7a13",
+      "href": "https://workday.example.com/api/workers/a6b42c9d3d2e49e8a9f33b7a8d9c7a13"
+    }
+  },
+  {
+    "id": "d8f61e9c3b7a46f19c4e2b7d5a8f9e6c",
+    "descriptor": "IT Support Organization (Sara Williams)",
+    "href": "https://workday.example.com/api/supervisoryOrganizations/d8f61e9c3b7a46f19c4e2b7d5a8f9e6c",
+    "name": "IT Support Department",
+    "workers": "https://workday.example.com/api/workers?org=d8f61e9c3b7a46f19c4e2b7d5a8f9e6c",
+    "code": "ITS",
+    "manager": {
+      "descriptor": "Sara Williams",
+      "id": "f3c7d5e6a1b54e21b8f92a3d4e8c6b71",
+      "href": "https://workday.example.com/api/workers/f3c7d5e6a1b54e21b8f92a3d4e8c6b71"
+    }
+  },
+  {
+    "id": "e7a93f5b4c2e49a1b8d3f7e2a9c5d8b6",
+    "descriptor": "Marketing Organization (David Brown)",
+    "href": "https://workday.example.com/api/supervisoryOrganizations/e7a93f5b4c2e49a1b8d3f7e2a9c5d8b6",
+    "name": "Marketing Department",
+    "workers": "https://workday.example.com/api/workers?org=e7a93f5b4c2e49a1b8d3f7e2a9c5d8b6",
+    "code": "MKT",
+    "manager": {
+      "descriptor": "David Brown",
+      "id": "c9e2f7b3a6d84b15b1e93c4a8e5d7a92",
+      "href": "https://workday.example.com/api/workers/c9e2f7b3a6d84b15b1e93c4a8e5d7a92"
+    }
+  },
+  {
+    "id": "f2b84c6e1a7f49e2b5d9a3c8e7b4f5a1",
+    "descriptor": "Sales Organization (Emma Davis)",
+    "href": "https://workday.example.com/api/supervisoryOrganizations/f2b84c6e1a7f49e2b5d9a3c8e7b4f5a1",
+    "name": "Sales Department",
+    "workers": "https://workday.example.com/api/workers?org=f2b84c6e1a7f49e2b5d9a3c8e7b4f5a1",
+    "code": "SAL",
+    "manager": {
+      "descriptor": "Emma Davis",
+      "id": "a4b5c6d7e8f94a23b1c2d3e4f5a6b7c8",
+      "href": "https://workday.example.com/api/workers/a4b5c6d7e8f94a23b1c2d3e4f5a6b7c8"
+    }
+  },
+  {
+    "id": "a9b71e3d8c2f46b19e5a7d3c1b9f8a4e",
+    "descriptor": "Operations Organization (Olivia Wilson)",
+    "href": "https://workday.example.com/api/supervisoryOrganizations/a9b71e3d8c2f46b19e5a7d3c1b9f8a4e",
+    "name": "Operations Department",
+    "workers": "https://workday.example.com/api/workers?org=a9b71e3d8c2f46b19e5a7d3c1b9f8a4e",
+    "code": "OPS",
+    "manager": {
+      "descriptor": "Olivia Wilson",
+      "id": "e5f6a7b8c9d04e12a3b4c5d6e7f8a9b0",
+      "href": "https://workday.example.com/api/workers/e5f6a7b8c9d04e12a3b4c5d6e7f8a9b0"
+    }
+  },
+  {
+    "id": "b8a61d9e3c7f42a5b1e9c4d8a2f6b3e7",
+    "descriptor": "Legal Organization (Priya Menon)",
+    "href": "https://workday.example.com/api/supervisoryOrganizations/b8a61d9e3c7f42a5b1e9c4d8a2f6b3e7",
+    "name": "Legal Department",
+    "workers": "https://workday.example.com/api/workers?org=b8a61d9e3c7f42a5b1e9c4d8a2f6b3e7",
+    "code": "LEG",
+    "manager": {
+      "descriptor": "Priya Menon",
+      "id": "b2c3d4e5f6a74b23c1d2e3f4a5b6c7d8",
+      "href": "https://workday.example.com/api/workers/b2c3d4e5f6a74b23c1d2e3f4a5b6c7d8"
+    }
+  },
+  {
+    "id": "c7f92e4b1a6d43b2b8e9c3f7a5d8e2c9",
+    "descriptor": "Procurement Organization (Liam Anderson)",
+    "href": "https://workday.example.com/api/supervisoryOrganizations/c7f92e4b1a6d43b2b8e9c3f7a5d8e2c9",
+    "name": "Procurement Department",
+    "workers": "https://workday.example.com/api/workers?org=c7f92e4b1a6d43b2b8e9c3f7a5d8e2c9",
+    "code": "PRC",
+    "manager": {
+      "descriptor": "Liam Anderson",
+      "id": "c1d2e3f4a5b64c23d1e2f3a4b5c6d7e8",
+      "href": "https://workday.example.com/api/workers/c1d2e3f4a5b64c23d1e2f3a4b5c6d7e8"
+    }
+  },
+  {
+    "id": "d9e72f5a3b6c48e1a7f9b2c4d3e5a6b8",
+    "descriptor": "Research & Development Organization (Noah Taylor)",
+    "href": "https://workday.example.com/api/supervisoryOrganizations/d9e72f5a3b6c48e1a7f9b2c4d3e5a6b8",
+    "name": "R&D Department",
+    "workers": "https://workday.example.com/api/workers?org=d9e72f5a3b6c48e1a7f9b2c4d3e5a6b8",
+    "code": "RND",
+    "manager": {
+      "descriptor": "Noah Taylor",
+      "id": "c1d2e3f4a5b64c32d1e2f3a4b5c6d7e8",
+      "href": "https://workday.example.com/api/workers/c1d2e3f4a5b64c32d1e2f3a4b5c6d7e8"
+    }
+  }
+]

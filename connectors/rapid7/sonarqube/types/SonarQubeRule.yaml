@@ -1,0 +1,236 @@
+x-samos-type-name: SonarQubeRule
+x-samos-namespace: sonarqube
+title: SonarQube Rule
+description: A Rule referenced by the issue type in SonarQube.
+x-samos-global-zone: true
+x-samos-extends-types:
+  - type-name: Exposure
+
+x-samos-keys:
+  - key
+
+x-samos-table:
+  - name: name
+  - name: repo
+  - name: severity
+  - name: status
+  - name: isTemplate
+  - name: type
+  - name: scope
+  - name: isExternal
+  - name: cleanCodeAttribute
+  - name: updatedAt
+  - name: createdAt
+
+x-samos-detail:
+  - name: name
+  - name: repo
+  - name: severity
+  - name: status
+  - name: type
+  - name: lang
+  - name: langName
+  - name: isTemplate
+  - name: tags
+  - name: sysTags
+  - name: params
+  - name: defaultDebtRemFnType
+  - name: defaultDebtRemFnOffset
+  - name: debtOverloaded
+  - name: debtRemFnType
+  - name: debtRemFnOffset
+  - name: defaultRemFnType
+  - name: defaultRemFnBaseEffort
+  - name: remFnType
+  - name: remFnBaseEffort
+  - name: remFnOverloaded
+  - name: scope
+  - name: isExternal
+  - name: educationPrinciples
+  - name: cleanCodeAttribute
+  - name: cleanCodeAttributeCategory
+  - name: impacts
+  - name: securityStandards
+  - name: descriptionSections
+  - name: updatedAt
+  - name: createdAt
+
+x-samos-derived-properties:
+  d_solution:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'x_solution'
+    items:
+      type: string
+      x-samos-fulfills:
+        type-name: Exposure
+        property-name: solution
+properties:
+  key:
+    type: string
+    title: Key
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: id
+  repo:
+    type: string
+    title: Repo
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  createdAt:
+    type: string
+    title: Created At
+    format: date-time
+  severity:
+    type: string
+    title: Severity
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: severity
+    x-samos-ref-types:
+      - type-name: SonarQubeEnumSeverity
+        key-name: id
+  status:
+    type: string
+    title: Status
+  isTemplate:
+    type: boolean
+    title: Template?
+  tags:
+    type: array
+    title: Tags
+    items:
+      type: string
+  sysTags:
+    type: array
+    title: Sys Tags
+    items:
+      type: string
+  lang:
+    type: string
+    title: Lang
+  langName:
+    type: string
+    title: Lang Name
+  params:
+    type: array
+    title: Params
+    items:
+      type: object
+  defaultDebtRemFnType:
+    type: string
+    title: Default Debt Rem Fn Type
+  defaultDebtRemFnOffset:
+    type: string
+    title: Default Debt Rem Fn Offset
+  debtOverloaded:
+    type: boolean
+    title: Debt Overloaded?
+  debtRemFnType:
+    type: string
+    title: Debt Rem Fn Type
+  debtRemFnOffset:
+    type: string
+    title: Debt Rem Fn Offset
+  type:
+    type: string
+    title: Type
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: exposure_type
+    x-samos-ref-types:
+      - type-name: SonarQubeEnumExposureType
+        key-name: id
+  defaultRemFnType:
+    type: string
+    title: Default Rem Fn Type
+  defaultRemFnBaseEffort:
+    type: string
+    title: Default Rem Fn Base Effort
+  remFnType:
+    type: string
+    title: Rem Fn Type
+  remFnBaseEffort:
+    type: string
+    title: Rem Fn Base Effort
+  remFnOverloaded:
+    type: boolean
+    title: Rem Fn Overloaded?
+  scope:
+    type: string
+    title: Scope
+  isExternal:
+    type: boolean
+    title: External?
+  descriptionSections:
+    type: array
+    title: Description Sections
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+          title: Key
+        content:
+          type: string
+          title: Content
+  educationPrinciples:
+    type: array
+    title: Education Principles
+    items:
+      type: string
+  cleanCodeAttribute:
+    type: string
+    title: Clean Code Attribute
+  cleanCodeAttributeCategory:
+    type: string
+    title: Clean Code Attribute Category
+  impacts:
+    type: array
+    title: Impacts
+    items:
+      type: object
+      properties:
+        softwareQuality:
+          type: string
+          title: Software Quality
+        severity:
+          type: string
+          title: Severity
+  securityStandards:
+    type: array
+    title: Security Standards
+    items:
+      type: string
+  updatedAt:
+    title: Updated At
+    type: string
+    format: date-time
+  deprecatedKeys:
+    title: Deprecated Key(s)
+    type: object
+  remFnGapMultiplier:
+    title: Rem Fn Gap Multiplier
+    type: string
+  defaultRemFnGapMultiplier:
+    title: Default Rem Fn Gap Multiplier
+    type: string
+  gapDescription:
+    title: Gap Description
+    type: string
+  internalKey:
+    title: Internal Key
+    type: string
+  x_solution:
+    x-samos-hidden: true
+    type: string
+    title: Solution
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: solution

@@ -1,0 +1,217 @@
+[
+  {
+    "Name": "Queen Roman",
+    "SurName": "javad",
+    "Username": "queen.roman",
+    "PanDomains_id": "6c874426-874b-4592-a0be-f2b828c85563",
+    "PadCustomers_id": null,
+    "DNI": null,
+    "Email": "queen.roman@example.com",
+    "Telephone": "6627",
+    "CorpMobile": null,
+    "PersMobile": null,
+    "CorpTelegramAccount": null,
+    "PersTelegramAccount": null,
+    "Inactive": true,
+    "PortalAccessDenial": false,
+    "PreferredLanguage": null,
+    "ManualLocation": false,
+    "PanLocations_id": "9787dcff-f927-4eba-82bd-d4e4080e58ec",
+    "PanOUsAD_id": "42b3dc88-2eb4-461d-8321-2495e945c9ff",
+    "Id": "821564d0-329c-4a8d-8a68-000237afab33",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactiva.com/proactivanet/api/users/821564d0-329c-4a8d-8a68-000237afab33",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactiva.com/proactivanet/api/users/821564d0-329c-4a8d-8a68-000237afab33/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "domain",
+        "Href": "https://demo.proactiva.com/proactivanet/api/domains/6c874426-874b-4592-a0be-f2b828c85563",
+        "Action": "GET"
+      },
+      {
+        "Rel": "location",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/9787dcff-f927-4eba-82bd-d4e4080e58ec",
+        "Action": "GET"
+      },
+      {
+        "Rel": "ou",
+        "Href": "https://demo.proactiva.com/proactivanet/api/ous/42b3dc88-2eb4-461d-8321-2495e945c9ff",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Name": "Sistemas Admin",
+    "SurName": "Luke sandy",
+    "Username": "sistemas.admin",
+    "PanDomains_id": "6c874426-874b-4592-a0be-f2b828c85563",
+    "PadCustomers_id": null,
+    "DNI": null,
+    "Email": null,
+    "Telephone": null,
+    "CorpMobile": null,
+    "PersMobile": null,
+    "CorpTelegramAccount": null,
+    "PersTelegramAccount": null,
+    "Inactive": false,
+    "PortalAccessDenial": false,
+    "PreferredLanguage": null,
+    "ManualLocation": false,
+    "PanLocations_id": null,
+    "PanOUsAD_id": "8d7f5950-0847-452e-ad32-7cee6d28b501",
+    "Id": "fefaade4-4946-43c0-91a5-00095becad74",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactiva.com/proactivanet/api/users/fefaade4-4946-43c0-91a5-00095becad74",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactiva.com/proactivanet/api/users/fefaade4-4946-43c0-91a5-00095becad74/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "domain",
+        "Href": "https://demo.proactiva.com/proactivanet/api/domains/6c874426-874b-4592-a0be-f2b828c85563",
+        "Action": "GET"
+      },
+      {
+        "Rel": "ou",
+        "Href": "https://demo.proactiva.com/proactivanet/api/ous/8d7f5950-0847-452e-ad32-7cee6d28b501",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Name": null,
+    "SurName": null,
+    "Username": "DELL",
+    "PanDomains_id": "331bba92-140f-471b-87c0-36f4397fa8ce",
+    "PadCustomers_id": null,
+    "DNI": null,
+    "Email": null,
+    "Telephone": null,
+    "CorpMobile": null,
+    "PersMobile": null,
+    "CorpTelegramAccount": null,
+    "PersTelegramAccount": null,
+    "Inactive": true,
+    "PortalAccessDenial": false,
+    "PreferredLanguage": null,
+    "ManualLocation": false,
+    "PanLocations_id": "1bea9452-e4a4-4c9d-95ad-5a59fb536f1a",
+    "PanOUsAD_id": null,
+    "Id": "835cfc8c-bdf7-4449-8b6e-000b426714cf",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactiva.com/proactivanet/api/users/835cfc8c-bdf7-4449-8b6e-000b426714cf",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactiva.com/proactivanet/api/users/835cfc8c-bdf7-4449-8b6e-000b426714cf/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "domain",
+        "Href": "https://demo.proactiva.com/proactivanet/api/domains/331bba92-140f-471b-87c0-36f4397fa8ce",
+        "Action": "GET"
+      },
+      {
+        "Rel": "location",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/1bea9452-e4a4-4c9d-95ad-5a59fb536f1a",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Name": null,
+    "SurName": null,
+    "Username": "sitemas",
+    "PanDomains_id": "dc209df6-ef6b-4fb0-82b2-ea8faa433fde",
+    "PadCustomers_id": null,
+    "DNI": null,
+    "Email": null,
+    "Telephone": null,
+    "CorpMobile": null,
+    "PersMobile": null,
+    "CorpTelegramAccount": null,
+    "PersTelegramAccount": null,
+    "Inactive": false,
+    "PortalAccessDenial": false,
+    "PreferredLanguage": null,
+    "ManualLocation": false,
+    "PanLocations_id": "9787dcff-f927-4eba-82bd-d4e4080e58ec",
+    "PanOUsAD_id": null,
+    "Id": "d865d938-2945-4f2c-8b94-000d21b7d97c",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactiva.com/proactivanet/api/users/d865d938-2945-4f2c-8b94-000d21b7d97c",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactiva.com/proactivanet/api/users/d865d938-2945-4f2c-8b94-000d21b7d97c/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "domain",
+        "Href": "https://demo.proactiva.com/proactivanet/api/domains/dc209df6-ef6b-4fb0-82b2-ea8faa433fde",
+        "Action": "GET"
+      },
+      {
+        "Rel": "location",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/9787dcff-f927-4eba-82bd-d4e4080e58ec",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Name": null,
+    "SurName": null,
+    "Username": "Innovative",
+    "PanDomains_id": "7b9a80bb-f64f-489b-9cf3-e12c79445a2d",
+    "PadCustomers_id": null,
+    "DNI": null,
+    "Email": null,
+    "Telephone": null,
+    "CorpMobile": null,
+    "PersMobile": null,
+    "CorpTelegramAccount": null,
+    "PersTelegramAccount": null,
+    "Inactive": false,
+    "PortalAccessDenial": false,
+    "PreferredLanguage": null,
+    "ManualLocation": false,
+    "PanLocations_id": null,
+    "PanOUsAD_id": null,
+    "Id": "c39ad382-6fb0-44f8-849f-000f3597cddf",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactiva.com/proactivanet/api/users/c39ad382-6fb0-44f8-849f-000f3597cddf",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactiva.com/proactivanet/api/users/c39ad382-6fb0-44f8-849f-000f3597cddf/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "domain",
+        "Href": "https://demo.proactiva.com/proactivanet/api/domains/7b9a80bb-f64f-489b-9cf3-e12c79445a2d",
+        "Action": "GET"
+      }
+    ]
+  }
+]

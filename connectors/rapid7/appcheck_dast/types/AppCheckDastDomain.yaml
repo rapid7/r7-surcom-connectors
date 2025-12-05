@@ -1,0 +1,43 @@
+x-samos-type-name: AppCheckDastDomain
+x-samos-namespace: appcheck.dast
+title: AppCheck DAST Domain
+description: A domain from AppCheck DAST
+
+x-samos-extends-types:
+  - type-name: Domain
+
+x-samos-global-zone: true
+
+x-samos-keys:
+  - domain
+  - d_id
+
+x-samos-table:
+  - name: domain
+
+x-samos-detail:
+  - name: domain
+
+x-samos-derived-properties:
+  d_id:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: domain
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+properties:
+  domain:
+    type: string
+    title: Domain
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: value
+    x-samos-correlation:
+      correlation-key: Domain.value
+      correlation-type: Domain
+      priority: 4

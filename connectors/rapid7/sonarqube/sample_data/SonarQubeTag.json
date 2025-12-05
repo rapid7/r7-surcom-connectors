@@ -1,0 +1,250 @@
+[
+  {
+    "key": "sonarqube",
+    "value": "2222"
+  },
+  {
+    "key": "sonarqube",
+    "value": "6666"
+  },
+  {
+    "key": "sonarqube",
+    "value": "ai-coe"
+  },
+  {
+    "key": "sonarqube",
+    "value": "alcide"
+  },
+  {
+    "key": "sonarqube",
+    "value": "archived"
+  },
+  {
+    "key": "sonarqube",
+    "value": "correlation"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.ai-coe"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.endpoint"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.endpoint.endpoint-minerva"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.endpoint.endpoint-on-premise"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.endpoint.endpoint-on-premise.endpoint-gophers"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.endpoint.endpoint-on-premise.endpoint-mavericks"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.endpoint.endpoint-on-premise.endpoint-owls"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.endpoint.endpoint-services.endpoint-alchemists"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.endpoint.endpoint-services.endpoint-marauders"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.endpoint.endpoint-services.endpoint-prism"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.endpoint.endpoint-services.endpoint-roughnecks"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.platform-data"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.platform-data.correlation"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.platform-data.data-platform-transport"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.platform-data.datamesh-access-layer"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.soar"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.soar.insightconnect"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.data-foundations.unified-data-platform.soar.integration-alliance"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response-services"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response-services.mdr"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr-detection-alerting.idr-alert-triage"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr-detection-alerting.idr-collectors"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr-detection-alerting.idr-event-sources"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr-detection-alerting.idr-service-portal"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr-detection-alerting.investigation-management"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr-detection-alerting.managed-services-engineering"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr-detection-alerting.odin"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-aba"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-actor-activity"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-asset-management-and-attribution"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-audit-logs"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-automation"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-cassandra"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-custom-alerts"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-custom-parsing"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-customerdb"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-data-collection-management"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-data-processing-pipeline"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-datamesh"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-devportal"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-endpoint-forensics"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-endpoint-realtime"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-enrichment-filehash-reputation"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-enrichment-geolocation"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-hunts"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-investigations"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-jobs"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-log-content"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-mysql"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-navigation-and-authorization"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-opensearch"
+  },
+  {
+    "key": "sonarqube",
+    "value": "cortex-domains.detection-and-response.insightidr.idr-core-backend.idr-operation"
+  }
+]

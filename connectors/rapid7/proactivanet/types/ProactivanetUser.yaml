@@ -1,0 +1,165 @@
+﻿x-samos-type-name: ProactivanetUser
+x-samos-namespace: proactivanet
+title: Proactivanet User
+description: A user in the Proactivanet platform.
+
+$ref: https://www.proactivanet.com/api/swagger#/definitions/Models.User
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - Id
+
+x-samos-table:
+  - name: Name
+  - name: SurName
+  - name: Username
+  - name: DNI
+  - name: Email
+  - name: Telephone
+  - name: Inactive
+  - name: PortalAccessDenial
+  - name: PreferredLanguage
+  - name: ManualLocation
+
+x-samos-detail:
+  - name: Name
+  - name: SurName
+  - name: Username
+  - name: DNI
+  - name: Email
+  - name: PanDomains_id
+  - name: Telephone
+  - name: CorpMobile
+  - name: PersMobile
+  - name: CorpTelegramAccount
+  - name: PersTelegramAccount
+  - name: PanLocations_id
+  - name: Inactive
+  - name: PortalAccessDenial
+  - name: PreferredLanguage
+  - name: ManualLocation
+
+x-samos-derived-properties:
+  d_active:
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: '!Inactive'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+  d_username:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'Username'
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+
+properties:
+  Name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+  SurName:
+    type: string
+    title: Surname
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+  Username:
+    type: string
+    title: Username
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  PanDomains_id:
+    type: string
+    title: PAN Domain
+    x-samos-ref-types:
+      - type-name: ProactivanetDomain
+        key-name: Id
+  PadCustomers_id:
+    type: string
+    title: Padcustomers ID
+  DNI:
+    type: string
+    title: DNI
+  Email:
+    type: string
+    title: Email
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+  Telephone:
+    type: string
+    title: Telephone
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+  CorpMobile:
+    type: string
+    title: Corp Mobile
+  PersMobile:
+    type: string
+    title: Pers Mobile
+  CorpTelegramAccount:
+    type: string
+    title: Corp Telegram Account
+  PersTelegramAccount:
+    type: string
+    title: Pers Telegram Account
+  Inactive:
+    type: boolean
+    title: Inactive?
+  PortalAccessDenial:
+    type: boolean
+    title: Portal Access Denial?
+  PreferredLanguage:
+    type: string
+    title: Preferred Language
+  ManualLocation:
+    type: boolean
+    title: Manual Location?
+  PanLocations_id:
+    type: string
+    title: PAN Location
+    x-samos-ref-types:
+      - type-name: ProactivanetLocation
+        key-name: Id
+  PanOUsAD_id:
+    type: string
+    title: PAN OUs AD ID
+  Id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-hidden: True
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  Links:
+    type: array
+    title: Links
+    x-samos-hidden: true
+    items:
+      type: object
+      properties:
+        Rel:
+          type: string
+          title: Rel
+        Href:
+          type: string
+          title: Href
+        Action:
+          type: string
+          title: Action

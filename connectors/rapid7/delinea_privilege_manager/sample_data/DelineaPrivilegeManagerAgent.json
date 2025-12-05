@@ -1,0 +1,26 @@
+[
+  {
+    "_ItemId": "4c4c4544-004a-5910-8048-c4c3533",
+    "Computer": "DESKTOP-PI0MB5I",
+    "Domain": "WORKGROUP",
+    "Operating System": "Windows 10",
+    "OS Name": "Microsoft Windows 10 Home Single Language",
+    "Version": "10.0.19045",
+    "Manufacturer": "Dell Inc.",
+    "Model": "Vostro 3591",
+    "Serial Number": "00327-36221-17-AAOEM",
+    "System Type": "x64-based PC"
+  },
+  {
+    "_ItemId": "4c4c4544-0032-3410-8037-533",
+    "Computer": "DESKTOP-20DG4OU",
+    "Domain": "WORKGROUP",
+    "Operating System": "Windows 10",
+    "OS Name": "Microsoft Windows 10 Home Single Language",
+    "Version": "10.0.19045",
+    "Manufacturer": "Dell Inc.",
+    "Model": "Inspiron 3493",
+    "Serial Number": "00327-36223-8360-AAOEM",
+    "System Type": "x64-based PC"
+  }
+]

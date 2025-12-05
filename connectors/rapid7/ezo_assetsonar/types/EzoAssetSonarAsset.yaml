@@ -1,0 +1,474 @@
+x-samos-type-name: EzoAssetSonarAsset
+x-samos-namespace: ezo.assetsonar
+title: Ezo AssetSonar Asset
+description: An asset from AssetSonar
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - sequence_num
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: state
+  - name: assigned_to_user_email
+  - name: group_id
+  - name: sub_group_id
+  - name: location_name
+  - name: created_at
+  - name: updated_at
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: state
+  - name: assigned_to_user_email
+  - name: asset_type
+  - name: audit_pending
+  - name: checkin_due_on
+  - name: checkout_on
+  - name: depreciated_value
+  - name: group
+  - name: identifier
+  - name: location_name
+  - name: manufacturer
+  - name: net_quantity
+  - name: price
+  - name: product_identity
+  - name: product_model_number
+  - name: purchased_on
+  - name: group_id
+  - name: sub_group_id
+  - name: created_at
+  - name: updated_at
+
+properties:
+  action:
+    title: Action
+    type: string
+  active_sub_checkout:
+    title: Active Sub Checkout
+    type: string
+  advanced_pricing:
+    title: Advanced Pricing?
+    type: boolean
+  arbitration:
+    title: Arbitration
+    type: integer
+  asset_type:
+    title: Asset Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  assigned_to_user_email:
+    title: Assigned To User
+    type: string
+    x-samos-ref-types:
+      - type-name: EzoAssetSonarMember
+        key-name: email
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: users
+  assigned_to_user_name:
+    title: Assigned To User Name
+    type: string
+  audit_pending:
+    title: Audit Pending?
+    type: boolean
+  available_for_sale:
+    title: Available For Sale?
+    type: boolean
+  average_cost_per_unit:
+    title: Average Cost Per Unit
+    type: string
+  average_cost_per_unit_original:
+    title: Average Cost Per Unit Original
+    type: string
+  bulk_import_id:
+    title: Bulk Import ID
+    type: integer
+  checkin_due_on:
+    title: Checkin Due On
+    type: string
+    format: date-time
+  checkout_on:
+    title: Checkout On
+    type: string
+    format: date-time
+  clone_from_asset_id:
+    title: Clone From Asset ID
+    type: integer
+  comments_count:
+    title: Comments Count
+    type: integer
+  created_at:
+    format: date-time
+    title: Created At
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  created_by_itam:
+    title: Created By ITAM?
+    type: boolean
+  current_meter_reading:
+    title: Current Meter Reading
+    type: string
+  custom_substate_id:
+    title: Custom Substate ID
+    type: integer
+  default_excess_location_threshold:
+    title: Default Excess Location Threshold
+    type: integer
+  depreciated_value:
+    properties:
+      straight_line:
+        title: Straight Line
+        type: string
+    title: Depreciated Value
+    type: object
+  depreciation_calculation_required:
+    title: Depreciation Calculation Required?
+    type: boolean
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  display_image:
+    x-samos-hidden: true
+    format: url
+    title: Display Image
+    type: string
+  document_urls:
+    x-samos-hidden: true
+    items:
+      type: string
+    title: Document URLs
+    type: array
+  documents:
+    items:
+      properties:
+        content_type:
+          title: Content Type
+          type: string
+        description:
+          title: Description
+          type: string
+        file_extension:
+          title: File Extension
+          type: string
+        file_name:
+          title: File Name
+          type: string
+        file_size:
+          title: File Size
+          type: integer
+        file_url:
+          x-samos-hidden: true
+          format: url
+          title: File URL
+          type: string
+        upload_by_id:
+          title: Upload By ID
+          type: integer
+        uploaded_at:
+          title: Uploaded At
+          type: string
+      type: object
+    title: Documents
+    type: array
+  documents_count:
+    title: Documents Count
+    type: integer
+  external_asset:
+    title: External Asset?
+    type: boolean
+  featured_item:
+    title: Featured Item?
+    type: boolean
+  group:
+    properties:
+      depreciation_rates:
+        items:
+          properties:
+            created_at:
+              format: date-time
+              title: Created At
+              type: string
+            depreciation_method_id:
+              title: Depreciation Method ID
+              type: integer
+            depreciation_method_name:
+              title: Depreciation Method Name
+              type: string
+            group_id:
+              title: Group ID
+              type: integer
+            id:
+              title: ID
+              type: integer
+            rate:
+              title: Rate
+              type: string
+            updated_at:
+              format: date-time
+              title: Updated At
+              type: string
+            useful_life:
+              title: Useful Life
+              type: integer
+          type: object
+        title: Depreciation Rates
+        type: array
+    title: Group
+    type: object
+  group_id:
+    title: Group
+    type: integer
+    x-samos-ref-types:
+      - type-name: EzoAssetSonarGroup
+        key-name: id
+  group_rule_provisioned:
+    title: Group Rule Provisioned?
+    type: boolean
+  hidden_on_web_store:
+    title: Hidden On Web Store?
+    type: boolean
+  holder_id:
+    title: Holder ID
+    type: integer
+  identifier:
+    title: Identifier
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  image_urls:
+    items:
+      properties:
+        original:
+          format: url
+          title: Original
+          type: string
+        small:
+          format: url
+          title: Small
+          type: string
+      type: object
+    title: Image URLs
+    type: array
+    x-samos-hidden: true
+  initial_stock_quantity:
+    title: Initial Stock Quantity
+    type: integer
+  inventory_threshold:
+    title: Inventory Threshold
+    type: integer
+  is_processed:
+    title: Processed?
+    type: boolean
+  it_asset_source:
+    title: IT Asset Source
+    type: string
+  itam_hardware_id:
+    title: ITAM Hardware ID
+    type: integer
+  item_audit_id:
+    title: Item Audit ID
+    type: integer
+  last_assigned_to_id:
+    title: Last Assigned To ID
+    type: integer
+  last_checked_in_at:
+    title: Last Checked In At
+    type: string
+  last_checked_out_at:
+    title: Last Checked Out At
+    type: string
+  last_history_id:
+    title: Last History ID
+    type: integer
+  latest_contract_id:
+    title: Latest Contract ID
+    type: integer
+  location_based_threshold:
+    title: Location Based Threshold
+    type: integer
+  location_id:
+    title: Location ID
+    type: integer
+    x-samos-ref-types:
+      - type-name: EzoAssetSonarLocation
+        key-name: id
+  location_name:
+    title: Location Name
+    type: string
+  location_number:
+    title: Location Number
+    type: integer
+  location_rule_provisioned:
+    title: Location Rule Provisioned?
+    type: boolean
+  manufacturer:
+    title: Manufacturer
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+  merge_date:
+    title: Merge Date
+    type: string
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  net_quantity:
+    title: Net Quantity
+    type: integer
+  network_asset:
+    title: Network Asset?
+    type: boolean
+  off_rented_on:
+    title: Off Rented On
+    type: string
+  package_id:
+    title: Package ID
+    type: integer
+  pending_verification:
+    title: Pending Verification?
+    type: boolean
+  price:
+    title: Price
+    type: string
+  price_original:
+    title: Price Original
+    type: string
+  primary_user:
+    title: Primary User
+    type: string
+  product_changed_manually:
+    title: Product Changed Manually?
+    type: boolean
+  product_id:
+    title: Product ID
+    type: integer
+  product_identity:
+    title: Product Identity
+    type: string
+  product_model_number:
+    title: Model Number
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+  purchase_order_id:
+    title: Purchase Order ID
+    type: integer
+  purchased_on:
+    title: Purchased On
+    type: string
+    format: date-time
+  qbd_item_name:
+    title: QBD Item Name
+    type: string
+  quickbooks_item_id:
+    title: QuickBooks Item ID
+    type: integer
+  rent_collected:
+    title: Rent Collected
+    type: string
+  rental_meter:
+    title: Rental Meter
+    type: integer
+  rental_meter_threshold:
+    title: Rental Meter Threshold
+    type: integer
+  retire_comments:
+    title: Retire Comments
+    type: string
+  retire_reason:
+    title: Retire Reason
+    type: string
+  retire_reason_id:
+    title: Retire Reason ID
+    type: integer
+  retired_by_id:
+    title: Retired By ID
+    type: integer
+  retired_on:
+    title: Retired On
+    type: string
+  sale_price:
+    title: Sale Price
+    type: string
+  sale_price_original:
+    title: Sale Price Original
+    type: string
+  salvage_value:
+    title: Salvage Value
+    type: string
+  salvage_value_original:
+    title: Salvage Value Original
+    type: string
+  send_usage_meter_threshold_recurring_alert:
+    title: Send Usage Meter Threshold Recurring Alert?
+    type: boolean
+  sequence_num:
+    title: Sequence Num
+    type: integer
+    x-samos-immutable: true
+  services_count:
+    title: Services Count
+    type: integer
+  state:
+    title: State
+    type: string
+  sub_checked_out_to_full_name:
+    title: Sub Checked Out To Full Name
+    type: string
+  sub_checked_out_to_id:
+    title: Sub Checked Out To ID
+    type: integer
+  sub_group_id:
+    title: Sub Group
+    type: integer
+    x-samos-ref-types:
+      - type-name: EzoAssetSonarSubGroup
+        key-name: id
+  sunshine_id:
+    title: Sunshine ID
+    type: integer
+  synced_with_jira_at:
+    title: Synced With Jira At
+    type: string
+  tax_free:
+    title: Tax Free?
+    type: boolean
+  update_counter:
+    title: Update Counter
+    type: integer
+  updated_at:
+    format: date-time
+    title: Updated At
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  usage_meter_threshold:
+    title: Usage Meter Threshold
+    type: string
+  vendor_id:
+    title: Vendor ID
+    type: integer
+  visible_on_web_store:
+    title: Visible On Web Store?
+    type: boolean

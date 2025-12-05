@@ -1,0 +1,344 @@
+[
+  {
+    "id": 62,
+    "ip": "10.0.0.213",
+    "ips": [
+      {
+        "ip": "10.0.0.213",
+        "timems": 1754881200000,
+        "time": "2025-08-11 03:00:00",
+        "sid": 25,
+        "vlan": 0
+      }
+    ],
+    "did": 62,
+    "sid": 25,
+    "time": 1694163687000,
+    "quarantine": 1754878965000,
+    "endtime": 1754883084000,
+    "os": "Linux 2.2.x-3.x",
+    "ossource": "TCP",
+    "typename": "dnsserver",
+    "typelabel": "DNS Server",
+    "customFields": {
+      "DT-MANUAL": {
+        "macaddress": "00:11:22:33:44:55"
+      }
+    },
+    "vendor": "Companty Inc"
+  },
+  {
+    "id": 63,
+    "ip": "10.0.0.10",
+    "ips": [
+      {
+        "ip": "10.0.0.10",
+        "timems": 1754881200000,
+        "time": "2025-08-11 03:00:00",
+        "sid": 25,
+        "vlan": 0
+      }
+    ],
+    "did": 63,
+    "sid": 25,
+    "time": 1694163687000,
+    "quarantine": 1754881664000,
+    "endtime": 1754882872000,
+    "os": "Linux 2.2.x-3.x",
+    "ossource": "TCP",
+    "typename": "desktop",
+    "typelabel": "Desktop"
+  },
+  {
+    "id": 417,
+    "macaddress": "02:2f:49:fa:25:b7",
+    "vendor": "",
+    "ip": "192.168.0.138",
+    "ips": [
+      {
+        "ip": "192.168.0.138",
+        "timems": 1755666000000,
+        "time": "2025-08-20 05:00:00",
+        "sid": 3,
+        "vlan": 0
+      }
+    ],
+    "did": 417,
+    "sid": 3,
+    "hostname": "GHAFGARWF-M285KCT",
+    "time": 1746130118000,
+    "quarantine": 1755634406000,
+    "endtime": 1755667290000,
+    "os": "Windows  (10.0)",
+    "ossource": "HTTP",
+    "typename": "server",
+    "typelabel": "Server"
+  },
+  {
+    "id": 76,
+    "ip": "10.0.0.22",
+    "ips": [
+      {
+        "ip": "10.0.0.22",
+        "timems": 1754881200000,
+        "time": "2025-08-11 03:00:00",
+        "sid": 25,
+        "vlan": 0
+      }
+    ],
+    "did": 76,
+    "sid": 25,
+    "hostname": "abc-dc-01.abc.local",
+    "time": 1694163747000,
+    "endtime": 1754882620000,
+    "os": "Windows  (10.0)",
+    "ossource": "HTTP",
+    "typename": "dnsserver",
+    "typelabel": "DNS Server"
+  },
+  {
+    "id": 12345,
+    "ip": "192.168.1.25",
+    "macaddress": "00:1A:2B:3C:4D:5E",
+    "devicelabel": "Engineering-Laptop-01",
+    "ips": [
+      {
+        "ip": "192.168.1.10",
+        "timems": 1730600000000,
+        "time": "2024-11-03T10:00:00Z",
+        "sid": 42
+      },
+      {
+        "ip": "192.168.1.25",
+        "timems": 1730700000000,
+        "time": "2024-11-04T08:30:00Z",
+        "sid": 43
+      }
+    ],
+    "did": 12345,
+    "sid": 43,
+    "credentials": [
+      {
+        "lastSeen": 1730700000000,
+        "credential": "admin@corp.local"
+      },
+      {
+        "lastSeen": 1730750000000,
+        "credential": "user@corp.local"
+      }
+    ],
+    "hostname": "ENG-LAPTOP-01",
+    "quarantine": 0,
+    "time": 1730500000000,
+    "endtime": 1730800000000,
+    "os": "Windows 11 Pro",
+    "ossource": "Active Directory",
+    "typename": "Endpoint",
+    "typelabel": "Workstation",
+    "vendor": "Dell",
+    "customFields": {
+      "DT-MANUAL": {
+        "macaddress": "00:1A:2B:3C:4D:5E"
+      },
+      "DT-AUTO": {
+        "macaddress": "00:1A:2B:3C:4D:5E"
+      },
+      "DT-CORE-AUTO": {
+        "OS Name": "Windows 11",
+        "OS Version": "23H2",
+        "Server Name": "ENG-LAPTOP-01",
+        "System Name": "ENG-LAPTOP-01",
+        "System Description": "Dell Latitude used by engineering team"
+      },
+      "DT-ICS-AUTO": {
+        "Description": "Engineering workstation connected to OT network",
+        "Protocol": "Modbus/TCP",
+        "Node name": "ENG-LAPTOP-NODE",
+        "Physical location": "Building A, Floor 3"
+      },
+      "CrowdstrikeIdentifier": {
+        "device_id": "abcd-1234-efgh-5678",
+        "device_name": "ENG-LAPTOP-01",
+        "dt_account_id": "CROWD-ACCT-001"
+      },
+      "CrowdstrikeFields": {
+        "url": "https://falcon.us-1.crowdstrike.com/host-management/hosts/abcd-1234-efgh-5678",
+        "OSBuild": "23H2",
+        "OSVersion": "Windows 11",
+        "OSPlatform": "Windows 11 Pro",
+        "Zero Trust Assessment Score": "None"
+      },
+      "Vuln-Crowdstrike": {
+        "Hostname": "ENG-LAPTOP-01",
+        "FieldOrder": "1",
+        "IP Address": "192.168.1.25",
+        "MAC Address": "00:1A:2B:3C:4D:5E",
+        "Last Updated": "2024-11-02T14:30:00Z",
+        "CVE Count": "12",
+        "CVE Low Count": "4",
+        "CVE Medium Count": "5",
+        "CVE High Count": "2",
+        "CVE Critical Count": "1"
+      },
+      "Vuln-Rapid7": {
+        "Hostname": "ENG-LAPTOP-01",
+        "FieldOrder": "2",
+        "IP Address": "192.168.1.25",
+        "Last Updated": "2024-11-02T14:30:00Z",
+        "CVE Count": "10",
+        "CVE Low Count": "3",
+        "CVE Medium Count": "4",
+        "CVE High Count": "2",
+        "CVE Critical Count": "1"
+      },
+      "Vuln-Tenable": {
+        "Url": "https://tenable.local/report?id=ENG-LAPTOP-01",
+        "Model": "Dell Latitude 5420",
+        "Hostname": "ENG-LAPTOP-01",
+        "FieldOrder": "3",
+        "IP Address": "192.168.1.25",
+        "MAC Address": "00:1A:2B:3C:4D:5E",
+        "Last Updated": "2024-11-02T14:30:00Z",
+        "CVE Count": "8",
+        "CVE Low Count": "2",
+        "CVE Medium Count": "3",
+        "CVE High Count": "2",
+        "CVE Critical Count": "1"
+      }
+    }
+  },
+  {
+    "customFields": {
+      "Vuln-Rapid7": {
+        "CVE Count": "128",
+        "CVE Critical Count": "30",
+        "CVE High Count": "87",
+        "CVE Medium Count": "11",
+        "FieldOrder": "['CVE Count', 'Hostname', 'IP Address', 'CVE Critical Count', 'CVE High Count', 'CVE Medium Count']",
+        "Hostname": "tl072cp.example.com",
+        "IP Address": "17.21.22.23",
+        "Last Updated": "1762812837876.693"
+      }
+    },
+    "did": 65,
+    "endtime": 1762886774000,
+    "hostname": "tl072cp.example.com",
+    "id": 65,
+    "ip": "10.11.105.100",
+    "ips": [
+      {
+        "ip": "10.11.105.100",
+        "sid": 140,
+        "time": "2025-11-11 18:00:00",
+        "timems": 1762884000000,
+        "vlan": 0
+      }
+    ],
+    "os": "Linux 3.11 and newer",
+    "ossource": "TCP",
+    "sid": 140,
+    "time": 1501797871000,
+    "typelabel": "Desktop",
+    "typename": "desktop"
+  },
+  {
+    "customFields": {
+      "Vuln-Rapid7": {
+        "CVE Count": "0",
+        "FieldOrder": "['CVE Count', 'Hostname', 'IP Address']",
+        "Hostname": "opa551.example.com",
+        "IP Address": "10.11.180.101",
+        "Last Updated": "1762812837876.693"
+      }
+    },
+    "did": 35,
+    "endtime": 1762886746000,
+    "hostname": "opa551.example.com",
+    "id": 35,
+    "ip": "10.11.180.101",
+    "ips": [
+      {
+        "ip": "10.11.180.101",
+        "sid": 243,
+        "time": "2025-11-11 18:00:00",
+        "timems": 1762884000000,
+        "vlan": 0
+      }
+    ],
+    "os": "Linux 3.x",
+    "ossource": "TCP",
+    "sid": 243,
+    "time": 1501797871000,
+    "typelabel": "Desktop",
+    "typename": "desktop"
+  },
+  {
+    "customFields": {
+      "Vuln-Tenable": {
+        "CVE Count": "0",
+        "FieldOrder": "['CVE Count', 'Hostname', 'IP Address', 'Url', 'Model']",
+        "Hostname": "ne5534",
+        "IP Address": "10.11.223.239",
+        "Last Updated": "1760406033828.763",
+        "Model": "HP LeftHand OS",
+        "Url": "https://cloud.tenable.com/tio/app.html#/assets-uw/all-assets/list/details/host/e2d94078-439e-46e4-98b4-91206b8a7271/findings?uw_asset_details_findings_nessus.st=severity.1"
+      }
+    },
+    "did": 13,
+    "endtime": 1762886466000,
+    "hostname": "ne5534.example.com",
+    "id": 13,
+    "ip": "10.11.182.114",
+    "ips": [
+      {
+        "ip": "10.11.182.114",
+        "sid": 243,
+        "time": "2025-11-11 18:00:00",
+        "timems": 1762884000000,
+        "vlan": 0
+      }
+    ],
+    "os": "Linux 2.2.x-3.x",
+    "ossource": "TCP",
+    "priority": 1,
+    "sid": 243,
+    "time": 1501797870000,
+    "typelabel": "Desktop",
+    "typename": "desktop"
+  },
+  {
+    "customFields": {
+      "Vuln-Tenable": {
+        "CVE Count": "3",
+        "CVE High Count": "1",
+        "CVE Medium Count": "2",
+        "FieldOrder": "['CVE Count', 'Hostname', 'IP Address', 'Url', 'Model', 'CVE High Count', 'CVE Medium Count']",
+        "Hostname": "lme49710.example.com",
+        "IP Address": "10.11.180.100",
+        "Last Updated": "1760406033828.763",
+        "Model": "Linux Kernel 2.6",
+        "Url": "https://cloud.tenable.com/tio/app.html#/assets-uw/all-assets/list/details/host/495054a2-80ec-4805-9d20-2d401a4913ac/findings?uw_asset_details_findings_nessus.st=severity.1"
+      }
+    },
+    "did": 321,
+    "endtime": 1762887333000,
+    "hostname": "lme49710.example.com",
+    "id": 321,
+    "ip": "10.11.180.100",
+    "ips": [
+      {
+        "ip": "10.11.180.100",
+        "sid": 243,
+        "time": "2025-11-11 18:00:00",
+        "timems": 1762884000000,
+        "vlan": 0
+      }
+    ],
+    "os": "Linux 3.x",
+    "ossource": "TCP",
+    "sid": 243,
+    "time": 1501797880000,
+    "typelabel": "Desktop",
+    "typename": "desktop"
+  }
+]

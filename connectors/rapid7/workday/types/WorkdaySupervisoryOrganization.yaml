@@ -1,0 +1,73 @@
+x-samos-type-name: WorkdaySupervisoryOrganization
+x-samos-namespace: workday
+title: Workday Supervisory Organization
+description: A Supervisory Organization type in Workday.
+
+x-samos-extends-types:
+  - type-name: Organization
+
+x-samos-keys:
+  - id
+
+$ref: https://community.workday.com/restapi/common/supervisory_organization#/definitions/supervisoryOrganizationSummary_3a94b57f042a4ebb95027e09d6192992
+
+x-samos-table:
+  - name: descriptor
+  - name: code
+  - name: manager.descriptor
+
+x-samos-detail:
+  - name: name
+  - name: descriptor
+  - name: code
+  - name: href
+  - name: workers
+  - name: manager
+
+properties:
+  id:
+    type: string
+    title: ID
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+  descriptor:
+    type: string
+    title: Descriptor
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  href:
+    type: string
+    title: Href
+  name:
+    type: string
+    title: Name
+  workers:
+    type: string
+    title: Workers
+    format: url
+  code:
+    type: string
+    title: Department
+  manager:
+    type: object
+    title: Manager
+    properties:
+      descriptor:
+        type: string
+        title: Manager
+      id:
+        type: string
+        title: Worker
+        x-samos-ref-types:
+          - type-name: WorkdayWorker
+            key-name: d_worker_id
+        x-samos-fulfills:
+          type-name: core.owned-entity
+          property-name: owners
+      href:
+        type: string
+        title: Href

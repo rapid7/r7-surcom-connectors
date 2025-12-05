@@ -1,0 +1,65 @@
+x-samos-type-name: SonarQubeTag
+x-samos-namespace: sonarqube
+title: SonarQube Tag
+description: A tag name/value in SonarQube.
+
+x-samos-global-zone: true
+x-samos-extends-types:
+  - type-name: SourceTag
+
+x-samos-keys:
+  - id
+  - d_tag_value
+
+x-samos-table:
+  - name: d_tag_name
+  - name: key
+  - name: value
+
+x-samos-detail:
+  - name: d_tag_name
+  - name: key
+  - name: value
+
+x-samos-derived-properties:
+  d_tag_key:
+    # fulfills 'key' SourceTag:key using derived property,
+    # because below 'value' already fulfills core.named-object:name
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: expression
+    value: '{key}_{value}'
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: id
+  d_tag_value:
+    # derived property for project tags reference to this source tag
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: expression
+    value: '{value}'
+  d_tag_name:
+    # derived property for fulfills core.named-object: name
+    title: Tag Name
+    type: string
+    syntax: expression
+    value: '{key}: {value}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  key:
+    title: Tag Key
+    type: string
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: key
+  value:
+    title: Tag Value
+    type: string
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: value

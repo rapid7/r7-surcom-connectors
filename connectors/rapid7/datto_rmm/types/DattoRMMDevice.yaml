@@ -1,0 +1,493 @@
+x-samos-type-name: DattoRMMDevice
+x-samos-namespace: datto.rmm
+title: Datto RMM Device
+description: Device details from Datto RMM
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+$ref: https://example_swagger.centrastage.net/api/v3/api-docs/Datto-RMM#/components/schemas/DeviceAudit
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: hostname
+  - name: operatingSystem
+  - name: siteName
+  - name: domain
+  - name: online
+  - name: intIpAddress
+  - name: bios.serialNumber
+  - name: lastSeen
+  - name: creationDate
+
+x-samos-detail:
+  - name: hostname
+  - name: description
+  - name: portalUrl
+  - name: operatingSystem
+  - name: domain
+  - name: lastLoggedInUser
+  - name: siteName
+  - name: intIpAddress
+  - name: displayVersion
+  - name: extIpAddress
+  - name: snmpEnabled
+  - name: deviceClass
+  - name: deviceType
+  - name: antivirus
+  - name: softwareStatus
+  - name: rebootRequired
+  - name: suspended
+  - name: deleted
+  - name: warrantyDate
+  - name: a64Bit
+  - name: systemInfo
+  - name: patchManagement
+  - name: nics
+  - name: bios
+  - name: baseBoard
+  - name: displays
+  - name: logicalDisks
+  - name: mobileInfo
+  - name: processors
+  - name: videoBoards
+  - name: attachedDevices
+  - name: snmpInfo
+  - name: physicalMemory
+  - name: lastAuditDate
+  - name: lastSeen
+  - name: lastReboot
+  - name: creationDate
+
+x-samos-derived-properties:
+  d_id:
+    # To fulfill the core.component:id as type is integer derived it
+    title: ID
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_name:
+    # rule is already fulfills `Machine:hostnames`
+    # so fulfills `core.named-object:name` derived the property
+    x-samos-hidden: true
+    type: string
+    value: 'hostname'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_active:
+    x-samos-hidden: true
+    type: boolean
+    value: '(suspended == `false`) && (deleted == `false`)'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_mac_addresses:
+    # fulfills `Machine:mac_addresses` derived the property
+    x-samos-hidden: true
+    value: 'nics[].macAddress'
+    syntax: jmespath
+    type: array
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+
+  d_mitigations:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    syntax: jmespath
+    value: >-
+      [
+        (patchManagement.patchStatus == `ApprovedPending` || patchManagement.patchStatus == `FullyPatched` || patchManagement.patchStatus == `RebootRequired` ) && `M1051` || null,
+        (antivirus.antivirusStatus == `RunningAndUpToDate`) && `M1049` || null
+      ] | [?@]
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  #-- Properties from device
+  a64Bit:
+    title: 64-Bit?
+    type: boolean
+  antivirus:
+    title: Antivirus
+    type: object
+    properties:
+      antivirusProduct:
+        title: Antivirus Product
+        type: string
+      antivirusStatus:
+        title: Antivirus Status
+        type: string
+  cagVersion:
+    title: CAG Version
+    type: string
+  creationDate:
+    format: epoch-millis
+    title: Creation Date
+    type: integer
+  deleted:
+    title: Deleted?
+    type: boolean
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  deviceClass:
+    title: Device Class
+    type: string
+  deviceType:
+    properties:
+      category:
+        title: Category
+        type: string
+      type:
+        title: Type
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: asset_type
+    title: Device Type
+    type: object
+  displayVersion:
+    title: Display Version
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+  domain:
+    title: Domain
+    type: string
+  extIpAddress:
+    format: ip-addr
+    title: External Ip Address
+    type: string
+  hostname:
+    title: Hostname
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+    exclude:
+      - 'WindowsX64'
+  id:
+    title: ID
+    type: integer
+  intIpAddress:
+    format: ip-addr
+    title: Internal Ip Address
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  lastAuditDate:
+    format: epoch-millis
+    title: Last Audit Date
+    type: integer
+  lastLoggedInUser:
+    title: Last Logged In User
+    type: string
+  lastReboot:
+    format: epoch-millis
+    title: Last Reboot
+    type: integer
+  lastSeen:
+    format: epoch-millis
+    title: Last Seen
+    type: integer
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  online:
+    title: Online?
+    type: boolean
+  operatingSystem:
+    title: Operating System
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+  patchManagement:
+    title: Patch Management
+    type: object
+    properties:
+      patchStatus:
+        title: Patch Status
+        type: string
+      patchesApprovedPending:
+        title: Patches Approved Pending
+        type: integer
+      patchesInstalled:
+        title: Patches Installed
+        type: integer
+      patchesNotApproved:
+        title: Patches Not Approved
+        type: integer
+  #-- Properties from device details
+  portalUrl:
+    format: url
+    title: Portal URL
+    type: string
+  rebootRequired:
+    title: Reboot Required?
+    type: boolean
+  siteId:
+    title: Site ID
+    type: integer
+    x-samos-ref-types:
+      - type-name: DattoRMMSite
+        key-name: id
+  siteName:
+    title: Site Name
+    type: string
+  siteUid:
+    title: Site UID
+    type: string
+  snmpEnabled:
+    title: SNMP Enabled?
+    type: boolean
+  softwareStatus:
+    title: Software Status
+    type: string
+  suspended:
+    title: Suspended?
+    type: boolean
+  udf:
+    title: UDF
+    type: object
+  uid:
+    title: UID
+    type: string
+  warrantyDate:
+    title: Warranty Date
+    type: string
+  webRemoteUrl:
+    format: url
+    title: Web Remote URL
+    type: string
+  systemInfo:
+    type: object
+    title: System Information
+    properties:
+      manufacturer:
+        type: string
+        title: Manufacturer
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: make
+      model:
+        type: string
+        title: Model
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: model
+      totalPhysicalMemory:
+        type: integer
+        title: Total Physical Memory
+      username:
+        type: string
+        title: Username
+      dotNetVersion:
+        type: string
+        title: Dot Net Version
+      totalCpuCores:
+        type: integer
+        title: Total CPU Cores
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: cpus
+  nics:
+    type: array
+    title: Nics
+    items:
+      type: object
+      properties:
+        instance:
+          type: string
+          title: Instance
+        ipv4:
+          type: string
+          title: Ipv4
+          format: ip-addr
+        ipv6:
+          type: string
+          title: Ipv6
+          format: ip-addr
+        macAddress:
+          type: string
+          title: Mac Address
+          format: mac-addr
+          x-samos-correlation:
+            correlation-key: MacAddr.value
+            correlation-type: Machine
+            priority: 4
+        type:
+          type: string
+          title: Type
+  bios:
+    type: object
+    title: Bios
+    properties:
+      instance:
+        type: string
+        title: Instance
+      releaseDate:
+        type: integer
+        title: Release Date
+        format: epo
+      serialNumber:
+        type: string
+        title: Serial Number
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: serial_number
+        x-samos-correlation:
+          correlation-key: core.managed.asset.serial_number
+          correlation-type: Machine
+          priority: 3
+      smBiosVersion:
+        type: string
+        title: SM Bios Version
+  baseBoard:
+    type: object
+    title: Base Board
+    properties:
+      manufacturer:
+        type: string
+        title: Manufacturer
+      product:
+        type: string
+        title: Product
+  displays:
+    type: array
+    title: Displays
+    items:
+      type: string
+  logicalDisks:
+    type: array
+    title: Logical Disks
+    items:
+      type: object
+      properties:
+        description:
+          type: string
+          title: Description
+        diskIdentifier:
+          type: string
+          title: Disk Identifier
+        freespace:
+          type: integer
+          title: Freespace
+        size:
+          type: integer
+          title: Size
+  mobileInfo:
+    type: string
+    title: Mobile Info
+  processors:
+    type: array
+    title: Processors
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Name
+  videoBoards:
+    type: array
+    title: Video Boards
+    items:
+      type: object
+      properties:
+        displayAdapter:
+          type: string
+          title: Display Adapter
+  attachedDevices:
+    type: array
+    title: Attached Devices
+    items:
+      type: object
+      properties:
+        deviceName:
+          type: string
+          title: Device Name
+        deviceType:
+          type: string
+          title: Device Type
+        driverFile:
+          type: string
+          title: Driver File
+        driverFileLastModified:
+          type: integer
+          title: Driver File Last Modified
+          format: epoch-millis
+        driverManufacturer:
+          type: string
+          title: Driver Manufacturer
+        driverName:
+          type: string
+          title: Driver Name
+        driverVersion:
+          type: string
+          title: Driver Version
+        portName:
+          type: string
+          title: Port Name
+  snmpInfo:
+    type: string
+    title: SNMP Info
+  physicalMemory:
+    type: array
+    title: Physical Memory
+    items:
+      type: object
+      properties:
+        module:
+          type: string
+          title: Module
+        size:
+          type: integer
+          title: Size
+        type:
+          type: string
+          title: Type
+        speed:
+          type: string
+          title: Speed
+        serialNumber:
+          type: string
+          title: Serial Number
+        partNumber:
+          type: string
+          title: Part Number
+        bank:
+          type: string
+          title: Bank

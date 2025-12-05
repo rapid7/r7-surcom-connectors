@@ -1,0 +1,441 @@
+﻿x-samos-type-name: DarktraceDevice
+x-samos-namespace: darktrace
+title: Darktrace Device
+description: A Device from Darktrace
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id # Unique Id is an Integer so need to derive to fulfill
+
+x-samos-table:
+  - name: name
+  - name: typelabel
+  - name: os
+  - name: ip
+
+x-samos-detail:
+  - name: name
+  - name: typelabel
+  - name: hostname
+  - name: os
+  - name: ossource
+  - name: ip
+  - name: d_sid
+  - name: ips
+  - name: vendor
+  - name: macaddress
+  - name: customFields
+  - name: typename
+  - name: time
+  - name: endtime
+  - name: quarantine
+  - name: customFields
+
+x-samos-derived-properties:
+  d_id:
+    type: string
+    title: ID
+    syntax: expression
+    value: '{id}'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_name:
+    # No name present to Hostname is taken to fulfill if not then IP
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'hostname || customFields."CrowdstrikeIdentifier".device_name ||
+      customFields."Vuln-Rapid7".Hostname || customFields."Vuln-Tenable".Hostname ||
+      customFields."DT-CORE-AUTO"."Server Name" || customFields."DT-CORE-AUTO"."System Name"
+      || join('' '', [typelabel || '''', ip || ''''][?@])'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_sid:
+    # We need to reference this as its integer - derived to typecast
+    title: Subnet
+    type: string
+    syntax: expression
+    value: '{sid}'
+    x-samos-ref-types:
+      - type-name: DarktraceSubnet
+        key-name: d_id
+
+  d_qualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'hostname && contains(hostname, `.`) && hostname || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_unqualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'hostname && !contains(hostname, `.`) && hostname || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_hostname:
+    type: array
+    syntax: jmespath
+    value: '[hostname, customFields."CrowdstrikeIdentifier".device_name,
+      customFields."Vuln-Rapid7".Hostname, customFields."Vuln-Tenable".Hostname,
+      customFields."DT-CORE-AUTO"."Server Name", customFields."DT-CORE-AUTO"."System Name"]|[]|[?@]'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_mac_addresses: # deprecated
+    x-samos-hidden: true
+    deprecated: true
+    type: string
+    syntax: jmespath
+    value: 'null'
+    format: mac-addr
+
+  d_all_mac_addresses:
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: '[macaddress, customFields."DT-MANUAL".macaddress,
+      customFields."DT-AUTO".macaddress, customFields."Vuln-Tenable"."MAC Address"]|[]|[?@]'
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+
+  d_os:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'os || customFields."DT-CORE-AUTO"."OS Name" || customFields."CrowdstrikeFields".OSPlatform'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+properties:
+  id:
+    title: ID
+    x-samos-hidden: true # Hidden as its integer and it will be derived to string
+    type: integer
+
+  ip:
+    title: IP Address
+    type: string
+    format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  macaddress:
+    title: MAC Address
+    type: string
+    format: mac-addr
+
+  devicelabel:
+    title: Device Label
+    type: string
+
+  ips:
+    title: IP History
+    type: array
+    items:
+      type: object
+      properties:
+        ip:
+          title: IP
+          type: string
+          format: ip-addr
+        timems:
+          title: Timestamp (ms)
+          type: integer
+          format: epoch-millis
+        time:
+          title: Time
+          type: string
+        sid:
+          title: SID
+          type: integer
+
+  did:
+    title: DID
+    type: integer
+    x-samos-hidden: true # Hidden as its same as ID
+
+  sid:
+    title: Subnet
+    type: integer
+    x-samos-hidden: true
+
+  credentials:
+    title: Credentials
+    type: array
+    items:
+      type: object
+      properties:
+        lastSeen:
+          title: Last Seen
+          type: integer
+          format: epoch-millis
+        credential:
+          title: Credential
+          type: string
+
+  hostname:
+    title: Hostname
+    type: string
+
+  quarantine:
+    title: Quarantine Time
+    type: integer
+    format: epoch-millis
+
+  time:
+    title: First Seen Time
+    type: integer
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  endtime:
+    title: End Time
+    type: integer
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  os:
+    title: Operating System
+    type: string
+
+  ossource:
+    title: OS Sources
+    type: string
+
+  typename:
+    title: Type Name
+    type: string
+
+  typelabel:
+    title: Type Label
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  vendor:
+    title: Vendor
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+
+  customFields:
+    title: Custom Fields
+    type: object
+    properties:
+      DT-MANUAL:
+        title: DT Manual
+        type: object
+        properties:
+          macaddress:
+            title: MAC Address
+            type: string
+            format: mac-addr
+      DT-AUTO:
+        title: DT Auto
+        type: object
+        properties:
+          macaddress:
+            title: MAC Address
+            type: string
+            format: mac-addr
+      DT-CORE-AUTO:
+        title: DT Auto
+        type: object
+        properties:
+          'OS Name':
+            title: OS Name
+            type: string
+          'OS Version':
+            title: OS Version
+            type: string
+            x-samos-fulfills:
+              type-name: Machine
+              property-name: os_version
+          'Server Name':
+            title: Server Name
+            type: string
+          'System Name':
+            title: System Name
+            type: string
+          'System Description':
+            type: string
+            title: System Description
+      DT-ICS-AUTO:
+        title: DT ICS Auto
+        type: object
+        properties:
+          Description:
+            title: Description
+            type: string
+            x-samos-fulfills:
+              type-name: core.named-object
+              property-name: description
+          Protocol:
+            title: Protocol
+            type: string
+          'Node name':
+            title: Node name
+            type: string
+          'Physical location':
+            title: Physical location
+            type: string
+      'CrowdstrikeIdentifier':
+        title: Crowdstrike Identifier
+        type: object
+        properties:
+          device_id:
+            type: string
+            title: Device ID
+            x-samos-correlation:
+              correlation-key: Machine.agent-software-uuid
+              correlation-type: Machine
+              priority: 3
+          device_name:
+            type: string
+            title: Device Name
+          dt_account_id:
+            type: string
+            title: Account ID
+      Vuln-Crowdstrike:
+        title: Vulnerability Crowdstrike
+        type: object
+        properties:
+          Hostname:
+            type: string
+            title: Hostname
+          FieldOrder:
+            type: string
+            title: Field Order
+          'IP Address':
+            type: string
+            title: IP Address
+          'MAC Address':
+            type: string
+            title: MAC Address
+            format: mac-addr
+          'Last Updated':
+            type: string
+            title: Last Updated
+          'CVE Count':
+            type: string
+            title: CVE Count
+          'CVE Low Count':
+            type: string
+            title: CVE Low Count
+          'CVE Medium Count':
+            type: string
+            title: CVE Medium Count
+          'CVE High Count':
+            type: string
+            title: CVE High Coun
+          'CVE Critical Count':
+            type: string
+            title: CVE Critical Count
+      'Vuln-Rapid7':
+        type: object
+        properties:
+          Hostname:
+            type: string
+            title: Hostname
+          FieldOrder:
+            type: string
+            title: Field Order
+          'IP Address':
+            type: string
+            title: IP Address
+          'Last Updated':
+            type: string
+            title: Last Updated
+          'CVE Count':
+            type: string
+            title: CVE Count
+          'CVE Low Count':
+            type: string
+            title: CVE Low Count
+          'CVE Medium Count':
+            type: string
+            title: CVE Medium Count
+          'CVE High Count':
+            type: string
+            title: CVE High Count
+          'CVE Critical Count':
+            type: string
+            title: CVE Critical Count
+      'Vuln-Tenable':
+        title: Vulnerability Tenable
+        type: object
+        properties:
+          Url:
+            type: string
+            title: URL
+            format: url
+          Model:
+            type: string
+            title: Model
+          Hostname:
+            type: string
+            title: Hostname
+          FieldOrder:
+            type: string
+            title: Field Order
+          'IP Address':
+            type: string
+            title: IP Address
+          'MAC Address':
+            type: string
+            title: MAC Address
+            format: mac-addr
+          'Last Updated':
+            type: string
+            title: Last Updated
+          'CVE Count':
+            type: string
+            title: CVE Count
+          'CVE Low Count':
+            type: string
+            title: CVE Low Count
+          'CVE Medium Count':
+            type: string
+            title: CVE Medium Count
+          'CVE High Count':
+            type: string
+            title: CVE High Count
+          'CVE Critical Count':
+            type: string
+            title: CVE Critical Count

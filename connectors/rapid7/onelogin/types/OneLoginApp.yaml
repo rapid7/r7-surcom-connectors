@@ -1,0 +1,85 @@
+x-samos-type-name: OneLoginApp
+x-samos-namespace: onelogin
+title: OneLogin App
+description: An App from OneLogin
+
+x-samos-extends-types:
+  - type-name: System
+
+x-samos-keys:
+  - d_id # It is used for referencing in other types
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: auth_method_description
+  - name: created_at
+  - name: updated_at
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: visible
+  - name: auth_method
+  - name: auth_method_description
+  - name: created_at
+  - name: updated_at
+
+x-samos-derived-properties:
+  d_id:
+    # The "id" property has an integer ID in the response
+    # so we derived it to string  type to fulfill the 'core.component.id' property
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+properties:
+  auth_method:
+    title: Auth Method
+    type: integer
+  auth_method_description:
+    title: Authorization Type
+    type: string
+  connector_id:
+    title: Connector ID
+    type: integer
+  created_at:
+    format: date-time
+    title: Created At
+    type: string
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  updated_at:
+    format: date-time
+    title: Updated At
+    type: string
+  visible:
+    title: Visible?
+    type: boolean
+x-samos-virtual:
+  users:
+    cypher-pattern: >
+      <-[:`e:OneLoginRole:apps`]-(:OneLoginRole)-[:`e:OneLoginRole:users`]->(:`OneLoginUser`)
+    type-name: OneLoginUser

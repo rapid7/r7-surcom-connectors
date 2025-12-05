@@ -1,0 +1,91 @@
+﻿x-samos-type-name: ProactivanetLocation
+x-samos-namespace: proactivanet
+title: Proactivanet Location
+description: A location in the Proactivanet platform.
+
+$ref: https://www.proactivanet.com/api/swagger#/definitions/Models.Location
+
+x-samos-extends-types:
+  - type-name: Location
+
+x-samos-keys:
+  - Id
+
+x-samos-table:
+  - name: Name
+  - name: Path
+  - name: Description
+  - name: GroupSelectionIncident
+
+x-samos-detail:
+  - name: Name
+  - name: Path
+  - name: Description
+  - name: PanLocations_id
+  - name: GroupSelectionIncident
+  - name: PawSvcAuthGroups_id
+  - name: PawSvcAuthUsers_id
+  - name: PadShiftRotations_id
+
+properties:
+  Name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Location.name
+      correlation-type: Location
+      priority: 5
+  Path:
+    type: string
+    title: Path
+  Description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  PanLocations_id:
+    type: string
+    title: PAN Locations
+    x-samos-ref-types:
+      - type-name: ProactivanetLocation
+        key-name: Id
+  GroupSelectionIncident:
+    type: string
+    title: Group Selection Incident
+  PawSvcAuthGroups_id:
+    type: string
+    title: Paw SVC Auth Groups ID
+  PawSvcAuthUsers_id:
+    type: string
+    title: Paw SVC Auth Users ID
+  PadShiftRotations_id:
+    type: string
+    title: Pad Shift Rotations ID
+  Id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Location
+      property-name: id
+  Links:
+    type: array
+    title: Links
+    x-samos-hidden: true
+    items:
+      type: object
+      properties:
+        Rel:
+          type: string
+          title: Rel
+        Href:
+          type: string
+          title: Href
+        Action:
+          type: string
+          title: Action

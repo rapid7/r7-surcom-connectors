@@ -1,0 +1,169 @@
+x-samos-type-name: WorkdayWorker
+x-samos-namespace: workday
+title: Workday Worker
+description: A Worker type in Workday.
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_worker_id
+
+x-samos-table:
+  - name: publicPrimaryWorkEmailAddress
+  - name: firstName
+  - name: lastName
+  - name: businessTitle
+  - name: currentlyActive
+  - name: timeInJobProfileStartDate
+  - name: supervisoryOrganization_OrganizationTop_GtOrganization.descriptor
+  - name: publicWorkAddress_FullWithCountry
+
+x-samos-detail:
+  - name: publicPrimaryWorkEmailAddress
+  - name: firstName
+  - name: lastName
+  - name: publicPrimaryWorkPhoneNumber
+  - name: businessTitle
+  - name: currentlyActive
+  - name: timeInJobProfileStartDate
+  - name: supervisoryOrganization_Hierarchy
+  - name: supervisoryOrganization_OrganizationTop_GtOrganization
+  - name: numberOfDirectReportsEmployees
+  - name: publicWorkAddress_FullWithCountry
+
+x-samos-derived-properties:
+  d_worker_id:
+    # Unique identifier for the Workday Worker, id is in nested object
+    # So derived for using x-samos-keys and referencing
+    x-samos-hidden: true
+    type: string
+    value: 'workerAccessibleByCurrentUser.id'
+    syntax: jmespath
+    x-samos-immutable: true
+    x-samos-fulfills:
+      property-name: id
+      type-name: User
+
+properties:
+  businessTitle:
+    title: Business Title
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: title
+  currentlyActive:
+    title: Currently Active?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+  firstName:
+    title: First Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+  isHierarchy:
+    title: Hierarchy?
+    type: boolean
+  lastName:
+    title: Last Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+  location:
+    title: Location
+    type: object
+    properties:
+      descriptor:
+        title: Descriptor
+        type: string
+      id:
+        title: ID
+        type: string
+  locationAddress_Country:
+    title: Location Address Country
+    type: object
+    properties:
+      descriptor:
+        title: Descriptor
+        type: string
+        x-samos-fulfills:
+          type-name: core.location
+          property-name: country
+        x-samos-ref-types:
+          - type-name: NoeticEnumCountry
+            key-name: country_name
+      id:
+        title: ID
+        type: string
+  numberOfDirectReportsEmployees:
+    title: Direct Reports Employees
+    type: integer
+  publicPrimaryWorkEmailAddress:
+    title: Work Email
+    type: string
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 5
+    x-samos-fulfills:
+      property-name: email
+      type-name: User
+  publicPrimaryWorkPhoneNumber:
+    title: Work Phone Number
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+  publicWorkAddress_FullWithCountry:
+    title: Work Address With Country
+    type: string
+  supervisoryOrganization_Hierarchy:
+    title: Supervisory Organization Hierarchy
+    type: string
+  supervisoryOrganization_OrganizationTop_GtOrganization:
+    title: Supervisory Organization
+    type: object
+    properties:
+      descriptor:
+        title: Supervisory Organization
+        type: string
+        x-samos-fulfills:
+          type-name: User
+          property-name: department
+      id:
+        title: ID
+        type: string
+        x-samos-ref-types:
+          - type-name: WorkdaySupervisoryOrganization
+            key-name: id
+  timeInJobProfileStartDate:
+    title: Job Start Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date
+  workAddress_StateProvince:
+    title: Work State Province
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: state
+  workerAccessibleByCurrentUser:
+    title: Current User
+    type: object
+    properties:
+      descriptor:
+        title: Descriptor
+        type: string
+        x-samos-fulfills:
+          type-name: core.named-object
+          property-name: name
+      id:
+        title: ID
+        type: string

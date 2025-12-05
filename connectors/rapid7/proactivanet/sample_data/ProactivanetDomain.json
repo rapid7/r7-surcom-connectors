@@ -1,0 +1,67 @@
+[
+  {
+    "Name": "domainname1",
+    "Description": null,
+    "Type": "Local",
+    "Id": "5138804e-6581-42fa-818e-00166944be6d",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactive.com/proactivanet/api/domains/5138804e-6581-42fa-818e-00166944be6d",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Name": "domainname12",
+    "Description": null,
+    "Type": "Local",
+    "Id": "4b0d9788-eb57-46f5-8f5b-002780e00851",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactive.com/proactivanet/api/domains/4b0d9788-eb57-46f5-8f5b-002780e00851",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Name": "domainname123",
+    "Description": null,
+    "Type": "Local",
+    "Id": "7c3ab700-7b56-4e10-9eb9-003351bd30cf",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactive.com/proactivanet/api/domains/7c3ab700-7b56-4e10-9eb9-003351bd30cf",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Name": "domainname1234",
+    "Description": null,
+    "Type": "Local",
+    "Id": "77246165-47d4-41d0-a4a6-00600c24bd19",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactive.com/proactivanet/api/domains/77246165-47d4-41d0-a4a6-00600c24bd19",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Name": "domainname12345",
+    "Description": null,
+    "Type": "Local",
+    "Id": "d88fbf9f-5b68-4f2b-94ea-00814b518f1f",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactive.com/proactivanet/api/domains/d88fbf9f-5b68-4f2b-94ea-00814b518f1f",
+        "Action": "GET"
+      }
+    ]
+  }
+]

@@ -1,0 +1,78 @@
+[
+  {
+    "id": 169697,
+    "uid": "a39bf3ab-f70f-4c1c-815b-63dcae9d5112",
+    "accountUid": "syre7a70001",
+    "name": "Managed",
+    "description": "This is the default site for your Managed devices.",
+    "notes": null,
+    "onDemand": false,
+    "splashtopAutoInstall": true,
+    "proxySettings": null,
+    "devicesStatus": {
+      "numberOfDevices": 0,
+      "numberOfOnlineDevices": 0,
+      "numberOfOfflineDevices": 0
+    },
+    "autotaskCompanyName": null,
+    "autotaskCompanyId": null,
+    "portalUrl": "https://example.com/site/169697"
+  },
+  {
+    "id": 169698,
+    "uid": "ca19f6ee-0c77-41ed-a8ec-403662413460",
+    "accountUid": "syre7a70001",
+    "name": "OnDemand",
+    "description": "This is the default site for your OnDemand devices.",
+    "notes": null,
+    "onDemand": true,
+    "splashtopAutoInstall": true,
+    "proxySettings": null,
+    "devicesStatus": {
+      "numberOfDevices": 0,
+      "numberOfOnlineDevices": 0,
+      "numberOfOfflineDevices": 0
+    },
+    "autotaskCompanyName": null,
+    "autotaskCompanyId": null,
+    "portalUrl": "https://example.com/site/169698"
+  },
+  {
+    "id": 169699,
+    "uid": "syre7a70001-00000000",
+    "accountUid": "syre7a70001",
+    "name": "Deleted Devices",
+    "description": "Container for devices marked for deletion",
+    "notes": null,
+    "onDemand": false,
+    "splashtopAutoInstall": true,
+    "proxySettings": null,
+    "devicesStatus": {
+      "numberOfDevices": 0,
+      "numberOfOnlineDevices": 0,
+      "numberOfOfflineDevices": 0
+    },
+    "autotaskCompanyName": null,
+    "autotaskCompanyId": null,
+    "portalUrl": "https://example.com/site/169699"
+  },
+  {
+    "id": 169880,
+    "uid": "33019f34-873c-498a-8962-9edf23f7f4be",
+    "accountUid": "syre7a70001",
+    "name": "r7-test",
+    "description": "testing",
+    "notes": null,
+    "onDemand": false,
+    "splashtopAutoInstall": true,
+    "proxySettings": null,
+    "devicesStatus": {
+      "numberOfDevices": 26,
+      "numberOfOnlineDevices": 26,
+      "numberOfOfflineDevices": 0
+    },
+    "autotaskCompanyName": null,
+    "autotaskCompanyId": null,
+    "portalUrl": "https://example.com/site/169880"
+  }
+]

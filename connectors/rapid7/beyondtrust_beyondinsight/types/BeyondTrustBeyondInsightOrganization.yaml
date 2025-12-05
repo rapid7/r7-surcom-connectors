@@ -1,0 +1,37 @@
+x-samos-type-name: BeyondTrustBeyondInsightOrganization
+x-samos-namespace: beyondtrust.beyondinsight
+title: BeyondInsight Organization
+description: Represents an Organization from BeyondTrust BeyondInsight
+
+x-samos-extends-types:
+  - type-name: Organization
+
+x-samos-keys:
+  - OrganizationID
+
+x-samos-table:
+  - name: Name
+  - name: IsActive
+
+x-samos-detail:
+  - name: Name
+  - name: IsActive
+
+properties:
+  IsActive:
+    title: Active?
+    type: boolean
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  OrganizationID:
+    title: Organization ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id

@@ -1,0 +1,57 @@
+[
+  {
+    "connector_id": 67912,
+    "id": 4166233,
+    "auth_method": 2,
+    "name": "CrushFTP",
+    "updated_at": "2025-10-06T12:12:33.658Z",
+    "description": "test app intigrations",
+    "auth_method_description": "SAML2.0",
+    "visible": true,
+    "created_at": "2025-10-06T12:12:33.658Z"
+  },
+  {
+    "created_at": "2025-10-06T12:18:54.408Z",
+    "auth_method": 2,
+    "description": "integration testing purpose",
+    "name": "Bear River BearTracks",
+    "updated_at": "2025-10-06T12:18:54.408Z",
+    "visible": true,
+    "id": 4166235,
+    "connector_id": 48176,
+    "auth_method_description": "SAML2.0"
+  },
+  {
+    "name": "Dell Online Self Dispatch",
+    "connector_id": 15991,
+    "created_at": "2025-10-06T12:20:00.741Z",
+    "auth_method_description": "Form-based auth",
+    "visible": true,
+    "id": 4166236,
+    "auth_method": 0,
+    "description": "integration testing purpose",
+    "updated_at": "2025-10-06T12:20:00.741Z"
+  },
+  {
+    "id": 4166238,
+    "name": "Jigsaw",
+    "description": "integration testing purpose",
+    "auth_method": 0,
+    "created_at": "2025-10-06T12:20:51.288Z",
+    "auth_method_description": "Form-based auth",
+    "connector_id": 856,
+    "visible": true,
+    "updated_at": "2025-10-06T12:20:51.288Z"
+  },
+  {
+    "id": 4166251,
+    "updated_at": "2025-10-07T10:54:41.586Z",
+    "connector_id": 134486,
+    "created_at": "2025-10-06T12:26:54.903Z",
+    "auth_method_description": "Form-based auth",
+    "visible": true,
+    "description": "integration testing purpose",
+    "name": "Cloudsign (IdP initiated lancher)",
+    "auth_method": 0
+  }
+]

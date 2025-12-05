@@ -1,0 +1,31 @@
+[
+  {
+    "key": "DEM",
+    "id": 1,
+    "name": "demo-project-01",
+    "description": "its demo projects for bitbucket demo",
+    "public": false,
+    "type": "NORMAL",
+    "links": {
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/DEM"
+        }
+      ]
+    }
+  },
+  {
+    "key": "PROJ",
+    "id": 3,
+    "name": "project-02",
+    "public": false,
+    "type": "NORMAL",
+    "links": {
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/PROJ"
+        }
+      ]
+    }
+  }
+]

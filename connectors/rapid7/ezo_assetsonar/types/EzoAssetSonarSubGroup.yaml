@@ -1,0 +1,164 @@
+x-samos-type-name: EzoAssetSonarSubGroup
+x-samos-namespace: ezo.assetsonar
+title: Ezo AssetSonar Sub Group
+description: A sub group from AssetSonar
+
+x-samos-extends-types:
+  - type-name: core.component-group
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id # derived property to string type as id is of integer type in response to fulfill core.component.id
+  - id # To use it for reference in EzoAssetSonarAsset type
+x-samos-table:
+  - name: name
+  - name: description
+  - name: active
+  - name: d_group
+  - name: assets_count
+  - name: created_at
+  - name: updated_at
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: active
+  - name: d_group
+  - name: assets_count
+  - name: subgroup_path
+  - name: created_at
+  - name: updated_at
+
+x-samos-derived-properties:
+  d_id:
+    # Derived property to convert integer id to string type
+    # to fulfill core.component.id which requires string type
+    x-samos-immutable: true
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'id'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_group:
+    # Derived property to reference EzoAssetSonarGroup id
+    # which is of integer type to fulfill core.component.is_part_of_ref which requires string type
+    title: Group
+    type: string
+    syntax: jmespath
+    value: 'group_id'
+    x-samos-ref-types:
+      - type-name: EzoAssetSonarGroup
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+properties:
+  active:
+    title: Active?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+  allow_staff_to_set_checkout_duration:
+    title: Allow Staff To Set Checkout Duration?
+    type: boolean
+  assets_count:
+    title: Assets Count
+    type: integer
+  created_at:
+    format: date-time
+    title: Created At
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  enable_service_triage:
+    title: Enable Service Triage?
+    type: boolean
+  enable_task_template_triage:
+    title: Enable Task Template Triage?
+    type: boolean
+  group_id:
+    title: Group
+    type: integer
+    x-samos-hidden: true
+  hidden_on_web_store:
+    title: Hidden On Web Store?
+    type: boolean
+  id:
+    title: ID
+    type: integer
+    x-samos-immutable: true
+  indefinite_triage_completion_period:
+    title: Indefinite Triage Completion Period?
+    type: boolean
+  lft:
+    title: LFT
+    type: integer
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  parent_id:
+    title: Parent
+    type: integer
+    x-samos-ref-types:
+      - type-name: EzoAssetSonarSubGroup
+        key-name: id
+  rgt:
+    title: RGT
+    type: integer
+  staff_checkout_duration_days:
+    title: Staff Checkout Duration Days
+    type: integer
+  staff_checkout_duration_hours:
+    title: Staff Checkout Duration Hours
+    type: integer
+  staff_checkout_duration_mins:
+    title: Staff Checkout Duration Mins
+    type: integer
+  staff_checkout_duration_months:
+    title: Staff Checkout Duration Months
+    type: integer
+  staff_checkout_duration_weeks:
+    title: Staff Checkout Duration Weeks
+    type: integer
+  subgroup_path:
+    title: Subgroup Path
+    type: string
+  triage_completion_period:
+    title: Triage Completion Period
+    type: integer
+  triage_completion_period_basis:
+    title: Triage Completion Period Basis
+    type: string
+  triage_same_as_group:
+    title: Triage Same As Group?
+    type: boolean
+  updated_at:
+    format: date-time
+    title: Updated At
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  visible_on_web_store:
+    title: Visible On Web Store?
+    type: boolean
+x-samos-virtual:
+  members:
+    type-name: EzoAssetSonarAsset
+    cypher-pattern: >
+      <-[e:`e:EzoAssetSonarAsset:sub_group_id`]- (g:EzoAssetSonarAsset)

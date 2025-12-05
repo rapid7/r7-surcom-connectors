@@ -1,0 +1,251 @@
+x-samos-type-name: BeyondTrustBeyondInsightAsset
+x-samos-namespace: beyondtrust.beyondinsight
+title: BeyondInsight Asset
+description: Represents a Managed System (Asset) from BeyondTrust BeyondInsight.
+
+x-samos-extends-types:
+  - type-name: Machine
+
+x-samos-keys:
+  - d_sys_id
+  - ManagedSystemID
+
+x-samos-table:
+  - name: SystemName
+  - name: DnsName
+  - name: Description
+  - name: IPAddress
+  - name: PlatformID
+  - name: WorkgroupID
+  - name: AutoManagementFlag
+
+x-samos-detail:
+  - name: SystemName
+  - name: DnsName
+  - name: Description
+  - name: IPAddress
+  - name: PlatformID
+  - name: WorkgroupID
+  - name: d_functional_account
+  - name: AutoManagementFlag
+  - name: AccessURL
+  - name: ContactEmail
+  - name: Timeout
+  - name: ReleaseDuration
+  - name: NetBiosName
+  - name: MaxReleaseDuration
+  - name: Port
+  - name: RemoteClientType
+  - name: HostName
+  - name: UseSSL
+  - name: IsApplicationHost
+  - name: IsDefaultInstance
+  - name: InstanceName
+  - name: ChangePasswordAfterAnyReleaseFlag
+  - name: CheckPasswordFlag
+  - name: ResetPasswordOnMismatchFlag
+  - name: ElevationCommand
+
+x-samos-derived-properties:
+  # Derived 'ManagedSystemID' integer property to map to core.component.id which is "id" property is accepted string type
+  d_sys_id:
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: ManagedSystemID
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_dnsname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: '[DnsName][?@!=null&&contains(@,`.`)]|[0]'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_functional_account:
+    # Derived 'FunctionalAccountID' integer property to map to core.owned-entity.users, which is users property accepts string type
+    title: Functional Account
+    type: string
+    syntax: jmespath
+    value: 'FunctionalAccountID'
+    x-samos-ref-types:
+      - type-name: BeyondTrustBeyondInsightFunctionalAccount
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: users
+
+properties:
+  AccessURL:
+    title: Access URL
+    type: string
+  AccountNameFormat:
+    title: Account Name Format
+    type: integer
+  ApplicationHostID:
+    title: Application Host ID
+    type: string
+  AssetID:
+    title: Asset ID
+    type: integer
+  AutoManagementFlag:
+    title: Auto Management Flag?
+    type: boolean
+  ChangeFrequencyDays:
+    title: Change Frequency Days
+    type: integer
+  ChangeFrequencyType:
+    title: Change Frequency Type
+    type: string
+  ChangePasswordAfterAnyReleaseFlag:
+    title: Change Password After Any Release Flag?
+    type: boolean
+  ChangeTime:
+    title: Change Time
+    type: string
+  CheckPasswordFlag:
+    title: Check Password Flag?
+    type: boolean
+  CloudID:
+    title: Cloud ID
+    type: integer
+  ContactEmail:
+    title: Contact Email
+    type: string
+    x-samos-ref-types:
+      - type-name: BeyondTrustBeyondInsightUser
+        key-name: EmailAddress
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: owners
+  DSSKeyRuleID:
+    title: DSS Key Rule ID
+    type: integer
+  DatabaseID:
+    title: Database
+    type: integer
+  Description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  DirectoryID:
+    title: Directory ID
+    type: integer
+  DnsName:
+    title: DNS Name
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+  ElevationCommand:
+    title: Elevation Command
+    type: string
+  EntityTypeID:
+    title: Entity Type
+    type: integer
+  ForestName:
+    title: Forest Name
+    type: string
+  FunctionalAccountID:
+    title: Functional Account
+    type: integer
+    x-samos-hidden: true
+  HostName:
+    title: Host Name
+    type: string
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+  IPAddress:
+    format: ip-addr
+    title: IP Address
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  ISAReleaseDuration:
+    title: ISA Release Duration
+    type: integer
+  InstanceName:
+    title: Instance Name
+    type: string
+  IsApplicationHost:
+    title: Application Host?
+    type: boolean
+  IsDefaultInstance:
+    title: Default Instance?
+    type: boolean
+  LoginAccountID:
+    title: Login Account ID
+    type: string
+  ManagedSystemID:
+    title: Managed System ID
+    type: integer # Derived to string property 'd_sys_id' above
+    x-samos-hidden: true
+    x-samos-immutable: true
+  MaxReleaseDuration:
+    title: Max Release Duration
+    type: integer
+  NetBiosName:
+    title: Net Bios Name
+    type: string
+  OracleInternetDirectoryID:
+    title: Oracle Internet Directory ID
+    type: string
+  OracleInternetDirectoryServiceName:
+    title: Oracle Internet Directory Service Name
+    type: string
+  PasswordRuleID:
+    title: Password Rule ID
+    type: integer
+  PlatformID:
+    title: Platform
+    type: integer
+    x-samos-ref-types:
+      - type-name: BeyondTrustBeyondInsightPlatform
+        key-name: PlatformID
+  Port:
+    title: Port
+    type: integer
+  ReleaseDuration:
+    title: Release Duration
+    type: integer
+  RemoteClientType:
+    title: Remote Client Type
+    type: string
+  ResetPasswordOnMismatchFlag:
+    title: Reset Password On Mismatch Flag?
+    type: boolean
+  SshKeyEnforcementMode:
+    title: SSH Key Enforcement Mode
+    type: integer
+  SystemName:
+    title: System
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  Template:
+    title: Template
+    type: string
+  Timeout:
+    title: Timeout
+    type: integer
+  UseSSL:
+    title: Use SSL
+    type: boolean
+  WorkgroupID:
+    title: Workgroup
+    type: integer
+    x-samos-ref-types:
+      - type-name: BeyondTrustBeyondInsightWorkgroup
+        key-name: ID

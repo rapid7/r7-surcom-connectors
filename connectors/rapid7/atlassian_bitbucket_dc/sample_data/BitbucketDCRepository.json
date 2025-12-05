@@ -1,0 +1,873 @@
+[
+  {
+    "slug": "crm_django",
+    "id": 16,
+    "name": "CRM_Django",
+    "hierarchyId": "e342611f289dd65c6b84",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "PROJ",
+      "id": 3,
+      "name": "project-02",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/PROJ"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "http://34.217.37.37:7990/scm/proj/crm_django.git",
+          "name": "http"
+        },
+        {
+          "href": "ssh://git@34.217.37.37:7999/proj/crm_django.git",
+          "name": "ssh"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/PROJ/repos/crm_django/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "django-projects",
+    "id": 22,
+    "name": "Django-Projects",
+    "hierarchyId": "f685eee4cd98e63930ce",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "PROJ",
+      "id": 3,
+      "name": "project-02",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/PROJ"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "ssh://git@34.217.37.37:7999/proj/django-projects.git",
+          "name": "ssh"
+        },
+        {
+          "href": "http://34.217.37.37:7990/scm/proj/django-projects.git",
+          "name": "http"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/PROJ/repos/django-projects/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "event-organiser-django-app",
+    "id": 2,
+    "name": "Event-Organiser-Django-APP",
+    "hierarchyId": "2d909daeb54c3136d59b",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "DEM",
+      "id": 1,
+      "name": "demo-project-01",
+      "description": "its demo projects for bitbucket demo",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/DEM"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "ssh://git@34.217.37.37:7999/dem/event-organiser-django-app.git",
+          "name": "ssh"
+        },
+        {
+          "href": "http://34.217.37.37:7990/scm/dem/event-organiser-django-app.git",
+          "name": "http"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/DEM/repos/event-organiser-django-app/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "event-organiser-django-app",
+    "id": 15,
+    "name": "Event-Organiser-Django-APP",
+    "hierarchyId": "637e73395488afc3ccce",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "PROJ",
+      "id": 3,
+      "name": "project-02",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/PROJ"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "http://34.217.37.37:7990/scm/proj/event-organiser-django-app.git",
+          "name": "http"
+        },
+        {
+          "href": "ssh://git@34.217.37.37:7999/proj/event-organiser-django-app.git",
+          "name": "ssh"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/PROJ/repos/event-organiser-django-app/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "first-git-project",
+    "id": 8,
+    "name": "first-git-project",
+    "hierarchyId": "e8d9bd327886dbc58c5d",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "DEM",
+      "id": 1,
+      "name": "demo-project-01",
+      "description": "its demo projects for bitbucket demo",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/DEM"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "http://34.217.37.37:7990/scm/dem/first-git-project.git",
+          "name": "http"
+        },
+        {
+          "href": "ssh://git@34.217.37.37:7999/dem/first-git-project.git",
+          "name": "ssh"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/DEM/repos/first-git-project/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "gstbills_upload-",
+    "id": 9,
+    "name": "GstBills_Upload-",
+    "hierarchyId": "1b614a68fea97a54cc08",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "DEM",
+      "id": 1,
+      "name": "demo-project-01",
+      "description": "its demo projects for bitbucket demo",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/DEM"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "http://34.217.37.37:7990/scm/dem/gstbills_upload-.git",
+          "name": "http"
+        },
+        {
+          "href": "ssh://git@34.217.37.37:7999/dem/gstbills_upload-.git",
+          "name": "ssh"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/DEM/repos/gstbills_upload-/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "its-all-about-python",
+    "id": 3,
+    "name": "Its-All-About-Python",
+    "hierarchyId": "fbf1e6324ff863ae6041",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "DEM",
+      "id": 1,
+      "name": "demo-project-01",
+      "description": "its demo projects for bitbucket demo",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/DEM"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "http://34.217.37.37:7990/scm/dem/its-all-about-python.git",
+          "name": "http"
+        },
+        {
+          "href": "ssh://git@34.217.37.37:7999/dem/its-all-about-python.git",
+          "name": "ssh"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/DEM/repos/its-all-about-python/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "mutual_funds_broker",
+    "id": 11,
+    "name": "mutual_funds_broker",
+    "hierarchyId": "b7ed7f6b2c8b1ea0e561",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "DEM",
+      "id": 1,
+      "name": "demo-project-01",
+      "description": "its demo projects for bitbucket demo",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/DEM"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "ssh://git@34.217.37.37:7999/dem/mutual_funds_broker.git",
+          "name": "ssh"
+        },
+        {
+          "href": "http://34.217.37.37:7990/scm/dem/mutual_funds_broker.git",
+          "name": "http"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/DEM/repos/mutual_funds_broker/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "my-website",
+    "id": 5,
+    "name": "my-website",
+    "hierarchyId": "02ec4629e393fc60bd61",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "DEM",
+      "id": 1,
+      "name": "demo-project-01",
+      "description": "its demo projects for bitbucket demo",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/DEM"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "ssh://git@34.217.37.37:7999/dem/my-website.git",
+          "name": "ssh"
+        },
+        {
+          "href": "http://34.217.37.37:7990/scm/dem/my-website.git",
+          "name": "http"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/DEM/repos/my-website/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "my-website",
+    "id": 18,
+    "name": "my-website",
+    "hierarchyId": "77e1cb1e72c33863ec4c",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "PROJ",
+      "id": 3,
+      "name": "project-02",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/PROJ"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "http://34.217.37.37:7990/scm/proj/my-website.git",
+          "name": "http"
+        },
+        {
+          "href": "ssh://git@34.217.37.37:7999/proj/my-website.git",
+          "name": "ssh"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/PROJ/repos/my-website/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "pandas-practice",
+    "id": 12,
+    "name": "Pandas-Practice",
+    "hierarchyId": "7adc8ae9d4a48391a47d",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "PROJ",
+      "id": 3,
+      "name": "project-02",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/PROJ"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "http://34.217.37.37:7990/scm/proj/pandas-practice.git",
+          "name": "http"
+        },
+        {
+          "href": "ssh://git@34.217.37.37:7999/proj/pandas-practice.git",
+          "name": "ssh"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/PROJ/repos/pandas-practice/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "pandas_exercise-",
+    "id": 4,
+    "name": "Pandas_Exercise-",
+    "hierarchyId": "89e6ebdc0578b92c7097",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "DEM",
+      "id": 1,
+      "name": "demo-project-01",
+      "description": "its demo projects for bitbucket demo",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/DEM"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "http://34.217.37.37:7990/scm/dem/pandas_exercise-.git",
+          "name": "http"
+        },
+        {
+          "href": "ssh://git@34.217.37.37:7999/dem/pandas_exercise-.git",
+          "name": "ssh"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/DEM/repos/pandas_exercise-/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "payment",
+    "id": 17,
+    "name": "payment",
+    "hierarchyId": "34e2df9575893318e2d6",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "PROJ",
+      "id": 3,
+      "name": "project-02",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/PROJ"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "http://34.217.37.37:7990/scm/proj/payment.git",
+          "name": "http"
+        },
+        {
+          "href": "ssh://git@34.217.37.37:7999/proj/payment.git",
+          "name": "ssh"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/PROJ/repos/payment/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "paytm-payment",
+    "id": 10,
+    "name": "paytm-payment",
+    "hierarchyId": "abd074b6b9000f83ef79",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "DEM",
+      "id": 1,
+      "name": "demo-project-01",
+      "description": "its demo projects for bitbucket demo",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/DEM"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "http://34.217.37.37:7990/scm/dem/paytm-payment.git",
+          "name": "http"
+        },
+        {
+          "href": "ssh://git@34.217.37.37:7999/dem/paytm-payment.git",
+          "name": "ssh"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/DEM/repos/paytm-payment/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "regandlogin",
+    "id": 7,
+    "name": "RegAndLogin",
+    "hierarchyId": "4449c9678cf92ae6e7b5",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "DEM",
+      "id": 1,
+      "name": "demo-project-01",
+      "description": "its demo projects for bitbucket demo",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/DEM"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "http://34.217.37.37:7990/scm/dem/regandlogin.git",
+          "name": "http"
+        },
+        {
+          "href": "ssh://git@34.217.37.37:7999/dem/regandlogin.git",
+          "name": "ssh"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/DEM/repos/regandlogin/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "repo-01",
+    "id": 1,
+    "name": "repo-01",
+    "hierarchyId": "1ab2800b4a03391bc556",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "DEM",
+      "id": 1,
+      "name": "demo-project-01",
+      "description": "its demo projects for bitbucket demo",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/DEM"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "ssh://git@34.217.37.37:7999/dem/repo-01.git",
+          "name": "ssh"
+        },
+        {
+          "href": "http://34.217.37.37:7990/scm/dem/repo-01.git",
+          "name": "http"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/DEM/repos/repo-01/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "sample_dajngo_test",
+    "id": 13,
+    "name": "Sample_dajngo_test",
+    "hierarchyId": "ccd77eb04c9aa57f3504",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "PROJ",
+      "id": 3,
+      "name": "project-02",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/PROJ"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "http://34.217.37.37:7990/scm/proj/sample_dajngo_test.git",
+          "name": "http"
+        },
+        {
+          "href": "ssh://git@34.217.37.37:7999/proj/sample_dajngo_test.git",
+          "name": "ssh"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/PROJ/repos/sample_dajngo_test/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "sonarlint-visualstudio",
+    "id": 6,
+    "name": "sonarlint-visualstudio",
+    "hierarchyId": "5849704e24296feebb61",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "DEM",
+      "id": 1,
+      "name": "demo-project-01",
+      "description": "its demo projects for bitbucket demo",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/DEM"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "ssh://git@34.217.37.37:7999/dem/sonarlint-visualstudio.git",
+          "name": "ssh"
+        },
+        {
+          "href": "http://34.217.37.37:7990/scm/dem/sonarlint-visualstudio.git",
+          "name": "http"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/DEM/repos/sonarlint-visualstudio/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "sonarlint-visualstudio",
+    "id": 19,
+    "name": "sonarlint-visualstudio",
+    "hierarchyId": "c70693255cd168507c0f",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "PROJ",
+      "id": 3,
+      "name": "project-02",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/PROJ"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": false,
+    "links": {
+      "clone": [
+        {
+          "href": "ssh://git@34.217.37.37:7999/proj/sonarlint-visualstudio.git",
+          "name": "ssh"
+        },
+        {
+          "href": "http://34.217.37.37:7990/scm/proj/sonarlint-visualstudio.git",
+          "name": "http"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/PROJ/repos/sonarlint-visualstudio/browse"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "static-projects",
+    "id": 14,
+    "name": "static-projects",
+    "hierarchyId": "dd51656fc40ca9bc1f71",
+    "scmId": "git",
+    "state": "AVAILABLE",
+    "statusMessage": "Available",
+    "forkable": true,
+    "project": {
+      "key": "PROJ",
+      "id": 3,
+      "name": "project-02",
+      "public": false,
+      "type": "NORMAL",
+      "links": {
+        "self": [
+          {
+            "href": "http://34.217.37.37:7990/projects/PROJ"
+          }
+        ]
+      }
+    },
+    "public": false,
+    "archived": true,
+    "links": {
+      "clone": [
+        {
+          "href": "http://34.217.37.37:7990/scm/proj/static-projects.git",
+          "name": "http"
+        },
+        {
+          "href": "ssh://git@34.217.37.37:7999/proj/static-projects.git",
+          "name": "ssh"
+        }
+      ],
+      "self": [
+        {
+          "href": "http://34.217.37.37:7990/projects/PROJ/repos/static-projects/browse"
+        }
+      ]
+    }
+  }
+]

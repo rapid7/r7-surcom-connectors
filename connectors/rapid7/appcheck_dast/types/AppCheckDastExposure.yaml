@@ -1,0 +1,128 @@
+x-samos-type-name: AppCheckDastExposure
+x-samos-namespace: appcheck.dast
+title: AppCheck DAST Exposure
+description: A vulnerability or other exposure from AppCheck DAST
+
+x-samos-extends-types:
+  - type-name: Exposure
+x-samos-global-zone: true
+x-samos-keys:
+  - exposure_id
+
+x-samos-table:
+  - name: title
+  - name: cves
+  - name: cvss_score
+  - name: d_severity
+  - name: priority
+
+x-samos-detail:
+  - name: title
+  - name: cves
+  - name: cvss_score
+  - name: d_severity
+  - name: priority
+  - name: impact
+  - name: solution
+  - name: cvss_v3_impact
+  - name: cvss_score
+  - name: cvss_v3_score
+  - name: synopsis
+  - name: probability
+  - name: cvss_v3_vector
+  - name: description
+  - name: cvss_vector
+
+x-samos-derived-properties:
+  d_exposure_type:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'length(cves) == `0` && `ExposureType: Weakness` || `ExposureType: Vulnerability`'
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: exposure_type
+    x-samos-ref-types:
+      - type-name: NoeticEnumExposureType
+        key-name: id
+
+  d_severity:
+    title: Severity
+    type: string
+    syntax: jmespath
+    # There is no Severity field in API response, hence its calculated based on its severity scores
+    # Here Info is Appcheck Severity and not a standard one
+    value: '(cvss_score >= `7.0` && cvss_score <= `10.0` && `High` ||
+      cvss_score >= `4.0` && cvss_score <= `6.9` && `Medium` ||
+      cvss_score >= `0.1` && cvss_score <= `3.9` && `Low` || `Info`)'
+    x-samos-fulfills:
+      property-name: severity
+      type-name: Exposure
+    x-samos-ref-types:
+      - key-name: id
+        type-name: AppCheckDastExposureSeverityEnum
+
+properties:
+  exposure_id:
+    type: string
+    title: Exposure Id
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: id
+  solution:
+    type: string
+    title: Solution
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: solution
+  cvss_v3_impact:
+    type: string
+    title: CVSS V3 Impact
+  cvss_score:
+    type: number
+    title: CVSS Score
+  cvss_v3_score:
+    type: number
+    title: CVSS V3 Score
+  priority:
+    type: string
+    title: Priority
+  synopsis:
+    type: string
+    title: Synopsis
+  probability:
+    type: string
+    title: Probability
+  cvss_v3_vector:
+    type: string
+    title: CVSS V3 Vector
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  impact:
+    type: string
+    title: Impact
+  cves:
+    type: array
+    title: CVEs
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Vulnerability
+          key-name: id
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: vulnerabilities
+  title:
+    type: string
+    title: Title
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  cvss_vector:
+    type: string
+    title: CVSS Vector

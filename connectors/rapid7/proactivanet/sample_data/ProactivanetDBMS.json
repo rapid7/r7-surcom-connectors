@@ -1,0 +1,197 @@
+[
+  {
+    "Code": "DB-001",
+    "Name": "SQLEXPRESS",
+    "Description": null,
+    "DBMSType": "Microsoft SQL Server",
+    "InstanceName": "SQLEXPRESS",
+    "Computer_id": "f3818c95-2a1b-4f96-85c9-3fb2e",
+    "Hostname": "A-0001",
+    "ManualDatabases": false,
+    "AutomaticDetection": true,
+    "ComputerClientLastAuditDate": "2024-09-15T22:54:33",
+    "ConnectToDBMS": false,
+    "ClientLastAuditDate": null,
+    "ProductName": "Express Edition (64-bit)",
+    "ProductVersion": "16.0.1000.6",
+    "Id": "24ba4762-3bec-4a7b-91c1-000f6342af20",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactive.com/proactivanet/api/dbms/24ba4762-3bec-4a7b-91c1-000f6342af20",
+        "Action": "GET"
+      },
+      {
+        "Rel": "server",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/f3818c95-2a1b-4f96-85c9-3fb2eff52932",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactive.com/proactivanet/api/dbms/24ba4762-3bec-4a7b-91c1-000f6342af20/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view databases",
+        "Href": "https://demo.proactive.com/proactivanet/api/dbms/24ba4762-3bec-4a7b-91c1-000f6342af20/databases",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Code": "DB-002",
+    "Name": "UPSWS2014SERVER",
+    "Description": null,
+    "DBMSType": "Microsoft SQL Server",
+    "InstanceName": "UPSWS2014SERVER",
+    "Computer_id": "cfd47b9a-5a43-4bfd-ba38-7787c1809a55",
+    "Hostname": "A-0003",
+    "ManualDatabases": false,
+    "AutomaticDetection": true,
+    "ComputerClientLastAuditDate": "2024-04-12T09:59:43",
+    "ConnectToDBMS": false,
+    "ClientLastAuditDate": null,
+    "ProductName": "Express Edition",
+    "ProductVersion": "12.3.6024.0",
+    "Id": "564365c3-f0b2-47a4-9f00-02b965486f06",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactive.com/proactivanet/api/dbms/564365c3-f0b2-47a4-9f00-02b965486f06",
+        "Action": "GET"
+      },
+      {
+        "Rel": "server",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/cfd47b9a-5a43-4bfd-ba38-7787c1809a55",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactive.com/proactivanet/api/dbms/564365c3-f0b2-47a4-9f00-02b965486f06/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view databases",
+        "Href": "https://demo.proactive.com/proactivanet/api/dbms/564365c3-f0b2-47a4-9f00-02b965486f06/databases",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Code": "DB-003",
+    "Name": "ASOCIACION",
+    "Description": null,
+    "DBMSType": "Microsoft SQL Server",
+    "InstanceName": "ASOCIACION",
+    "Computer_id": "7dc7bff8-fa5a-430b-b60c-b7ba9a0c33b8",
+    "Hostname": "A-0002",
+    "ManualDatabases": false,
+    "AutomaticDetection": true,
+    "ComputerClientLastAuditDate": "2025-02-25T08:39:47",
+    "ConnectToDBMS": false,
+    "ClientLastAuditDate": null,
+    "ProductName": "Express Edition (64-bit)",
+    "ProductVersion": "15.0.2000.5",
+    "Id": "31868f16-3644-44aa-82a2-069abfb3d1e4",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactive.com/proactivanet/api/dbms/31868f16-3644-44aa-82a2-069abfb3d1e4",
+        "Action": "GET"
+      },
+      {
+        "Rel": "server",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/7dc7bff8-fa5a-430b-b60c-b7ba9a0c33b8",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactive.com/proactivanet/api/dbms/31868f16-3644-44aa-82a2-069abfb3d1e4/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view databases",
+        "Href": "https://demo.proactive.com/proactivanet/api/dbms/31868f16-3644-44aa-82a2-069abfb3d1e4/databases",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Code": "DB-004",
+    "Name": "SQLEXPRESSSPM",
+    "Description": null,
+    "DBMSType": "Microsoft SQL Server",
+    "InstanceName": "SQLEXPRESSSPM",
+    "Computer_id": "dd5e13e3-5f4f-45c3-8174-6a6b64c7fdda",
+    "Hostname": "B-0004",
+    "ManualDatabases": false,
+    "AutomaticDetection": true,
+    "ComputerClientLastAuditDate": "2025-05-01T10:05:21",
+    "ConnectToDBMS": false,
+    "ClientLastAuditDate": null,
+    "ProductName": "Express Edition (64-bit)",
+    "ProductVersion": "12.0.2000.8",
+    "Id": "60cbeaed-7cdc-4dd1-ae59-0b5a6d47871d",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactive.com/proactivanet/api/dbms/60cbeaed-7cdc-4dd1-ae59-0b5a6d47871d",
+        "Action": "GET"
+      },
+      {
+        "Rel": "server",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/dd5e13e3-5f4f-45c3-8174-6a6b64c7fdda",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactive.com/proactivanet/api/dbms/60cbeaed-7cdc-4dd1-ae59-0b5a6d47871d/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view databases",
+        "Href": "https://demo.proactive.com/proactivanet/api/dbms/60cbeaed-7cdc-4dd1-ae59-0b5a6d47871d/databases",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Code": "DB-005",
+    "Name": "SQLEXPRESS",
+    "Description": null,
+    "DBMSType": "Microsoft SQL Server",
+    "InstanceName": "SQLEXPRESS",
+    "Computer_id": "1f9e4ea6-2714-4a45-aa8f-781718be285d",
+    "Hostname": "B-0005",
+    "ManualDatabases": false,
+    "AutomaticDetection": true,
+    "ComputerClientLastAuditDate": "2023-04-25T20:07:08",
+    "ConnectToDBMS": false,
+    "ClientLastAuditDate": null,
+    "ProductName": "Express Edition with Advanced Services",
+    "ProductVersion": "10.50.1600.1",
+    "Id": "35b45421-5a94-4071-9f61-0d0f802659b1",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactive.com/proactivanet/api/dbms/35b45421-5a94-4071-9f61-0d0f802659b1",
+        "Action": "GET"
+      },
+      {
+        "Rel": "server",
+        "Href": "https://demo.proactive.com/proactivanet/api/pcs/1f9e4ea6-2714-4a45-aa8f-781718be285d",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactive.com/proactivanet/api/dbms/35b45421-5a94-4071-9f61-0d0f802659b1/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view databases",
+        "Href": "https://demo.proactive.com/proactivanet/api/dbms/35b45421-5a94-4071-9f61-0d0f802659b1/databases",
+        "Action": "GET"
+      }
+    ]
+  }
+]

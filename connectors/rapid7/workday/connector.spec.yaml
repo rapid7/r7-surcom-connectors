@@ -1,0 +1,70 @@
+id: workday
+name: Workday (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+reference-schemas:
+  - url: https://community.workday.com/restapi/common/supervisory_organization
+    file: refdocs/supervisory_organization_swagger.json
+
+types:
+  - WorkdayWorker
+  - WorkdaySupervisoryOrganization
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Workday Workers and Supervisory Organizations
+    description: Imports all workers and Supervisory Organizations from Workday
+    return_types:
+      - WorkdayWorker
+      - WorkdaySupervisoryOrganization
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: Web Service URL for Workday
+    example: https://example-workday-services1.workday.com
+
+  tenant:
+    type: string
+    title: Tenant Alias
+    description: The unique alias of your Workday tenant
+
+  client_id:
+    type: string
+    title: Client ID
+    description: The Client ID used to authenticate with the Workday API
+
+  client_secret:
+    type: string
+    title: Client Secret
+    description: The Client Secret associated with the Client ID, used for authentication
+    format: password
+
+  refresh_token:
+    type: string
+    title: Refresh Token
+    description: A token used to obtain continued access to the Workday API
+    format: password
+
+  active_workers:
+    type: boolean
+    title: Only Active Workers?
+    description: >-
+      If enabled, only active workers will be imported. If disabled, all workers (including inactive) will be imported.
+    default: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - iam

@@ -1,0 +1,108 @@
+id: sonarqube
+name: SonarQube (Beta)
+author: Rapid7
+version: 0.2.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+current_changes:
+  - Improved retrieving of issues per project
+
+types:
+  - SonarQubeProject
+  - SonarQubeIssue
+  - SonarQubeRule
+  - SonarQubeTag
+  - SonarQubeEnumExposureType
+  - SonarQubeEnumSeverity
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: SonarQube Projects, Issues, Rules and Tags
+    description: Imports all Projects, Issues, Rules and Tags from SonarQube
+    return_types:
+      - SonarQubeProject
+      - SonarQubeIssue
+      - SonarQubeRule
+      - SonarQubeTag
+
+# Settings that will be used to configure this Connector.
+settings:
+  auth_type:
+    type: string
+    title: Authentication Type
+    description: SonarQube Authentication Type (On-Premises or Cloud)
+    enum:
+      - On-Premises
+      - Cloud
+    default: On-Premises
+
+  organization:
+    type: string
+    title: Organization Key (for SonarQube Cloud)
+    description: Organization Key for SonarCloud only, leave blank if using On-Premises
+    example: my-organization
+    nullable: true
+
+  url:
+    type: string
+    title: Base URL
+    description: Base URL for the SonarQube based on the chosen Authentication Type
+    example: https://sonarcloud.io or https://localhost:9000
+    default: https://sonarcloud.io
+
+  api_token:
+    type: string
+    title: API Token
+    description: Token used to authenticate with SonarQube
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If this is enabled, verify the server's identity
+    default: true
+
+  severity:
+    title: Severity
+    type: string
+    description: >-
+      Select the minimum severity levels of issues to import. Only findings with a severity equal to or higher than the selected values will be included.
+    enum:
+      - INFO
+      - MINOR
+      - MAJOR
+      - CRITICAL
+      - BLOCKER
+    default: MAJOR
+
+  types:
+    title: Issue Type(s) (for SonarQube On-Premises)
+    type: array
+    description: >-
+      Select which types of issues to import when using SonarQube On-Premises, leave this blank for SonarQube Cloud. Only findings matching the selected issue types will be included.
+    items:
+      type: string
+      enum:
+        - BUG
+        - CODE_SMELL
+        - VULNERABILITY
+    default:
+      - BUG
+      - VULNERABILITY
+    nullable: true
+
+  look_back_days:
+    title: Look Back Day(s)
+    type: integer
+    example: 3
+    minimum: 1
+    default: 30
+    description: >-
+      Specify how many days in the past to retrieve issue findings. Only issues identified within this time frame will be imported.
+
+runtime: py311
+
+categories:
+  - application_development

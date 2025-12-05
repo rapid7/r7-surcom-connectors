@@ -1,0 +1,37 @@
+[
+  {
+    "id": 879267,
+    "name": "Default",
+    "admins": [],
+    "apps": [4166233, 4166235, 4166236, 4166238, 4166251],
+    "users": [254689331]
+  },
+  {
+    "id": 879710,
+    "name": "IT Administrators",
+    "admins": [],
+    "apps": [4166233, 4166236, 4166238],
+    "users": [254689331, 254721917]
+  },
+  {
+    "id": 879711,
+    "name": "Sales & Client Services",
+    "admins": [],
+    "apps": [4166235, 4166238, 4166251],
+    "users": []
+  },
+  {
+    "id": 879712,
+    "name": "Operations Team",
+    "admins": [254722067],
+    "apps": [4166233, 4166236],
+    "users": [254721917, 254721960]
+  },
+  {
+    "id": 879714,
+    "name": "Management / Executives",
+    "admins": [254721976],
+    "apps": [4166235, 4166251],
+    "users": []
+  }
+]

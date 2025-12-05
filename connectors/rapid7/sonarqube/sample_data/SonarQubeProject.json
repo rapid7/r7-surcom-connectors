@@ -1,0 +1,32 @@
+[
+  {
+    "organization": "user-git",
+    "key": "user-git_AdvisorBooking",
+    "projectId": "AZkEA542v0P5N3XFffFs",
+    "projectUuidV4": "bb324060-cf13-4472-a765-45f132cb463a",
+    "name": "AdvisorBooking",
+    "isFavorite": true,
+    "tags": [],
+    "visibility": "public",
+    "eligibilityStatus": "COMPLETED",
+    "eligible": true,
+    "isNew": false,
+    "analysisDateAllBranches": "2025-09-01T06:43:30+0000",
+    "isAiCodeAssured": false
+  },
+  {
+    "organization": "user-git",
+    "key": "user-git_Django-Projects",
+    "projectId": "AZkEBtS0HA8MxMgIqP_Z",
+    "projectUuidV4": "7de65130-293b-4533-a8b6-2b8338f39f87",
+    "name": "Django-Projects",
+    "isFavorite": true,
+    "tags": ["correlation", "2222", "ai-coe"],
+    "visibility": "public",
+    "eligibilityStatus": "COMPLETED",
+    "eligible": true,
+    "isNew": false,
+    "analysisDateAllBranches": "2025-09-01T06:46:30+0000",
+    "isAiCodeAssured": false
+  }
+]

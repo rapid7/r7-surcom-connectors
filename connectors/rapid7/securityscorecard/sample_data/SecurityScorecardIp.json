@@ -1,0 +1,32 @@
+[
+  {
+    "ip": "1.1.1.1",
+    "status": "ATTRIBUTED",
+    "detection": "DNS Lookup",
+    "sources": "A Record",
+    "issues": 0,
+    "findings": 0,
+    "scoreImpact": 0.0,
+    "country": null,
+    "code": null,
+    "domainsCount": 4,
+    "domains": ["information.company.com", "info.company.com", "test.cloudcity.cloud", "www.managedops.cloud"],
+    "tags": null,
+    "assignee": null
+  },
+  {
+    "ip": "3.12.1.102",
+    "status": "ATTRIBUTED",
+    "detection": "DNS Lookup",
+    "sources": "A Record",
+    "issues": 0,
+    "findings": 0,
+    "scoreImpact": 0.0,
+    "country": "United States",
+    "code": "US",
+    "domainsCount": 1,
+    "domains": ["academy.company.com"],
+    "tags": null,
+    "assignee": "user_name@company.com"
+  }
+]

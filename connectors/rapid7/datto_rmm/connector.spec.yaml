@@ -1,0 +1,49 @@
+id: datto.rmm
+name: Datto RMM (Beta)
+author: Rapid7
+version: 1.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+current_changes:
+  - Validation error fix for `driverFileLastModified`
+
+reference-schemas:
+  - url: https://example_swagger.centrastage.net/api/v3/api-docs/Datto-RMM
+    file: refdocs/swagger.json
+
+types:
+  - DattoRMMDevice
+  - DattoRMMSite
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Datto RMM Devices and Sites
+    description: Import all devices and sites from Datto RMM
+    return_types:
+      - DattoRMMDevice
+      - DattoRMMSite
+
+settings:
+  url:
+    type: string
+    title: API URL
+    description: The URL associated with the generated API Key
+    example: https://examplecorp-api.centrastage.net
+
+  api_key:
+    type: string
+    title: API Key
+    description: API Key used to authenticate to the Datto RMM API
+
+  api_secret:
+    type: string
+    title: API Secret
+    description: API Secret used to authenticate to the Datto RMM API
+    format: password
+
+runtime: py311
+
+categories:
+  - endpoint_management

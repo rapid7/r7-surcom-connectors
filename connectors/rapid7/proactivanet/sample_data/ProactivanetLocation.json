@@ -1,0 +1,162 @@
+[
+  {
+    "Name": "abcd",
+    "Path": "/abcd",
+    "Description": null,
+    "PanLocations_id": null,
+    "GroupSelectionIncident": "None",
+    "PawSvcAuthGroups_id": null,
+    "PawSvcAuthUsers_id": null,
+    "PadShiftRotations_id": null,
+    "Id": "fb2ca790-1bce-4abc-ad54-028636f80b08",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/fb2ca790-1bce-4abc-ad54-028636f80b08",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/fb2ca790-1bce-4abc-ad54-028636f80b08/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "location rules",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locationRules?PanLocations_id=fb2ca790-1bce-4abc-ad54-028636f80b08",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Name": "xyz",
+    "Path": "/abcd/xyz",
+    "Description": null,
+    "PanLocations_id": "fb2ca790-1bce-4abc-ad54-028636f80b08",
+    "GroupSelectionIncident": "None",
+    "PawSvcAuthGroups_id": null,
+    "PawSvcAuthUsers_id": null,
+    "PadShiftRotations_id": null,
+    "Id": "f2733111-138a-4da0-a70c-035211e1f581",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/f2733111-138a-4da0-a70c-035211e1f581",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/f2733111-138a-4da0-a70c-035211e1f581/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "parent",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/9787dcff-f927-4eba-82bd-d4e4080e58ec",
+        "Action": "GET"
+      },
+      {
+        "Rel": "location rules",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locationRules?PanLocations_id=f2733111-138a-4da0-a70c-035211e1f581",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Name": "MARKET",
+    "Path": "/abcd/MARKET",
+    "Description": null,
+    "PanLocations_id": "fb2ca790-1bce-4abc-ad54-028636f80b08",
+    "GroupSelectionIncident": "None",
+    "PawSvcAuthGroups_id": null,
+    "PawSvcAuthUsers_id": null,
+    "PadShiftRotations_id": null,
+    "Id": "188f111a-b753-4ef4-93ee-03eca974b54f",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/188f111a-b753-4ef4-93ee-03eca974b54f",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/188f111a-b753-4ef4-93ee-03eca974b54f/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "parent",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/fb2ca790-1bce-4abc-ad54-028636f80b08",
+        "Action": "GET"
+      },
+      {
+        "Rel": "location rules",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locationRules?PanLocations_id=188f111a-b753-4ef4-93ee-03eca974b54f",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Name": "LOS Angels",
+    "Path": "/abcd/LOS Angels",
+    "Description": null,
+    "PanLocations_id": "fb2ca790-1bce-4abc-ad54-028636f80b08",
+    "GroupSelectionIncident": "None",
+    "PawSvcAuthGroups_id": null,
+    "PawSvcAuthUsers_id": null,
+    "PadShiftRotations_id": null,
+    "Id": "dfe7627a-2240-4b44-9d21-043d611448c7",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/dfe7627a-2240-4b44-9d21-043d611448c7",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/dfe7627a-2240-4b44-9d21-043d611448c7/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "parent",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/611d5e12-cddd-4ef8-baa5-312ca2393167",
+        "Action": "GET"
+      },
+      {
+        "Rel": "location rules",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locationRules?PanLocations_id=dfe7627a-2240-4b44-9d21-043d611448c7",
+        "Action": "GET"
+      }
+    ]
+  },
+  {
+    "Name": "Sub Direct",
+    "Path": "/abcd/admin/Sub Direct",
+    "Description": null,
+    "PanLocations_id": "fb2ca790-1bce-4abc-ad54-028636f80b08",
+    "GroupSelectionIncident": "None",
+    "PawSvcAuthGroups_id": null,
+    "PawSvcAuthUsers_id": null,
+    "PadShiftRotations_id": null,
+    "Id": "14897e5f-4443-466a-bfe1-044d7ef2f515",
+    "Links": [
+      {
+        "Rel": "self",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/14897e5f-4443-466a-bfe1-044d7ef2f515",
+        "Action": "GET"
+      },
+      {
+        "Rel": "view custom fields",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/14897e5f-4443-466a-bfe1-044d7ef2f515/customFields",
+        "Action": "GET"
+      },
+      {
+        "Rel": "parent",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locations/a77702ee-e506-4029-9395-f525541b89da",
+        "Action": "GET"
+      },
+      {
+        "Rel": "location rules",
+        "Href": "https://demo.proactiva.com/proactivanet/api/locationRules?PanLocations_id=14897e5f-4443-466a-bfe1-044d7ef2f515",
+        "Action": "GET"
+      }
+    ]
+  }
+]

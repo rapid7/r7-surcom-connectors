@@ -1,0 +1,93 @@
+x-samos-type-name: SecurityScorecardDomain
+x-samos-namespace: securityscorecard
+title: SecurityScorecard Domain
+description: A domain from SecurityScorecard
+
+x-samos-global-zone: true
+
+x-samos-extends-types:
+  - type-name: Domain
+
+x-samos-keys:
+  - domain
+
+x-samos-table:
+  - name: domain
+  - name: status
+  - name: issues
+  - name: findings
+  - name: scoreImpact
+  - name: ipsCount
+  - name: criticality
+  - name: tags
+  - name: assignee
+
+x-samos-detail:
+  - name: domain
+  - name: status
+  - name: issues
+  - name: findings
+  - name: scoreImpact
+  - name: ipsCount
+  - name: criticality
+  - name: tags
+  - name: assignee
+
+x-samos-derived-properties:
+  d_name:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: domain
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_id:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: domain
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+properties:
+  domain:
+    type: string
+    title: Domain
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: value
+    x-samos-correlation:
+      correlation-key: Domain.value
+      correlation-type: Domain
+      priority: 4
+  status:
+    type: string
+    title: Status
+  issues:
+    type: integer
+    title: Issues
+  findings:
+    type: integer
+    title: Findings
+  scoreImpact:
+    type: number
+    title: Impact
+  ipsCount:
+    type: integer
+    title: IPs count
+  criticality:
+    type: string
+    title: Criticality
+  tags:
+    title: Tags
+    type: array
+    items:
+      type: string
+  assignee:
+    title: Owner
+    type: string
