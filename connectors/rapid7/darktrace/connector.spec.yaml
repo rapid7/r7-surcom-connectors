@@ -1,0 +1,61 @@
+﻿id: darktrace
+name: Darktrace
+author: Rapid7
+version: 1.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+current_changes:
+  - Fix a data validation issue with `DarktraceDevice`
+
+types:
+  - DarktraceDevice
+  - DarktraceSubnet
+
+functions:
+  - id: test
+  - id: import_all
+    title: Darktrace devices and subnets
+    description: Import all devices and subnets from Darktrace
+    return_types:
+      - DarktraceDevice
+      - DarktraceSubnet
+
+settings:
+  url:
+    type: string
+    title: URL
+    description: Base URL for the Darktrace API
+    example: https://example.cloud.darktrace.com
+
+  public_key:
+    type: string
+    title: Token
+    description: Token for Darktrace API authentication
+
+  private_key:
+    type: string
+    title: Private Token
+    description: Private Token for Darktrace API authentication
+    format: password
+
+  look_back_days:
+    type: integer
+    title: Look Back Days
+    description: Number of days to look back for devices and subnets
+    default: 7
+    minimum: 1
+
+  verify:
+    type: boolean
+    title: Verify TLS?
+    default: true
+    description: If enabled, verify the server's identity
+
+runtime: py311
+
+# Add any Python dependencies here that your Connector needs to run.
+# Each dependency should be pinned to a specific version.
+# python_dependencies:  # Currently no extra dependencies
+
+categories:
+  - network_firewall

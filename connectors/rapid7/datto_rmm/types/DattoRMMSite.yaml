@@ -1,0 +1,104 @@
+x-samos-type-name: DattoRMMSite
+x-samos-namespace: datto.rmm
+title: Datto RMM Site
+description: Site details from Datto RMM
+
+x-samos-extends-types:
+  - type-name: core.component-group
+
+$ref: https://example_swagger.centrastage.net/api/v3/api-docs/Datto-RMM#/components/schemas/SitesPage
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: accountUid
+  - name: portalUrl
+
+x-samos-detail:
+  - name: name
+  - name: accountUid
+  - name: description
+  - name: portalUrl
+  - name: proxySettings
+  - name: splashtopAutoInstall
+  - name: onDemand
+  - name: notes
+  - name: devicesStatus
+  - name: autotaskCompanyId
+  - name: autotaskCompanyName
+
+x-samos-derived-properties:
+  d_id:
+    # To fulfill the core.component:id as type is integer derived it
+    type: string
+    title: ID
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+properties:
+  id:
+    type: integer
+    title: ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+  uid:
+    type: string
+    title: UID
+    x-samos-hidden: true
+  accountUid:
+    type: string
+    title: Account UID
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  notes:
+    type: string
+    title: Notes
+  onDemand:
+    type: boolean
+    title: On Demand?
+  splashtopAutoInstall:
+    type: boolean
+    title: Splashtop Auto Install?
+  proxySettings:
+    type: string
+    title: Proxy Settings
+  devicesStatus:
+    type: object
+    title: Devices Status
+    properties:
+      numberOfDevices:
+        type: integer
+        title: Number Of Devices
+      numberOfOnlineDevices:
+        type: integer
+        title: Number Of Online Devices
+      numberOfOfflineDevices:
+        type: integer
+        title: Number Of Offline Devices
+  autotaskCompanyName:
+    type: string
+    title: Autotask Company Name
+  autotaskCompanyId:
+    type: string
+    title: Autotask Company ID
+  portalUrl:
+    type: string
+    title: Portal URL

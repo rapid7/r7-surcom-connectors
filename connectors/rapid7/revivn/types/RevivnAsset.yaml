@@ -1,0 +1,149 @@
+x-samos-type-name: RevivnAsset
+x-samos-namespace: revivn
+title: Revivn Asset
+description: An Asset in Revivn
+
+x-samos-extends-types:
+  - type-name: Machine
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: serial_number
+  - name: asset_tag
+  - name: device_type
+  - name: manufacturer
+  - name: model
+  - name: retired_at
+
+x-samos-detail:
+  - name: serial_number
+  - name: asset_tag
+  - name: device_type
+  - name: manufacturer
+  - name: model
+  - name: retired_at
+  - name: enrolled_status
+  - name: hard_drive
+  - name: ram
+  - name: cpu
+  - name: year
+  - name: end_of_life_condition
+  - name: lock_codes
+  - name: cosmetic_condition
+  - name: data_sanitization
+  - name: functionality_faults
+
+x-samos-derived-properties:
+  d_active:
+    x-samos-hidden: true
+    type: boolean
+    syntax: expression
+    value: 'false'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_operational:
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: 'Retired'
+    x-samos-ref-types:
+      - type-name: NoeticEnumOperationalStatus
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: operational_status
+
+  d_name:
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: '{model}_{serial_number}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  serial_number:
+    type: string
+    title: Serial Number
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+  model:
+    type: string
+    title: Model
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+  device_type:
+    type: string
+    title: Device Type
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  manufacturer:
+    type: string
+    title: Manufacturer
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+  enrolled_status:
+    type: string
+    title: Enrolled Status
+  hard_drive:
+    type: string
+    title: Hard Drive
+  ram:
+    type: string
+    title: RAM
+  cpu:
+    type: string
+    title: CPU
+  year:
+    type: string
+    title: Year
+  end_of_life_condition:
+    type: string
+    title: End Of Life Condition
+  asset_tag:
+    type: string
+    title: Asset Tag
+  lock_codes:
+    type: string
+    title: Lock Codes
+  id:
+    type: string
+    title: Id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  cosmetic_condition:
+    type: string
+    title: Cosmetic Condition
+  data_sanitization:
+    type: string
+    title: Data Sanitization
+  functionality_faults:
+    type: string
+    title: Functionality Faults
+  cod_url:
+    type: string
+    title: COD URL
+    format: url
+  pickup_id:
+    type: string
+    title: Pickup ID
+  retired_at:
+    type: string
+    title: Retired At
+    format: date-time

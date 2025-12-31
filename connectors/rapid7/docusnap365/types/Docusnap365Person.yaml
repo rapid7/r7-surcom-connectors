@@ -1,0 +1,142 @@
+x-samos-type-name: Docusnap365Person
+x-samos-namespace: docusnap365
+title: Docusnap365 Person
+description: Represents a person in Docusnap365.
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: lastUserChangeTimeUtc
+  - name: organizationId
+  - name: siteId
+  - name: DS00000000_Vorname
+  - name: DS00000000_Nachname
+  - name: DS00000000_Servicebereich
+  - name: DS00000000_Email
+  - name: DS00000000_Position
+  - name: DS00000000_Manager
+
+x-samos-detail:
+  - name: name
+  - name: lastUserChangeTimeUtc
+  - name: organizationId
+  - name: siteId
+  - name: DS00000000_Vorname
+  - name: DS00000000_Nachname
+  - name: DS00000000_Servicebereich
+  - name: DS00000000_Email
+  - name: DS00000000_Position
+  - name: DS00000000_Manager
+  - name: userId
+  - name: status
+  - name: DS00000000_Phone
+  - name: scope
+  - name: userDefined
+  - name: realm
+
+properties:
+  DS00000000_Email:
+    title: E-Mail
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 5
+  DS00000000_Manager:
+    title: Manager
+    type: string
+  DS00000000_Nachname:
+    title: Surname
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+  DS00000000_Phone:
+    title: Phone
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+  DS00000000_Position:
+    title: Position
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: title
+  DS00000000_Servicebereich:
+    title: Department
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: department
+  DS00000000_Vorname:
+    title: First Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+  iconId:
+    title: Icon ID
+    type: string
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+  label:
+    title: Label
+    type: string
+  lastUserChangeTimeUtc:
+    format: date-time
+    title: Last Manual Change
+    type: string
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  organizationId:
+    title: Organization
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365Organization
+        key-name: id
+  realm:
+    title: Realm
+    type: string
+  resourceTypeId:
+    title: Resource Type ID
+    type: string
+  scope:
+    title: Scope
+    type: string
+  segment:
+    title: Segment
+    type: string
+  siteId:
+    title: Site
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365Site
+        key-name: id
+  status:
+    title: Status
+    type: string
+  userDefined:
+    title: User Defined?
+    type: boolean
+  userId:
+    title: User ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id

@@ -1,0 +1,1997 @@
+x-samos-type-name: Docusnap365SystemDetails
+x-samos-namespace: docusnap365
+title: Docusnap365 System
+description: Represents detailed system information in Docusnap365.
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 1
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: fqdn
+  - name: module
+  - name: isVirtual
+  - name: organizationId
+  - name: siteId
+  - name: platformId
+  - name: firstInventoryTimeUtc
+  - name: lastInventoryTimeUtc
+  - name: lastLoggedOnUser
+
+x-samos-detail:
+  - name: name
+  - name: fqdn
+  - name: lastLoggedOnUser
+  - name: module
+  - name: isVirtual
+  - name: firstInventoryTimeUtc
+  - name: lastInventoryTimeUtc
+  - name: organizationId
+  - name: siteId
+  - name: platformId
+  - name: buildingId
+  - name: roomId
+  - name: floorId
+  - name: os
+  - name: scope
+  - name: logSysWinApps
+  - name: logSysWinLocalGroups
+  - name: logSysWinShares
+  - name: logSysWinUpdateHistory
+  - name: logSysWinScheduleTasks
+  - name: logSysWinNetAdapter
+  - name: logSysWinSecProduct
+  - name: logSysWinReliability
+  - name: logSysWinPowerPlan
+  - name: logSysWinRDP
+  - name: logSysLnxUsers
+  - name: logSysWinActiveDirectory
+  - name: logSysLnxCPU
+  - name: logSysWinCertificates
+  - name: logSysWinRam
+  - name: logSysWinPrinters
+  - name: logSysWinSoftware
+  - name: logSysWinOptionalWindowsFeature
+  - name: logSysWinLocalUsers
+  - name: logSysWinFirewall
+  - name: logSysWinServerRolesFeatures
+  - name: logSysWinUserProfiles
+
+properties:
+  buildingId:
+    title: Building ID
+    type: string
+  daemons:
+    properties:
+      quickInfo:
+        items:
+          properties:
+            content:
+              items:
+                properties:
+                  systemCtlIsEmpty:
+                    title: System Ctl Empty?
+                    type: boolean
+                  systemVIsEmpty:
+                    title: System V Empty?
+                    type: boolean
+                  upstartIsEmpty:
+                    title: Upstart Empty?
+                    type: boolean
+                type: object
+              title: Content
+              type: array
+            name:
+              title: Name
+              type: string
+          type: object
+        title: Quick Info
+        type: array
+      tabs:
+        items:
+          properties:
+            content:
+              items:
+                properties:
+                  content:
+                    items:
+                      properties:
+                        active:
+                          title: Active
+                          type: string
+                        description:
+                          title: Description
+                          type: string
+                        id:
+                          title: ID
+                          type: string
+                        load:
+                          title: Load
+                          type: string
+                        sub:
+                          title: Sub
+                          type: string
+                        unit:
+                          title: Unit
+                          type: string
+                      type: object
+                    title: Content
+                    type: array
+                  name:
+                    title: Name
+                    type: string
+                type: object
+              title: Content
+              type: array
+            name:
+              title: Name
+              type: string
+          type: object
+        title: Tabs
+        type: array
+    title: Daemons
+    type: object
+  degId:
+    title: Deg ID
+    type: string
+  domainId:
+    title: Domain ID
+    type: string
+  firstInventoryTimeUtc:
+    format: date-time
+    title: First Inventory
+    type: string
+  fqdn:
+    title: Fully Qualified Host Name
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+  iconId:
+    title: Icon ID
+    type: string
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  isVirtual:
+    title: Virtual?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: virtual
+  jobId:
+    title: Job ID
+    type: string
+  jobStartedAtUtc:
+    format: date-time
+    title: Job Started
+    type: string
+  label:
+    title: Label
+    type: string
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+  lastInventoryTimeUtc:
+    format: date-time
+    title: Last Inventory
+    type: string
+  lastLoggedOnUser:
+    title: Last Logged On User
+    type: string
+  lastUserChangeTimeUtc:
+    format: date-time
+    title: Last User Change
+    type: string
+  logSysLnxCPUPatchInfoCollection:
+    items:
+      properties:
+        description:
+          title: Description
+          type: string
+        id:
+          title: ID
+          type: string
+        name:
+          title: Name
+          type: string
+        status:
+          title: Status
+          type: string
+      type: object
+    title: Log Sys Lnx Cpu Patch Info Collection
+    type: array
+  logSysLnxCPUs:
+    items:
+      properties:
+        addressWidth:
+          title: Address Width
+          type: string
+        currentClockSpeed:
+          title: Current Clock Speed
+          type: string
+        description:
+          title: Description
+          type: string
+        id:
+          title: ID
+          type: string
+        l2CacheSize:
+          title: L2 Cache Size
+          type: integer
+        l3CacheSize:
+          title: L3 Cache Size
+          type: integer
+        manufacturer:
+          title: Manufacturer
+          type: string
+        maxClockSpeed:
+          title: Max Clock Speed
+          type: integer
+        numberOfCores:
+          title: Number Of Cores
+          type: integer
+        numberOfLogicalProcessors:
+          title: Number Of Logical Processors
+          type: string
+        processorID:
+          title: Processor ID
+          type: string
+        processorName:
+          title: Processor Name
+          type: string
+      type: object
+    title: Log Sys Lnx CPUs
+    type: array
+  logSysLnxCron:
+    items:
+      properties:
+        command:
+          title: Command
+          type: string
+        dayOfMonth:
+          title: Day Of Month
+          type: string
+        dayOfWeek:
+          title: Day Of Week
+          type: string
+        hour:
+          title: Hour
+          type: string
+        id:
+          title: ID
+          type: string
+        minute:
+          title: Minute
+          type: string
+        month:
+          title: Month
+          type: string
+        name:
+          title: Name
+          type: string
+        shortcut:
+          title: Shortcut
+          type: string
+        user:
+          title: User
+          type: string
+      type: object
+    title: Log Sys Lnx Cron
+    type: array
+  logSysLnxGroups:
+    items:
+      properties:
+        groupID:
+          title: Group ID
+          type: integer
+        groupName:
+          title: Group Name
+          type: string
+        groupStatus:
+          title: Group Status
+          type: integer
+        id:
+          title: ID
+          type: string
+        logSysLnxGroupUsers:
+          items:
+            type: object
+          title: Log Sys Lnx Group Users
+          type: array
+        userCounter:
+          title: User Counter
+          type: integer
+      type: object
+    title: Log Sys Lnx Groups
+    type: array
+  logSysLnxKernelModules:
+    items:
+      properties:
+        id:
+          title: ID
+          type: string
+        moduleLoadedCount:
+          title: Module Loaded Count
+          type: integer
+        moduleName:
+          title: Module Name
+          type: string
+        moduleSize:
+          title: Module Size
+          type: integer
+        moduleUsedBy:
+          title: Module Used By
+          type: string
+      type: object
+    title: Log Sys Lnx Kernel Modules
+    type: array
+  logSysLnxKernelParameters:
+    items:
+      properties:
+        id:
+          title: ID
+          type: string
+        parameterName:
+          title: Parameter Name
+          type: string
+        parameterValue:
+          title: Parameter Value
+          type: string
+      type: object
+    title: Log Sys Lnx Kernel Parameters
+    type: array
+  logSysLnxNetConnections:
+    items:
+      properties:
+        adapterId:
+          title: Adapter ID
+          type: integer
+        adapterName:
+          title: Adapter Name
+          type: string
+        caption:
+          title: Caption
+          type: string
+        cidrNotation:
+          title: Cidr Notation
+          type: string
+        dhcpActive:
+          title: Dhcp Active?
+          type: boolean
+        enabled:
+          title: Enabled?
+          type: boolean
+        id:
+          title: ID
+          type: string
+        interfaceName:
+          title: Interface Name
+          type: string
+        ipAddress:
+          title: Ip Address
+          type: string
+        ipGateway:
+          title: Ip Gateway
+          type: string
+        ipSubnet:
+          title: Ip Subnet
+          type: string
+        mac:
+          format: mac-addr
+          title: Mac
+          type: string
+        manufacturer:
+          title: Manufacturer
+          type: string
+        maxSpeed:
+          title: Max Speed
+          type: integer
+        revision:
+          title: Revision
+          type: string
+      type: object
+    title: Log Sys Lnx Net Connections
+    type: array
+  logSysLnxNetworkServices:
+    items:
+      properties:
+        id:
+          title: ID
+          type: string
+        ipAddress:
+          title: Ip Address
+          type: string
+        logSysLinux:
+          title: Log Sys Linux
+          type: string
+        name:
+          title: Name
+          type: string
+        port:
+          title: Port
+          type: string
+        processID:
+          title: Process ID
+          type: string
+        processName:
+          title: Process Name
+          type: string
+        protocol:
+          title: Protocol
+          type: string
+      type: object
+    title: Log Sys Lnx Network Services
+    type: array
+  logSysLnxPartitions:
+    items:
+      properties:
+        fileSystem:
+          title: File System
+          type: string
+        freeBytes:
+          title: Free Bytes
+          type: integer
+        id:
+          title: ID
+          type: string
+        mountingPoints:
+          items:
+            title: Mounting Point
+            type: string
+          title: Mounting Points
+          type: array
+        name:
+          title: Name
+          type: string
+        sizeBytes:
+          title: Size Bytes
+          type: integer
+        usedBytes:
+          title: Used Bytes
+          type: integer
+        usedPercent:
+          title: Used Percent
+          type: integer
+      type: object
+    title: Log Sys Lnx Partitions
+    type: array
+  logSysLnxRamCollection:
+    items:
+      properties:
+        bankLabel:
+          title: Bank Label
+          type: string
+        capacity:
+          title: Capacity
+          type: integer
+        caption:
+          title: Caption
+          type: string
+        clockSpeed:
+          title: Clock Speed
+          type: string
+        deviceLocator:
+          title: Device Locator
+          type: string
+        id:
+          title: ID
+          type: string
+        manufacturer:
+          title: Manufacturer
+          type: string
+        partNumber:
+          title: Part Number
+          type: string
+        serialNumber:
+          title: Serial Number
+          type: string
+        tag:
+          title: Tag
+          type: string
+        totalWidth:
+          title: Total Width
+          type: string
+        voltage:
+          title: Voltage
+          type: string
+      type: object
+    title: Log Sys Lnx Ram Collection
+    type: array
+  logSysLnxSoftware:
+    items:
+      properties:
+        id:
+          title: ID
+          type: string
+        softwareDescription:
+          title: Software Description
+          type: string
+        softwareName:
+          title: Software Name
+          type: string
+        softwareVersion:
+          title: Software Version
+          type: string
+      type: object
+    title: Log Sys Lnx Software
+    type: array
+  logSysLnxUsers:
+    items:
+      properties:
+        disabled:
+          title: Disabled?
+          type: boolean
+        fullName:
+          title: Full Name
+          type: string
+        groupCounter:
+          title: Group Counter
+          type: integer
+        homeDirectory:
+          title: Home Directory
+          type: string
+        id:
+          title: ID
+          type: string
+        lockedState:
+          title: Locked State
+          type: integer
+        loginShell:
+          title: Login Shell
+          type: string
+        passwordDisabledUntil:
+          title: Password Disabled Until
+          type: string
+        passwordLastChanged:
+          format: date-time
+          title: Password Last Changed
+          type: string
+        passwordMaxExpires:
+          format: date-time
+          title: Password Max Expires
+          type: string
+        passwordMinExpires:
+          title: Password Min Expires
+          type: string
+        passwordUseable:
+          title: Password Useable?
+          type: boolean
+        passwordWarnDays:
+          title: Password Warn Days
+          type: integer
+        primaryGroup:
+          title: Primary Group
+          type: string
+        userID:
+          title: User ID
+          type: integer
+        userName:
+          title: User Name
+          type: string
+        usersGroups:
+          items:
+            type: object
+          title: Users Groups
+          type: array
+      type: object
+    title: Log Sys Lnx Users
+    type: array
+  logSysNFS:
+    items:
+      properties:
+        access:
+          title: Access
+          type: string
+        directory:
+          title: Directory
+          type: string
+        id:
+          title: ID
+          type: string
+      type: object
+    title: Log Sys Nfs
+    type: array
+  logSysWinActiveDirectory:
+    properties:
+      quickInfo:
+        items:
+          properties:
+            content:
+              items:
+                properties:
+                  instanceType:
+                    title: Instance Type
+                    type: integer
+                  replicationData:
+                    title: Replication Data
+                    type: string
+                  uSNChanged:
+                    title: U Sn Changed
+                    type: integer
+                  uSNCreated:
+                    title: U Sn Created
+                    type: integer
+                  whenChanged:
+                    format: date-time
+                    title: When Changed
+                    type: string
+                  whenCreated:
+                    format: date-time
+                    title: When Created
+                    type: string
+                type: object
+              title: Content
+              type: array
+            name:
+              title: Name
+              type: string
+          type: object
+        title: Quick Info
+        type: array
+    title: Log Sys Win Active Directory
+    type: object
+  logSysWinApps:
+    items:
+      properties:
+        appsDetails:
+          properties:
+            quickInfo:
+              items:
+                properties:
+                  content:
+                    items:
+                      properties:
+                        architecture:
+                          title: Architecture
+                          type: integer
+                        id:
+                          title: ID
+                          type: string
+                        isBundle:
+                          title: Bundle?
+                          type: boolean
+                        isDevelopmentMode:
+                          title: Development Mode?
+                          type: boolean
+                        isFrameWork:
+                          title: Frame Work
+                          type: string
+                        isPartiallyStaged:
+                          title: Partially Staged?
+                          type: boolean
+                        isResourcePackage:
+                          title: Resource Package?
+                          type: boolean
+                        name:
+                          title: Name
+                          type: string
+                        nonRemovable:
+                          title: Non Removable?
+                          type: boolean
+                        packageFamilyName:
+                          title: Package Family Name
+                          type: string
+                        packageFullName:
+                          title: Package Full Name
+                          type: string
+                        publisher:
+                          title: Publisher
+                          type: string
+                        publisherId:
+                          title: Publisher ID
+                          type: string
+                        resourceID:
+                          title: Resource ID
+                          type: string
+                        signatureKind:
+                          title: Signature Kind
+                          type: integer
+                        status:
+                          title: Status
+                          type: integer
+                        version:
+                          title: Version
+                          type: string
+                      type: object
+                    title: Content
+                    type: array
+                  name:
+                    title: Name
+                    type: string
+                type: object
+              title: Quick Info
+              type: array
+            tabs:
+              items:
+                properties:
+                  content:
+                    items:
+                      properties:
+                        content:
+                          items:
+                            properties:
+                              id:
+                                title: ID
+                                type: string
+                              name:
+                                title: Name
+                                type: string
+                              sid:
+                                title: Sid
+                                type: string
+                            type: object
+                          title: Content
+                          type: array
+                        name:
+                          title: Name
+                          type: string
+                      type: object
+                    title: Content
+                    type: array
+                  name:
+                    title: Name
+                    type: string
+                type: object
+              title: Tabs
+              type: array
+          title: Apps Details
+          type: object
+        architecture:
+          title: Architecture
+          type: integer
+        id:
+          title: ID
+          type: string
+        isBundle:
+          title: Bundle?
+          type: boolean
+        isDevelopmentMode:
+          title: Development Mode?
+          type: boolean
+        isFrameWork:
+          title: Frame Work
+          type: boolean
+        isPartiallyStaged:
+          title: Partially Staged?
+          type: boolean
+        isResourcePackage:
+          title: Resource Package?
+          type: boolean
+        name:
+          title: Name
+          type: string
+        nonRemovable:
+          title: Non Removable?
+          type: boolean
+        packageFamilyName:
+          title: Package Family Name
+          type: string
+        packageFullName:
+          title: Package Full Name
+          type: string
+        publisher:
+          title: Publisher
+          type: string
+        publisherId:
+          title: Publisher ID
+          type: string
+        resourceID:
+          title: Resource ID
+          type: string
+        signatureKind:
+          title: Signature Kind
+          type: integer
+        status:
+          title: Status
+          type: integer
+        userArray:
+          items:
+            type: string
+          title: User Array
+          type: array
+        version:
+          title: Version
+          type: string
+      type: object
+    title: Log Sys Win Apps
+    type: array
+  logSysWinCertificates:
+    items:
+      properties:
+        algorithm:
+          title: Algorithm
+          type: string
+        dnsNames:
+          title: Dns Names
+          type: string
+        friendlyName:
+          title: Friendly Name
+          type: string
+        hasPrivateKey:
+          title: Has Private Key?
+          type: boolean
+        issuer:
+          title: Issuer
+          type: string
+        keySize:
+          title: Key Size
+          type: integer
+        notAfter:
+          format: date-time
+          title: Not After
+          type: string
+        notBefore:
+          format: date-time
+          title: Not Before
+          type: string
+        path:
+          title: Path
+          type: string
+        sendAsTrustedIssuer:
+          title: Send As Trusted Issuer?
+          type: boolean
+        serialNumber:
+          title: Serial Number
+          type: string
+        subject:
+          title: Subject
+          type: string
+        thumbprint:
+          title: Thumbprint
+          type: string
+      type: object
+    title: Log Sys Win Certificates
+    type: array
+  logSysWinCpu:
+    items:
+      properties:
+        addressWidth:
+          title: Address Width
+          type: string
+        cpuDetailView:
+          properties:
+            quickInfo:
+              items:
+                properties:
+                  content:
+                    items:
+                      properties:
+                        addressWidth:
+                          title: Address Width
+                          type: string
+                        currentClockSpeed:
+                          title: Current Clock Speed
+                          type: integer
+                        description:
+                          title: Description
+                          type: string
+                        id:
+                          title: ID
+                          type: string
+                        l2CacheSize:
+                          title: L2 Cache Size
+                          type: integer
+                        l3CacheSize:
+                          title: L3 Cache Size
+                          type: integer
+                        manufacturer:
+                          title: Manufacturer
+                          type: string
+                        maxClockSpeed:
+                          title: Max Clock Speed
+                          type: integer
+                        name:
+                          title: Name
+                          type: string
+                        numberOfCores:
+                          title: Number Of Cores
+                          type: integer
+                        numberOfLogicalProcessors:
+                          title: Number Of Logical Processors
+                          type: integer
+                      type: object
+                    title: Content
+                    type: array
+                  name:
+                    title: Name
+                    type: string
+                type: object
+              title: Quick Info
+              type: array
+            tabs:
+              items:
+                type: string
+              title: Tabs
+              type: array
+          title: Cpu Detail View
+          type: object
+        currentClockSpeed:
+          title: Current Clock Speed
+          type: integer
+        description:
+          title: Description
+          type: string
+        id:
+          title: ID
+          type: string
+        l2CacheSize:
+          title: L2 Cache Size
+          type: integer
+        l3CacheSize:
+          title: L3 Cache Size
+          type: integer
+        manufacturer:
+          title: Manufacturer
+          type: string
+        maxClockSpeed:
+          title: Max Clock Speed
+          type: integer
+        name:
+          title: Name
+          type: string
+        numberOfCores:
+          title: Number Of Cores
+          type: integer
+        numberOfLogicalProcessors:
+          title: Number Of Logical Processors
+          type: integer
+      type: object
+    title: Log Sys Win Cpu
+    type: array
+  logSysWinFirewall:
+    items:
+      properties:
+        displayName:
+          title: Display Name
+          type: string
+        enabled:
+          title: Enabled?
+          type: boolean
+        id:
+          title: ID
+          type: string
+        logSysWinFirewallProfiles:
+          items:
+            properties:
+              allowUserApps:
+                title: Allow User Apps?
+                type: boolean
+              enabled:
+                title: Enabled?
+                type: boolean
+              id:
+                title: ID
+                type: string
+              inbound:
+                title: Inbound
+                type: integer
+              notify:
+                title: Notify?
+                type: boolean
+              outbound:
+                title: Outbound
+                type: integer
+              profileName:
+                title: Profile Name
+                type: string
+            type: object
+          title: Log Sys Win Firewall Profiles
+          type: array
+      type: object
+    title: Log Sys Win Firewall
+    type: array
+  logSysWinLocalGroups:
+    items:
+      properties:
+        description:
+          title: Description
+          type: string
+        id:
+          title: ID
+          type: string
+        localGroupDetails:
+          properties:
+            quickInfo:
+              items:
+                properties:
+                  content:
+                    items:
+                      properties:
+                        description:
+                          title: Description
+                          type: string
+                        id:
+                          title: ID
+                          type: string
+                        name:
+                          title: Name
+                          type: string
+                        numberOfMembers:
+                          title: Number Of Members
+                          type: integer
+                        sid:
+                          title: Sid
+                          type: string
+                        systemGroup:
+                          title: System Group?
+                          type: boolean
+                      type: object
+                    title: Content
+                    type: array
+                  name:
+                    title: Name
+                    type: string
+                type: object
+              title: Quick Info
+              type: array
+            tabs:
+              items:
+                properties:
+                  content:
+                    items:
+                      properties:
+                        content:
+                          items:
+                            properties:
+                              id:
+                                title: ID
+                                type: string
+                              name:
+                                title: Name
+                                type: string
+                              objectClass:
+                                title: Object Class
+                                type: string
+                              principalSource:
+                                title: Principal Source
+                                type: string
+                              sid:
+                                title: Sid
+                                type: string
+                              systemAccount:
+                                title: System Account?
+                                type: boolean
+                            type: object
+                          title: Content
+                          type: array
+                        name:
+                          title: Name
+                          type: string
+                      type: object
+                    title: Content
+                    type: array
+                  name:
+                    title: Name
+                    type: string
+                type: object
+              title: Tabs
+              type: array
+          title: Local Group Details
+          type: object
+        name:
+          title: Name
+          type: string
+        numberOfMembers:
+          title: Number Of Members
+          type: integer
+        sid:
+          title: Sid
+          type: string
+        systemGroup:
+          title: System Group?
+          type: boolean
+      type: object
+    title: Log Sys Win Local Groups
+    type: array
+  logSysWinLocalUsers:
+    items:
+      properties:
+        description:
+          title: Description
+          type: string
+        disabled:
+          title: Disabled?
+          type: boolean
+        fullname:
+          title: Fullname
+          type: string
+        id:
+          title: ID
+          type: string
+        localAdmin:
+          title: Local Admin?
+          type: boolean
+        lockout:
+          title: Lockout?
+          type: boolean
+        name:
+          title: Name
+          type: string
+        passwordChangeable:
+          title: Password Changeable
+          type: string
+        passwordNeverExpires:
+          title: Password Never Expires?
+          type: boolean
+        passwordRequired:
+          title: Password Required
+          type: string
+        sid:
+          title: Sid
+          type: string
+        status:
+          title: Status
+          type: integer
+        systemAccount:
+          title: System Account?
+          type: boolean
+      type: object
+    title: Log Sys Win Local Users
+    type: array
+  logSysWinNetAdapter:
+    items:
+      properties:
+        adapterType:
+          title: Adapter Type
+          type: string
+        caption:
+          title: Caption
+          type: string
+        configurationStringID:
+          title: Configuration String ID
+          type: string
+        description:
+          title: Description
+          type: string
+        dhcpEnabled:
+          title: Dhcp Enabled?
+          type: boolean
+        dhcpLeaseExpires:
+          title: Dhcp Lease Expires
+          type: string
+        dhcpLeaseObtained:
+          title: Dhcp Lease Obtained
+          type: string
+        dhcpServer:
+          title: Dhcp Server
+          type: string
+        dnsAddress:
+          format: ip-addr
+          title: Dns Address
+          type: string
+        gateway:
+          format: ip-addr
+          title: Gateway
+          type: string
+        id:
+          title: ID
+          type: string
+        ipEnabled:
+          title: Ip Enabled?
+          type: boolean
+        ipv4:
+          format: ip-addr
+          title: Ipv4
+          type: string
+        ipv4Cidr:
+          title: Ipv4 Cidr
+          type: string
+        ipv4Sub:
+          format: ip-addr
+          title: Ipv4 Sub
+          type: string
+        ipv6:
+          title: Ipv6
+          type: string
+        ipv6Cidr:
+          title: Ipv6 Cidr
+          type: string
+        ipv6Sub:
+          title: Ipv6 Sub
+          type: string
+        macAddress:
+          format: mac-addr
+          title: Mac Address
+          type: string
+        manufacturer:
+          title: Manufacturer
+          type: string
+        name:
+          title: Name
+          type: string
+        netConnectionID:
+          title: Net Connection ID
+          type: string
+        netConnectionStatus:
+          title: Net Connection Status
+          type: integer
+        netbiosOptions:
+          title: Netbios Options
+          type: integer
+        pnpDeviceID:
+          title: Pnp Device ID
+          type: string
+        productName:
+          title: Product Name
+          type: string
+        serviceName:
+          title: Service Name
+          type: string
+        speed:
+          title: Speed
+          type: integer
+        timeOfLastReset:
+          format: date-time
+          title: Time Of Last Reset
+          type: string
+        winsEnableLMHostsLookup:
+          title: Wins Enable Lm Hosts Lookup?
+          type: boolean
+        winsHostLookupFile:
+          title: Wins Host Lookup File
+          type: string
+        winsPrimaryServer:
+          title: Wins Primary Server
+          type: string
+        winsSecondaryServer:
+          title: Wins Secondary Server
+          type: string
+      type: object
+    title: Log Sys Win Net Adapter
+    type: array
+  logSysWinOptionalWindowsFeature:
+    items:
+      properties:
+        description:
+          title: Description
+          type: string
+        displayName:
+          title: Display Name
+          type: string
+        id:
+          title: ID
+          type: string
+        name:
+          title: Name
+          type: string
+        state:
+          title: State
+          type: integer
+      type: object
+    title: Log Sys Win Optional Windows Feature
+    type: array
+  logSysWinPowerPlan:
+    properties:
+      quickInfo:
+        items:
+          properties:
+            content:
+              items:
+                properties:
+                  description:
+                    title: Description
+                    type: string
+                  id:
+                    title: ID
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  powerPlanId:
+                    title: Power Plan ID
+                    type: string
+                type: object
+              title: Content
+              type: array
+            name:
+              title: Name
+              type: string
+          type: object
+        title: Quick Info
+        type: array
+      tabs:
+        items:
+          properties:
+            content:
+              items:
+                properties:
+                  content:
+                    items:
+                      properties:
+                        description:
+                          title: Description
+                          type: string
+                        id:
+                          title: ID
+                          type: string
+                        name:
+                          title: Name
+                          type: string
+                        powerPolicyId:
+                          title: Power Policy ID
+                          type: string
+                        powerValueAc:
+                          title: Power Value Ac
+                          type: integer
+                        powerValueDc:
+                          title: Power Value Dc
+                          type: integer
+                      type: object
+                    title: Content
+                    type: array
+                  name:
+                    title: Name
+                    type: string
+                type: object
+              title: Content
+              type: array
+            name:
+              title: Name
+              type: string
+          type: object
+        title: Tabs
+        type: array
+    title: Log Sys Win Power Plan
+    type: object
+  logSysWinPrinters:
+    items:
+      properties:
+        id:
+          title: ID
+          type: string
+        port:
+          title: Port
+          type: string
+        printerName:
+          title: Printer Name
+          type: string
+      type: object
+    title: Log Sys Win Printers
+    type: array
+  logSysWinRDP:
+    properties:
+      quickInfo:
+        items:
+          properties:
+            content:
+              items:
+                properties:
+                  id:
+                    title: ID
+                    type: string
+                  networkLevelAuthenticationEnabled:
+                    title: Network Level Authentication Enabled?
+                    type: boolean
+                  remoteDesktopEnabled:
+                    title: Remote Desktop Enabled?
+                    type: boolean
+                type: object
+              title: Content
+              type: array
+            name:
+              title: Name
+              type: string
+          type: object
+        title: Quick Info
+        type: array
+      tabs:
+        items:
+          properties:
+            content:
+              items:
+                properties:
+                  content:
+                    items:
+                      properties:
+                        description:
+                          title: Description
+                          type: string
+                        displayName:
+                          title: Display Name
+                          type: string
+                        group:
+                          title: Group
+                          type: string
+                        groupSid:
+                          title: Group Sid
+                          type: string
+                        id:
+                          title: ID
+                          type: string
+                        objectClass:
+                          title: Object Class
+                          type: string
+                        principalSource:
+                          title: Principal Source
+                          type: string
+                        sid:
+                          title: Sid
+                          type: string
+                      type: object
+                    title: Content
+                    type: array
+                  name:
+                    title: Name
+                    type: string
+                type: object
+              title: Content
+              type: array
+            name:
+              title: Name
+              type: string
+          type: object
+        title: Tabs
+        type: array
+    title: Log Sys Win Rdp
+    type: object
+  logSysWinRam:
+    items:
+      properties:
+        bankLabel:
+          title: Bank Label
+          type: string
+        capacity:
+          title: Capacity
+          type: integer
+        caption:
+          title: Caption
+          type: string
+        clockSpeed:
+          title: Clock Speed
+          type: integer
+        deviceLocator:
+          title: Device Locator
+          type: string
+        id:
+          title: ID
+          type: string
+        manufacturer:
+          title: Manufacturer
+          type: string
+        partNumber:
+          title: Part Number
+          type: string
+        serialNumber:
+          title: Serial Number
+          type: string
+        tag:
+          title: Tag
+          type: string
+        totalWidth:
+          title: Total Width
+          type: integer
+        voltage:
+          title: Voltage
+          type: string
+      type: object
+    title: Log Sys Win Ram
+    type: array
+  logSysWinReliability:
+    properties:
+      quickInfo:
+        items:
+          properties:
+            content:
+              items:
+                properties:
+                  average:
+                    title: Average
+                    type: number
+                  count:
+                    title: Count
+                    type: integer
+                  criticalLast7Days:
+                    title: Critical Last Days
+                    type: integer
+                  errorsLast7Days:
+                    title: Errors Last Days
+                    type: integer
+                  id:
+                    title: ID
+                    type: string
+                  maximum:
+                    title: Maximum
+                    type: integer
+                  minimum:
+                    title: Minimum
+                    type: number
+                type: object
+              title: Content
+              type: array
+            name:
+              title: Name
+              type: string
+          type: object
+        title: Quick Info
+        type: array
+      tabs:
+        items:
+          properties:
+            content:
+              items:
+                properties:
+                  content:
+                    items:
+                      properties:
+                        count:
+                          title: Count
+                          type: integer
+                        id:
+                          title: ID
+                          type: string
+                        message:
+                          title: Message
+                          type: string
+                        productName:
+                          title: Product Name
+                          type: string
+                        sourceName:
+                          title: Source Name
+                          type: string
+                        timeGenerated:
+                          format: date-time
+                          title: Time Generated
+                          type: string
+                      type: object
+                    title: Content
+                    type: array
+                  name:
+                    title: Name
+                    type: string
+                type: object
+              title: Content
+              type: array
+            name:
+              title: Name
+              type: string
+          type: object
+        title: Tabs
+        type: array
+    title: Log Sys Win Reliability
+    type: object
+  logSysWinScheduleTasks:
+    items:
+      properties:
+        author:
+          title: Author
+          type: string
+        id:
+          title: ID
+          type: string
+        name:
+          title: Name
+          type: string
+        path:
+          title: Path
+          type: string
+        registrationsDate:
+          title: Registrations Date
+          type: string
+        schTaskDetails:
+          properties:
+            quickInfo:
+              items:
+                properties:
+                  content:
+                    items:
+                      properties:
+                        author:
+                          title: Author
+                          type: string
+                        id:
+                          title: ID
+                          type: string
+                        name:
+                          title: Name
+                          type: string
+                        path:
+                          title: Path
+                          type: string
+                        registrationsDate:
+                          title: Registrations Date
+                          type: string
+                        status:
+                          title: Status
+                          type: integer
+                        userID:
+                          title: User ID
+                          type: string
+                      type: object
+                    title: Content
+                    type: array
+                  name:
+                    title: Name
+                    type: string
+                type: object
+              title: Quick Info
+              type: array
+            tabs:
+              items:
+                properties:
+                  content:
+                    items:
+                      properties:
+                        content:
+                          items:
+                            properties:
+                              condition:
+                                title: Condition
+                                type: integer
+                              details:
+                                title: Details
+                                type: string
+                              id:
+                                title: ID
+                                type: string
+                              type:
+                                title: Type
+                                type: integer
+                            type: object
+                          title: Content
+                          type: array
+                        name:
+                          title: Name
+                          type: string
+                      type: object
+                    title: Content
+                    type: array
+                  name:
+                    title: Name
+                    type: string
+                type: object
+              title: Tabs
+              type: array
+          title: Sch Task Details
+          type: object
+        status:
+          title: Status
+          type: integer
+        userID:
+          title: User ID
+          type: string
+      type: object
+    title: Log Sys Win Schedule Tasks
+    type: array
+  logSysWinSecProduct:
+    items:
+      properties:
+        datInstallDate:
+          format: date-time
+          title: Dat Install Date
+          type: string
+        displayName:
+          title: Display Name
+          type: string
+        id:
+          title: ID
+          type: string
+        lastScanTime:
+          format: date-time
+          title: Last Scan Time
+          type: string
+        productPath:
+          title: Product Path
+          type: string
+        reportingExePath:
+          title: Reporting Exe Path
+          type: string
+        signatureState:
+          title: Signature State
+          type: integer
+        state:
+          title: State
+          type: integer
+      type: object
+    title: Log Sys Win Sec Product
+    type: array
+  logSysWinServerRolesFeatures:
+    items:
+      properties:
+        id:
+          title: ID
+          type: string
+        name:
+          title: Name
+          type: string
+        parent:
+          title: Parent
+          type: string
+        path:
+          title: Path
+          type: string
+        type:
+          title: Type
+          type: string
+      type: object
+    title: Log Sys Win Server Roles Features
+    type: array
+  logSysWinServices:
+    title: Log Sys Win Services
+    type: array
+    x-samos-exclude: true
+  logSysWinShares:
+    items:
+      properties:
+        administrativeShare:
+          title: Administrative Share?
+          type: boolean
+        continuoslyAvailable:
+          title: Continuosly Available?
+          type: boolean
+        description:
+          title: Description
+          type: string
+        encrypted:
+          title: Encrypted?
+          type: boolean
+        id:
+          title: ID
+          type: string
+        name:
+          title: Name
+          type: string
+        shareDetails:
+          properties:
+            quickInfo:
+              items:
+                properties:
+                  content:
+                    items:
+                      properties:
+                        administrativeShare:
+                          title: Administrative Share?
+                          type: boolean
+                        continuoslyAvailable:
+                          title: Continuosly Available?
+                          type: boolean
+                        description:
+                          title: Description
+                          type: string
+                        encrypted:
+                          title: Encrypted?
+                          type: boolean
+                        id:
+                          title: ID
+                          type: string
+                        name:
+                          title: Name
+                          type: string
+                        sharePath:
+                          title: Share Path
+                          type: string
+                        shareVolume:
+                          title: Share Volume
+                          type: string
+                      type: object
+                    title: Content
+                    type: array
+                  name:
+                    title: Name
+                    type: string
+                type: object
+              title: Quick Info
+              type: array
+            tabs:
+              items:
+                properties:
+                  content:
+                    items:
+                      properties:
+                        content:
+                          items:
+                            properties:
+                              accessControlType:
+                                title: Access Control Type
+                                type: integer
+                              accessRight:
+                                title: Access Right
+                                type: integer
+                              change:
+                                title: Change?
+                                type: boolean
+                              full:
+                                title: Full?
+                                type: boolean
+                              id:
+                                title: ID
+                                type: string
+                              name:
+                                title: Name
+                                type: string
+                              read:
+                                title: Read?
+                                type: boolean
+                              scopeName:
+                                title: Scope Name
+                                type: string
+                              shareName:
+                                title: Share Name
+                                type: string
+                            type: object
+                          title: Content
+                          type: array
+                        name:
+                          title: Name
+                          type: string
+                      type: object
+                    title: Content
+                    type: array
+                  name:
+                    title: Name
+                    type: string
+                type: object
+              title: Tabs
+              type: array
+          title: Share Details
+          type: object
+        sharePath:
+          title: Share Path
+          type: string
+        shareVolume:
+          title: Share Volume
+          type: string
+      type: object
+    title: Log Sys Win Shares
+    type: array
+  logSysWinSoftware:
+    items:
+      properties:
+        estimatedSize:
+          title: Estimated Size
+          type: integer
+        id:
+          title: ID
+          type: string
+        installDate:
+          format: date-time
+          title: Install Date
+          type: string
+        licenseKey:
+          title: License Key
+          type: string
+        name:
+          title: Name
+          type: string
+        publisher:
+          title: Publisher
+          type: string
+        version:
+          title: Version
+          type: string
+      type: object
+    title: Log Sys Win Software
+    type: array
+  logSysWinUpdateHistory:
+    items:
+      properties:
+        id:
+          title: ID
+          type: string
+        installDate:
+          format: date-time
+          title: Install Date
+          type: string
+        kbNumberStr:
+          title: Kb Number Str
+          type: string
+        manufracturerURL:
+          properties:
+            link:
+              title: Link
+              type: string
+            linkDe:
+              title: Link De
+              type: string
+            linkEn:
+              title: Link En
+              type: string
+          title: Manufracturer URL
+          type: object
+        title:
+          title: Title
+          type: string
+      type: object
+    title: Log Sys Win Update History
+    type: array
+  logSysWinUserProfiles:
+    items:
+      properties:
+        id:
+          title: ID
+          type: string
+        lastLogon:
+          format: date-time
+          title: Last Logon
+          type: string
+        name:
+          title: Name
+          type: string
+        profileSize:
+          title: Profile Size
+          type: integer
+        roamingSize:
+          title: Roaming Size
+          type: integer
+      type: object
+    title: Log Sys Win User Profiles
+    type: array
+  module:
+    title: Type
+    type: string
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  organizationId:
+    title: Organization
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365Organization
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+  os:
+    title: OS
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+  platformId:
+    title: Platform
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365Platform
+        key-name: id
+  realm:
+    title: Realm
+    type: string
+  resourceTypeId:
+    title: Resource Type ID
+    type: string
+  scope:
+    title: Scope
+    type: string
+  segment:
+    title: Segment
+    type: string
+  siteId:
+    title: Site
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365Site
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: location
+  status:
+    title: Status
+    type: string
+  floorId:
+    title: Floor ID
+    type: string
+  roomId:
+    title: Room ID
+    type: string
+  userDefined:
+    title: User Defined?
+    type: boolean
+  userId:
+    title: User ID
+    type: string

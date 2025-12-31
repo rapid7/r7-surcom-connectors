@@ -1,0 +1,74 @@
+x-samos-type-name: Docusnap365Organization
+x-samos-namespace: docusnap365
+title: Docusnap365 Organization
+description: Represents an organization in Docusnap365.
+
+x-samos-extends-types:
+  - type-name: Organization
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: label
+  - name: segment
+  - name: desc
+  - name: userDefined
+  - name: gridSelected
+
+x-samos-detail:
+  - name: label
+  - name: segment
+  - name: desc
+  - name: userDefined
+  - name: gridSelected
+  - name: scope
+  - name: realm
+
+properties:
+  desc:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  gridSelected:
+    title: Grid Selected?
+    type: boolean
+  iconId:
+    format: uuid
+    title: Icon ID
+    type: string
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+  label:
+    title: Label
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  realm:
+    title: Realm
+    type: string
+  resourceTypeId:
+    format: uuid
+    title: Resource Type ID
+    type: string
+  scope:
+    title: Scope
+    type: string
+  segment:
+    title: Segment
+    type: string
+  userDefined:
+    title: User Defined?
+    type: boolean
+  userId:
+    format: uuid
+    title: User ID
+    type: string

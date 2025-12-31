@@ -1,0 +1,58 @@
+x-samos-type-name: OneLoginRole
+x-samos-namespace: onelogin
+title: OneLogin Role
+description: A Role from OneLogin
+
+x-samos-extends-types:
+  - type-name: core.named-object
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: apps
+  - name: users
+
+x-samos-detail:
+  - name: name
+  - name: apps
+  - name: users
+  - name: admins
+
+properties:
+  admins:
+    items:
+      type: integer
+      x-samos-ref-types:
+        - key-name: id
+          type-name: OneLoginUser
+    title: Admins
+    type: array
+  apps:
+    items:
+      type: integer
+      x-samos-ref-types:
+        - key-name: id
+          type-name: OneLoginApp
+    title: Apps
+    type: array
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  users:
+    items:
+      type: integer
+      x-samos-ref-types:
+        - key-name: id
+          type-name: OneLoginUser
+    title: Users
+    type: array

@@ -1,0 +1,100 @@
+x-samos-type-name: BeyondTrustBeyondInsightPlatform
+x-samos-namespace: beyondtrust.beyondinsight
+title: BeyondInsight Platform
+description: Represents a Platform from BeyondTrust BeyondInsight
+
+x-samos-extends-types:
+  - type-name: core.named-object
+
+x-samos-supernode: true
+x-samos-default-hide-from-graph: true
+
+x-samos-keys:
+  - PlatformID
+
+x-samos-table:
+  - name: Name
+  - name: ShortName
+  - name: PortFlag
+  - name: DefaultPort
+  - name: DomainNameFlag
+  - name: AutoManagementFlag
+  - name: ManageableFlag
+  - name: DSSFlag
+
+x-samos-detail:
+  - name: Name
+  - name: ShortName
+  - name: PortFlag
+  - name: DefaultPort
+  - name: DomainNameFlag
+  - name: AutoManagementFlag
+  - name: ManageableFlag
+  - name: DSSFlag
+  - name: SupportsElevationFlag
+  - name: LoginAccountFlag
+  - name: ApplicationHostFlag
+  - name: RequiresApplicationHost
+  - name: RequiresTenantID
+  - name: RequiresObjectID
+  - name: RequiresSecret
+
+properties:
+  ApplicationHostFlag:
+    title: Application Host Flag?
+    type: boolean
+  AutoManagementFlag:
+    title: Auto Management Flag?
+    type: boolean
+  DSSAutoManagementFlag:
+    title: DSS Auto Management Flag?
+    type: boolean
+  DSSFlag:
+    title: DSS Flag?
+    type: boolean
+  DefaultPort:
+    title: Default Port
+    type: integer
+  DefaultSessionType:
+    title: Default Session Type
+    type: string
+  DomainNameFlag:
+    title: Domain Name Flag?
+    type: boolean
+  LoginAccountFlag:
+    title: Login Account Flag?
+    type: boolean
+  ManageableFlag:
+    title: Manageable Flag?
+    type: boolean
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  PlatformID:
+    title: Platform ID
+    type: integer
+    x-samos-immutable: true
+  PortFlag:
+    title: Port Flag?
+    type: boolean
+  RequiresApplicationHost:
+    title: Requires Application Host?
+    type: boolean
+  RequiresObjectID:
+    title: Requires Object ID?
+    type: boolean
+  RequiresSecret:
+    title: Requires Secret?
+    type: boolean
+  RequiresTenantID:
+    title: Requires Tenant ID?
+    type: boolean
+  ShortName:
+    title: Short Name
+    type: string
+  SupportsElevationFlag:
+    title: Supports Elevation Flag?
+    type: boolean

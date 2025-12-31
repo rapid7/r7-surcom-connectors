@@ -1,0 +1,337 @@
+x-samos-type-name: AsimilyDevice
+x-samos-namespace: asimily
+title: Asimily Device
+description: Representing a device type from Asimily
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_device_id
+
+x-samos-table:
+  - name: hostName
+  - name: macAddr
+  - name: deviceType
+  - name: manufacturer
+  - name: deviceModel
+  - name: serialNumber
+  - name: os
+  - name: managedBy
+  - name: lastDiscoveredAt
+
+x-samos-detail:
+  - name: hostName
+  - name: macAddr
+  - name: deviceType
+  - name: manufacturer
+  - name: deviceModel
+  - name: os
+  - name: isNetworkingDevice
+  - name: isUsingEndpointSecurity
+  - name: serialNumber
+  - name: managedBy
+  - name: osVersion
+  - name: deviceMasterFamily
+  - name: discoverySourceValue
+  - name: hardwareArchitecture
+  - name: department
+  - name: facility
+  - name: deviceTag
+  - name: v4IpAddrs
+  - name: v6IpAddrs
+  - name: location
+  - name: region
+  - name: softwareVersion
+  - name: storesEphi
+  - name: transmitEphi
+  - name: riskScore
+  - name: likelihood
+  - name: impact
+  - name: patientImpact
+  - name: businessImpact
+  - name: dataImpact
+  - name: avgUtilizationPercent
+  - name: utilizationPercent
+  - name: isCurrentlyInUse
+  - name: isWireless
+  - name: deviceClass
+  - name: deviceFamilies
+  - name: anomalyPresent
+  - name: mds2
+  - name: cmmsId
+  - name: d_endpoint_protected
+  - name: discoverySourceValue
+  - name: uptime
+  - name: lastDiscoveredAt
+
+x-samos-derived-properties:
+  d_device_id:
+    # Derived and fulfills id unified property name for core.component:id and will accept string type.
+    title: Device ID
+    type: string
+    syntax: expression
+    value: '{deviceID}'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_hostname:
+    # Fulfills hostname unified property name.
+    # derived hostname property because it already fulfills core.named-object:name.
+    type: string
+    syntax: expression
+    value: '{hostName}'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_endpoint_protected:
+    # Derived property to fulfill endpoint_protection_active unified property name.
+    # Some of the values in isUsingEndpointSecurity is null so deriving to boolean.
+    title: Endpoint Protected?
+    type: boolean
+    syntax: expression
+    value: 'isUsingEndpointSecurity == `true`'
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_protection_active
+
+  d_ips:
+    # Derived property to fulfill ips unified property name.
+    title: IPs
+    type: array
+    syntax: jmespath
+    value: '[v4IpAddrs, v6IpAddrs][]'
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  d_mitigations:
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    # M1012 (Mobile: Enterprise Policy, aka EMM/MDM) if "managedBy": "MDM"
+    # M1016	Vulnerability Scanning
+    # M1049	Antivirus/Antimalware
+    value: >-
+      [
+        contains(managedBy || ``, `MDM`) && `M1012`,
+        `M1016`,
+        isUsingEndpointSecurity == `true` && `M1049`
+      ] | [?@]
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  deviceID:
+    type: integer
+    title: Device ID
+    x-samos-hidden: true
+  macAddr:
+    type: string
+    title: MAC Address
+    format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+  v4IpAddrs:
+    type: array
+    title: IPv4 Address
+    items:
+      type: string
+      format: ip-addr
+  v6IpAddrs:
+    type: array
+    title: IPv6 Address
+    items:
+      type: string
+      format: ip-addr
+  manufacturer:
+    type: string
+    title: Manufacturer
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+  deviceModel:
+    type: string
+    title: Device Model
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+  os:
+    type: string
+    title: OS
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+  osVersion:
+    type: string
+    title: OS Version
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+  deviceType:
+    type: string
+    title: Device Type
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  deviceFamilies:
+    type: array
+    title: Device Families
+    items:
+      type: string
+  serialNumber:
+    type: string
+    title: Serial Number
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+  department:
+    type: string
+    title: Department
+  facility:
+    type: string
+    title: Facility
+  hardwareArchitecture:
+    type: string
+    title: Hardware Architecture
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_architecture
+  hostName:
+    type: string
+    title: Hostname
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+  location:
+    type: string
+    title: Location
+  region:
+    type: string
+    title: Region
+  softwareVersion:
+    type: string
+    title: Software Version
+  storesEphi:
+    type: boolean
+    title: Stores EPHI?
+  transmitEphi:
+    type: boolean
+    title: Transmit EPHI?
+  riskScore:
+    type: integer
+    title: Risk Score
+  likelihood:
+    type: number
+    title: Likelihood
+  impact:
+    type: integer
+    title: Impact
+  patientImpact:
+    type: integer
+    title: Patient Impact
+  businessImpact:
+    type: integer
+    title: Business Impact
+  dataImpact:
+    type: integer
+    title: Data Impact
+  avgUtilizationPercent:
+    type: number
+    title: Avg Utilization Percent
+  utilizationPercent:
+    type: number
+    title: Utilization Percent
+  uptime:
+    type: integer
+    title: Uptime
+  isConnected:
+    type: boolean
+    title: Connected?
+  isCurrentlyInUse:
+    type: boolean
+    title: Currently In Use?
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+  isNetworkingDevice:
+    type: boolean
+    title: Networking Device?
+  isWireless:
+    type: boolean
+    title: Wireless?
+  deviceClass:
+    type: string
+    title: Device Class
+  managedBy:
+    type: string
+    title: Managed By
+  anomalyPresent:
+    type: boolean
+    title: Anomaly Present?
+  mds2:
+    type: string
+    title: MDS2
+  cmmsId:
+    type: string
+    title: CMMS ID
+  lastDiscoveredAt:
+    type: string
+    title: Last Discovered At
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_scanned
+  deviceTag:
+    type: array
+    title: Device Tag
+    items:
+      type: string
+  deviceMasterFamily:
+    type: string
+    title: Device Master Family
+  discoverySourceValue:
+    type: string
+    title: Discovery Source Value
+  isUsingEndpointSecurity:
+    type: boolean
+    x-samos-hidden: true
+    title: Using Endpoint Security?
+
+x-samos-virtual:
+  vulnerabilities:
+    type-name: Vulnerability
+    cypher-pattern: >
+      <-[:`e:Finding:applies_to`]-(:AsimilyVulnerabilityFinding)-[:`e:Finding:vulnerability`]->(v:AsimilyVulnerability)
+  exposures:
+    type-name: Exposure
+    cypher-pattern: >
+      <-[:`e:Finding:applies_to`]-(:AsimilyAnomalyFinding)-[:`e:Finding:vulnerability`]->(e:AsimilyAnomaly)

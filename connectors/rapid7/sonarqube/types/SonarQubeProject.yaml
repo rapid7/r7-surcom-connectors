@@ -1,0 +1,120 @@
+x-samos-type-name: SonarQubeProject
+x-samos-namespace: sonarqube
+title: SonarQube Project
+description: A Project/Repository type in SonarQube.
+
+x-samos-extends-types:
+  - type-name: Repository
+
+x-samos-keys:
+  - key
+
+x-samos-table:
+  - name: name
+  - name: organization
+  - name: eligibilityStatus
+  - name: visibility
+  - name: isNew
+  - name: eligible
+  - name: isAiCodeAssured
+  - name: analysisDateAllBranches
+
+x-samos-detail:
+  - name: name
+  - name: organization
+  - name: key
+  - name: eligibilityStatus
+  - name: visibility
+  - name: isFavorite
+  - name: tags
+  - name: isNew
+  - name: eligible
+  - name: isAiCodeAssured
+  - name: analysisDateAllBranches
+
+x-samos-derived-properties:
+  d_public:
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: 'visibility == `public`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: public
+properties:
+  organization:
+    type: string
+    title: Organization
+  key:
+    type: string
+    x-samos-immutable: true
+    title: Key
+  projectId:
+    type: string
+    title: Project ID
+  projectUuidV4:
+    type: string
+    title: Project UUID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Repository.id
+      correlation-type: Repository
+      priority: 2
+  isFavorite:
+    type: boolean
+    title: Favorite?
+  tags:
+    type: array
+    title: Tags
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: SonarQubeTag
+          key-name: d_tag_value
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+  visibility:
+    type: string
+    title: Visibility
+  eligibilityStatus:
+    type: string
+    title: Eligibility Status
+  eligible:
+    type: boolean
+    title: Eligible?
+  isNew:
+    type: boolean
+    title: New?
+  analysisDateAllBranches:
+    type: string
+    title: Branches Analysis Date
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  isAiCodeAssured:
+    type: boolean
+    title: AI Code Assured?
+  aiCodeAssurance:
+    title: AI Code Assurance
+    type: string
+  containsAiCode:
+    title: AI Code Contains?
+    type: boolean
+  qualifier:
+    title: Qualifier
+    type: string
+  isAiCodeFixEnabled:
+    title: AI Code Fix Enabled?
+    type: boolean

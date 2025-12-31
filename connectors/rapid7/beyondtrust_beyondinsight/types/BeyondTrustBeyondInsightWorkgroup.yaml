@@ -1,0 +1,54 @@
+x-samos-type-name: BeyondTrustBeyondInsightWorkgroup
+x-samos-namespace: beyondtrust.beyondinsight
+title: BeyondInsight Workgroup
+description: Represents a Workgroup from BeyondTrust BeyondInsight
+
+x-samos-extends-types:
+  - type-name: core.component-group
+  - type-name: core.component
+
+x-samos-keys:
+  - d_id # unique derived property
+  - ID # reference id for other types
+
+x-samos-table:
+  - name: Name
+  - name: OrganizationID
+
+x-samos-detail:
+  - name: Name
+  - name: OrganizationID
+
+x-samos-derived-properties:
+  # Map 'ID' integer property to core.component.id which is "id" property accepted string type
+  d_id:
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: ID
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+properties:
+  ID:
+    title: ID
+    type: integer
+    x-samos-immutable: true
+    x-samos-hidden: true
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  OrganizationID:
+    title: Organization
+    type: string
+    x-samos-ref-types:
+      - type-name: BeyondTrustBeyondInsightOrganization
+        key-name: OrganizationID
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization

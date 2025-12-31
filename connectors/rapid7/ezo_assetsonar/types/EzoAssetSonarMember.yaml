@@ -1,0 +1,493 @@
+x-samos-type-name: EzoAssetSonarMember
+x-samos-namespace: ezo.assetsonar
+title: Ezo AssetSonar Member
+description: A member from AssetSonar
+
+x-samos-extends-types:
+  - type-name: User
+x-samos-keys:
+  - id
+  - email # To reference assigned_to_user_email in AssetSonarAsset type
+
+x-samos-table:
+  - name: email
+  - name: full_name
+  - name: description
+  - name: d_active
+  - name: role_name
+  - name: department
+  - name: location_id
+  - name: created_at
+  - name: updated_at
+
+x-samos-detail:
+  - name: email
+  - name: full_name
+  - name: description
+  - name: d_active
+  - name: role_name
+  - name: department
+  - name: location_id
+  - name: first_name
+  - name: last_name
+  - name: employee_identification_number
+  - name: manager_id
+  - name: saml_user
+  - name: is_ldap_user
+  - name: address
+  - name: address_line_2
+  - name: address_name
+  - name: city
+  - name: state
+  - name: zip_code
+  - name: country
+  - name: phone_number
+  - name: fax
+  - name: subscribed_to_emails
+  - name: account_name
+  - name: alert_type
+  - name: auto_sync_with_ldap
+  - name: entity_type
+  - name: guest_user
+  - name: is_gsuite_user
+  - name: last_sync_date
+  - name: password_changed_at
+  - name: sam_managed_user
+  - name: offboarding_date
+  - name: created_at
+  - name: updated_at
+
+x-samos-derived-properties:
+  d_id:
+    # Deriving id property to fulfill core.principal.id
+    # to make it into a string version
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  d_email:
+    # Deriving email property to fulfill core.principal.email
+    # which is of type string in EZO AssetSonarAsset type
+    x-samos-hidden: true
+    title: Email
+    type: string
+    syntax: jmespath
+    value: 'email'
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+
+  d_active:
+    # The "status" property has an integer ID in the response as 1 or 2
+    # Deriving the `status` property to fulfills `core.principal:active` which is of type boolean
+    title: Active?
+    type: boolean
+    value: 'status == `1`'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+properties:
+  account_name:
+    title: Account Name
+    type: string
+  address:
+    title: Address
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: address
+  address_line_2:
+    title: Address Line 2
+    type: string
+  address_name:
+    title: Address Name
+    type: string
+  alert_type:
+    title: Alert Type
+    type: string
+  already_rated:
+    title: Already Rated?
+    type: boolean
+  attach_invoice_with_order_alerts:
+    title: Attach Invoice With Order Alerts?
+    type: boolean
+  authorization_amount:
+    title: Authorization Amount
+    type: integer
+  auto_sync_with_ldap:
+    title: Auto Sync With LDAP?
+    type: boolean
+  automation_user:
+    title: Automation User?
+    type: boolean
+  billing_address_id:
+    title: Billing Address ID
+    type: integer
+  business_id:
+    title: Business ID
+    type: integer
+  category_id:
+    title: Category ID
+    type: integer
+  cc_business_in_alerts:
+    title: CC Business In Alerts?
+    type: boolean
+  cc_secondary_emails_in_alerts:
+    title: CC Secondary Emails In Alerts?
+    type: boolean
+  city:
+    title: City
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: city
+  collect_tax:
+    title: Collect Tax
+    type: string
+  comments_count:
+    title: Comments Count
+    type: integer
+  compact_view:
+    title: Compact View?
+    type: boolean
+  company_default_payment_terms:
+    title: Company Default Payment Terms?
+    type: boolean
+  confirmed_at:
+    title: Confirmed At
+    type: string
+  consumed_timestep:
+    title: Consumed Timestep
+    type: string
+  contact_owner:
+    title: Contact Owner
+    type: string
+  contact_type:
+    title: Contact Type
+    type: string
+  country:
+    title: Country
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: country
+    x-samos-ref-types:
+      - type-name: NoeticEnumCountry
+        key-name: alpha_2_id
+  created_at:
+    format: date-time
+    title: Created At
+    type: string
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date
+  created_by_id:
+    title: Created By ID
+    type: integer
+  created_by_scim:
+    title: Created By SCIM?
+    type: boolean
+  creation_source:
+    title: Creation Source
+    type: string
+  credit_memo_amount:
+    title: Credit Memo Amount
+    type: string
+  customer_category_id:
+    title: Customer Category ID
+    type: integer
+  deactivated_at:
+    title: Deactivated At
+    type: string
+    format: date-time
+  default_address_id:
+    title: Default Address ID
+    type: integer
+  default_triage_setting_id:
+    title: Default Triage Setting ID
+    type: integer
+  deleted_at:
+    title: Deleted At
+    type: string
+    format: date-time
+  department:
+    title: Department
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: department
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  display_picture_content_type:
+    title: Display Picture Content Type
+    type: string
+  display_picture_file_name:
+    title: Display Picture File Name
+    type: string
+  display_picture_file_size:
+    title: Display Picture File Size
+    type: string
+  display_picture_updated_at:
+    title: Display Picture Updated At
+    type: string
+  documents_count:
+    title: Documents Count
+    type: integer
+  dummy_location_member:
+    title: Dummy Location Member?
+    type: boolean
+  email:
+    title: Email
+    type: string
+    x-samos-immutable: true
+  employee_id:
+    title: Employee ID
+    type: integer
+  employee_identification_number:
+    title: Employee Identification Number
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: employee_id
+  entity_type:
+    title: Entity Type
+    type: string
+  entity_unique_id:
+    title: Entity Unique ID
+    type: integer
+  external_id:
+    title: External ID
+    type: integer
+  fax:
+    title: Fax
+    type: string
+  first_name:
+    title: First Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+  full_name:
+    title: Full Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  guest_user:
+    title: Guest User
+    type: integer
+  hourly_rate:
+    title: Hourly Rate
+    type: string
+  id:
+    title: ID
+    type: integer
+    x-samos-immutable: true
+  iframe_request_sign_in_time:
+    title: Iframe Request Sign In Time
+    type: string
+  inactive_by_id:
+    title: Inactive By ID
+    type: integer
+  is_gsuite_user:
+    title: Gsuite User?
+    type: boolean
+  is_ldap_user:
+    title: LDAP User?
+    type: boolean
+  jira_account_id:
+    title: Jira Account ID
+    type: integer
+  last_name:
+    title: Last Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+  last_sync_date:
+    title: Last Sync Date
+    type: string
+  last_sync_source:
+    title: Last Sync Source
+    type: string
+  last_used_ffos_at:
+    title: Last Used Ffos At
+    type: string
+  location_id:
+    title: Location
+    type: integer
+    x-samos-ref-types:
+      - type-name: EzoAssetSonarLocation
+        key-name: id
+  manager_id:
+    title: Manager
+    type: integer
+    x-samos-ref-types:
+      - type-name: EzoAssetSonarMember
+        key-name: id
+  offboarding_date:
+    title: Offboarding Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: end_date
+  otp_required_for_login:
+    title: OTP Required For Login
+    type: string
+  password_changed_at:
+    title: Password Changed At
+    type: string
+  payment_term_id:
+    title: Payment Term ID
+    type: integer
+  payment_term_same_as_business:
+    title: Payment Term Same As Business
+    type: string
+  phone_number:
+    title: Phone Number
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+  reset_password_sent_at:
+    title: Reset Password Sent At
+    type: string
+  role_id:
+    title: Role ID
+    type: integer
+  role_name:
+    title: Role Name
+    type: string
+  salesforce_id:
+    title: Salesforce ID
+    type: integer
+  sam_managed_user:
+    title: Sam Managed User
+    type: string
+  saml_session_index_id:
+    title: SAML Session Index ID
+    type: integer
+  saml_user:
+    title: SAML User?
+    type: boolean
+  scim_action:
+    title: SCIM Action
+    type: string
+  secure_code:
+    title: Secure Code
+    type: string
+  services_count:
+    title: Services Count
+    type: integer
+  settings_access:
+    title: Settings Access?
+    type: boolean
+  show_announcement:
+    title: Show Announcement?
+    type: boolean
+  show_app_updates:
+    title: Show App Updates?
+    type: boolean
+  signature:
+    title: Signature
+    type: string
+  single_step_addresses_qr_printing:
+    title: Single Step Addresses QR Printing?
+    type: boolean
+  single_step_baskets_qr_printing:
+    title: Single Step Baskets QR Printing?
+    type: boolean
+  single_step_bundles_qr_printing:
+    title: Single Step Bundles QR Printing?
+    type: boolean
+  single_step_contacts_qr_printing:
+    title: Single Step Contacts QR Printing?
+    type: boolean
+  single_step_customers_qr_printing:
+    title: Single Step Customers QR Printing?
+    type: boolean
+  single_step_locations_qr_printing:
+    title: Single Step Locations QR Printing?
+    type: boolean
+  single_step_members_qr_printing:
+    title: Single Step Members QR Printing?
+    type: boolean
+  state:
+    title: State
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: state
+  status:
+    title: Status
+    type: integer
+  stock_asset_current_checkout_view:
+    title: Stock Asset Current Checkout View?
+    type: boolean
+  stock_asset_group_by_column:
+    title: Stock Asset Group By Column
+    type: string
+  subscribed_to_emails:
+    title: Subscribed To Emails?
+    type: boolean
+  team_id:
+    title: Team ID
+    type: string
+  transaction_started_at:
+    title: Transaction Started At
+    type: string
+  unseen_app_updates_count:
+    title: Unseen App Updates Count
+    type: integer
+  unsubscribed_by_id:
+    title: Unsubscribed By ID
+    type: string
+  updated_at:
+    format: date-time
+    title: Updated At
+    type: string
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+  use_business_contact_details:
+    title: Use Business Contact Details?
+    type: boolean
+  user_listing_id:
+    title: User Listing ID
+    type: integer
+  vendor_id:
+    title: Vendor ID
+    type: integer
+  web_store_sign_up_privacy_policy_agreed_on:
+    title: Web Store Sign Up Privacy Policy Agreed On
+    type: string
+  web_store_sign_up_terms_agreed_on:
+    title: Web Store Sign Up Terms Agreed On
+    type: string
+  web_store_signup:
+    title: Web Store Signup?
+    type: boolean
+  webstore_authentication_token:
+    title: Webstore Authentication Token
+    type: string
+  zendesk_account_id:
+    title: Zendesk Account ID
+    type: integer
+  zip_code:
+    title: Zip Code
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: postal_code

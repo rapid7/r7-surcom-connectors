@@ -1,0 +1,98 @@
+x-samos-type-name: BeyondTrustBeyondInsightUserGroup
+x-samos-namespace: beyondtrust.beyondinsight
+title: BeyondInsight UserGroup
+description: Represents a User Group from BeyondTrust BeyondInsight
+
+x-samos-extends-types:
+  - type-name: UserGroup
+
+x-samos-keys:
+  - d_group_id
+
+x-samos-table:
+  - name: Name
+  - name: Description
+  - name: GroupType
+  - name: IsActive
+  - name: RoleType
+  - name: DistinguishedName
+
+x-samos-detail:
+  - name: Name
+  - name: Description
+  - name: GroupType
+  - name: IsActive
+  - name: RoleType
+  - name: DistinguishedName
+  - name: ApplicationRegistrationIDs
+
+x-samos-derived-properties:
+  # Maps the 'GroupID' integer property to UserGroup.id, which accepts a string type
+  d_group_id:
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: GroupID
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+
+properties:
+  AccountAttribute:
+    title: Account Attribute
+    type: string
+  ApplicationRegistrationIDs:
+    title: Application Registration IDs
+    type: string
+  BaseDistinguishedName:
+    title: Base Distinguished Name
+    type: string
+  Description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  DistinguishedName:
+    title: Distinguished Name
+    type: string
+    x-samos-correlation:
+      correlation-key: User.x500dn
+      correlation-type: UserGroup
+      priority: 5
+  ExcludedFromGlobalSync:
+    title: Excluded From Global Sync?
+    type: boolean
+  GroupID:
+    title: Group ID
+    type: integer
+    x-samos-immutable: true
+  GroupType:
+    title: Group Type
+    type: string
+  IsActive:
+    title: Active?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+  MembershipAttribute:
+    title: Membership Attribute
+    type: string
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: UserGroup.name
+      correlation-type: UserGroup
+      priority: 3
+  OverrideGlobalSyncSettings:
+    title: Override Global Sync Settings?
+    type: boolean
+  RoleType:
+    title: Role Type
+    type: integer

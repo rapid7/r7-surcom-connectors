@@ -1,0 +1,464 @@
+﻿x-samos-type-name: SolarWindsOrionNode
+x-samos-namespace: solarwinds.orion
+title: SolarWinds Orion Node
+description: Nodes details from SolarWinds Orion
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 5 # EDR has the highest priority for fulfilling properties of the base type
+
+$ref: https://solarwinds.github.io/OrionSDK/2024.4#/definitions/Orion.Nodes
+
+x-samos-keys:
+  - d_id
+  - NodeID
+
+x-samos-table:
+  - name: NodeName
+  - name: IPAddress
+  - name: DNS
+  - name: Vendor
+  - name: MachineType
+  - name: IsServer
+  - name: LastBoot
+
+x-samos-detail:
+  - name: NodeName
+  - name: MachineType
+  - name: ObjectSubType
+  - name: IPAddress
+  - name: IPAddressType
+  - name: DNS
+  - name: SysName
+  - name: Vendor
+  - name: IsServer
+  - name: Status
+  - name: Severity
+  - name: ResponseTime
+  - name: PercentLoss
+  - name: CPUCount
+  - name: CPULoad
+  - name: TotalMemory
+  - name: MemoryUsed
+  - name: MemoryAvailable
+  - name: PercentMemoryUsed
+  - name: PercentMemoryAvailable
+  - name: LastBoot
+  - name: SystemUpTime
+  - name: NodeDescription
+  - name: Description
+  - name: SysObjectID
+  - name: Location
+  - name: Contact
+  - name: IOSImage
+  - name: IOSVersion
+  - name: GroupStatus
+  - name: NodeStatusRootCause
+  - name: StatusDescription
+  - name: PolledStatus
+  - name: StatusLED
+  - name: StatusIcon
+  - name: DynamicIP
+  - name: Caption
+  - name: AvgResponseTime
+  - name: MinResponseTime
+  - name: MaxResponseTime
+  - name: LoadAverage1
+  - name: LoadAverage5
+  - name: LoadAverage15
+  - name: LastSync
+  - name: LastSystemUpTimePollUtc
+  - name: UiSeverity
+  - name: ChildStatus
+  - name: Allow64BitCounters
+  - name: AgentPort
+  - name: CMTS
+  - name: SNMPVersion
+  - name: PollInterval
+  - name: EngineID
+  - name: RediscoveryInterval
+  - name: NextPoll
+  - name: NextRediscovery
+  - name: StatCollection
+  - name: External
+  - name: Community
+  - name: RWCommunity
+  - name: IPAddressGUID
+  - name: BlockUntil
+  - name: OrionIdPrefix
+  - name: OrionIdColumn
+  - name: SkippedPollingCycles
+  - name: MinutesSinceLastSync
+  - name: EntityType
+  - name: VendorIcon
+  - name: Icon
+  - name: DetailsUrl
+  - name: DisplayName
+  - name: Category
+  - name: IsOrionServer
+  - name: ModernIcon
+  - name: CustomStatus
+
+required:
+  - NodeID
+
+x-samos-derived-properties:
+  d_id:
+    # Converting NodeID integer to string for fulfills core.component:id
+    title: ID
+    type: string
+    syntax: jmespath
+    value: 'NodeID'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_status:
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: 'Status == `1`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  NodeID:
+    title: Node ID
+    type: integer
+    x-samos-immutable: true
+  ObjectSubType:
+    title: Object Sub Type
+    type: string
+  IPAddress:
+    title: IP Address
+    type: string
+    format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  IPAddressType:
+    title: IP Address Type
+    type: string
+  DynamicIP:
+    title: Dynamic IP?
+    type: boolean
+  Caption:
+    title: Caption
+    type: string
+  NodeDescription:
+    title: Node Description
+    type: string
+  Description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  DNS:
+    title: DNS
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 4
+  SysName:
+    title: System Name
+    type: string
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 4
+  Vendor:
+    title: Vendor
+    type: string
+  SysObjectID:
+    title: System Object ID
+    type: string
+  Location:
+    title: Location
+    type: string
+  Contact:
+    title: Contact
+    type: string
+  VendorIcon:
+    title: Vendor Icon
+    type: string
+  Icon:
+    title: Icon
+    type: string
+  Status:
+    title: Status
+    type: integer
+  PolledStatus:
+    title: Polled Status
+    type: integer
+  StatusLED:
+    title: Status LED
+    type: string
+  StatusDescription:
+    title: Status Description
+    type: string
+  NodeStatusRootCause:
+    title: Node Status Root Cause
+    type: string
+  NodeStatusRootCauseWithLinks:
+    title: Node Status Root Cause With Links
+    type: string
+  CustomStatus:
+    title: Custom Status
+    type: boolean
+  IOSImage:
+    title: IOS Image
+    type: string
+  IOSVersion:
+    title: IOS Version
+    type: string
+  GroupStatus:
+    title: Group Status
+    type: string
+  StatusIcon:
+    title: Status Icon
+    type: string
+  LastBoot:
+    title: Last Boot
+    type: string
+  SystemUpTime:
+    title: System Up Time
+    type: number
+  ResponseTime:
+    title: Response Time
+    type: integer
+  PercentLoss:
+    title: Percent Loss
+    type: number
+  AvgResponseTime:
+    title: Average Response Time
+    type: integer
+  MinResponseTime:
+    title: Minimum Response Time
+    type: integer
+  MaxResponseTime:
+    title: Maximum Response Time
+    type: integer
+  CPUCount:
+    title: CPU Count
+    type: integer
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: cpus
+  CPULoad:
+    title: CPU Load
+    type: integer
+  MemoryUsed:
+    title: Memory Used
+    type: number
+  LoadAverage1:
+    title: Load Average 1 Min
+    type: number
+  LoadAverage5:
+    title: Load Average 5 Min
+    type: number
+  LoadAverage15:
+    title: Load Average 15 Min
+    type: number
+  MemoryAvailable:
+    title: Memory Available
+    type: number
+  PercentMemoryUsed:
+    title: Percent Memory Used
+    type: integer
+  PercentMemoryAvailable:
+    title: Percent Memory Available
+    type: number
+  LastSync:
+    title: Last Sync
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_first_seen
+  LastSystemUpTimePollUtc:
+    title: Last System Up Time Poll UTC
+    type: string
+  MachineType:
+    title: Machine Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  IsServer:
+    title: Server?
+    type: boolean
+  Severity:
+    title: Severity
+    type: integer
+  UiSeverity:
+    title: UI Severity
+    type: integer
+  ChildStatus:
+    title: Child Status
+    type: integer
+  Allow64BitCounters:
+    title: Allow 64 Bit Counters?
+    type: boolean
+  AgentPort:
+    title: Agent Port
+    type: string
+  TotalMemory:
+    title: Total Memory
+    type: number
+  CMTS:
+    title: CMTS
+    type: json
+  CustomPollerLastStatisticsPoll:
+    x-samos-hidden: true
+    title: Custom Poller Last Statistics Poll
+    type: string
+  x_CustomPollerLastStatisticsPoll:
+    title: Custom Poller Last Statistics Poll
+    type: string
+  CustomPollerLastStatisticsPollSuccess:
+    title: Custom Poller Last Statistics Poll Success
+    type: string
+  SNMPVersion:
+    title: SNMP Version
+    type: integer
+  PollInterval:
+    title: Poll Interval
+    type: integer
+  EngineID:
+    title: Engine ID
+    type: integer
+  RediscoveryInterval:
+    title: Rediscovery Interval
+    type: integer
+  NextPoll:
+    title: Next Poll
+    type: string
+  NextRediscovery:
+    title: Next Rediscovery
+    type: string
+  StatCollection:
+    title: Stat Collection
+    type: integer
+  External:
+    title: External?
+    type: boolean
+  Community:
+    title: Community
+    type: string
+  RWCommunity:
+    title: RW Community
+    type: string
+  IPAddressGUID:
+    title: IP Address GUID
+    type: string
+  NodeName:
+    title: Node Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  BlockUntil:
+    title: Block Until
+    type: string
+  BufferNoMemThisHour:
+    title: Buffer No Memory This Hour
+    type: number
+  BufferNoMemToday:
+    title: Buffer No Memory Today
+    type: number
+  BufferSmMissThisHour:
+    title: Buffer Small Miss This Hour
+    type: number
+  BufferSmMissToday:
+    title: Buffer Small Miss Today
+    type: number
+  BufferMdMissThisHour:
+    title: Buffer Medium Miss This Hour
+    type: number
+  BufferMdMissToday:
+    title: Buffer Medium Miss Today
+    type: number
+  BufferBgMissThisHour:
+    title: Buffer Big Miss This Hour
+    type: number
+  BufferBgMissToday:
+    title: Buffer Big Miss Today
+    type: number
+  BufferLgMissThisHour:
+    title: Buffer Large Miss This Hour
+    type: number
+  BufferLgMissToday:
+    title: Buffer Large Miss Today
+    type: number
+  BufferHgMissThisHour:
+    title: Buffer Huge Miss This Hour
+    type: number
+  BufferHgMissToday:
+    title: Buffer Huge Miss Today
+    type: number
+  OrionIdPrefix:
+    title: Orion ID Prefix
+    type: string
+  OrionIdColumn:
+    title: Orion ID Column
+    type: string
+  SkippedPollingCycles:
+    title: Skipped Polling Cycles
+    type: integer
+  MinutesSinceLastSync:
+    title: Minutes Since Last Sync
+    type: integer
+  EntityType:
+    title: Entity Type
+    type: string
+  DetailsUrl:
+    title: Details URL
+    type: string
+  DisplayName:
+    title: Display Name
+    type: string
+  Category:
+    title: Category
+    type: integer
+  IsOrionServer:
+    title: Orion Server?
+    type: boolean
+  ModernIcon:
+    title: Modern Icon
+    type: string
+  IP:
+    title: IP Address
+    format: ip-addr
+  Image:
+    title: Image
+  UnManaged:
+    title: Un Managed?
+  IP_Address:
+    title: IP Address
+    format: ip-addr
+  UnManageFrom:
+    title: Unmanage From
+    format: date-time
+  UnManageUntil:
+    title: Unmanage Until
+    format: date-time
+  StatusIconHint:
+    title: Status Icon Hint
+  AncestorDetailsUrls:
+    title: Ancestor Details URLs
+    type: array
+    items:
+      type: string
+  AncestorDisplayNames:
+    title: Ancestor Display Names
+    type: array
+    items:
+      type: string

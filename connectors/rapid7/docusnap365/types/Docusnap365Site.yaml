@@ -1,0 +1,115 @@
+x-samos-type-name: Docusnap365Site
+x-samos-namespace: docusnap365
+title: Docusnap365 Site
+description: Represents site information in Docusnap365.
+
+x-samos-extends-types:
+  - type-name: Location
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: label
+  - name: desc
+  - name: type
+  - name: userDefined
+
+x-samos-detail:
+  - name: label
+  - name: desc
+  - name: type
+  - name: isOpen
+  - name: show
+  - name: buildingId
+  - name: floorId
+  - name: siteId
+  - name: userDefined
+  - name: search
+
+x-samos-derived-properties:
+  d_segment_ids:
+    title: Segment IDs
+    type: string
+    syntax: jmespath
+    value: '(realm == `rooms` && floorId ||
+      realm == `floors` && buildingId ||
+      realm == `buildings` && siteId || ``)'
+    x-samos-ref-types:
+      - type-name: Docusnap365Site
+        key-name: id
+    x-samos-fulfills:
+      type-name: Location
+      property-name: is_part_of_ref
+    x-samos-hidden: true
+
+properties:
+  buildingId:
+    title: Building
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365Site
+        key-name: id
+  desc:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  floorId:
+    title: Floor
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365Site
+        key-name: id
+  iconId:
+    title: Icon ID
+    type: string
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Location
+      property-name: id
+  isOpen:
+    title: Open?
+    type: boolean
+  label:
+    title: Label
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Location.name
+      correlation-type: Location
+      priority: 5
+  realm:
+    title: Realm
+    type: string
+  resourceTypeId:
+    title: Resource Type ID
+    type: string
+  search:
+    title: Search?
+    type: boolean
+  segment:
+    title: Segment
+    type: string
+  show:
+    title: Show?
+    type: boolean
+  siteId:
+    title: Site
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365Site
+        key-name: id
+  type:
+    title: Type
+    type: string
+  userDefined:
+    title: User Defined?
+    type: boolean

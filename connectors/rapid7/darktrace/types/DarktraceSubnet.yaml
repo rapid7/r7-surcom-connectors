@@ -1,0 +1,163 @@
+﻿x-samos-type-name: DarktraceSubnet
+x-samos-namespace: darktrace
+title: Darktrace Subnet
+description: A subnet from Darktrace
+
+x-samos-extends-types:
+  - type-name: Network
+    subtype-priority: 5
+
+x-samos-keys:
+  - d_id
+
+x-samos-derived-properties:
+  d_id:
+    type: string
+    title: ID
+    syntax: expression
+    value: '{sid}'
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+x-samos-table:
+  - name: label
+  - name: network
+  - name: mostRecentTraffic
+  - name: lastSeen
+
+x-samos-detail:
+  - name: label
+  - name: network
+  - name: mostRecentTraffic
+  - name: latitude
+  - name: longitude
+  - name: lastSeen
+  - name: firstSeen
+  - name: clientDevices
+  - name: serverDevices
+  - name: uniqueHostnames
+  - name: uniqueUsernames
+  - name: dhcpCount
+  - name: confidence
+
+properties:
+  sid:
+    title: SID
+    type: integer
+    x-samos-hidden: true
+
+  auto:
+    title: Auto?
+    type: boolean
+
+  dhcp:
+    title: DHCP Enabled?
+    type: boolean
+
+  firstSeen:
+    title: First Seen
+    type: integer
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  label:
+    title: Subnet Label
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  lastSeen:
+    title: Last Seen
+    type: integer
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  latitude:
+    title: Latitude
+    type: number
+
+  longitude:
+    title: Longitude
+    type: number
+
+  network:
+    title: Network CIDR
+    type: string
+    x-samos-fulfills:
+      type-name: Network
+      property-name: cidr
+    x-samos-correlation:
+      correlation-key: Network.cidr
+      correlation-type: Network
+      priority: 4
+
+  shid:
+    title: SHID
+    type: integer
+
+  uniqueHostnames:
+    title: Unique Hostnames?
+    type: boolean
+
+  uniqueUsernames:
+    title: Unique Usernames?
+    type: boolean
+
+  confidence:
+    title: Confidence Level
+    type: integer
+
+  probes:
+    title: Probes
+    type: array
+    items:
+      type: integer
+
+  lastDHCP:
+    title: Last DHCP
+    type: integer
+    format: epoch-millis
+
+  credentialTrackingCount:
+    title: Credential Tracking Count
+    type: integer
+
+  dhcpQuality:
+    title: DHCP Quality
+    type: integer
+
+  dhcpCount:
+    title: DHCP Count
+    type: integer
+
+  kerberosCount:
+    title: Kerberos Count
+    type: integer
+
+  kerberosQuality:
+    title: Kerberos Quality
+    type: integer
+
+  recentTrafficPercent:
+    title: Recent Traffic Percent
+    type: integer
+
+  clientDevices:
+    title: Number of Client Devices
+    type: integer
+
+  serverDevices:
+    title: Service Devices
+    type: integer
+
+  mostRecentTraffic:
+    title: Most Recent Traffic
+    type: integer
+    format: epoch-millis

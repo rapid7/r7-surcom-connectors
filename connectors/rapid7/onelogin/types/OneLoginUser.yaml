@@ -1,0 +1,187 @@
+x-samos-type-name: OneLoginUser
+x-samos-namespace: onelogin
+title: OneLogin User
+description: A User type from OneLogin
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_user_id # It is used for reference in other types
+  - id
+
+x-samos-table:
+  - name: d_name
+  - name: email
+  - name: core.principal:groups
+  - name: core.principal:active
+  - name: created_at
+  - name: updated_at
+  - name: last_login
+
+x-samos-detail:
+  - name: name
+  - name: firstname
+  - name: lastname
+  - name: email
+  - name: username
+  - name: distinguished_name
+  - name: phone
+  - name: core.principal:groups
+  - name: member_of
+  - name: samaccountname
+  - name: invitation_sent_at
+  - name: password_changed_at
+  - name: locked_until
+  - name: invalid_login_attempts
+  - name: core.principal:active
+  - name: created_at
+  - name: lastUpdated
+  - name: activated_at
+  - name: last_login
+
+x-samos-derived-properties:
+  d_user_id:
+    # The "id" property has an integer ID in the response
+    # so we derived it to string  type to fulfill the 'User.id' property
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  d_group:
+    # Deriving the `group_id` (type: Integer)  property to fulfills `core.principal:groups` which is of type string
+    title: Group
+    type: string
+    syntax: expression
+    value: '{group_id}'
+    x-samos-ref-types:
+      - type-name: OneLoginGroup
+        key-name: d_group_id
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups
+
+  d_name:
+    # There is possibility `username` value can be empty,
+    # so deriving the `firstname` and `lastname` property to fulfills `core.named-object:name`
+    type: string
+    title: Full Name
+    syntax: expression
+    value: '{firstname} {lastname}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_active:
+    # The "status" property has an integer ID in the response as 1 or 2
+    # Deriving the `status` property to fulfills `core.principal:active` which is of type boolean
+    title: Active?
+    type: boolean
+    value: 'status == `1`'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+properties:
+  activated_at:
+    format: date-time
+    title: Activated At
+    type: string
+  created_at:
+    format: date-time
+    title: Created At
+    type: string
+  directory_id:
+    title: Directory ID
+    type: string
+  distinguished_name:
+    title: Distinguished Name
+    type: string
+  email:
+    title: Email
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+  external_id:
+    title: External ID
+    type: string
+  firstname:
+    title: First Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+  group_id:
+    title: Group
+    type: integer
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+  invalid_login_attempts:
+    title: Invalid Login Attempts
+    type: integer
+  invitation_sent_at:
+    format: date-time
+    title: Invitation Sent At
+    type: string
+  last_login:
+    format: date-time
+    title: Last Login
+    type: string
+  lastname:
+    title: Last Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+  locked_until:
+    title: Locked Until
+    type: string
+  member_of:
+    title: Member Of
+    type: string
+  password_changed_at:
+    format: date-time
+    title: Password Changed At
+    type: string
+  phone:
+    title: Phone
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+  samaccountname:
+    title: SAM Account Name
+    type: string
+  state:
+    title: State
+    type: integer
+  status:
+    # we already have a derived property d_active
+    x-samos-hidden: true
+    title: Status
+    type: integer
+  updated_at:
+    format: date-time
+    title: Updated At
+    type: string
+  username:
+    title: Username
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: username

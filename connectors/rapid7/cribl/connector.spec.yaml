@@ -1,0 +1,53 @@
+id: cribl
+name: Cribl
+author: Rapid7
+version: 1.0.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Remove 'Beta' label
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCaked
+# version of the connector ID.
+types:
+  - CriblWorker
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Import All
+    description: Import Cribl Workers
+    return_types:
+      - CriblWorker
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: The base URL for your Cribl.Cloud instance
+    example: https://workspaceName-organizationId.cribl.cloud
+
+  client_id:
+    type: string
+    title: Client ID
+    description: The Client ID for your Cribl API Credential
+
+  client_secret:
+    type: string
+    format: password
+    title: Client Secret
+    description: The Client Secret for your Cribl API Credential
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - security_operations

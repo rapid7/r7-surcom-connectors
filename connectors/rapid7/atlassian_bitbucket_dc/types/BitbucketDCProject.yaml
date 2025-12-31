@@ -1,0 +1,87 @@
+x-samos-type-name: BitbucketDCProject
+x-samos-namespace: atlassian.bitbucket.dc
+title: Atlassian Bitbucket Data Center Project
+description: Bitbucket projects make it easier for teams to focus on a goal, product, or process by organizing their repositories.
+
+x-samos-extends-types:
+  - type-name: core.component-group
+  - type-name: core.named-object
+  - type-name: core.component
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: public
+  - name: type
+
+x-samos-detail:
+  - name: key
+  - name: name
+  - name: description
+  - name: public
+  - name: type
+  - name: links
+
+x-samos-derived-properties:
+  d_id:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: id # convert integer id to string, because `core.component:id` accept string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+properties:
+  key:
+    type: string
+    title: Key
+  id:
+    type: integer
+    title: ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  public:
+    type: boolean
+    title: Public?
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: public
+  type:
+    type: string
+    title: Type
+  links:
+    type: object
+    title: Links
+    properties:
+      self:
+        type: array
+        title: Self
+        items:
+          type: object
+          properties:
+            href:
+              type: string
+              title: Href
+              format: url
+
+x-samos-virtual:
+  members:
+    cypher-pattern: >
+      <-[:`e:core.component:is_part_of_ref`]-(:BitbucketDCRepository)
+    type-name: BitbucketDCRepository
