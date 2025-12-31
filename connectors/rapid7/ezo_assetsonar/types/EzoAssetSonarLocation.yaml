@@ -1,0 +1,190 @@
+x-samos-type-name: EzoAssetSonarLocation
+x-samos-namespace: ezo.assetsonar
+title: Ezo AssetSonar Location
+description: A location from AssetSonar
+
+x-samos-extends-types:
+  - type-name: Location
+
+x-samos-keys:
+  - d_id # For the unique identifier derived property and to fulfill core.location.id
+  - id # To use it for reference in EzoAssetSonarAssetMember type
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: status
+  - name: street1
+  - name: city
+  - name: state
+  - name: country
+  - name: zipcode
+  - name: created_at
+  - name: updated_at
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: status
+  - name: street1
+  - name: street2
+  - name: city
+  - name: state
+  - name: country
+  - name: zipcode
+  - name: d_parent_id
+  - name: latitude
+  - name: longitude
+  - name: created_at
+  - name: updated_at
+
+x-samos-derived-properties:
+  d_id:
+    # The "id" property has an integer ID in the response
+    # so we derived it to string  type to fulfill the 'core.location.id' property
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Location
+      property-name: id
+  d_latitude:
+    # latitude is coming in string format,
+    # so deriving it to number type so that it can fulfill core.location.latitude
+    type: number
+    x-samos-hidden: true
+    syntax: jmespath
+    value: lati
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: latitude
+
+  d_longitude: # longitude is coming in string format, so deriving to number type so that it can fulfill core.location.longitude
+    type: number
+    x-samos-hidden: true
+    syntax: jmespath
+    value: longi
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: longitude
+
+  d_parent_id:
+    # derived property to reference parent location id which is of integer type
+    # to fulfill core.location.is_part_of_ref which requires string type
+    type: string
+    title: Parent Location
+    syntax: jsonpath
+    value: 'parent_id'
+    x-samos-ref-types:
+      - type-name: EzoAssetSonarLocation
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: Location
+      property-name: is_part_of_ref
+
+properties:
+  city:
+    title: City
+    type: string
+    description: City Name
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: city
+  country:
+    title: Country
+    type: string
+    description: Country Name
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: country
+    x-samos-ref-types:
+      - type-name: NoeticEnumCountry
+        key-name: alpha_2_id
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  identification_number:
+    title: Identification Number
+    type: string
+  lati:
+    title: Lati
+    type: string
+  longi:
+    title: Longi
+    type: string
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  sequence_num:
+    title: Sequence Num
+    type: integer
+  state:
+    title: State
+    type: string
+    description: State Name
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: state
+  status:
+    title: Status
+    type: string
+  zipcode:
+    title: Zipcode
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: postal_code
+  id:
+    title: ID
+    type: integer
+    x-samos-immutable: true
+  secure_code:
+    title: Secure Code
+    type: string
+  comments_count:
+    title: Comments Count
+    type: integer
+  documents_count:
+    title: Documents Count
+    type: integer
+  visible_on_web_store:
+    title: Visible On Web Store?
+    type: boolean
+  hidden_on_web_store:
+    title: Hidden On Web Store?
+    type: boolean
+  manual_lat_long:
+    title: Manual Lat Long?
+    type: boolean
+  delta:
+    title: Delta?
+    type: boolean
+  parent_id:
+    x-samos-hidden: true
+    title: Parent
+    type: integer
+  street1:
+    title: Street
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: address
+  street2:
+    title: Street2
+    type: string
+  created_at:
+    format: date-time
+    title: Created At
+    type: string
+  updated_at:
+    format: date-time
+    title: Updated At
+    type: string

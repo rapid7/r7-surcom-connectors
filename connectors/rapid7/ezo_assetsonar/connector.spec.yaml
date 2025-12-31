@@ -1,0 +1,49 @@
+id: ezo.assetsonar
+name: EZO AssetSonar (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+types:
+  - EzoAssetSonarAsset
+  - EzoAssetSonarGroup
+  - EzoAssetSonarLocation
+  - EzoAssetSonarSubGroup
+  - EzoAssetSonarMember
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: EZO AssetSonar Fixed Assets and Members
+    description: Import all Items including Fixed Assets, Groups, Locations, SubGroups, and Members from EZO AssetSonar
+    return_types:
+      - EzoAssetSonarAsset
+      - EzoAssetSonarGroup
+      - EzoAssetSonarLocation
+      - EzoAssetSonarSubGroup
+      - EzoAssetSonarMember
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: API Base URL
+    description: URL for the EZO AssetSonar API
+    example: https://example.ezofficeinventory.com/
+
+  token:
+    type: string
+    title: API Access Token
+    description: Token for EZO AssetSonar API authentication.
+    format: password
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - asset_management

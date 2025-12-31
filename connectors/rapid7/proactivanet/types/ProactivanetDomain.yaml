@@ -1,0 +1,77 @@
+﻿x-samos-type-name: ProactivanetDomain
+x-samos-namespace: proactivanet
+title: Proactivanet Domain
+description: A domain in the Proactivanet CMDB.
+
+x-samos-global-zone: true
+
+$ref: https://www.proactivanet.com/api/swagger#/definitions/Models.Domain
+
+x-samos-extends-types:
+  - type-name: core.component-group
+    subtype-priority: 4
+
+x-samos-keys:
+  - Id
+
+x-samos-table:
+  - name: Name
+  - name: Type
+  - name: Description
+
+x-samos-detail:
+  - name: Name
+  - name: Type
+  - name: Description
+
+x-samos-derived-properties:
+  d_public:
+    x-samos-hidden: true
+    title: Public?
+    syntax: jmespath
+    value: 'Type == `Global`'
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: public
+
+properties:
+  Name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  Description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  Type:
+    type: string
+    title: Type
+  Id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  Links:
+    type: array
+    title: Links
+    x-samos-hidden: true
+    items:
+      type: object
+      properties:
+        Rel:
+          type: string
+          title: Rel
+        Href:
+          type: string
+          title: Href
+        Action:
+          type: string
+          title: Action

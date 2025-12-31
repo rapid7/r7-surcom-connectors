@@ -1,0 +1,131 @@
+x-samos-type-name: SecurityScorecardIp
+x-samos-namespace: securityscorecard
+title: SecurityScorecard IP Address
+description: A IP Address from SecurityScorecard
+
+x-samos-global-zone: true
+
+x-samos-extends-types:
+  - type-name: IpAddress
+
+x-samos-keys:
+  - ip
+
+x-samos-table:
+  - name: ip
+  - name: status
+  - name: detection
+  - name: issues
+  - name: findings
+  - name: scoreImpact
+  - name: country
+  - name: code
+  - name: domainsCount
+  - name: domains
+  - name: tags
+  - name: assignee
+
+x-samos-detail:
+  - name: ip
+  - name: status
+  - name: detection
+  - name: sources
+  - name: issues
+  - name: findings
+  - name: scoreImpact
+  - name: country
+  - name: domainsCount
+  - name: domains
+  - name: tags
+  - name: assignee
+
+x-samos-derived-properties:
+  # IPs in SecurityScorecard are known to be public ips
+  d_public:
+    x-samos-hidden: true
+    type: boolean
+    syntax: expression
+    value: 'true'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: public
+
+  d_id:
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: ip
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_active:
+    # Possible Values: Attributed, Claimed, Removed, Under Review (addition), Under Review (Removal)
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: 'status == `Attributed` || status == `Claimed`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  ip:
+    type: string
+    title: IP Address
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: IpAddress
+      property-name: value
+    x-samos-correlation:
+      correlation-key: IpAddress.value
+      correlation-type: IpAddress
+      priority: 4
+  status:
+    type: string
+    title: Status
+  detection:
+    type: string
+    title: Detection
+  sources:
+    type: string
+    title: Sources
+  issues:
+    type: integer
+    title: Issues
+  findings:
+    # As of this version there no findings data retrived.
+    type: integer
+    title: Findings
+  scoreImpact:
+    type: number
+    title: Impact
+  country:
+    type: string
+    title: Country
+  code:
+    type: string
+    title: Code
+    x-samos-ref-types:
+      - type-name: NoeticEnumCountry
+        key-name: alpha_2_id
+  domainsCount:
+    type: integer
+    title: Domain Count
+  domains:
+    type: array
+    title: Domains
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: SecurityScorecardDomain
+          key-name: domain
+  tags:
+    type: array
+    title: Tags
+    items:
+      type: string
+  assignee:
+    type: string
+    title: Owner

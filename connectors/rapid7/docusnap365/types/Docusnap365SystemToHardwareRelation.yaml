@@ -1,0 +1,153 @@
+x-samos-type-name: Docusnap365SystemToHardwareRelation
+x-samos-namespace: docusnap365
+title: Docusnap365 System To Hardware Relation
+description: Represents the relationship between systems and hardware in Docusnap365.
+
+x-samos-hidden: true
+
+x-samos-extends-types:
+  - type-name: core.named-object
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: label
+  - name: fromId
+  - name: toId
+  - name: fromLabel
+  - name: toLabel
+  - name: relationType
+  - name: fromSegment
+  - name: toSegment
+  - name: scope
+
+x-samos-detail:
+  - name: label
+  - name: fromId
+  - name: toId
+  - name: fromLabel
+  - name: toLabel
+  - name: relationType
+  - name: fromSegment
+  - name: toSegment
+  - name: scope
+  - name: toScope
+  - name: criticality
+  - name: edgeType
+  - name: hasEdgeConnection
+  - name: userDefined
+
+properties:
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+  criticality:
+    title: Criticality
+    type: integer
+  edgeType:
+    title: Edge Type
+    type: string
+  fromIconId:
+    format: uuid
+    title: System Icon ID
+    type: string
+  fromId:
+    title: System
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365SystemDetails
+        key-name: id
+  fromLabel:
+    title: System Name
+    type: string
+  fromResourceTypeId:
+    format: uuid
+    title: From Resource Type ID
+    type: string
+  fromScope:
+    title: System Scope
+    type: string
+  fromSegment:
+    title: From Segment
+    type: string
+  hasEdgeConnection:
+    title: Has Edge Connection?
+    type: boolean
+  iconId:
+    format: uuid
+    title: Icon ID
+    type: string
+  identifier:
+    title: Identifier
+    type: string
+  label:
+    title: Label
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  name:
+    properties:
+      iconId:
+        format: uuid
+        title: Icon ID
+        type: string
+      id:
+        title: ID
+        type: string
+      realm:
+        title: Realm
+        type: string
+      resourceTypeId:
+        format: uuid
+        title: Resource Type ID
+        type: string
+      scope:
+        title: Scope
+        type: string
+      value:
+        title: Value
+        type: string
+    title: Name
+    type: object
+  realm:
+    title: Realm
+    type: string
+  relationType:
+    title: Relation Type
+    type: string
+  resourceTypeId:
+    format: uuid
+    title: Resource Type ID
+    type: string
+  scope:
+    title: Scope
+    type: string
+  toIconId:
+    format: uuid
+    title: Hardware Icon ID
+    type: string
+  toId:
+    title: Hardware
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365Hardware
+        key-name: id
+  toLabel:
+    title: Hardware Name
+    type: string
+  toResourceTypeId:
+    format: uuid
+    title: Hardware Resource Type ID
+    type: string
+  toScope:
+    title: Hardware Scope
+    type: string
+  toSegment:
+    title: To Segment
+    type: string
+  userDefined:
+    title: User Defined?
+    type: boolean

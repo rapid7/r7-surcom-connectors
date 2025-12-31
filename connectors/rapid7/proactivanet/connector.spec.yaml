@@ -1,0 +1,74 @@
+﻿id: proactivanet
+name: Proactivanet (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+reference-schemas:
+  - url: https://www.proactivanet.com/api/swagger
+    file: refdocs/proactivanetswagger.json
+
+# One or two entries describing the changes in this version.
+# (Previous changelog is maintained by the publishing process)
+current_changes:
+  - Initial release
+
+types:
+  - ProactivanetDevice
+  - ProactivanetDBMS
+  - ProactivanetDomain
+  - ProactivanetLocation
+  - ProactivanetUser
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Proactivanet Devices, Domains, Locations, DBMS and Users
+    description: Imports all devices, DBMS, domains, locations and users from Proactivanet
+    return_types:
+      - ProactivanetDevice
+      - ProactivanetDBMS
+      - ProactivanetDomain
+      - ProactivanetLocation
+      - ProactivanetUser
+
+# Settings that will be used to configure this Connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: The URL of the Proactivanet API
+    example: https://<your-server-domain>.proactivanet.com
+
+  api_key:
+    type: string
+    title: API Key
+    description: The API key for the Proactivanet API
+    format: password
+
+  language_code:
+    type: string
+    title: Accept-Language
+    description: The language code to use for the API requests.
+    enum:
+      - es
+      - en
+      - ca
+      - eu
+      - fr
+      - de
+      - pt
+    default: es
+
+# The runtime platform for this connector.
+runtime: py311
+
+# Add any Python dependencies here that your Connector needs to run.
+# Each dependency should be pinned to a specific version.
+# python_dependencies:
+#  - "another_dependency==1.0.0"
+
+# The list of categories for this Connector in the Extension Library.
+categories:
+  - asset_management

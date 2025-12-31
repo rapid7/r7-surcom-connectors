@@ -1,0 +1,56 @@
+id: revivn
+name: Revivn (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCaked
+# version of the connector ID.
+types:
+  - RevivnAsset
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Revivn Assets
+    description: Import all asset details from Revivn.
+    return_types:
+      - RevivnAsset
+
+# Configuration settings for this connector.
+settings:
+  client_id:
+    type: string
+    title: Client ID
+    description: Client ID used to authenticate with the Revivn API.
+
+  client_secret:
+    type: string
+    title: Client Secret
+    description: Client Secret used to authenticate with the Revivn API.
+    format: password
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Add required Python dependencies here. Pin each dependency to a specific
+# version.
+# python_dependencies:
+#  - "another_dependency==1.0.0"
+
+# Categories for this connector in the Extension Library.
+categories:
+  - asset_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

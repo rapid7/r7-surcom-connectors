@@ -1,0 +1,54 @@
+x-samos-type-name: Docusnap365Platform
+x-samos-namespace: docusnap365
+title: Docusnap365 Platform
+description: Represents platform like Iaas, Paas, Saas etc in Docusnap365.
+
+x-samos-supernode: true
+x-samos-default-hide-from-graph: true
+
+x-samos-extends-types:
+  - type-name: core.named-object
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: label
+  - name: userDefined
+  - name: scope
+
+x-samos-detail:
+  - name: label
+  - name: userDefined
+  - name: scope
+  - name: segment
+
+properties:
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+  label:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  userDefined:
+    title: User Defined?
+    type: boolean
+  iconId:
+    title: Icon ID
+    type: string
+  realm:
+    title: Realm
+    type: string
+  resourceTypeId:
+    title: Resource Type ID
+    type: string
+  scope:
+    title: Scope
+    type: string
+  segment:
+    title: Segment
+    type: string

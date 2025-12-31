@@ -1,0 +1,53 @@
+x-samos-type-name: OneLoginGroup
+x-samos-namespace: onelogin
+title: OneLogin Group
+description: A Group type from OneLogin
+
+x-samos-extends-types:
+  - type-name: UserGroup
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_group_id # It is used for reference in OneLoginUser type
+  - id
+
+x-samos-table:
+  - name: name
+  - name: reference
+
+x-samos-detail:
+  - name: name
+  - name: reference
+
+x-samos-derived-properties:
+  d_group_id:
+    # The "id" property has an integer ID in the response
+    # so we derive a string to fulfill the 'UserGroup.id' property
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+
+properties:
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: UserGroup.name
+      correlation-type: UserGroup
+      priority: 3
+  reference:
+    title: Reference
+    type: string

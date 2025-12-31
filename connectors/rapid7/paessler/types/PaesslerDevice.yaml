@@ -1,0 +1,177 @@
+x-samos-type-name: PaesslerDevice
+x-samos-namespace: paessler
+title: Paessler PRTG Network Monitor Device
+description: Device for Paessler PRTG Network Monitor
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 5
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: group
+  - name: device
+  - name: host
+  - name: status
+  - name: priority
+
+x-samos-detail:
+  - name: group
+  - name: device
+  - name: host
+  - name: status
+  - name: priority
+  - name: probe
+  - name: downsens
+  - name: upsens
+  - name: downacksens
+  - name: partialdownsens
+  - name: pausedsens
+  - name: undefinedsens
+  - name: unusualsens
+  - name: warnsens
+
+x-samos-derived-properties:
+  d_id:
+    type: string
+    title: Asset ID
+    syntax: jmespath
+    value: objid # convert integer objid to string, because `core.component:id` accept string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_active:
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: status == `Up`
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  device:
+    title: Device
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  device_raw:
+    title: Device Raw
+    type: string
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+  downacksens:
+    title: Down Ack Sensor
+    type: string
+  downacksens_raw:
+    title: Down Ack Sensor Raw
+    type: integer
+    x-samos-hidden: true
+  downsens:
+    title: Down Sensor
+    type: string
+  downsens_raw:
+    title: Down Sensor Raw
+    type: integer
+    x-samos-hidden: true
+  group:
+    title: Probe Group Device
+    type: string
+  group_raw:
+    title: Group Raw
+    type: string
+    x-samos-hidden: true
+  host:
+    format: ip-addr
+    title: Host
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  host_raw:
+    format: ip-addr
+    title: Host Raw
+    type: string
+    x-samos-hidden: true
+  objid:
+    title: Object ID
+    type: integer
+  objid_raw:
+    title: Object ID Raw
+    type: integer
+    x-samos-hidden: true
+  partialdownsens:
+    title: Partial Down sensor
+    type: string
+  partialdownsens_raw:
+    title: Partial Down sensor Raw
+    type: integer
+    x-samos-hidden: true
+  pausedsens:
+    title: Paused Sensor
+    type: string
+  pausedsens_raw:
+    title: Paused Sensor Raw
+    type: integer
+    x-samos-hidden: true
+  probe:
+    title: Probe
+    type: string
+  probe_raw:
+    title: Probe Raw
+    type: string
+    x-samos-hidden: true
+  undefinedsens:
+    title: Undefined Sensor
+    type: string
+  undefinedsens_raw:
+    title: Undefined Sensor Raw
+    type: integer
+    x-samos-hidden: true
+  unusualsens:
+    title: Unusual Sensor
+    type: string
+  unusualsens_raw:
+    title: Unusual Sensor Raw
+    type: integer
+    x-samos-hidden: true
+  upsens:
+    title: Up Sensor
+    type: string
+  upsens_raw:
+    title: Up Sensor Raw
+    type: integer
+    x-samos-hidden: true
+  warnsens:
+    title: Warning Sensor
+    type: string
+  warnsens_raw:
+    title: Warning Sensor Raw
+    type: integer
+    x-samos-hidden: true
+  status:
+    title: Status
+    type: string
+  status_raw:
+    title: Status Raw
+    type: integer
+    x-samos-hidden: true
+  priority:
+    title: Priority
+    type: string
+  priority_raw:
+    title: Priority Raw
+    type: integer
+    x-samos-hidden: true

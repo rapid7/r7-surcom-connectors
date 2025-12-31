@@ -1,0 +1,157 @@
+x-samos-type-name: BitbucketDCRepository
+x-samos-namespace: atlassian.bitbucket.dc
+title: Atlassian Bitbucket Data Center Repository
+description: A Bitbucket Data Center Repository
+
+x-samos-extends-types:
+  - type-name: Repository
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: name
+  - name: project.name
+  - name: statusMessage
+  - name: public
+  - name: forkable
+  - name: archived
+
+x-samos-detail:
+  - name: key
+  - name: name
+  - name: hierarchyId
+  - name: scmId
+  - name: state
+  - name: statusMessage
+  - name: forkable
+  - name: project
+  - name: public
+  - name: archived
+  - name: links
+
+x-samos-derived-properties:
+  d_id:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: id # convert integer id to string, because `core.component:id` accept string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_active_repo:
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: 'archived == `false`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  slug:
+    type: string
+    title: Slug
+  id:
+    type: integer
+    title: ID
+    x-samos-hidden: true
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Repository.id
+      correlation-type: Repository
+      priority: 2
+  hierarchyId:
+    type: string
+    title: Hierarchy ID
+  scmId:
+    type: string
+    title: SCM ID
+  state:
+    type: string
+    title: State
+  statusMessage:
+    type: string
+    title: Status Message
+  forkable:
+    type: boolean
+    title: Forkable?
+  project:
+    type: object
+    title: Project
+    properties:
+      key:
+        type: string
+        title: Key
+      id:
+        type: integer
+        title: Project
+        x-samos-ref-types:
+          - type-name: BitbucketDCProject
+            key-name: id
+      name:
+        type: string
+        title: Project Name
+      public:
+        type: boolean
+        title: Public?
+      type:
+        type: string
+        title: Type
+      links:
+        type: object
+        title: Links
+        properties:
+          self:
+            type: array
+            title: Self
+            items:
+              type: object
+              properties:
+                href:
+                  type: string
+                  title: Href
+                  format: url
+  public:
+    type: boolean
+    title: Public?
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: public
+  archived:
+    type: boolean
+    title: Archived?
+  links:
+    type: object
+    title: Links
+    properties:
+      clone:
+        type: array
+        title: Clone
+        items:
+          type: object
+          properties:
+            href:
+              type: string
+              title: Href
+              format: url
+            name:
+              type: string
+              title: Name
+      self:
+        type: array
+        title: Self
+        items:
+          type: object
+          properties:
+            href:
+              type: string
+              title: Href
+              format: url

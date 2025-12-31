@@ -1,0 +1,92 @@
+x-samos-type-name: BeyondTrustBeyondInsightFunctionalAccount
+x-samos-namespace: beyondtrust.beyondinsight
+title: BeyondInsight Functional Account
+description: Represents an Administrative Functional Account from BeyondTrust BeyondInsight
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - d_id # unique id for core.component and referenced by other types
+
+x-samos-table:
+  - name: AccountName
+  - name: Description
+  - name: PlatformID
+  - name: DomainName
+  - name: SystemReferenceCount
+
+x-samos-detail:
+  - name: AccountName
+  - name: DisplayName
+  - name: Description
+  - name: PlatformID
+  - name: DomainName
+  - name: SystemReferenceCount
+
+x-samos-derived-properties:
+  # Derived 'id' string property to map to core.component.id which is "id" property is accepted string type
+  d_id:
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: expression
+    value: '{FunctionalAccountID}'
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  d_service_account:
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: 'true'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_service_account
+
+properties:
+  AccountName:
+    title: Account
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: User.sAMAccountName
+      correlation-type: User
+      priority: 4
+  Description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  DisplayName:
+    title: Display Name
+    type: string
+  DomainName:
+    title: Domain
+    type: string
+  ElevationCommand:
+    title: Elevation Command
+    type: string
+  FunctionalAccountID:
+    title: Functional Account
+    type: integer
+    x-samos-immutable: true
+  ObjectID:
+    title: Object ID
+    type: string
+  PlatformID:
+    title: Platform
+    type: integer
+    x-samos-ref-types:
+      - type-name: BeyondTrustBeyondInsightPlatform
+        key-name: PlatformID
+  SystemReferenceCount:
+    title: System Reference Count
+    type: integer
+  TenantID:
+    title: Tenant ID
+    type: string

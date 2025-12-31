@@ -1,0 +1,183 @@
+x-samos-type-name: AppCheckDastFinding
+x-samos-namespace: appcheck.dast
+title: AppCheck DAST Finding
+description: A finding from AppCheck DAST
+
+x-samos-extends-types:
+  - type-name: Finding
+# Not a Global Zone as there are no globally-recognized identifier such as CVES here
+x-samos-keys:
+  - vul_id
+
+x-samos-table:
+  - name: host
+  - name: plugin
+  - name: ipv4_address
+  - name: status
+  - name: url
+  - name: target
+  - name: attack
+
+x-samos-detail:
+  - name: plugin
+  - name: host
+  - name: exposure_id
+  - name: ipv4_address
+  - name: status
+  - name: url
+  - name: target
+  - name: attack
+  - name: port
+  - name: assignee
+  - name: category
+  - name: results_set
+  - name: details
+  - name: scanning_engine
+  - name: parameter
+  - name: assigned_to
+  - name: first_detected_at
+  - name: last_detected_at
+  - name: modified
+
+properties:
+  vul_id:
+    type: string
+    title: Id
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+  exposure_id:
+    type: string
+    title: Exposure
+    x-samos-ref-types:
+      - type-name: AppCheckDastExposure
+        key-name: exposure_id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability
+  status:
+    type: string
+    title: Status
+  port:
+    type: integer
+    title: Port
+  assignee:
+    type: string
+    title: Assignee
+  host:
+    type: string
+    title: Host
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to
+    x-samos-ref-types:
+      - type-name: AppCheckDastDomain
+        key-name: domain
+  results_set:
+    type: array
+    items:
+      type: string
+    title: Results Set
+  details:
+    type: object
+    properties:
+      Detection:
+        type: string
+      Technical Details:
+        type: string
+      External Sources:
+        type: string
+      CVEs:
+        type: string
+      Impact:
+        type: string
+        x-samos-fulfills:
+          type-name: core.named-object
+          property-name: description
+      Messages:
+        type: string
+        x-samos-exclude: true
+      Detection Method:
+        type: string
+        x-samos-exclude: true
+      Classifications:
+        type: string
+      Technical Summary:
+        type: string
+      Attack Request:
+        type: string
+        x-samos-exclude: true
+      Sentinel Detection Information:
+        type: string
+      Exploit Details:
+        type: string
+      Affected Applications:
+        type: string
+      Out Of Scope Notice:
+        type: string
+      Technical Analysis:
+        type: string
+      Response Difference:
+        type: string
+        x-samos-exclude: true
+      Generic SQL Injection Detection:
+        type: string
+    title: Details
+  scanning_engine:
+    type: string
+    title: Scanning Engine
+  parameter:
+    type: string
+    title: Parameter
+  ipv4_address:
+    type: string
+    title: IPv4 Address
+  url:
+    type: string
+    title: URL
+    format: url
+  plugin:
+    type: string
+    title: Plugin
+  target:
+    type: string
+    title: Target
+  attack:
+    type: string
+    title: Attack
+  last_detected_at:
+    type: string
+    title: Last Detected At
+    format: date-time
+  modified:
+    title: Modified
+    type: string
+    format: date-time
+  first_detected_at:
+    type: string
+    title: First Detected At
+    format: date-time
+  category:
+    type: string
+    title: Category
+  notes:
+    type: string
+    title: Notes
+  mss_confirmed:
+    type: boolean
+    title: Confirmed Vulnerability?
+  manually_altered:
+    type: boolean
+    title: Manually Altered?
+  suppression_days:
+    type: integer
+    title: Suppression Days
+  suppressed_at:
+    # date in which the vulnerability was suppressed (false positive or acceptable risk)
+    type: string
+    title: Suppressed At
+    format: date-time
+  assigned_to:
+    type: string
+    title: Assigned To

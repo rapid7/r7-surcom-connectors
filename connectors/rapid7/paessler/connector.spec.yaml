@@ -1,0 +1,63 @@
+id: paessler
+name: Paessler PRTG Network Monitor (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCaked
+# version of the connector ID.
+types:
+  - PaesslerDevice
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Paessler PRTG Network Monitor Devices
+    description: Import Devices from Paessler PRTG Network Monitor
+    return_types:
+      - PaesslerDevice
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: The Base URL for the Paessler PRTG Network Monitor API
+    example: https://example.my-prtg.com
+
+  username:
+    type: string
+    title: Username
+    description: Username for Paessler PRTG Network Monitor API authentication
+
+  pass_hash:
+    type: string
+    title: Passhash
+    description: Passhash for Paessler PRTG Network Monitor API authentication
+    format: password
+    example: 2107147710
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Add required Python dependencies here. Pin each dependency to a specific
+# version.
+# python_dependencies:
+#  - "another_dependency==1.0.0"
+
+# Categories for this connector in the Extension Library.
+categories:
+  - network_firewall
+
+# If true, when installing in Surface Command, the user
+# gets specific installation instructions
+show_orchestrator_ui: false

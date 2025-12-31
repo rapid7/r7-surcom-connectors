@@ -1,0 +1,193 @@
+x-samos-type-name: Docusnap365IPHost
+x-samos-namespace: docusnap365
+title: Docusnap365 IP Host
+description: Represents an IP Host in Docusnap365.
+
+x-samos-extends-types:
+  - type-name: Machine
+  - type-name: core.component
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: ipAddress
+  - name: osVendor
+  - name: osGen
+  - name: osFullname
+  - name: osFamily
+  - name: accuracy
+  - name: macAddress
+  - name: macVendor
+  - name: lastBootTime
+  - name: uptime
+  - name: organizationId
+  - name: siteId
+  - name: platformId
+
+x-samos-detail:
+  - name: name
+  - name: ipAddress
+  - name: osVendor
+  - name: osGen
+  - name: osFullname
+  - name: osFamily
+  - name: accuracy
+  - name: macAddress
+  - name: macVendor
+  - name: lastBootTime
+  - name: uptime
+  - name: organizationId
+  - name: siteId
+  - name: platformId
+  - name: userDefined
+  - name: module
+  - name: status
+  - name: scope
+
+x-samos-derived-properties:
+  d_hostname:
+    # Name property is fulfilled to core.named-object. Hence deriving to machine.hostnames here
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'name'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+properties:
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  accuracy:
+    title: OS Detection Accuracy
+    type: integer
+  degId:
+    title: Deg ID
+    type: string
+  iconId:
+    title: Icon ID
+    type: string
+  ipAddress:
+    format: ip-addr
+    title: IPv4 Address
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  jobStartedAtUtc:
+    format: date-time
+    title: Job Started
+    type: string
+  label:
+    title: Label
+    type: string
+  lastBootTime:
+    format: date-time
+    title: Last Boot Time
+    type: string
+  macAddress:
+    format: mac-addr
+    title: MAC Address
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 3
+  macVendor:
+    title: MAC Vendor
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+  module:
+    title: Module
+    type: string
+  organizationId:
+    title: Organization
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365Organization
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+  osFamily:
+    title: OS Family
+    type: string
+  osFullname:
+    title: OS Name
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+  osGen:
+    title: OS Generation
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+  osVendor:
+    title: OS Vendor
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_product
+  platformId:
+    title: Platform
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365Platform
+        key-name: id
+  realm:
+    title: Realm
+    type: string
+  resourceTypeId:
+    title: Resource Type ID
+    type: string
+  scope:
+    title: Scope
+    type: string
+  segment:
+    title: Segment
+    type: string
+  siteId:
+    title: Site
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365Site
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: location
+  status:
+    title: Status
+    type: string
+  uptime:
+    title: Up Time (h)
+    type: integer
+  userDefined:
+    title: User Defined?
+    type: boolean
+  userId:
+    title: User ID
+    type: string

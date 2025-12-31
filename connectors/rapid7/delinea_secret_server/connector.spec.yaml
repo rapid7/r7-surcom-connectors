@@ -1,0 +1,55 @@
+id: delinea.secret.server
+name: Delinea Secret Server (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+types:
+  - DelineaSecretServerUser
+  - DelineaSecretServerSecret
+  - DelineaSecretServerSecretPermission
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Delinea Secret Server Users, Secrets and Secret Permissions
+    description: Import Users, Secrets and Secret Permissions from Delinea Secret Server
+    return_types:
+      - DelineaSecretServerUser
+      - DelineaSecretServerSecret
+      - DelineaSecretServerSecretPermission
+
+settings:
+  platform_url:
+    type: string
+    title: Delinea Platform URL
+    description: The Delinea Platform URL for retrieving the access token to authenticate Delinea Secret Server API
+    example: https://example.delinea.app
+
+  url:
+    type: string
+    title: Secret Server API Endpoint Base URL
+    description: The Secret Server API Endpoint Base URL from the Delinea Platform to access Delinea Secret Server API
+    example: https://example.secretservercloud.com
+
+  client_id:
+    type: string
+    title: Service Account Username
+    description: The Username or Client ID for a platform service user for Delinea Secret Server API authentication
+
+  client_secret:
+    type: string
+    title: Service Account Password
+    description: Service Account Password or Client Secret for a platform service user for Delinea Secret Server API authentication
+    format: password
+
+runtime: py311
+
+categories:
+  - credential_management
+
+show_orchestrator_ui: false

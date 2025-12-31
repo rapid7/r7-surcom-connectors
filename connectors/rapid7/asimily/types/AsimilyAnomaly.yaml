@@ -1,0 +1,154 @@
+x-samos-type-name: AsimilyAnomaly
+x-samos-namespace: asimily
+title: Asimily Anomaly
+description: Representing an Exposure type detected by Asimily
+x-samos-global-zone: true
+
+x-samos-extends-types:
+  - type-name: Exposure
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: anomaly
+  - name: description
+  - name: criticality
+  - name: anomalyCategory
+  - name: d_mitreTactic
+  - name: d_mitreTechnique
+  - name: earliestTriggerTime
+  - name: latestTriggerTime
+
+x-samos-detail:
+  - name: anomaly
+  - name: description
+  - name: criticality
+  - name: anomalyCategory
+  - name: d_mitreTactic
+  - name: d_mitreTechnique
+  - name: destinationIpAddress
+  - name: isFixed
+  - name: fixActionTaken
+  - name: anomalyScore
+  - name: domainDeviceOrIpDevice
+  - name: criticalityScore
+  - name: earliestTriggerTime
+  - name: latestTriggerTime
+
+x-samos-derived-properties:
+  d_id:
+    # Converting CustomerAnomalyId integer to string for fulfills core.exposure:id
+    title: Anomaly
+    type: string
+    syntax: expression
+    value: '{customerAnomalyId}'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: id
+  d_exposure_type:
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: 'ExposureType: Configuration'
+    x-samos-ref-types:
+      - type-name: NoeticEnumExposureType
+        key-name: id
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: exposure_type
+
+  d_mitreTactic:
+    title: MITRE ATT&CK Tactic
+    type: array
+    syntax: jmespath
+    value: 'join(`:`, [`enterprise-attack`, mitreTactic])'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: MitreAttackTactic
+          key-name: d_name_key
+
+  d_mitreTechnique:
+    title: MITRE ATT&CK Technique
+    type: array
+    syntax: jmespath
+    value: 'join(`:`, [`enterprise-attack`, mitreTechnique])'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: MitreAttackTechnique
+          key-name: d_name_key
+
+properties:
+  anomaly:
+    type: string
+    title: Anomaly
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Exposure.id
+      correlation-type: Exposure
+      priority: 5
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  criticality:
+    type: string
+    title: Criticality
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: severity
+    x-samos-ref-types:
+      - type-name: EnumSeverity
+        key-name: id
+  earliestTriggerTime:
+    type: string
+    title: Earliest Trigger Time
+    format: date-time
+  latestTriggerTime:
+    type: string
+    title: Latest Trigger Time
+    format: date-time
+  alertId:
+    type: string
+    title: Alert ID
+  destinationIpAddress:
+    type: array
+    title: Destination IP Address
+    items:
+      type: string
+  isFixed:
+    type: integer
+    title: Is Fixed
+  fixActionTaken:
+    type: string
+    title: Fix Action Taken
+  anomalyScore:
+    type: integer
+    title: Anomaly Score
+  anomalyCategory:
+    type: string
+    title: Anomaly Category
+  mitreTactic:
+    type: string
+    title: Mitre Tactic
+  mitreTechnique:
+    type: string
+    title: Mitre Technique
+  domainDeviceOrIpDevice:
+    type: string
+    title: Domain Device Or IP Device
+  criticalityScore:
+    type: integer
+    title: Criticality Score
+  customerAnomalyId:
+    type: integer
+    title: Customer Anomaly
+    x-samos-hidden: true

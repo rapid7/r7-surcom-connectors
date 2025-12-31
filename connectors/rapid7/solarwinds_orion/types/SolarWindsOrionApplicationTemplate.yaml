@@ -1,0 +1,85 @@
+﻿x-samos-type-name: SolarWindsOrionApplicationTemplate
+x-samos-namespace: solarwinds.orion
+title: SolarWinds Orion Application Template
+description: A group of Application Template in Solarwinds Orion
+
+x-samos-extends-types:
+  - type-name: core.component-group
+    subtype-priority: 4
+
+x-samos-keys:
+  - UniqueId
+  - d_application_template_id
+
+x-samos-table:
+  - name: Name
+  - name: IsMockTemplate
+  - name: HasImportedView
+  - name: Created
+  - name: LastModified
+
+x-samos-detail:
+  - name: Name
+  - name: IsMockTemplate
+  - name: HasImportedView
+  - name: CustomApplicationType
+  - name: Created
+  - name: LastModified
+
+required:
+  - UniqueId
+
+x-samos-derived-properties:
+  d_application_template_id:
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: 'ApplicationTemplateID'
+    x-samos-hidden: true
+
+properties:
+  ApplicationTemplateID:
+    title: Application Template ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  IsMockTemplate:
+    title: Mock Template?
+    type: boolean
+  Created:
+    title: Created
+    type: string
+    format: date-time
+  LastModified:
+    title: Last Modified
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  ViewID:
+    title: ViewID
+    type: integer
+  HasImportedView:
+    title: Imported View?
+    type: boolean
+  ViewXml:
+    title: View Xml
+    type: string
+  CustomApplicationType:
+    title: Custom Application Type
+    type: string
+  UniqueId:
+    title: UniqueId
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id

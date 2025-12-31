@@ -1,0 +1,187 @@
+x-samos-type-name: EzoAssetSonarGroup
+x-samos-namespace: ezo.assetsonar
+title: Ezo AssetSonar Group
+description: An asset group from AssetSonar
+x-samos-extends-types:
+  - type-name: core.component-group
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id # derived property to string type as id is of integer type in response to fulfill core.component.id
+  - id # To use it for reference in EzoAssetSonarAsset type
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: assets_count
+  - name: active
+  - name: created_at
+  - name: updated_at
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: assets_count
+  - name: active
+  - name: asset_depreciation_mode
+  - name: documents
+  - name: depreciation_rates
+  - name: visible_on_web_store
+  - name: created_at
+  - name: updated_at
+
+x-samos-derived-properties:
+  d_id:
+    # The "id" property has an integer ID in the response
+    # so we derived it to string  type to fulfill the 'core.component.id' property
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+properties:
+  active:
+    title: Active?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+  allow_staff_to_set_checkout_duration:
+    title: Allow Staff To Set Checkout Duration?
+    type: boolean
+  asset_depreciation_mode:
+    title: Asset Depreciation Mode
+    type: string
+  assets_count:
+    title: Assets Count
+    type: integer
+  comments_count:
+    title: Comments Count
+    type: string
+  company_id:
+    title: Company ID
+    type: integer
+  created_at:
+    format: date-time
+    title: Created At
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  delta:
+    title: Delta?
+    type: boolean
+  depreciation_rates:
+    items:
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        depreciation_method_id:
+          title: Depreciation Method ID
+          type: integer
+        depreciation_method_name:
+          title: Depreciation Method Name
+          type: string
+        group_id:
+          title: Group ID
+          type: integer
+        id:
+          title: ID
+          type: integer
+        rate:
+          title: Rate
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        useful_life:
+          title: Useful Life
+          type: integer
+      type: object
+    title: Depreciation Rates
+    type: array
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  documents:
+    items:
+      type: string
+    title: Documents
+    type: array
+  documents_count:
+    title: Documents Count
+    type: integer
+  enable_service_triage:
+    title: Enable Service Triage?
+    type: boolean
+  enable_task_template_triage:
+    title: Enable Task Template Triage?
+    type: boolean
+  hidden_on_web_store:
+    title: Hidden On Web Store?
+    type: boolean
+  id:
+    title: ID
+    type: integer
+    x-samos-immutable: true
+  indefinite_triage_completion_period:
+    title: Indefinite Triage Completion Period?
+    type: boolean
+  minimum_depreciation_price:
+    title: Minimum Depreciation Price
+    type: string
+  name:
+    title: Group Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  pricing_bracket_interval:
+    title: Pricing Bracket Interval
+    type: string
+  staff_checkout_duration_days:
+    title: Staff Checkout Duration Days
+    type: integer
+  staff_checkout_duration_hours:
+    title: Staff Checkout Duration Hours
+    type: integer
+  staff_checkout_duration_mins:
+    title: Staff Checkout Duration Mins
+    type: integer
+  staff_checkout_duration_months:
+    title: Staff Checkout Duration Months
+    type: integer
+  staff_checkout_duration_weeks:
+    title: Staff Checkout Duration Weeks
+    type: integer
+  triage_completion_period:
+    title: Triage Completion Period
+    type: integer
+  triage_completion_period_basis:
+    title: Triage Completion Period Basis
+    type: string
+  updated_at:
+    format: date-time
+    title: Updated At
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  visible_on_web_store:
+    title: Visible On Web Store?
+    type: boolean
+x-samos-virtual:
+  members:
+    type-name: EzoAssetSonarAsset
+    cypher-pattern: >
+      <-[e:`e:EzoAssetSonarAsset:group_id`]- (g:EzoAssetSonarAsset)

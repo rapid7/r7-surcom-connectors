@@ -1,0 +1,402 @@
+﻿x-samos-type-name: ProactivanetDevice
+x-samos-namespace: proactivanet
+title: Proactivanet Device
+description: A device in the Proactivanet platform
+
+$ref: https://www.proactivanet.com/api/swagger#/definitions/Models.Pc
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - Id
+
+x-samos-table:
+  - name: Hostname
+  - name: Code
+  - name: ServiceTag
+  - name: ComputerModelName
+  - name: StatusName
+  - name: OsName
+  - name: ProcessorName
+  - name: MemoryInstalledMB
+  - name: HdSizeGB
+  - name: IsServer
+  - name: IsVM
+  - name: VMPlatform
+  - name: WarrantyEndDate
+  - name: clientLastAuditDate
+  - name: serverLastAuditDate
+  - name: LastEventDate
+
+x-samos-detail:
+  - name: Code
+  - name: Hostname
+  - name: ServiceTag
+  - name: ComputerModelName
+  - name: StatusName
+  - name: OsName
+  - name: ProcessorName
+  - name: IsServer
+  - name: IsVM
+  - name: VMPlatform
+  - name: LastEventDate
+  - name: FromAgent
+  - name: AgentType
+  - name: AgentVersion
+  - name: PanUsers_idResponsible
+  - name: UserNameResponsable
+  - name: FullNameResponsable
+  - name: PanUsers_idHabitual
+  - name: UserNameHabitual
+  - name: FullNameHabitual
+  - name: ManualClassification
+  - name: ManualLocation
+  - name: PanLocations_id
+  - name: PanLocationsName
+  - name: LocationTranslatedPath
+  - name: PanDomains_id
+  - name: ComputerDomainName
+  - name: PanOSFamilyName
+  - name: ProcSpeed
+  - name: ProcPhysicalCount
+  - name: ProcCoreCount
+  - name: ProcHTEnabled
+  - name: ProcCount
+  - name: PhysicalDiskCount
+  - name: ChassisType
+  - name: FirewallStatus
+  - name: FirewallEnabled
+  - name: IsVirtualizer
+  - name: IsClusterized
+  - name: AssociatedCI
+  - name: AssociatedCIName
+  - name: PadSuppliersName
+  - name: PadContractsName
+  - name: ManualWarranty
+  - name: Description
+  - name: Notes
+  - name: Label
+  - name: TradeMark
+  - name: CDCount
+  - name: RDSEnabled
+  - name: RDSPort
+  - name: FirewallProvider
+  - name: FirewallIsSystem
+  - name: UBR
+
+x-samos-derived-properties:
+  d_name:
+    # Hostname is the properties, already fulfilling the Machine:hostnames property
+    # So, derived properties for fulfilling type-name: core.named-object:name
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'Hostname'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  Code:
+    type: string
+    title: Code
+  Hostname:
+    type: string
+    title: Hostname
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+  Description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  Notes:
+    type: string
+    title: Notes
+  Label:
+    type: string
+    title: Label
+  ServiceTag:
+    type: string
+    title: Service Tag
+  FromAgent:
+    type: boolean
+    title: From Agent?
+  AgentType:
+    type: string
+    title: Agent Type
+  AgentVersion:
+    type: string
+    title: Agent Version
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+  TradeMark:
+    type: string
+    title: Trade Mark
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+  PanComputerModels_id:
+    type: string
+    title: PAN Computer Models ID
+  ComputerModelName:
+    type: string
+    title: Computer Model
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+  PanUsers_idResponsible:
+    type: string
+    title: PAN User Responsible
+    x-samos-ref-types:
+      - type-name: ProactivanetUser
+        key-name: Id
+  UserNameResponsable:
+    type: string
+    title: User Name Responsible
+  FullNameResponsable:
+    type: string
+    title: Full Name Responsible
+  PanUsers_idHabitual:
+    type: string
+    title: PAN Users Habitual
+    x-samos-ref-types:
+      - type-name: ProactivanetUser
+        key-name: Id
+  UserNameHabitual:
+    type: string
+    title: User Name Habitual
+  FullNameHabitual:
+    type: string
+    title: Full Name Habitual
+  ManualClassification:
+    type: boolean
+    title: Manual Classification?
+  ManualLocation:
+    type: boolean
+    title: Manual Location?
+  PanLocations_id:
+    type: string
+    title: PAN Locations
+    x-samos-ref-types:
+      - type-name: ProactivanetLocation
+        key-name: Id
+  PanLocationsName:
+    type: string
+    title: PAN Locations
+  LocationTranslatedPath:
+    type: string
+    title: Location Translated Path
+  PanDomains_id:
+    type: string
+    title: PAN Domains
+    x-samos-ref-types:
+      - type-name: ProactivanetDomain
+        key-name: Id
+  ComputerDomainName:
+    type: string
+    title: Computer Domain
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 4
+  PanHardwareStatus_id:
+    type: string
+    title: PAN Hardware Status ID
+  StatusName:
+    type: string
+    title: Status
+  PanOS_id:
+    x-samos-hidden: true
+    type: string
+    title: PAN OS ID
+  PanOSFamily_id:
+    x-samos-hidden: true
+    type: string
+    title: PAN OS Family ID
+  OsName:
+    type: string
+    title: OS
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+  PanOSFamilyName:
+    type: string
+    title: PAN OS Family
+  PanProcessors_id:
+    x-samos-hidden: true
+    type: string
+    title: PAN Processors ID
+  ProcessorName:
+    type: string
+    title: Processor
+  ProcSpeed:
+    type: integer
+    title: Proc Speed
+  ProcPhysicalCount:
+    type: integer
+    title: Proc Physical Count
+  ProcCoreCount:
+    type: integer
+    title: Proc Core Count
+  ProcHTEnabled:
+    type: boolean
+    title: Proc HT Enabled?
+  ProcCount:
+    type: integer
+    title: Proc Count
+  MemoryInstalledMB:
+    type: number
+    title: Memory Installed MB
+  HdSizeGB:
+    type: number
+    title: HD Size GB
+  PhysicalDiskCount:
+    type: integer
+    title: Physical Disk Count
+  CDCount:
+    type: integer
+    title: CD Count
+  IsServer:
+    type: boolean
+    title: Server?
+  ChassisType:
+    type: string
+    title: Chassis Type
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  RDSEnabled:
+    type: boolean
+    title: RDS Enabled?
+  RDSPort:
+    type: integer
+    title: RDS Port
+  FirewallStatus:
+    type: string
+    title: Firewall Status
+  FirewallProvider:
+    type: string
+    title: Firewall Provider
+  FirewallIsSystem:
+    type: boolean
+    title: Firewall Is System?
+  FirewallEnabled:
+    type: boolean
+    title: Firewall Enabled?
+  IsVM:
+    type: boolean
+    title: Vm?
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: virtual
+  IsVirtualizer:
+    type: boolean
+    title: Virtualizer?
+  VMPlatform:
+    type: string
+    title: Vm Platform
+  IsClusterized:
+    type: boolean
+    title: Clusterized?
+  ListIPs:
+    # This property is a semicolon-separated string of IPs. It is split into the `x_ips` list and hidden.
+    x-samos-hidden: true
+    type: string
+    title: List IP(s)
+  ListMACs:
+    x-samos-hidden: true
+    # This property is a semicolon-separated string of MACs. It is split into the `x_macs` list and hidden.
+    type: string
+    title: List MAC(s)
+  clientLastAuditDate:
+    type: string
+    title: Client Last Audit Date
+  serverLastAuditDate:
+    type: string
+    title: Server Last Audit Date
+  LastEventDate:
+    type: string
+    title: Last Event Date
+  AssociatedCI:
+    type: string
+    title: Associated CI
+  AssociatedCIName:
+    type: string
+    title: Associated CI Name
+  PadSuppliers_id:
+    type: string
+    x-samos-hidden: true
+    title: Pad Suppliers ID
+  PadSuppliersName:
+    type: string
+    title: Pad Suppliers Name
+  PadContracts_id:
+    x-samos-hidden: true
+    type: string
+    title: Pad Contracts ID
+  PadContractsName:
+    type: string
+    title: Pad Contracts Name
+  UBR:
+    type: integer
+    title: Ubr
+  ManualWarranty:
+    type: boolean
+    title: Manual Warranty?
+  WarrantyEndDate:
+    type: string
+    title: Warranty End Date
+    format: date-time
+  Id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  x_macs:
+    type: array
+    title: MAC Address(es)
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+  x_ips:
+    type: array
+    title: IP Address(es)
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  Links:
+    type: array
+    title: Links
+    x-samos-hidden: true
+    items:
+      type: object
+      properties:
+        Rel:
+          type: string
+          title: Rel
+        Href:
+          type: string
+          title: Href
+        Action:
+          type: string
+          title: Action

@@ -1,0 +1,115 @@
+﻿x-samos-type-name: ProactivanetDBMS
+x-samos-namespace: proactivanet
+title: Proactivanet DBMS
+description: A DBMS in the Proactivanet platform
+
+$ref: https://www.proactivanet.com/api/swagger#/definitions/Models.DBMS
+
+x-samos-extends-types:
+  - type-name: Storage
+
+x-samos-keys:
+  - Id
+  - Hostname
+
+x-samos-table:
+  - name: Name
+  - name: Code
+  - name: Hostname
+  - name: DBMSType
+  - name: ProductName
+  - name: ProductVersion
+  - name: ComputerClientLastAuditDate
+
+x-samos-detail:
+  - name: Code
+  - name: Name
+  - name: InstanceName
+  - name: Hostname
+  - name: Computer_id
+  - name: DBMSType
+  - name: ProductName
+  - name: ProductVersion
+  - name: ComputerClientLastAuditDate
+  - name: ClientLastAuditDate
+  - name: ManualDatabases
+  - name: AutomaticDetection
+  - name: ConnectToDBMS
+
+properties:
+  Code:
+    type: string
+    title: Code
+  Name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  Description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  DBMSType:
+    type: string
+    title: DBMS Type
+  InstanceName:
+    type: string
+    title: Instance Name
+  Computer_id:
+    type: string
+    title: Computer
+    x-samos-ref-types:
+      - type-name: ProactivanetDevice
+        key-name: Id
+  Hostname:
+    x-samos-immutable: true
+    type: string
+    title: Device Code
+  ManualDatabases:
+    type: boolean
+    title: Manual Databases?
+  AutomaticDetection:
+    type: boolean
+    title: Automatic Detection?
+  ComputerClientLastAuditDate:
+    type: string
+    title: Computer Client Last Audit Date
+  ConnectToDBMS:
+    type: boolean
+    title: Connect To DBMS?
+  ClientLastAuditDate:
+    type: string
+    title: Client Last Audit Date
+  ProductName:
+    type: string
+    title: Product Name
+  ProductVersion:
+    type: string
+    title: Product Version
+  Id:
+    type: string
+    title: ID
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  Links:
+    x-samos-hidden: true
+    type: array
+    title: Links
+    items:
+      type: object
+      properties:
+        Rel:
+          type: string
+          title: Rel
+        Href:
+          type: string
+          title: Href
+        Action:
+          type: string
+          title: Action

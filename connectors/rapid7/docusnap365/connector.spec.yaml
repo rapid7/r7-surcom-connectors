@@ -1,0 +1,54 @@
+id: docusnap365
+name: Docusnap365 (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+types:
+  - Docusnap365Site
+  - Docusnap365Platform
+  - Docusnap365Organization
+  - Docusnap365SystemDetails
+  - Docusnap365Hardware
+  - Docusnap365IPHost
+  - Docusnap365SystemToHardwareRelation
+  - Docusnap365Storage
+  - Docusnap365Network
+  - Docusnap365Data
+  - Docusnap365Person
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Docusnap365 Systems and Hardware
+    description: Import all systems, hardware, platform and organization along with associated segments from Docusnap365
+    return_types:
+      - Docusnap365Site
+      - Docusnap365Platform
+      - Docusnap365Organization
+      - Docusnap365SystemDetails
+      - Docusnap365Hardware
+      - Docusnap365IPHost
+      - Docusnap365SystemToHardwareRelation
+      - Docusnap365Storage
+      - Docusnap365Network
+      - Docusnap365Data
+      - Docusnap365Person
+
+settings:
+  api_key:
+    type: string
+    title: API Key
+    description: The API Key for Docusnap365 instance
+    format: password
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - asset_management

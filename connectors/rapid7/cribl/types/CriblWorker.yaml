@@ -1,0 +1,428 @@
+x-samos-type-name: CriblWorker
+x-samos-namespace: cribl.app
+
+title: Cribl Device
+description: A host with a Cribl Worker installed.
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: info.hostname
+  - name: group
+  - name: status
+
+  - name: lastMsgTime
+  - name: deployable
+  - name: firstMsgTime
+  - name: nodeUpgradeStatus
+  - name: lastMetrics
+  - name: disconnected
+
+x-samos-detail:
+  - name: info.hostname
+  - name: status
+  - name: group
+  - name: lastMsgTime
+  - name: firstMsgTime
+  - name: deployable
+  - name: disconnected
+  - name: nodeUpgradeStatus
+  - name: info
+
+x-samos-derived-properties:
+  d_hostnames:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: info.hostname
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+  d_lastSeen:
+    type: integer
+    title: Last Heartbeat Received
+    format: epoch-millis
+    x-samos-hidden: true
+    syntax: jsonpath
+    value: '$.lastMsgTime'
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+  d_ips:
+    x-samos-hidden: true
+    type: string
+    format: ip-addr
+    syntax: jmespath
+    value: 'os.addresses || []'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  d_operating_system:
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: "[os.id, os.version][] | [? @ != null] | join(' ', @)"
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+properties:
+  id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  status:
+    type: string
+    title: Status
+  group:
+    type: string
+    title: Group
+  info:
+    type: object
+    title: Info
+    properties:
+      hostname:
+        type: string
+        title: Hostname
+        x-samos-fulfills:
+          type-name: core.named-object
+          property-name: name
+        x-samos-correlation:
+          correlation-key: Machine.unqualified-hostname
+          correlation-type: Machine
+          priority: 2
+      platform:
+        type: string
+        title: OS Platform
+      architecture:
+        type: string
+        title: OS Architecture
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_architecture
+      release:
+        type: string
+        title: OS Release
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_version
+      cpus:
+        type: integer
+        title: CPUs
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: cpus
+      totalmem:
+        type: integer
+        title: Total Memory
+      node:
+        type: string
+        title: Node
+      env:
+        type: object
+        title: Environment Variables
+        properties:
+          CRIBL_CONF_DIR:
+            type: string
+            title: Config Directory
+          CRIBL_EDGE_FS_ROOT:
+            type: string
+            title: Edge FS Root
+          CRIBL_HOME:
+            type: string
+            title: Home Directory
+          CRIBL_INSTANCE_HOME:
+            type: string
+            title: Instance Home
+          CRIBL_INTERACTIVE:
+            type: string
+            title: Interactive Mode
+          CRIBL_ROLE:
+            type: string
+            title: Role
+          CRIBL_STATE_DIR:
+            type: string
+            title: State Directory
+          CRIBL_VOLUME_DIR:
+            type: string
+            title: Volume Directory
+          CRIBL_LOGGER_NOCONSOLE:
+            type: string
+            title: Logger No Console
+      cribl:
+        type: object
+        title: Cribl Details
+        properties:
+          config:
+            type: object
+            title: Configuration
+            properties:
+              policyRev:
+                type: string
+                title: Policy Revision
+              featuresRev:
+                type: string
+                title: Features Revision
+              hbPeriodSeconds:
+                type: integer
+                title: Heartbeat Period (Seconds)
+              version:
+                type: string
+                title: Version
+              logStreamEnv:
+                type: string
+                title: Log Stream Environment
+          pid:
+            type: integer
+            title: Process ID
+          startTime:
+            type: integer
+            title: Start Time
+            format: epoch-millis
+          guid:
+            type: string
+            title: GUID
+          master:
+            type: object
+            title: Master Details
+            properties:
+              host:
+                type: string
+                title: Host
+              port:
+                type: integer
+                title: Port
+              tls:
+                type: boolean
+                title: TLS Enabled?
+              servername:
+                type: string
+                title: Server Name
+          distMode:
+            type: string
+            title: Distribution Mode
+          group:
+            type: string
+            title: Group
+          disableSNIRouting:
+            type: boolean
+            title: Disable SNI Routing?
+          socksEnabled:
+            type: boolean
+            title: SOCKS Enabled?
+          version:
+            type: string
+            title: Cribl Version
+            x-samos-fulfills:
+              type-name: core.managed.endpoint
+              property-name: agent_version
+          lookupVersions:
+            type: object
+            title: Lookup Versions
+          tags:
+            type: array
+            title: Tags
+            items:
+              type: string
+      isSaasWorker:
+        type: boolean
+        title: SaaS Worker?
+      aws:
+        type: object
+        title: AWS Details
+        properties:
+          region:
+            type: string
+            title: Region
+          zone:
+            type: string
+            title: Availability Zone
+          type:
+            type: string
+            title: Instance Type
+      os:
+        type: object
+        title: Operating System
+        properties:
+          id:
+            type: string
+            title: OS ID
+            x-samos-fulfills:
+              type-name: Machine
+              property-name: os_product
+          addresses:
+            type: array
+            title: IP Addresses
+            items:
+              type: string
+          version:
+            type: string
+            title: OS Version
+      conn_ip:
+        type: string
+        title: Connection IP
+      totalDiskSpace:
+        type: integer
+        title: Total Disk Space
+      freeDiskSpace:
+        type: integer
+        title: Free Disk Space
+      localTime:
+        type: integer
+        title: Local Time
+        format: epoch
+  workerProcesses:
+    type: integer
+    title: Worker Processes
+  lastMsgTime:
+    type: integer
+    title: Last Message Time
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_logs_seen
+  deployable:
+    type: boolean
+    title: Deployable?
+    description: Whether the Node can be deployed
+  firstMsgTime:
+    type: integer
+    title: First Message Time
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  nodeUpgradeStatus:
+    type: object
+    title: Node Upgrade Status
+    properties:
+      timestamp:
+        type: integer
+        title: Timestamp
+        format: epoch-millis
+      state:
+        type: integer
+        title: State Code
+  lastMetrics:
+    type: object
+    title: Last Metrics
+    properties:
+      edge.dropped_events:
+        type: integer
+        title: Edge Dropped Events
+      route.in_bytes:input:windows_metrics:in_windows_metrics:
+        type: integer
+        title: Win Metrics Route In Bytes
+      route.in_events:input:windows_metrics:in_windows_metrics:
+        type: integer
+        title: Win Metrics Route In Events
+      health.inputs:input:system_metrics:in_system_metrics:
+        type: integer
+        title: System Metrics Input Health
+      health.inputs:
+        type: integer
+        title: Total Input Health
+      health.inputs:input:system_state:in_system_state:
+        type: integer
+        title: System State Input Health
+      health.inputs:input:windows_metrics:in_windows_metrics:
+        type: integer
+        title: Windows Metrics Input Health
+      health.inputs:input:win_event_logs:in_win_event_logs:
+        type: integer
+        title: Windows Event Logs Input Health
+      health.outputs:output:devnull:devnull:
+        type: integer
+        title: DevNull Output Health
+      health.outputs:
+        type: integer
+        title: Total Output Health
+      health.outputs:output:exabeam:IdeagenExabeam:
+        type: integer
+        title: Exabeam Output Health
+      total.in_events:
+        type: integer
+        title: Total In Events
+      total.out_events:
+        type: integer
+        title: Total Out Events
+      total.in_bytes:
+        type: integer
+        title: Total In Bytes
+      total.out_bytes:
+        type: integer
+        title: Total Out Bytes
+      total.in_events:input:windows_metrics:in_windows_metrics:
+        type: integer
+        title: Total Win Metrics In Events
+      total.in_bytes:input:windows_metrics:in_windows_metrics:
+        type: integer
+        title: Total Win Metrics In Bytes
+      total.out_events:output:devnull:devnull:
+        type: integer
+        title: Total DevNull Out Events
+      total.out_bytes:output:devnull:devnull:
+        type: integer
+        title: Total DevNull Out Bytes
+      total.dropped_events:
+        type: integer
+        title: Total Dropped Events
+      total.in_events:input:win_event_logs:in_win_event_logs:
+        type: integer
+        title: Total Win Event Logs In Events
+      total.in_bytes:input:win_event_logs:in_win_event_logs:
+        type: integer
+        title: Total Win Event Logs In Bytes
+      total.dropped_events:output:null:
+        type: integer
+        title: Total Null Output Dropped Events
+      total.out_events:output:exabeam:IdeagenExabeam:
+        type: integer
+        title: Total Exabeam Out Events
+      total.out_bytes:output:exabeam:IdeagenExabeam:
+        type: integer
+        title: Total Exabeam Out Bytes
+      health.outputs:output:cribl_http:Windows_Exabeam_Stream:
+        type: integer
+        title: Cribl HTTP Output Health
+      total.in_events:input:system_state:in_system_state:
+        type: integer
+        title: Total System State In Events
+      total.in_bytes:input:system_state:in_system_state:
+        type: integer
+        title: Total System State In Bytes
+      total.in_bytes:input:file:in_file_varlog:
+        type: integer
+        title: Total /var/log File In Bytes
+      total.in_events:input:file:in_file_varlog:
+        type: integer
+        title: Total /var/log File In Events
+      total.in_bytes:input:file:in_file_auto:
+        type: integer
+        title: Total Auto File In Bytes
+      total.in_events:input:file:in_file_auto:
+        type: integer
+        title: Total Auto File In Events
+      total.in_bytes:input:system_metrics:in_system_metrics:
+        type: integer
+        title: Total System Metrics In Bytes
+      total.in_events:input:system_metrics:in_system_metrics:
+        type: integer
+        title: Total System Metrics In Events
+      health.inputs:input:file:in_file_auto:
+        type: integer
+        title: Auto File Input Health
+      health.inputs:input:file:in_file_varlog:
+        type: integer
+        title: /var/log File Input Health
+  disconnected:
+    type: boolean
+    title: Disconnected?
+    description: Whether the Node is connected to the Leader

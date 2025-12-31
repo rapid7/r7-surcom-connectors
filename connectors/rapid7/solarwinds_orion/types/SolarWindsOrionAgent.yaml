@@ -1,0 +1,243 @@
+﻿x-samos-type-name: SolarWindsOrionAgent
+x-samos-namespace: solarwinds.orion
+title: SolarWinds Orion Agent
+description: Agent details from SolarWinds Orion
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+$ref: https://solarwinds.github.io/OrionSDK/2024.4#/definitions/Orion.AgentManagement.Agent
+
+x-samos-keys:
+  - AgentGuid
+
+x-samos-table:
+  - name: Name
+  - name: Hostname
+  - name: IP
+  - name: IsActiveAgent
+  - name: AgentVersion
+  - name: OSVersion
+  - name: OSLabel
+  - name: RegisteredOn
+
+x-samos-detail:
+  - name: Name
+  - name: Hostname
+  - name: IP
+  - name: ConnectionStatus
+  - name: AgentStatus
+  - name: IsActiveAgent
+  - name: AgentVersion
+  - name: OSVersion
+  - name: OSLabel
+  - name: RegisteredOn
+  - name: ResponseTime
+  - name: NodeId
+  - name: DNSName
+  - name: ConnectionStatusMessage
+  - name: ConnectionStatusTimestamp
+  - name: AgentStatusMessage
+  - name: AgentStatusTimestamp
+  - name: Mode
+  - name: AutoUpdateEnabled
+  - name: OrionIdColumn
+  - name: PassiveAgentHostname
+  - name: PassiveAgentPort
+  - name: Is64Windows
+  - name: CPUArch
+  - name: OSArch
+  - name: OSType
+  - name: OSDistro
+  - name: Type
+  - name: RuntimeOSDistro
+  - name: RuntimeOSVersion
+  - name: RuntimeOSLabel
+  - name: NetFrameworkRelease
+
+required:
+  - AgentGuid
+
+x-samos-derived-properties:
+  d_fqdn:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'Hostname && contains(Hostname, `.`) && Hostname || DNSName && contains(DNSName, `.`) && DNSName || `null`'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+  d_unqualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'Hostname && !contains(Hostname, `.`) && Hostname || DNSName && !contains(DNSName, `.`) && DNSName || `null`'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+properties:
+  AgentId:
+    x-samos-hidden: true
+    title: Agent ID
+    type: integer
+  AgentGuid:
+    title: Agent GUID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  NodeId:
+    title: Node
+    type: integer
+    x-samos-ref-types:
+      - type-name: SolarWindsOrionNode
+        key-name: NodeID
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  Hostname:
+    title: Hostname
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+  DNSName:
+    title: DNS Name
+    type: string
+  IP:
+    title: IP Address
+    type: string
+    format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  OSVersion:
+    title: OS Version
+    type: string
+  PollingEngineId:
+    title: Polling Engine ID
+    type: integer
+  ConnectionStatus:
+    title: Connection Status
+    type: integer
+  ConnectionStatusMessage:
+    title: Connection Status Message
+    type: string
+  ConnectionStatusTimestamp:
+    title: Connection Status Timestamp
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_first_seen
+  AgentStatus:
+    title: Agent Status
+    type: integer
+  AgentStatusMessage:
+    title: Agent Status Message
+    type: string
+  AgentStatusTimestamp:
+    title: Agent Status Timestamp
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_scanned
+  IsActiveAgent:
+    title: Active Agent?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+  Mode:
+    title: Mode
+    type: integer
+  AgentVersion:
+    title: Agent Version
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+  AutoUpdateEnabled:
+    title: Auto Update Enabled?
+    type: boolean
+  OrionIdColumn:
+    title: Orion ID Column
+    type: string
+  PassiveAgentHostname:
+    title: Passive Agent Hostname
+    type: string
+  PassiveAgentPort:
+    title: Passive Agent Port
+    type: string
+  ProxyId:
+    title: Proxy ID
+    type: integer
+  RegisteredOn:
+    title: Registered On
+    type: string
+    format: date-time
+  SID:
+    title: SID
+    type: string
+    x-samos-correlation:
+      correlation-key: Machine.SID
+      correlation-type: Machine
+      priority: 3
+  Is64Windows:
+    title: 64bit Windows?
+    type: boolean
+  CPUArch:
+    title: CPU Architecture
+    type: string
+  OSArch:
+    title: OS Architecture
+    type: string
+  OSType:
+    title: OS Type
+    type: string
+  OSDistro:
+    title: OS Distribution
+    type: string
+  ResponseTime:
+    title: Response Time
+    type: integer
+  Type:
+    title: Type
+    type: integer
+  RuntimeOSDistro:
+    title: Runtime OS Distribution
+    type: string
+  RuntimeOSVersion:
+    title: Runtime OS Version
+    type: string
+  RuntimeOSLabel:
+    title: Runtime OS Label
+    type: string
+  OSLabel:
+    title: OS
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+  NetFrameworkRelease:
+    title: .NET Framework Release
+    type: string
+  Description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  DisplayName:
+    title: Display Name
+    type: string

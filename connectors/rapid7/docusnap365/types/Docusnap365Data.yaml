@@ -1,0 +1,136 @@
+x-samos-type-name: Docusnap365Data
+x-samos-namespace: docusnap365
+title: Docusnap365 Data
+description: Represents data information in Docusnap365.
+
+x-samos-extends-types:
+  - type-name: Storage
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: scope
+  - name: description
+  - name: organizationId
+  - name: siteId
+  - name: lastInventoryTimeUtc
+  - name: lastUserChangeTimeUtc
+
+x-samos-detail:
+  - name: name
+  - name: scope
+  - name: description
+  - name: firstInventoryTimeUtc
+  - name: lastInventoryTimeUtc
+  - name: lastUserChangeTimeUtc
+  - name: organizationId
+  - name: siteId
+  - name: module
+  - name: parent
+  - name: platformId
+  - name: userDefined
+  - name: status
+  - name: realm
+  - name: jobStartedAtUtc
+
+properties:
+  description:
+    title: Fully Qualified Instance Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  firstInventoryTimeUtc:
+    format: date-time
+    title: First Inventory
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  iconId:
+    title: Icon ID
+    type: string
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  jobStartedAtUtc:
+    format: date-time
+    title: Job Started
+    type: string
+  label:
+    title: Label
+    type: string
+  lastInventoryTimeUtc:
+    format: date-time
+    title: Last Inventory
+    type: string
+  lastUserChangeTimeUtc:
+    format: date-time
+    title: Last Manual Change
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  module:
+    title: Module
+    type: string
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  organizationId:
+    title: Organization
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365Organization
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+  parent:
+    title: Parent
+    type: string
+  platformId:
+    title: Platform
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365Platform
+        key-name: id
+  realm:
+    title: Realm
+    type: string
+  resourceTypeId:
+    title: Resource Type ID
+    type: string
+  scope:
+    title: Type
+    type: string
+  segment:
+    title: Segment
+    type: string
+  siteId:
+    title: Site
+    type: string
+    x-samos-ref-types:
+      - type-name: Docusnap365Site
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: location
+  status:
+    title: Status
+    type: string
+  userDefined:
+    title: User Defined?
+    type: boolean
+  userId:
+    title: User ID
+    type: string

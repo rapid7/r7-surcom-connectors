@@ -1,0 +1,55 @@
+id: onelogin
+name: OneLogin (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# version of the connector ID.
+types:
+  - OneLoginUser
+  - OneLoginGroup
+  - OneLoginRole
+  - OneLoginApp
+
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: OneLogin User, Groups, Roles and Apps
+    description: Import all User, Groups, Roles and Apps from OneLogin
+    return_types:
+      - OneLoginUser
+      - OneLoginGroup
+      - OneLoginRole
+      - OneLoginApp
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: Base URL for the OneLogin API
+    example: https://onelogin.com
+
+  client_id:
+    type: string
+    title: Client ID
+    description: Client ID for OneLogin API
+
+  client_secret:
+    type: string
+    title: Client Secret
+    description: Client Secret for OneLogin API
+    format: password
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - iam

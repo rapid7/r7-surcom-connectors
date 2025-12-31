@@ -1,0 +1,104 @@
+x-samos-type-name: AsimilyAnomalyFinding
+x-samos-namespace: asimily
+title: Asimily Anomaly Finding
+description: Representing a Finding in exposure identified by Asimily
+
+x-samos-extends-types:
+  - type-name: Finding
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: category
+  - name: device_id
+  - name: os
+  - name: x_status
+  - name: criticality
+  - name: first_seen
+  - name: last_seen
+
+x-samos-detail:
+  - name: category
+  - name: device_id
+  - name: os
+  - name: x_status
+  - name: criticality
+  - name: first_seen
+  - name: last_seen
+  - name: fixed_date
+  - name: alert_id
+  - name: anomaly_id
+  - name: fixAction_taken
+
+x-samos-derived-properties:
+  d_id:
+    # Converting NodeID integer to string for fulfills core.component:id
+    title: Finding ID
+    type: string
+    syntax: expression
+    value: '{anomaly_id}_{device_id}'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+
+properties:
+  anomaly_id:
+    type: string
+    title: Anomaly
+    x-samos-ref-types:
+      - type-name: AsimilyAnomaly
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability
+  device_id:
+    type: string
+    title: Device
+    x-samos-ref-types:
+      - type-name: AsimilyDevice
+        key-name: d_device_id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to
+  first_seen:
+    type: string
+    title: First Seen
+    format: date-time
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: first_seen
+  last_seen:
+    type: string
+    title: Last Seen
+    format: date-time
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: last_seen
+  fixed_date:
+    type: string
+    title: Fixed Date
+    format: date-time
+  alert_id:
+    type: string
+    title: Alert ID
+  fix_action_taken:
+    type: string
+    title: Fix Action Taken
+  x_status:
+    type: string
+    title: Status
+  category:
+    type: string
+    title: Anomaly Category
+  criticality:
+    type: string
+    title: Criticality
+  os:
+    type: string
+    title: OS
+  domainDeviceOrIpDevice:
+    type: string
+    title: Domain Device Or IP Device

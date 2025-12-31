@@ -1,0 +1,68 @@
+id: atlassian.bitbucket.dc
+name: Atlassian Bitbucket Data Center (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCaked
+types:
+  - BitbucketDCProject
+  - BitbucketDCRepository
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Atlassian Bitbucket Data Center Projects/Repos
+    description: Imports all Projects and Repositories from Atlassian Bitbucket Data Center
+    return_types:
+      - BitbucketDCProject
+      - BitbucketDCRepository
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: URL and Port for your local instance of Atlassian Bitbucket Data Center
+    example: https://<bitbucket-instance-url:port>
+
+  username:
+    type: string
+    title: Username
+    description: Username of the user the Access Token is associated with
+    example: admin
+
+  personal_access_token:
+    type: string
+    title: Personal Access Token
+    description: Personal Access Token for this user
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If this is enabled, verify the server's identity
+    default: true
+
+  skip_archived_repo:
+    type: boolean
+    title: Skip Archived Repositories?
+    description: When enabled, this option skips archived repositories during import
+    default: false
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - application_development
+
+show_orchestrator_ui: true

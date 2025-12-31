@@ -1,0 +1,67 @@
+id: securityscorecard
+name: SecurityScorecard
+author: Rapid7
+version: 1.0.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Remove 'Beta' label
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCaked
+# version of the connector ID.
+types:
+  - SecurityScorecardDomain
+  - SecurityScorecardIp
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: SecurityScorecard Domains and IP Addresses
+    description: Import all Domains and IP Addresses from SecurityScorecard
+    return_types:
+      - SecurityScorecardDomain
+      - SecurityScorecardIp
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: Base URL for SecurityScorecard API
+    example: https://api.securityscorecard.io/
+
+  domain:
+    type: string
+    title: Domain
+    description: The Company Domain name that the SecurityScorecard report is being generated for
+    example: rapid7.com
+
+  api_key:
+    type: string
+    title: API Key
+    description: API Key used to authenticate with SecurityScorecard
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Add required Python dependencies here. Pin each dependency to a specific
+# version.
+# python_dependencies:
+#  - "another_dependency==1.0.0"
+
+# Categories for this connector in the Extension Library.
+categories:
+  - external_attack_surface
