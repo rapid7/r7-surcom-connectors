@@ -1,0 +1,176 @@
+x-samos-type-name: GLPIUser
+x-samos-namespace: glpi
+title: GLPI User
+description: Representation of a User in GLPI.
+
+x-samos-extends-types:
+  - type-name: User
+
+$ref: https://example.in1.glpi-network.cloud/api.php#/components/schemas/User
+
+x-samos-keys:
+  - id # For the unique identifier of the user type
+  - x_id # For the reference mapping to other types
+
+required:
+  - id
+
+x-samos-table:
+  - name: username
+  - name: firstname
+  - name: d_email
+  - name: phone
+  - name: is_active
+  - name: is_deleted
+  - name: date_password_change
+  - name: last_login
+
+x-samos-detail:
+  - name: username
+  - name: firstname
+  - name: phone
+  - name: phone2
+  - name: mobile
+  - name: comment
+  - name: is_active
+  - name: is_deleted
+  - name: picture
+  - name: date_password_change
+  - name: authtype
+  - name: emails
+  - name: location
+  - name: default_profile
+  - name: default_entity
+  - name: last_login
+
+x-samos-derived-properties:
+  # Derived property to fulfill core.named-object.name,
+  # UserName property is used for user:username mapping in core.user
+  d_username:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: username
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  # Emails array, so we can not fulfill directly User:email,
+  # Therefore we create a derived property to extract emails for User:email mapping
+  d_email:
+    type: string
+    title: Email
+    syntax: jmespath
+    value: 'emails[*].email'
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+
+properties:
+  authtype:
+    title: Auth Type
+  comment:
+    title: Comment
+    type: string
+  date_password_change:
+    title: Date Password Change
+    type: string
+  default_entity:
+    properties:
+      id:
+        title: ID
+        type: integer
+      name:
+        title: Name
+        type: string
+    title: Default Entity
+    type: object
+  default_profile:
+    title: Default Profile
+    type: object
+  emails:
+    items:
+      properties:
+        email:
+          title: Email
+          type: string
+        id:
+          title: ID
+          type: integer
+        is_default:
+          title: Default?
+          type: integer
+        is_dynamic:
+          title: Dynamic?
+          type: integer
+      type: object
+    title: Emails
+    type: array
+  firstname:
+    title: Firstname
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+  id:
+    title: ID
+    type: integer
+    x-samos-immutable: true
+  is_active:
+    title: Active?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+  is_deleted:
+    title: Deleted?
+    type: boolean
+  last_login:
+    format: date-time
+    title: Last Login
+    type: string
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+  location:
+    title: Location
+    type: object
+  mobile:
+    title: Mobile
+    type: string
+  phone:
+    title: Primary Phone
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+  phone2:
+    title: Secondary Phone
+    type: string
+  picture:
+    title: Picture
+    type: string
+  realname:
+    title: Realname
+    type: string
+  username:
+    title: Username
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+  x_id:
+    # External ID mapped to User.id.
+    # In the computer type,
+    # this differentiates the external ID from the numeric group ID to avoid conflicts reference.
+    title: External ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id

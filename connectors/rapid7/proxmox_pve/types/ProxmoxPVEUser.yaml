@@ -1,0 +1,126 @@
+x-samos-type-name: ProxmoxPVEUser
+x-samos-namespace: proxmox.pve
+title: Proxmox PVE User
+description: Represents a user in Proxmox Virtual Environment (PVE).
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - userid
+
+x-samos-table:
+  - name: userid
+  - name: realm-type
+  - name: active
+  - name: groups
+  - name: comment
+  - name: expire
+
+x-samos-detail:
+  - name: userid
+  - name: realm-type
+  - name: active
+  - name: expire
+  - name: first_name
+  - name: last_name
+  - name: groups
+  - name: comment
+  - name: email
+  - name: keys
+  - name: tokens
+
+x-samos-derived-properties:
+  d_active:
+    # The "enable" property indicates whether the user account is enabled
+    title: Active?
+    type: boolean
+    value: 'enable == `1`'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+  d_username:
+    # The "userid" property represents the username of the user
+    title: Username
+    type: string
+    value: 'userid'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+  d_full_name:
+    # Combining first name and last name to create full name
+    title: Full Name
+    type: string
+    syntax: jmespath
+    value: "join(' ', [firstname, lastname])"
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  comment:
+    title: Comment
+    type: string
+  email:
+    title: Email
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 5
+  enable:
+    title: Enabled
+    type: integer
+    x-samos-hidden: true
+  expire:
+    title: Expire
+    type: integer
+    format: epoch
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: end_date
+  firstname:
+    title: First Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+  groups:
+    title: Groups
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: ProxmoxPVEGroup
+          key-name: groupid
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups
+  keys:
+    title: Keys
+    type: string
+  lastname:
+    title: Last Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+  realm-type:
+    title: Realm
+    type: string
+  tokens:
+    title: Tokens
+    type: object
+  userid:
+    title: User ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id

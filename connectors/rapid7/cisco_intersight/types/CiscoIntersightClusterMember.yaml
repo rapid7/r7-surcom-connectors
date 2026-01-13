@@ -1,0 +1,450 @@
+x-samos-type-name: CiscoIntersightClusterMember
+x-samos-namespace: cisco.intersight
+title: Cisco Intersight Cluster Member
+description: Registered Intersight cluster member
+
+x-samos-extends-types:
+  - type-name: core.named-object
+  - type-name: core.component
+    subtype-priority: 3
+
+x-samos-keys:
+  - Moid
+
+x-samos-table:
+  - name: d_name
+  - name: ConnectedHost
+  - name: ConnectionStatus
+  - name: ConnectorVersion
+  - name: AppPartitionNumber
+  - name: Leadership
+  - name: CreateTime
+  - name: ModTime
+
+x-samos-detail:
+  - name: ConnectedHost
+  - name: ConnectionStatus
+  - name: ConnectorVersion
+  - name: AppPartitionNumber
+  - name: Leadership
+  - name: CreateTime
+  - name: ModTime
+  - name: d_name
+  - name: ApiVersion
+  - name: ClassId
+  - name: MemberIdentity
+  - name: DeviceExternalIpAddress
+  - name: ConnectionFlapStatus
+  - name: ConnectionStatusLastChangeTime
+  - name: ConnectionReason
+  - name: LockedLeader
+  - name: ProxyApp
+  - name: ParentClusterMemberIdentity
+  - name: PermissionResources
+  - name: x_tags
+  - name: Sudi
+  - name: Owners
+  - name: ObjectType
+
+x-samos-derived-properties:
+  d_name:
+    # No Name field present so derived the name
+    title: Name
+    type: string
+    syntax: expression
+    value: '{ConnectedHost}_{AppPartitionNumber}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_active:
+    # To fulfill active? field with a boolean value
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: 'ConnectionStatus == `Connected`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  AccountMoid:
+    title: Account MOID
+    type: string
+  Ancestors:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Ancestors
+    type: array
+  ApiVersion:
+    title: API Version
+    type: integer
+  AppPartitionNumber:
+    title: App Partition Number
+    type: integer
+  ClassId:
+    title: Class ID
+    type: string
+  ConnectedHost:
+    title: Connected Host
+    type: string
+  ConnectionFlapStatus:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      FlapAlertTime:
+        format: date-time
+        title: Flap Alert Time
+        type: string
+      FlapCount:
+        title: Flap Count
+        type: integer
+      FlapDetected:
+        title: Flap Detected?
+        type: boolean
+      ObjectType:
+        title: Object Type
+        type: string
+      WindowSize:
+        title: Window Size
+        type: string
+    title: Connection Flap Status
+    type: object
+  ConnectionId:
+    title: Connection ID
+    type: string
+  ConnectionReason:
+    title: Connection Reason
+    type: string
+  ConnectionStatus:
+    title: Connection Status
+    type: string
+  ConnectionStatusLastChangeTime:
+    format: date-time
+    title: Connection Status Last Change Time
+    type: string
+  ConnectorVersion:
+    title: Connector Version
+    type: string
+  CreateTime:
+    format: date-time
+    title: Create Time
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  Device:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Device
+    type: object
+  DeviceExternalIpAddress:
+    format: ip-addr
+    title: Device External Ip Address
+    type: string
+  DomainGroupMoid:
+    title: Domain Group MOID
+    type: string
+  Leadership:
+    title: Leadership
+    type: string
+  LockedLeader:
+    title: Locked Leader?
+    type: boolean
+  MemberIdentity:
+    title: Member Identity
+    type: string
+  ModTime:
+    format: date-time
+    title: Modified Time
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  Moid:
+    title: MOID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  ObjectType:
+    title: Object Type
+    type: string
+  Owners:
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CiscoIntersightAccount
+          key-name: Moid
+    title: Owners
+    type: array
+  Parent:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Parent
+    type: object
+  ParentClusterMemberIdentity:
+    title: Parent Cluster Member Identity
+    type: string
+  PermissionResources:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+          x-samos-ref-types:
+            - type-name: CiscoIntersightOrganization
+              key-name: Moid
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Permission Resources
+    type: array
+  ProxyApp:
+    title: Proxy App
+    type: string
+  SharedScope:
+    title: Shared Scope
+    type: string
+  Sudi:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Jti:
+        title: JTI
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      Pid:
+        title: PID
+        type: string
+      SerialNumber:
+        title: Serial Number
+        type: string
+      Signature:
+        title: Signature
+        type: string
+      Status:
+        title: Status
+        type: string
+      StatusDetails:
+        title: Status Details
+        type: string
+      SudiCertificate:
+        properties:
+          ClassId:
+            title: Class ID
+            type: string
+          Issuer:
+            properties:
+              ClassId:
+                title: Class ID
+                type: string
+              CommonName:
+                title: Common Name
+                type: string
+              Country:
+                items:
+                  type: string
+                title: Country
+                type: array
+              Locality:
+                items:
+                  type: string
+                title: Locality
+                type: array
+              ObjectType:
+                title: Object Type
+                type: string
+              Organization:
+                items:
+                  type: string
+                title: Organization
+                type: array
+              OrganizationalUnit:
+                items:
+                  type: string
+                title: Organizational Unit
+                type: array
+              State:
+                items:
+                  type: string
+                title: State
+                type: array
+            title: Issuer
+            type: object
+          NotAfter:
+            format: date-time
+            title: Not After
+            type: string
+          NotBefore:
+            format: date-time
+            title: Not Before
+            type: string
+          ObjectType:
+            title: Object Type
+            type: string
+          PemCertificate:
+            title: Pem Certificate
+            type: string
+          Sha256Fingerprint:
+            title: SHA-256 Fingerprint
+            type: string
+          SignatureAlgorithm:
+            title: Signature Algorithm
+            type: string
+          Subject:
+            properties:
+              ClassId:
+                title: Class ID
+                type: string
+              CommonName:
+                title: Common Name
+                type: string
+              Country:
+                items:
+                  type: string
+                title: Country
+                type: array
+              Locality:
+                items:
+                  type: string
+                title: Locality
+                type: array
+              ObjectType:
+                title: Object Type
+                type: string
+              Organization:
+                items:
+                  type: string
+                title: Organization
+                type: array
+              OrganizationalUnit:
+                items:
+                  type: string
+                title: Organizational Unit
+                type: array
+              State:
+                items:
+                  type: string
+                title: State
+                type: array
+            title: Subject
+            type: object
+        title: SUDI Certificate
+        type: object
+    title: SUDI
+    type: object
+  x_tags:
+    title: x_tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CiscoIntersightTag
+          key-name: d_id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+  Tags:
+    x-samos-hidden: true
+    title: Tags
+    type: array
+    items:
+      properties:
+        AncestorDefinitions:
+          items:
+            properties:
+              ClassId:
+                title: Class ID
+                type: string
+              Moid:
+                title: MOID
+                type: string
+              ObjectType:
+                title: Object Type
+                type: string
+              link:
+                title: Link
+                type: string
+            type: object
+          title: Ancestor Definitions
+          type: array
+        Definition:
+          properties:
+            ClassId:
+              title: Class ID
+              type: string
+            Moid:
+              title: MOID
+              type: string
+            ObjectType:
+              title: Object Type
+              type: string
+            link:
+              title: Link
+              type: string
+          title: Definition
+          type: object
+        Key:
+          title: Key
+          type: string
+          x-samos-immutable: true
+        Propagated:
+          title: Propagated?
+          type: boolean
+        SysTag:
+          title: System Tag?
+          type: boolean
+        Type:
+          title: Type
+          type: string
+        Value:
+          title: Value
+          type: string

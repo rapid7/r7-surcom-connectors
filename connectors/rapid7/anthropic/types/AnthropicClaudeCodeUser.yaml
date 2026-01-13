@@ -1,0 +1,180 @@
+x-samos-type-name: AnthropicClaudeCodeUser
+x-samos-namespace: anthropic
+title: Anthropic Claude Code Analytics
+description: Daily analytics data for Claude Code usage including sessions, code metrics, tool actions, and model usage
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: email
+  - name: date
+  - name: num_sessions
+
+x-samos-detail:
+  - name: d_email
+  - name: date
+  - name: organization_id
+  - name: customer_type
+  - name: terminal_type
+  - name: core_metrics
+  - name: tool_actions
+  - name: model_breakdown
+
+x-samos-derived-properties:
+  d_email:
+    title: Email
+    type: string
+    syntax: jmespath
+    value: 'actor.email_address'
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+
+properties:
+  id:
+    title: Object ID
+    x-samos-immutable: true
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  date:
+    title: Date
+    type: string
+    format: date-time
+    description: Date of the analytics record
+
+  actor:
+    title: Actor
+    type: object
+    description: Actor information (either user_actor or api_actor)
+    properties:
+      type:
+        type: string
+        description: Actor type (user_actor or api_actor)
+      email_address:
+        type: string
+        description: User email address (for user_actor type)
+        x-samos-fulfills:
+          type-name: core.named-object
+          property-name: name
+      api_key_name:
+        type: string
+        description: API key name (for api_actor type)
+
+  organization_id:
+    title: Organization ID
+    type: string
+    description: Organization identifier
+
+  customer_type:
+    title: Customer Type
+    type: string
+    description: Type of customer (e.g., api)
+
+  terminal_type:
+    title: Terminal Type
+    type: string
+    description: Type of terminal used (e.g., vscode)
+
+  core_metrics:
+    title: Core Metrics
+    type: object
+    description: Core usage metrics
+    properties:
+      num_sessions:
+        type: integer
+        description: Number of sessions
+      lines_of_code:
+        type: object
+        properties:
+          added:
+            type: integer
+            description: Lines of code added
+          removed:
+            type: integer
+            description: Lines of code removed
+      commits_by_claude_code:
+        type: integer
+        description: Number of commits by Claude Code
+      pull_requests_by_claude_code:
+        type: integer
+        description: Number of pull requests by Claude Code
+
+  tool_actions:
+    title: Tool Actions
+    type: object
+    description: Tool action statistics
+    properties:
+      edit_tool:
+        type: object
+        properties:
+          accepted:
+            type: integer
+          rejected:
+            type: integer
+      multi_edit_tool:
+        type: object
+        properties:
+          accepted:
+            type: integer
+          rejected:
+            type: integer
+      write_tool:
+        type: object
+        properties:
+          accepted:
+            type: integer
+          rejected:
+            type: integer
+      notebook_edit_tool:
+        type: object
+        properties:
+          accepted:
+            type: integer
+          rejected:
+            type: integer
+
+  model_breakdown:
+    title: Model Breakdown
+    type: array
+    description: Model usage and cost breakdown
+    items:
+      type: object
+      properties:
+        model:
+          type: string
+          description: Model name
+        tokens:
+          type: object
+          properties:
+            input:
+              type: integer
+              description: Input tokens
+            output:
+              type: integer
+              description: Output tokens
+            cache_read:
+              type: integer
+              description: Cache read tokens
+            cache_creation:
+              type: integer
+              description: Cache creation tokens
+        estimated_cost:
+          type: object
+          properties:
+            currency:
+              type: string
+              description: Currency code
+            amount:
+              type: number
+              description: Cost amount

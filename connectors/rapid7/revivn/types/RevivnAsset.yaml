@@ -116,6 +116,9 @@ properties:
   asset_tag:
     type: string
     title: Asset Tag
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_tag
   lock_codes:
     type: string
     title: Lock Codes

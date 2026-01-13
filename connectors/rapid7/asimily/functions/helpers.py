@@ -103,7 +103,14 @@ class AsimilyClient():
         }
         if uri_key == 'assets':
             params['discoveredOver'] = f"{self.settings.get('look_back_days')} days"
-            params['isCurrentlyInUse'] = 'yes' if self.settings.get('device_in_use') else 'no'
+
+        if uri_key == 'assets' and self.settings.get('device_in_use'):
+            params['isCurrentlyInUse'] = 'yes'
+
+        if uri_key == 'assets' and self.settings.get('only_active_device'):
+            # --- If user selects active device only as true, then the Asimily API param
+            # isDeviceDeActivated is set to no to fetch only active devices
+            params['isDeviceDeActivated'] = 'no'
         response = self.make_request(uri=endpoint[uri_key], params=params,
                                      anomaly_severity=anomaly_severity)
         return response

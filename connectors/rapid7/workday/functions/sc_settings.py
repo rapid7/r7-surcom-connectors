@@ -16,4 +16,5 @@ Settings = TypedDict('Settings', {
     'client_secret': str,
     'refresh_token': str,
     'active_workers': bool,
+    'termination_date_fieldname': Optional[str],
 })

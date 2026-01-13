@@ -1,12 +1,13 @@
 id: asimily
 name: Asimily Risk Management (Beta)
 author: Rapid7
-version: 0.1.0
-notice: Copyright © 2025 Rapid7, All rights reserved.
+version: 0.2.0
+notice: Copyright © 2026 Rapid7, All rights reserved.
 
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Initial release
+  - Added setting to filter only active devices
+  - Added 'Device Deactivated?' property to AsimilyDevice type
 
 types:
   - AsimilyDevice
@@ -83,6 +84,13 @@ settings:
     title: Device Currently in Use?
     description: >-
       If enabled, only devices currently in use will be imported. if disabled, all devices will be imported.
+    default: false
+
+  only_active_device:
+    type: boolean
+    title: Only Active Device?
+    description: >-
+      If enabled, only active devices will be imported. If disabled, all devices will be imported.
     default: false
 
   cve_score:

@@ -1,0 +1,277 @@
+x-samos-type-name: KeycloakClient
+x-samos-namespace: keycloak
+title: Keycloak Client
+description: A Client in Keycloak.
+
+x-samos-extends-types:
+  - type-name: System
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: clientId
+  - name: name
+  - name: protocol
+  - name: description
+  - name: x_realm_id
+
+x-samos-detail:
+  - name: clientId
+  - name: name
+  - name: description
+  - name: x_realm_id
+  - name: enabled
+  - name: rootUrl
+  - name: baseUrl
+  - name: adminUrl
+  - name: defaultClientScopes
+  - name: optionalClientScopes
+  - name: access
+  - name: clientAuthenticatorType
+  - name: redirectUris
+  - name: webOrigins
+  - name: protocol
+  - name: attributes
+  - name: surrogateAuthRequired
+  - name: alwaysDisplayInConsole
+  - name: fullScopeAllowed
+  - name: bearerOnly
+  - name: consentRequired
+  - name: standardFlowEnabled
+  - name: implicitFlowEnabled
+  - name: directAccessGrantsEnabled
+  - name: serviceAccountsEnabled
+  - name: publicClient
+  - name: frontchannelLogout
+  - name: nodeReRegistrationTimeout
+  - name: authenticationFlowBindingOverrides
+  - name: protocolMappers
+
+properties:
+  id:
+    type: string
+    title: Id
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  clientId:
+    type: string
+    title: Client ID
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  rootUrl:
+    type: string
+    title: Root URL
+  baseUrl:
+    type: string
+    title: Base URL
+  surrogateAuthRequired:
+    type: boolean
+    title: Surrogate Auth Required?
+  enabled:
+    type: boolean
+    title: Enabled?
+  alwaysDisplayInConsole:
+    type: boolean
+    title: Always Display In Console?
+  clientAuthenticatorType:
+    type: string
+    title: Client Authenticator Type
+  redirectUris:
+    title: Redirect URI's
+    type: array
+    items:
+      type: string
+      format: uri
+  webOrigins:
+    title: Web Origins
+    type: array
+    items:
+      type: string
+  notBefore:
+    type: integer
+    title: Not Before
+  bearerOnly:
+    type: boolean
+    title: Bearer Only?
+  consentRequired:
+    type: boolean
+    title: Consent Required?
+  standardFlowEnabled:
+    type: boolean
+    title: Standard Flow Enabled?
+  implicitFlowEnabled:
+    type: boolean
+    title: Implicit Flow Enabled?
+  directAccessGrantsEnabled:
+    type: boolean
+    title: Direct Access Grants Enabled?
+  serviceAccountsEnabled:
+    type: boolean
+    title: Service Accounts Enabled?
+  publicClient:
+    type: boolean
+    title: Public Client?
+  frontchannelLogout:
+    type: boolean
+    title: Frontchannel Logout?
+  protocol:
+    type: string
+    title: Type
+  attributes:
+    title: Attributes
+    type: object
+    properties:
+      realm_client:
+        title: Realm Client
+        type: string
+      post.logout.redirect.uris:
+        title: Post Logout Redirect URIs
+        type: string
+      pkce.code.challenge.method:
+        title: PKCE Code Challenge Method
+        type: string
+      client.use.lightweight.access.token.enabled:
+        title: Client Use Lightweight Access Token Enabled
+        type: string
+      oidc.ciba.grant.enabled:
+        title: OIDC CIBA Grant Enabled
+        type: string
+      backchannel.logout.session.required:
+        title: Backchannel Logout Session Required
+        type: string
+      standard.token.exchange.enabled:
+        title: Standard Token Exchange Enabled
+        type: string
+      frontchannel.logout.session.required:
+        title: Frontchannel Logout Session Required
+        type: string
+      oauth2.device.authorization.grant.enabled:
+        title: OAuth2 Device Authorization Grant Enabled
+        type: string
+      display.on.consent.screen:
+        title: Display On Consent Screen
+        type: string
+      backchannel.logout.revoke.offline.tokens:
+        title: Backchannel Logout Revoke Offline Tokens
+        type: string
+      dpop.bound.access.tokens:
+        title: DPoP Bound Access Tokens
+        type: string
+
+  authenticationFlowBindingOverrides:
+    type: object
+    title: Authentication Flow Binding Overrides
+  fullScopeAllowed:
+    type: boolean
+    title: Full Scope Allowed?
+  nodeReRegistrationTimeout:
+    type: integer
+    title: Node Re Registration Timeout
+  defaultClientScopes:
+    title: Default Client Scopes
+    type: array
+    items:
+      type: string
+
+  optionalClientScopes:
+    title: Optional Client Scopes
+    type: array
+    items:
+      type: string
+
+  access:
+    title: Access
+    type: object
+    properties:
+      view:
+        type: boolean
+        title: View?
+      configure:
+        type: boolean
+        title: Configure?
+      manage:
+        type: boolean
+        title: Manage?
+
+  protocolMappers:
+    title: Protocolmappers
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: ID
+          type: string
+        name:
+          title: Name
+          type: string
+        protocol:
+          title: Protocol
+          type: string
+        protocolMapper:
+          title: Protocol Mapper
+          type: string
+        consentRequired:
+          title: Consent Required?
+          type: boolean
+        config:
+          type: object
+          properties:
+            introspection.token.claim:
+              title: Introspection Token Claim
+              type: string
+            userinfo.token.claim:
+              title: Userinfo Token Claim
+              type: string
+            user.attribute:
+              title: User Attribute
+              type: string
+            id.token.claim:
+              title: ID Token Claim
+              type: string
+            access.token.claim:
+              title: Access Token Claim
+              type: string
+            claim.name:
+              title: Claim Name
+              type: string
+            jsonType.label:
+              title: JSON Type Label
+              type: string
+
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  adminUrl:
+    type: string
+    title: Admin URL
+    x-samos-correlation:
+      correlation-key: System.sso-url
+      correlation-type: System
+      priority: 4
+  x_realm_id:
+    type: string
+    title: Realm
+    x-samos-ref-types:
+      - type-name: KeycloakRealm
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+x-samos-virtual:
+  users:
+    type-name: KeycloakUser
+    cypher-pattern: >
+      <-[:`e:KeycloakUser:x_client_ids`]-(:KeycloakUser)

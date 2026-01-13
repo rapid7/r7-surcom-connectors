@@ -1,0 +1,43 @@
+id: openai
+name: OpenAI (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCaked
+# version of the connector ID.
+types:
+  - OpenAIUser
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Import All
+    description: Import OpenAI organization users and ChatGPT usage data
+    return_types:
+      - OpenAIUser
+
+# Configuration settings for this connector.
+settings:
+  admin_api_key:
+    type: string
+    format: password
+    title: Admin API Key
+    description: Admin-level API key for authentication (format sk-admin-...)
+    example: sk-admin-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - security_operations

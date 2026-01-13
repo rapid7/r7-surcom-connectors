@@ -1,0 +1,69 @@
+id: cisco.intersight
+name: Cisco Intersight (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCaked
+# version of the connector ID.
+types:
+  - CiscoIntersightPhysicalSummary
+  - CiscoIntersightHyperflexCluster
+  - CiscoIntersightFabricInterconnect
+  - CiscoIntersightOrganization
+  - CiscoIntersightAccount
+  - CiscoIntersightNode
+  - CiscoIntersightClusterMember
+  - CiscoIntersightTag
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Cisco Intersight Platform Data
+    description: Import All organization, accounts, nodes, tags, cluster members and physical summary from Cisco Intersight
+    return_types:
+      - CiscoIntersightPhysicalSummary
+      - CiscoIntersightHyperflexCluster
+      - CiscoIntersightFabricInterconnect
+      - CiscoIntersightOrganization
+      - CiscoIntersightAccount
+      - CiscoIntersightNode
+      - CiscoIntersightClusterMember
+      - CiscoIntersightTag
+
+# Configuration settings for this connector.
+settings:
+  intersight_region:
+    type: string
+    title: Region
+    description: Select the region where your Cisco Intersight data center is located
+    enum:
+      - US
+      - EU
+    default: US
+
+  api_key_id:
+    type: string
+    title: Key ID
+    description: The Api Key Id generated from the platform
+
+  secret_key:
+    type: string
+    title: Private Key
+    format: password
+    description: The Secret Key Certificate generated from the platform
+
+runtime: py311
+
+python_dependencies:
+  - 'cryptography==46.0.3'
+
+categories:
+  - endpoint_management

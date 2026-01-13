@@ -1,0 +1,72 @@
+id: proxmox.pve
+name: Proxmox Virtual Environment (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+types:
+  - ProxmoxPVEVM
+  - ProxmoxPVEStorage
+  - ProxmoxPVENode
+  - ProxmoxPVEUser
+  - ProxmoxPVEGroup
+functions:
+  - id: test
+
+  - id: import_all
+    title: Proxmox PVE Cluster Import
+    description: Import all Cluster node, storage, VM, user, and group data from Proxmox PVE.
+    return_types:
+      - ProxmoxPVEVM
+      - ProxmoxPVEStorage
+      - ProxmoxPVENode
+      - ProxmoxPVEUser
+      - ProxmoxPVEGroup
+
+settings:
+  url:
+    type: string
+    title: Base URL
+    example: https://<your-server-ip>:8006
+    description: The URL of the Proxmox PVE server.
+
+  user:
+    type: string
+    title: User
+    example: root
+    description: The User used as a part of authentication to authenticate to the Proxmox PVE API.
+
+  realm:
+    type: string
+    title: Realm
+    example: pam
+    description: The Realm used as a part of authentication to authenticate to the Proxmox PVE API.
+
+  token_id:
+    type: string
+    title: Token ID
+    example: mytokenid
+    description: The Token ID used as a part of authentication to authenticate to the Proxmox PVE API.
+    format: password
+
+  token_secret:
+    type: string
+    title: Token Secret
+    description: The Token Secret used as a part of authentication to authenticate to the Proxmox PVE API.
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: >-
+      If enabled, verify the server's identity
+    default: true
+    nullable: false
+
+runtime: py311
+
+categories:
+  - cloud_service_provider

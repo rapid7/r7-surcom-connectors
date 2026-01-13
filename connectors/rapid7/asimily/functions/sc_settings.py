@@ -13,9 +13,10 @@ Settings = TypedDict('Settings', {
     'url': str,
     'username': str,
     'password': str,
-    'cve_score': Optional[int],
-    'look_back_days': Optional[int],
+    'look_back_days': int,
     'device_families': list,
     'device_in_use': bool,
+    'only_active_device': bool,
+    'cve_score': int,
     'anomaly_severity': str,
 })

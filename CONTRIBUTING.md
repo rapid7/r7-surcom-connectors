@@ -42,9 +42,10 @@ it into production.  If you do not care to follow these rules, your contribution
 
 - **Do** ensure your Connector code is in the correct directory:
   - `connectors/rapid7:` Connectors that are supported by **Rapid7**
-  - `connectors/partners:` Connectors that are supported by a **Third Party - you!**
+  - `connectors/partners:` Connectors that are supported by a **Third Party**
   - `connectors/community:` Connectors that are supported by the **Open Source Community** - through Issues, Pull Requests and Discussions in our [Discussion Community](https://discuss.rapid7.com/)
-- **Do** ensure the `INSTRUCTIONS.md` file has been updated with detailed documentation.
+- **Do** ensure the `INSTRUCTIONS.md` has been updated to include detailed documentation;
+  - For each setting that is required to configure the Connector, there should be sufficient details in the `__Documentation__` section to get this setting. See this [Connector on the Extension Library](https://extensions.rapid7.com/extension/securityscorecard_app) for an example and see its source code [here](https://github.com/rapid7/r7-surcom-connectors/blob/main/connectors/rapid7/securityscorecard/docs/INSTRUCTIONS.md?plain=1)
 - **Don't** include more than one Connector per pull request.
 
 #### Bug Fixes

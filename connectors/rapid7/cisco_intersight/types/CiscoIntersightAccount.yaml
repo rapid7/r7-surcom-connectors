@@ -1,0 +1,367 @@
+x-samos-type-name: CiscoIntersightAccount
+x-samos-namespace: cisco.intersight
+title: Cisco Intersight Account
+description: Account owner details for Cisco Intersight
+x-samos-extends-types:
+  - type-name: CloudAccount
+    subtype-priority: 3
+
+x-samos-keys:
+  - Moid
+
+x-samos-table:
+  - name: Name
+  - name: Regions
+  - name: Status
+  - name: SingleAdminLockout
+  - name: CreateTime
+  - name: ModTime
+
+x-samos-detail:
+  - name: Name
+  - name: Regions
+  - name: Status
+  - name: SingleAdminLockout
+  - name: CreateTime
+  - name: ModTime
+  - name: EndPointRoles
+  - name: PermissionResources
+  - name: ObjectType
+  - name: x_tags
+  - name: Owners
+
+x-samos-derived-properties:
+  d_account_id:
+    # To fulfill account_id
+    x-samos-hidden: true
+    type: string
+    value: 'Moid'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: CloudAccount
+      property-name: account_id
+    x-samos-correlation:
+      correlation-key: CloudAccount.id
+      correlation-type: CloudAccount
+      priority: 5
+
+  d_active:
+    # To fulfill active? field with a boolean value
+    x-samos-hidden: true
+    type: boolean
+    value: 'Status == `Active`'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  AccountMoid:
+    title: Account MOID
+    type: string
+  Ancestors:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Ancestors
+    type: array
+  AppRegistrations:
+    items:
+      type: string
+    title: App Registrations
+    type: array
+  ClassId:
+    title: Class ID
+    type: string
+  CreateTime:
+    format: date-time
+    title: Create Time
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  DomainGroupMoid:
+    title: Domain Group MOID
+    type: string
+  DomainGroups:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Domain Groups
+    type: array
+  EndPointRoles:
+    items:
+      type: string
+    title: End Point Roles
+    type: array
+  Idpreferences:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: ID Preferences
+    type: array
+  Idps:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: IDPS
+    type: array
+  ModTime:
+    format: date-time
+    title: Modified Time
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  Moid:
+    title: MOID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  ObjectType:
+    title: Object Type
+    type: string
+  Owners:
+    items:
+      type: string
+    title: Owners
+    type: array
+  PermissionResources:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+          x-samos-ref-types:
+            - type-name: CiscoIntersightOrganization
+              key-name: Moid
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Permission Resources
+    type: array
+  Permissions:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Permissions
+    type: array
+  PrivilegeSets:
+    items:
+      type: string
+    title: Privilege Sets
+    type: array
+  Privileges:
+    items:
+      type: string
+    title: Privileges
+    type: array
+  Regions:
+    items:
+      type: string
+    title: Regions
+    type: array
+  ResourceLimits:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Resource Limits
+    type: object
+  Roles:
+    items:
+      type: string
+    title: Roles
+    type: array
+  SecurityHolder:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Security Holder
+    type: object
+  SessionLimits:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Session Limits
+    type: object
+  SharedScope:
+    title: Shared Scope
+    type: string
+  SingleAdminLockout:
+    title: Single Admin Lockout?
+    type: boolean
+  Status:
+    title: Status
+    type: string
+  x_tags:
+    title: x_tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CiscoIntersightTag
+          key-name: d_id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+  Tags:
+    x-samos-hidden: true
+    title: Tags
+    type: array
+    items:
+      properties:
+        AncestorDefinitions:
+          items:
+            properties:
+              ClassId:
+                title: Class ID
+                type: string
+              Moid:
+                title: MOID
+                type: string
+              ObjectType:
+                title: Object Type
+                type: string
+              link:
+                title: Link
+                type: string
+            type: object
+          title: Ancestor Definitions
+          type: array
+        Definition:
+          properties:
+            ClassId:
+              title: Class ID
+              type: string
+            Moid:
+              title: MOID
+              type: string
+            ObjectType:
+              title: Object Type
+              type: string
+            link:
+              title: Link
+              type: string
+          title: Definition
+          type: object
+        Key:
+          title: Key
+          type: string
+          x-samos-immutable: true
+        Propagated:
+          title: Propagated?
+          type: boolean
+        SysTag:
+          title: System Tag?
+          type: boolean
+        Type:
+          title: Type
+          type: string
+        Value:
+          title: Value
+          type: string

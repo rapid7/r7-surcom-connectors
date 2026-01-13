@@ -1,0 +1,85 @@
+x-samos-type-name: AnthropicUser
+x-samos-namespace: anthropic
+
+title: Anthropic User
+description: A User in Anthropic
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: email
+  - name: role
+
+x-samos-detail:
+  - name: email
+  - name: name
+  - name: role
+  - name: added_at
+  - name: member_of
+
+x-samos-derived-properties:
+  d_admin:
+    title: Administrator?
+    type: boolean
+    syntax: jmespath
+    value: 'role==`admin`'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_administrator
+
+properties:
+  id:
+    type: string
+    title: Id
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  type:
+    type: string
+    title: Type
+    description: For Users, this is always "user".
+  email:
+    type: string
+    title: Email
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  role:
+    type: string
+    title: Role
+    enum:
+      - user
+      - developer
+      - billing
+      - admin
+      - claude_code_user
+  added_at:
+    type: string
+    title: Added At
+    format: date-time
+  member_of:
+    type: array
+    title: Member Of
+    description: List of workspace IDs this user is a member of
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: AnthropicWorkspace
+          property-name: id

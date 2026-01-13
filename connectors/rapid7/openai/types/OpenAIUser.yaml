@@ -1,0 +1,71 @@
+x-samos-type-name: OpenAIUser
+x-samos-namespace: openai
+
+title: OpenAI User
+description: An organization member from the OpenAI Organization Users API
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: email
+  - name: role
+  - name: added_at
+
+x-samos-detail:
+  - name: name
+  - name: email
+  - name: role
+  - name: added_at
+  - name: projects
+
+x-samos-derived-properties:
+  d_admin:
+    title: Administrator?
+    type: boolean
+    syntax: jmespath
+    value: 'role==`owner`'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_administrator
+
+properties:
+  id:
+    type: string
+    title: Id
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  object:
+    type: string
+    title: Object
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  email:
+    type: string
+    title: Email
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+  role:
+    type: string
+    title: Role
+  added_at:
+    type: integer
+    title: Added At
+    format: epoch
