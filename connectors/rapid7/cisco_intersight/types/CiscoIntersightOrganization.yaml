@@ -1,0 +1,220 @@
+x-samos-type-name: CiscoIntersightOrganization
+x-samos-namespace: cisco.intersight
+title: Cisco Intersight Organization
+description: Cisco Intersight organizational unit container
+
+x-samos-extends-types:
+  - type-name: Organization
+    subtype-priority: 3
+
+x-samos-keys:
+  - Moid
+
+x-samos-table:
+  - name: Name
+  - name: Description
+  - name: CreateTime
+  - name: ModTime
+
+x-samos-detail:
+  - name: Name
+  - name: Description
+  - name: CreateTime
+  - name: ModTime
+  - name: ClassId
+  - name: x_tags
+  - name: ObjectType
+  - name: Owners
+  - name: PermissionResources
+
+properties:
+  Account:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Account
+    type: object
+  AccountMoid:
+    title: Account MOID
+    type: string
+  Ancestors:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Ancestors
+    type: array
+  ClassId:
+    title: Class ID
+    type: string
+  CreateTime:
+    format: date-time
+    title: Create Time
+    type: string
+  Description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  DomainGroupMoid:
+    title: Domain Group MOID
+    type: string
+  ModTime:
+    format: date-time
+    title: Modified Time
+    type: string
+  Moid:
+    title: MOID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  ObjectType:
+    title: Object Type
+    type: string
+  Owners:
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CiscoIntersightAccount
+          key-name: Moid
+    title: Owners
+    type: array
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: owners
+  PermissionResources:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Permission Resources
+    type: array
+  ResourceGroups:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Resource Groups
+    type: array
+  SharedScope:
+    title: Shared Scope
+    type: string
+  SharedWithResources:
+    title: Shared With Resources
+    type: string
+  x_tags:
+    title: x_tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CiscoIntersightTag
+          key-name: d_id
+  Tags:
+    x-samos-hidden: true
+    title: Tags
+    type: array
+    items:
+      properties:
+        AncestorDefinitions:
+          items:
+            properties:
+              ClassId:
+                title: Class ID
+                type: string
+              Moid:
+                title: MOID
+                type: string
+              ObjectType:
+                title: Object Type
+                type: string
+              link:
+                title: Link
+                type: string
+            type: object
+          title: Ancestor Definitions
+          type: array
+        Definition:
+          properties:
+            ClassId:
+              title: Class ID
+              type: string
+            Moid:
+              title: MOID
+              type: string
+            ObjectType:
+              title: Object Type
+              type: string
+            link:
+              title: Link
+              type: string
+          title: Definition
+          type: object
+        Key:
+          title: Key
+          type: string
+          x-samos-immutable: true
+        Propagated:
+          title: Propagated?
+          type: boolean
+        SysTag:
+          title: System Tag?
+          type: boolean
+        Type:
+          title: Type
+          type: string
+        Value:
+          title: Value
+          type: string

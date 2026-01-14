@@ -1,0 +1,204 @@
+x-samos-type-name: ProxmoxPVEVM
+x-samos-namespace: proxmox.pve
+title: Proxmox PVE VM
+description: Proxmox PVE Virtual Machine type
+
+x-samos-extends-types:
+  - type-name: Machine
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: status
+  - name: node
+  - name: cpu
+  - name: mem
+  - name: memhost
+  - name: memory
+  - name: cores
+  - name: scsi0
+  - name: net0
+
+x-samos-detail:
+  - name: status
+  - name: node
+  - name: cpu
+  - name: mem
+  - name: memhost
+  - name: memory
+  - name: cores
+  - name: scsi0
+  - name: net0
+  - name: vmid
+  - name: mac_address
+  - name: ostype
+  - name: name
+  - name: type
+  - name: uptime
+  - name: boot
+  - name: maxcpu
+  - name: maxmem
+  - name: maxdisk
+  - name: disk
+  - name: diskread
+  - name: diskwrite
+  - name: netin
+  - name: netout
+  - name: digest
+  - name: ide2
+  - name: smbios1
+  - name: scsihw
+  - name: template
+  - name: hastate
+  - name: vmgenid
+  - name: numa
+
+x-samos-derived-properties:
+  d_active:
+    # The "status" property indicates if the VM is running or not
+    title: Active?
+    type: boolean
+    value: 'status != `stopped`'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+    x-samos-hidden: true
+
+  d_cpu:
+    title: CPU Count
+    type: integer
+    value: 'ceil(cpu)'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: cpus
+    x-samos-hidden: true
+
+properties:
+  boot:
+    title: Boot
+    type: string
+  cores:
+    title: Processor Cores
+    type: integer
+  cpu:
+    title: CPU Usage
+    type: number
+  digest:
+    title: Digest
+    type: string
+  disk:
+    title: Disk
+    type: integer
+  diskread:
+    title: Disk Read
+    type: integer
+  diskwrite:
+    title: Disk Write
+    type: integer
+  hastate:
+    title: Hastate
+    type: string
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  ide2:
+    title: IDE
+    type: string
+  maxcpu:
+    title: Max CPU
+    type: integer
+  maxdisk:
+    title: Max Disk
+    type: integer
+  maxmem:
+    title: Max Memory
+    type: integer
+  mem:
+    title: Memory Usage
+    type: integer
+  memhost:
+    title: Host Memory Usage
+    type: integer
+  memory:
+    title: Memory
+    type: string
+  meta:
+    title: Meta
+    type: string
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+  net0:
+    title: Network Device (net0)
+    type: string
+  netin:
+    title: Net In
+    type: integer
+  netout:
+    title: Net Out
+    type: integer
+  node:
+    title: Node
+    type: string
+    x-samos-ref-types:
+      - type-name: ProxmoxPVENode
+        key-name: node
+  numa:
+    title: Numa
+    type: integer
+  ostype:
+    title: OS Type
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+  scsi0:
+    title: Hard Disk (scsi0)
+    type: string
+  scsihw:
+    title: SCSI HW
+    type: string
+  smbios1:
+    title: Smbios
+    type: string
+  sockets:
+    title: Sockets
+    type: integer
+  status:
+    title: Status
+    type: string
+  template:
+    title: Template
+    type: integer
+  type:
+    title: Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  uptime:
+    title: Uptime
+    type: integer
+  vmgenid:
+    title: VM GenID
+    type: string
+  vmid:
+    title: VM ID
+    type: integer
+  mac_address:
+    title: Mac Address
+    type: string

@@ -1,0 +1,712 @@
+x-samos-type-name: CiscoIntersightPhysicalSummary
+x-samos-namespace: cisco.intersight
+title: Cisco Intersight Physical Summary
+description: Cisco Intersight physical server summary
+x-samos-extends-types:
+  - type-name: Machine
+
+x-samos-keys:
+  - Moid
+
+x-samos-table:
+  - name: Name
+  - name: AlarmSummary.Health
+  - name: UserLabel
+  - name: Model
+  - name: TotalMemory
+  - name: CpuCapacity
+  - name: Firmware
+  - name: CreateTime
+  - name: ModTime
+
+x-samos-detail:
+  # General Details
+  - name: Name
+  - name: UserLabel
+  - name: MgmtIpAddress
+  - name: Serial
+  - name: Model
+  - name: Vendor
+  - name: AssetTag
+  - name: Ipv4Address
+  - name: PackageVersion
+  - name: Firmware
+  - name: Dn
+  - name: ClassId
+  - name: x_tags
+  - name: AdminPowerState
+  - name: PlatformType
+  - name: CreateTime
+  - name: ModTime
+  - name: Lifecycle
+  - name: ConnectionStatus
+  - name: BiosPostComplete
+  - name: FrontPanelLockState
+  - name: IsUpgraded
+  - name: FaultSummary
+  - name: LastPowerStateChangedTime
+  # CPU/Motherboard Details
+  - name: NumCpus
+  - name: NumThreads
+  - name: NumCpuCores
+  - name: NumCpuCoresEnabled
+  - name: AvailableMemory
+  - name: TotalMemory
+  - name: MemorySpeed
+  - name: CpuCapacity
+  - name: NumAdaptors
+  - name: CoolingMode
+  # KVM & Drives
+  - name: ManagementMode
+  - name: KvmIpAddresses
+  - name: KvmServerStateEnabled
+  - name: KvmVendor
+  - name: TunneledKvm
+  - name: HasE3SSupport
+  # Chassis Details
+  - name: Ancestors # Equipment Chassis
+  - name: EquipmentChassis
+  # Device Details
+  - name: InventoryDeviceInfo
+  - name: InventoryParent # Device Registration Link
+  # Organization Details
+  - name: CustomPermissionResources # Organization Link
+  # Alarm summary
+  - name: AlarmSummary
+  # Physical Server Location
+  - name: LocationDetails
+  # Others
+  - name: NumEthHostInterfaces
+  - name: NumFcHostInterfaces
+  - name: ObjectType
+  - name: OperPowerState
+  - name: OperReason
+  - name: OperState
+  - name: Operability
+  - name: Owners
+  - name: Parent
+  - name: PermissionResources
+  - name: Personality
+  - name: Presence
+  - name: RegisteredDevice
+  - name: Revision
+  - name: Rn
+  - name: ScaledMode
+  - name: ServiceProfile
+  - name: SharedScope
+  - name: SourceObjectType
+  - name: TopologyScanStatus
+
+x-samos-derived-properties:
+  d_hostnames:
+    # Derived Hostname from Name field to fulfill
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: '[Name]|[?@]'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_active:
+    # To fulfill active? field with a boolean value
+    x-samos-hidden: true
+    type: boolean
+    value: 'Lifecycle == `Active`'
+    syntax: expression
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_qualified_names:
+    # Corelation required for qualified hostnames
+    title: Qualified Hostname
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'Name && contains(Name, `.`) && Name || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_unqualified_names:
+    # Corelation required for unqualified hostnames
+    title: Unqualified Hostname
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'Name && !contains(Name, `.`) && Name || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+properties:
+  AccountMoid:
+    title: Account MOID
+    type: string
+  AdminPowerState:
+    title: Admin Power State
+    type: string
+  AlarmSummary:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Critical:
+        title: Critical
+        type: integer
+      Health:
+        title: Health
+        type: string
+      Info:
+        title: Info
+        type: integer
+      ObjectType:
+        title: Object Type
+        type: string
+      Suppressed:
+        title: Suppressed?
+        type: boolean
+      SuppressedCritical:
+        title: Suppressed Critical
+        type: integer
+      SuppressedInfo:
+        title: Suppressed Info
+        type: integer
+      SuppressedWarning:
+        title: Suppressed Warning
+        type: integer
+      Warning:
+        title: Warning
+        type: integer
+    title: Alarm Summary
+    type: object
+  Ancestors:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Ancestors
+    type: array
+  AssetTag:
+    title: Asset Tag
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_tag
+  AvailableMemory:
+    title: Available Memory
+    type: integer
+  BiosPostComplete:
+    title: Bios Post Complete?
+    type: boolean
+  ChassisId:
+    title: Chassis ID
+    type: string
+  ClassId:
+    title: Class ID
+    type: string
+  ConnectionStatus:
+    title: Connection Status
+    type: string
+  CoolingMode:
+    title: Cooling Mode
+    type: string
+  CpuCapacity:
+    title: Cpu Capacity
+    type: number
+  CreateTime:
+    format: date-time
+    title: Create Time
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  CustomPermissionResources:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+          x-samos-ref-types:
+            - type-name: CiscoIntersightOrganization
+              key-name: Moid
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Custom Permission Resources
+    type: array
+  DeviceMoId:
+    title: Device MOID
+    type: string
+  Dn:
+    title: DN
+    type: string
+  DomainGroupMoid:
+    title: Domain Group MOID
+    type: string
+  EquipmentChassis:
+    title: Equipment Chassis
+    type: object
+  FaultSummary:
+    title: Fault Summary
+    type: integer
+  Firmware:
+    title: Firmware
+    type: string
+  FrontPanelLockState:
+    title: Front Panel Lock State
+    type: string
+  HardwareUuid:
+    title: Hardware UUID
+    type: string
+  HasE3SSupport:
+    title: E3S Support?
+    type: boolean
+  InventoryDeviceInfo:
+    title: Inventory Device Info
+    type: string
+  InventoryParent:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Inventory Parent
+    type: object
+  Ipv4Address:
+    format: ip-addr
+    title: Ipv4 Address
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  IsUpgraded:
+    title: Is Upgraded?
+    type: boolean
+  KvmIpAddresses:
+    items:
+      properties:
+        Address:
+          format: ip-addr
+          title: Address
+          type: string
+        Category:
+          title: Category
+          type: string
+        ClassId:
+          title: Class ID
+          type: string
+        DefaultGateway:
+          format: ip-addr
+          title: Default Gateway
+          type: string
+        Dn:
+          title: DN
+          type: string
+        HttpPort:
+          title: HTTP Port
+          type: integer
+        HttpsPort:
+          title: HTTPs Port
+          type: integer
+        KvmPort:
+          title: KVM Port
+          type: integer
+        KvmVlan:
+          title: KVM VLAN
+          type: integer
+        Name:
+          title: Name
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        Subnet:
+          format: ip-addr
+          title: Subnet
+          type: string
+        Type:
+          title: Type
+          type: string
+      type: object
+    title: KVM IP Addresses
+    type: array
+  KvmServerStateEnabled:
+    title: Kvm Server State Enabled?
+    type: boolean
+  KvmVendor:
+    title: Kvm Vendor
+    type: string
+  LastPowerStateChangedTime:
+    title: Last Power State Changed Time
+    type: string
+  Lifecycle:
+    title: Lifecycle
+    type: string
+  LocationDetails:
+    properties:
+      Address:
+        properties:
+          Address1:
+            title: Address
+            type: string
+          Address2:
+            title: Address
+            type: string
+          City:
+            title: City
+            type: string
+          ClassId:
+            format: domain-name
+            title: Class ID
+            type: string
+          Country:
+            title: Country
+            type: string
+          ObjectType:
+            title: Object Type
+            type: string
+          PostalCode:
+            title: Postal Code
+            type: string
+          StateProvince:
+            title: State Province
+            type: string
+        title: Address
+        type: object
+      ClassId:
+        title: Class ID
+        type: string
+      Coordinates:
+        properties:
+          ClassId:
+            title: Class ID
+            type: string
+          Latitude:
+            title: Latitude
+            type: number
+          Longitude:
+            title: Longitude
+            type: number
+          ObjectType:
+            title: Object Type
+            type: string
+        title: Coordinates
+        type: object
+      Name:
+        title: Name
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+    title: Location Details
+    type: object
+  ManagementMode:
+    title: Management Mode
+    type: string
+  MemorySpeed:
+    title: Memory Speed
+    type: string
+  MgmtIpAddress:
+    format: ip-addr
+    title: Management IP Address
+    type: string
+  ModTime:
+    format: date-time
+    title: Modified Time
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  Model:
+    title: Model
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+  Moid:
+    title: MOID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  NumAdaptors:
+    title: Number Of Adaptors
+    type: integer
+  NumCpuCores:
+    title: Number Of CPU Cores
+    type: integer
+  NumCpuCoresEnabled:
+    title: Number Of CPU Cores Enabled
+    type: integer
+  NumCpus:
+    title: Number Of CPUs
+    type: integer
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: cpus
+  NumEthHostInterfaces:
+    title: Number Of Ethernet Host Interfaces
+    type: integer
+  NumFcHostInterfaces:
+    title: Number Of FC Host Interfaces
+    type: integer
+  NumThreads:
+    title: Number Of Threads
+    type: integer
+  ObjectType:
+    title: Object Type
+    type: string
+  OperPowerState:
+    title: Oper Power State
+    type: string
+  OperReason:
+    items:
+      type: string
+    title: Oper Reason
+    type: array
+  OperState:
+    title: Oper State
+    type: string
+  Operability:
+    title: Operability
+    type: string
+  Owners:
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CiscoIntersightAccount
+          key-name: Moid
+    title: Owners
+    type: array
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: owners
+  PackageVersion:
+    title: Package Version
+    type: string
+  Parent:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Parent
+    type: object
+  PermissionResources:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+          x-samos-ref-types:
+            - type-name: CiscoIntersightOrganization
+              key-name: Moid
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Permission Resources
+    type: array
+  Personality:
+    title: Personality
+    type: string
+  PlatformType:
+    title: Platform Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  Presence:
+    title: Presence
+    type: string
+  RegisteredDevice:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Registered Device
+    type: object
+  Revision:
+    title: Revision
+    type: string
+  Rn:
+    title: RN
+    type: string
+  ScaledMode:
+    title: Scaled Mode
+    type: string
+  Serial:
+    title: Serial
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+  ServerId:
+    title: Server ID
+    type: integer
+  ServiceProfile:
+    title: Service Profile
+    type: string
+  SharedScope:
+    title: Shared Scope
+    type: string
+  SlotId:
+    title: Slot ID
+    type: integer
+  SourceObjectType:
+    title: Source Object Type
+    type: string
+  x_tags:
+    title: x_tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CiscoIntersightTag
+          key-name: d_id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+  Tags:
+    x-samos-hidden: true
+    title: Tags
+    type: array
+    items:
+      properties:
+        AncestorDefinitions:
+          items:
+            properties:
+              ClassId:
+                title: Class ID
+                type: string
+              Moid:
+                title: MOID
+                type: string
+              ObjectType:
+                title: Object Type
+                type: string
+              link:
+                title: Link
+                type: string
+            type: object
+          title: Ancestor Definitions
+          type: array
+        Definition:
+          properties:
+            ClassId:
+              title: Class ID
+              type: string
+            Moid:
+              title: MOID
+              type: string
+            ObjectType:
+              title: Object Type
+              type: string
+            link:
+              title: Link
+              type: string
+          title: Definition
+          type: object
+        Key:
+          title: Key
+          type: string
+          x-samos-immutable: true
+        Propagated:
+          title: Propagated?
+          type: boolean
+        SysTag:
+          title: System Tag?
+          type: boolean
+        Type:
+          title: Type
+          type: string
+        Value:
+          title: Value
+          type: string
+  TopologyScanStatus:
+    title: Topology Scan Status
+    type: string
+  TotalMemory:
+    title: Total Memory
+    type: integer
+  TunneledKvm:
+    title: Tunneled KVM?
+    type: boolean
+  UserLabel:
+    title: User Label
+    type: string
+  Uuid:
+    title: UUID
+    type: string
+  Vendor:
+    title: Vendor
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make

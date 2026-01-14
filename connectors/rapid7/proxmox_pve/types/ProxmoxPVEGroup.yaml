@@ -1,0 +1,63 @@
+x-samos-type-name: ProxmoxPVEGroup
+x-samos-namespace: proxmox.pve
+title: Proxmox PVE Group
+description: Represents a group in Proxmox Virtual Environment (PVE).
+
+x-samos-extends-types:
+  - type-name: UserGroup
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: groupid
+  - name: comment
+  - name: members
+
+x-samos-detail:
+  - name: groupid
+  - name: comment
+  - name: members
+
+x-samos-derived-properties:
+  d_group_name:
+    # The "groupid" property represents the name of the group
+    x-samos-hidden: true
+    title: Group Name
+    type: string
+    value: 'groupid'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  comment:
+    title: Comment
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  groupid:
+    title: Name
+    type: string
+    x-samos-immutable: true
+    x-samos-required: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+    x-samos-correlation:
+      correlation-key: UserGroup.name
+      correlation-type: UserGroup
+      priority: 5
+  members:
+    title: Users
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: ProxmoxPVEUser
+          key-name: userid
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups

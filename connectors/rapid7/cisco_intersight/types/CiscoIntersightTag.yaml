@@ -1,0 +1,110 @@
+x-samos-type-name: CiscoIntersightTag
+x-samos-namespace: cisco.intersight
+title: Cisco Intersight Tag
+description: Cisco Intersight metadata tag label
+
+x-samos-global-zone: true
+x-samos-extends-types:
+  - type-name: SourceTag
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: d_name
+  - name: Key
+  - name: Value
+
+x-samos-detail:
+  - name: d_name
+  - name: Key
+  - name: Value
+
+x-samos-derived-properties:
+  d_id:
+    # no id field so derived an id field
+    title: ID
+    type: string
+    syntax: expression
+    value: '{Key}_{Value}_{Type}'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: id
+
+  d_key:
+    # Key is immutable so derived for fulfilling
+    title: Key
+    type: string
+    syntax: jmespath
+    value: Key
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: key
+
+  d_name:
+    # Derived a Name as there is None
+    title: Name
+    type: string
+    syntax: expression
+    value: '{Key}: {Value}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  AncestorDefinitions:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          format: url
+          title: Link
+          type: string
+      type: object
+    title: Ancestor Definitions
+    type: array
+  Definition:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Definition
+    type: object
+  Key:
+    title: Key
+    type: string
+    x-samos-immutable: true
+  Propagated:
+    title: Propagated?
+    type: boolean
+  SysTag:
+    title: System Tag?
+    type: boolean
+  Type:
+    title: Type
+    type: string
+  Value:
+    title: Value
+    type: string
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: value

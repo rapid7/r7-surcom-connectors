@@ -1,0 +1,392 @@
+x-samos-type-name: GLPIComputer
+x-samos-namespace: glpi
+title: GLPI Computer
+description: Representation of a Computer in GLPI.
+
+x-samos-extends-types:
+  - type-name: Machine
+
+$ref: https://example.in1.glpi-network.cloud/api.php#/components/schemas/Computer
+
+x-samos-keys:
+  - d_id
+  - id
+
+required:
+  - id
+x-samos-table:
+  - name: name
+  - name: status.name
+  - name: manufacturer.name
+  - name: type.name
+  - name: model.name
+  - name: location.name
+  - name: d_users
+  - name: d_groups
+  - name: date_creation
+  - name: date_mod
+
+x-samos-detail:
+  - name: name
+  - name: comment
+  - name: is_recursive
+  - name: contact
+  - name: contact_num
+  - name: serial
+  - name: d_mac_addresses
+  - name: otherserial
+  - name: d_users
+  - name: d_groups
+  - name: is_deleted
+  - name: status
+  - name: location
+  - name: entity
+  - name: type
+  - name: manufacturer
+  - name: model
+  - name: user
+  - name: user_tech
+  - name: group
+  - name: group_tech
+  - name: network
+  - name: autoupdatesystem
+  - name: x_network_components
+  - name: date_creation
+  - name: date_mod
+
+x-samos-derived-properties:
+  d_id:
+    # Derived 'id' string property to map to core.component.id,
+    # which is "core.component:id" property is accepted string type
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_users:
+    # Derived property to fulfill core.owned-entity.users,
+    # which is users property accepts string type
+    type: string
+    title: User(s)
+    syntax: jmespath
+    # This creates a list, attaches prefix, flattens, and joins
+    value: "[user.id && join('', ['user_', to_string(user.id)]), group[*].id | map(&to_string(@), @)][] | [?@ != null]"
+    x-samos-ref-types:
+      - type-name: GLPIUser
+        key-name: x_id
+      - type-name: GLPIGroup
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: users
+
+  d_groups:
+    # Derived property to fulfill core.owned-entity.groups,
+    # which accepts only string type
+    type: string
+    title: Group(s)
+    syntax: jmespath
+    value: "[user_tech.id && join('', ['user_', to_string(user_tech.id)]), group_tech[*].id | map(&to_string(@), @)][] | [?@ != null]"
+    x-samos-ref-types:
+      - type-name: GLPIUser
+        key-name: x_id
+      - type-name: GLPIGroup
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: technical_owners
+
+  d_mac_addresses:
+    # We cannot map directly due to nested structure,
+    # so derived property to fulfill Machine.mac_addresses
+    title: Mac Addresses
+    type: array
+    syntax: jmespath
+    value: 'x_network_components[*].mac'
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+
+  d_hostname:
+    # The "hostName" property already fulfills core.named-object:name,
+    # same property cannot fulfill Machine.hostnames,
+    # so we create a derived property to fulfill Machine.hostnames
+    type: string
+    syntax: expression
+    value: '{name}'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+properties:
+  autoupdatesystem:
+    title: Auto Update System
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+      name:
+        title: Name
+        type: string
+  comment:
+    title: Comment
+    type: string
+  contact:
+    title: Contact
+    type: string
+  contact_num:
+    title: Contact Num
+    type: string
+  date_creation:
+    format: date-time
+    title: Created At
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_first_seen
+  date_mod:
+    format: date-time
+    title: Modified At
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+  entity:
+    title: Entity
+    type: object
+    properties:
+      completename:
+        title: Completename
+        type: string
+      id:
+        title: ID
+        type: integer
+        x-samos-immutable: true
+      name:
+        title: Entity
+        type: string
+  group:
+    title: Group
+    type: array
+    items:
+      properties:
+        id:
+          title: ID
+          type: integer
+        name:
+          title: Name
+          type: string
+      type: object
+  group_tech:
+    title: Group Tech
+    type: array
+    items:
+      properties:
+        id:
+          title: ID
+          type: integer
+        name:
+          title: Name
+          type: string
+      type: object
+  id:
+    title: ID
+    type: integer
+    x-samos-immutable: true
+  is_deleted:
+    title: Deleted?
+    type: boolean
+  is_recursive:
+    title: Recursive?
+    type: boolean
+  location:
+    title: Location
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+      name:
+        title: Location
+        type: string
+  manufacturer:
+    title: Manufacturer
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+      name:
+        title: Manufacturer
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: make
+  model:
+    title: Model
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+      name:
+        title: Model
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: model
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  network:
+    title: Network
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+      name:
+        title: Network
+        type: string
+  otherserial:
+    title: Other Serial
+    type: string
+  serial:
+    title: Serial
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+  status:
+    title: Status
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+      name:
+        title: Status
+        type: string
+  type:
+    title: Type
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+      name:
+        title: Type
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: asset_type
+  user:
+    title: User
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+      name:
+        title: Name
+        type: string
+  user_tech:
+    title: User Tech
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+      name:
+        title: Name
+        type: string
+  uuid:
+    title: UUID
+    type: string
+    pattern: .*
+  x_network_components:
+    title: Network Components
+    type: array
+    items:
+      type: object
+      properties:
+        busID:
+          title: Bus ID
+          type: string
+        entity:
+          title: Entity
+          type: object
+          properties:
+            id:
+              title: ID
+              type: integer
+            name:
+              title: Name
+              type: string
+        id:
+          title: ID
+          type: integer
+        is_deleted:
+          title: Deleted?
+          type: boolean
+        is_dynamic:
+          title: Dynamic?
+          type: boolean
+        is_recursive:
+          title: Recursive?
+          type: boolean
+        items_id:
+          title: Items ID
+          type: integer
+        itemtype:
+          title: Item Type
+          type: string
+        location:
+          title: Location
+          type: object
+        mac:
+          title: Mac Address
+          type: string
+        network_card:
+          title: Network Card
+          type: object
+          properties:
+            designation:
+              title: Designation
+              type: string
+            id:
+              title: ID
+              type: integer
+        otherserial:
+          title: Other Serial
+          type: string
+        serial:
+          title: Serial
+          type: string
+        status:
+          title: Status
+          type: string

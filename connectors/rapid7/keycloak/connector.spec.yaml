@@ -1,0 +1,72 @@
+id: keycloak
+name: Keycloak Identity Management (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+reference-schemas:
+  - url: https://keycloak.org/docs-api/latest/rest-api
+    file: refdocs/openapi.json
+
+types:
+  - KeycloakRealm
+  - KeycloakUser
+  - KeycloakGroup
+  - KeycloakClient
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Keycloak Identity Management realms, users, groups and clients.
+    description: Import all Realms, Users, Groups and Clients from Keycloak Identity Management.
+    return_types:
+      - KeycloakRealm
+      - KeycloakUser
+      - KeycloakGroup
+      - KeycloakClient
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: API Base URL
+    description: API Base URL for Keycloak instance.
+    example: https://example.com
+
+  username:
+    type: string
+    title: Username
+    description: Username for keycloak authentication.
+
+  password:
+    type: string
+    title: Password
+    description: Password for keycloak authentication.
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Add required Python dependencies here. Pin each dependency to a specific
+# version.
+# python_dependencies:
+#  - "another_dependency==1.0.0"
+
+categories:
+  - iam
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: True

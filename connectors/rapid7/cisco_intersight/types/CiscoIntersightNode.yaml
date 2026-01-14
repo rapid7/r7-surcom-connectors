@@ -1,0 +1,512 @@
+x-samos-type-name: CiscoIntersightNode
+x-samos-namespace: cisco.intersight
+title: Cisco Intersight Node
+description: Cisco HyperFlex cluster compute node
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - Moid
+
+x-samos-table:
+  - name: HostName
+  - name: Ip.Ip
+  - name: SerialNumber
+  - name: ModelNumber
+  - name: DisplayVersion
+  - name: Role
+  - name: Status
+  - name: CreateTime
+  - name: ModTime
+
+x-samos-detail:
+  - name: HostName
+  - name: BuildNumber
+  - name: SerialNumber
+  - name: ModelNumber
+  - name: DisplayVersion
+  - name: Role
+  - name: Status
+  - name: CreateTime
+  - name: ModTime
+  - name: Version
+  - name: ClassId
+  - name: Cluster
+  - name: ClusterMember
+  - name: Parent
+  - name: PermissionResources
+  - name: Ip
+  - name: Owners
+  - name: SiteInfo
+  - name: EmptySlotsList
+  - name: NodeMaintenanceMode
+  - name: NodeStatus
+  - name: x_tags
+  - name: Owners
+  - name: ObjectType
+  - name: Lockdown
+  - name: Hypervisor
+  - name: HypervisorDataIp
+  - name: HxdpDataIp
+  - name: HxdpMmgtIp
+  - name: Identity
+
+x-samos-derived-properties:
+  d_name:
+    # The 'Hostname' property already fulfills "Machine:hostname",
+    # so we cannot use the same property for "core.named-object:name",
+    # Therefore property is derived.
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'HostName'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_active:
+    # To fulfill active? field with a boolean value
+    x-samos-hidden: true
+    type: boolean
+    value: 'Status == `ONLINE`'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  AccountMoid:
+    title: Account MOID
+    type: string
+  Ancestors:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Ancestors
+    type: array
+  BuildNumber:
+    title: Build Number
+    type: string
+  ClassId:
+    title: Class ID
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  Cluster:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+        x-samos-ref-types:
+          - type-name: CiscoIntersightHyperflexCluster
+            key-name: Moid
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Cluster
+    type: object
+  ClusterMember:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+        x-samos-ref-types:
+          - type-name: CiscoIntersightClusterMember
+            key-name: Moid
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Cluster Member
+    type: object
+  CreateTime:
+    format: date-time
+    title: Create Time
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  DisplayVersion:
+    title: Display Version
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+  DomainGroupMoid:
+    title: Domain Group MOID
+    type: string
+  Drives:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Drives
+    type: array
+  EmptySlotsList:
+    items:
+      type: string
+    title: Empty Slots List
+    type: array
+  HostName:
+    title: Host Name
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+  HxdpDataIp:
+    properties:
+      Address:
+        title: Address
+        type: string
+      ClassId:
+        title: Class ID
+        type: string
+      Fqdn:
+        title: FQDN
+        type: string
+      Ip:
+        format: ip-addr
+        title: IP
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+    title: HXDP Data IP
+    type: object
+  HxdpMmgtIp:
+    properties:
+      Address:
+        title: Address
+        type: string
+      ClassId:
+        title: Class ID
+        type: string
+      Fqdn:
+        title: FQDN
+        type: string
+      Ip:
+        format: ip-addr
+        title: IP
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+    title: HXDP Management IP
+    type: object
+  Hypervisor:
+    title: Hypervisor
+    type: string
+  HypervisorDataIp:
+    properties:
+      Address:
+        title: Address
+        type: string
+      ClassId:
+        title: Class ID
+        type: string
+      Fqdn:
+        title: FQDN
+        type: string
+      Ip:
+        format: ip-addr
+        title: IP
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+    title: Hypervisor Data IP
+    type: object
+  Identity:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Links:
+        items:
+          type: string
+        title: Links
+        type: array
+      ObjectType:
+        title: Object Type
+        type: string
+      Uuid:
+        title: UUID
+        type: string
+    title: Identity
+    type: object
+  Ip:
+    properties:
+      Address:
+        title: Address
+        type: string
+      ClassId:
+        title: Class ID
+        type: string
+      Fqdn:
+        title: FQDN
+        type: string
+      Ip:
+        format: ip-addr
+        title: IP
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: ips
+      ObjectType:
+        title: Object Type
+        type: string
+    title: IP
+    type: object
+  Lockdown:
+    title: Lockdown?
+    type: boolean
+  ModTime:
+    format: date-time
+    title: Modified Time
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  ModelNumber:
+    title: Model Number
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+  Moid:
+    title: MOID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  NodeMaintenanceMode:
+    title: Node Maintenance Mode
+    type: string
+  NodeStatus:
+    title: Node Status
+    type: string
+  NodeUuid:
+    title: Node UUID
+    type: string
+  ObjectType:
+    title: Object Type
+    type: string
+  Owners:
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CiscoIntersightAccount
+          key-name: Moid
+    title: Owners
+    type: array
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: owners
+  Parent:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+        x-samos-ref-types:
+          - type-name: CiscoIntersightHyperflexCluster
+            key-name: Moid
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Parent
+    type: object
+  PermissionResources:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+          x-samos-ref-types:
+            - type-name: CiscoIntersightOrganization
+              key-name: Moid
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Permission Resources
+    type: array
+  PhysicalServer:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Physical Server
+    type: object
+  Role:
+    title: Role
+    type: string
+  SerialNumber:
+    title: Serial Number
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+  SharedScope:
+    title: Shared Scope
+    type: string
+  SiteInfo:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Name:
+        title: Name
+        type: string
+      NumNodes:
+        title: Number Of Nodes
+        type: integer
+      ObjectType:
+        title: Object Type
+        type: string
+      ZoneUuid:
+        title: Zone UUID
+        type: string
+    title: Site Info
+    type: object
+  Status:
+    title: Status
+    type: string
+  x_tags:
+    title: x_tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CiscoIntersightTag
+          key-name: d_id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+  Tags:
+    x-samos-hidden: true
+    title: Tags
+    type: array
+    items:
+      properties:
+        AncestorDefinitions:
+          items:
+            properties:
+              ClassId:
+                title: Class ID
+                type: string
+              Moid:
+                title: MOID
+                type: string
+              ObjectType:
+                title: Object Type
+                type: string
+              link:
+                title: Link
+                type: string
+            type: object
+          title: Ancestor Definitions
+          type: array
+        Definition:
+          properties:
+            ClassId:
+              title: Class ID
+              type: string
+            Moid:
+              title: MOID
+              type: string
+            ObjectType:
+              title: Object Type
+              type: string
+            link:
+              title: Link
+              type: string
+          title: Definition
+          type: object
+        Key:
+          title: Key
+          type: string
+          x-samos-immutable: true
+        Propagated:
+          title: Propagated?
+          type: boolean
+        SysTag:
+          title: System Tag?
+          type: boolean
+        Type:
+          title: Type
+          type: string
+        Value:
+          title: Value
+          type: string
+  Version:
+    title: Version
+    type: string

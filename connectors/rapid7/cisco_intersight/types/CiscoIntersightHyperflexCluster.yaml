@@ -1,0 +1,759 @@
+x-samos-type-name: CiscoIntersightHyperflexCluster
+x-samos-namespace: cisco.intersight
+title: Cisco Intersight Hyperflex Cluster
+description: HyperFlex cluster detailed snapshot
+
+x-samos-extends-types:
+  - type-name: core.cluster
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - Moid
+
+x-samos-table:
+  - name: Name
+  - name: HxdpBuildVersion
+  - name: HypervisorVersion
+  - name: DeploymentType
+  - name: VmCount
+  - name: Status
+  - name: CreateTime
+  - name: ModTime
+
+x-samos-detail:
+  - name: Name
+  - name: HxdpBuildVersion
+  - name: HypervisorVersion
+  - name: DeploymentType
+  - name: VmCount
+  - name: Status
+  - name: CreateTime
+  - name: ModTime
+  - name: ClusterName
+  - name: ClusterPurpose
+  - name: ClusterType
+  - name: ObjectType
+  - name: Nodes
+  - name: AlarmSummary
+  - name: Capability
+  - name: CapacityRunway
+  - name: ComputeNodeCount
+  - name: ConvergedNodeCount
+  - name: NetworkConfiguration
+  - name: Owners
+  - name: PermissionResources
+  - name: DnsServers
+  - name: DriveType
+  - name: FltAggr
+  - name: ClassId
+  - name: NtpServers
+  - name: HxVersion
+  - name: HypervisorType
+  - name: HypervisorVersion
+  - name: StorageCapacity
+  - name: StorageClientIpPools
+  - name: StorageClientVrf
+  - name: StorageNodeCount
+  - name: StorageUtilization
+  - name: Summary
+  - name: UpgradeStatus
+  - name: UplinkSpeed
+  - name: UtilizationPercentage
+  - name: UtilizationTrendPercentage
+  - name: VcenterConfiguration
+  - name: VmCount
+  - name: Volumes
+  - name: Volumes
+  - name: x_tags
+
+x-samos-derived-properties:
+  d_hostname:
+    # Fulfilling hostname with the name value
+    title: Hostname
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: '[Name]|[?@]'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_active:
+    # To fulfill active? field with a boolean value
+    title: Active?
+    x-samos-hidden: true
+    type: boolean
+    value: 'Summary.State == `ONLINE`'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  AccountMoid:
+    title: Account MOID
+    type: string
+  Alarm:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Alarm
+    type: array
+  AlarmSummary:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Critical:
+        title: Critical
+        type: integer
+      Health:
+        title: Health
+        type: string
+      Info:
+        title: Info
+        type: integer
+      ObjectType:
+        title: Object Type
+        type: string
+      Warning:
+        title: Warning
+        type: integer
+    title: Alarm Summary
+    type: object
+  Ancestors:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Ancestors
+    type: array
+  AssociatedProfile:
+    title: Associated Profile
+    type: string
+  Capability:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      EncryptionSupported:
+        title: Encryption Supported?
+        type: boolean
+      IscsiSupported:
+        title: ISCSI Supported?
+        type: boolean
+      ObjectType:
+        title: Object Type
+        type: string
+      ReplicationSupported:
+        title: Replication Supported?
+        type: boolean
+    title: Capability
+    type: object
+  CapacityRunway:
+    title: Capacity Runway
+    type: integer
+  ChildClusters:
+    items:
+      type: string
+    title: Child Clusters
+    type: array
+  ClassId:
+    title: Class ID
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  ClusterName:
+    title: Cluster Name
+    type: string
+  ClusterPurpose:
+    title: Cluster Purpose
+    type: string
+  ClusterType:
+    title: Cluster Type
+    type: integer
+  ClusterUuid:
+    title: Cluster UUID
+    type: string
+  ComputeNodeCount:
+    title: Compute Node Count
+    type: integer
+  ConvergedNodeCount:
+    title: Converged Node Count
+    type: integer
+  CreateTime:
+    format: date-time
+    title: Create Time
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  DeploymentType:
+    title: Deployment Type
+    type: string
+  DeviceId:
+    title: Device ID
+    type: string
+  DnsServers:
+    items:
+      type: string
+    title: DNS Servers
+    type: array
+  DomainGroupMoid:
+    title: Domain Group MOID
+    type: string
+  DriveType:
+    title: Drive Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_tag
+  Encryption:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Encryption
+    type: object
+  EncryptionStatus:
+    title: Encryption Status
+    type: string
+  FltAggr:
+    title: FLT Aggregate
+    type: integer
+  Health:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Health
+    type: object
+  HxVersion:
+    title: HX Version
+    type: string
+  HxdpBuildVersion:
+    title: HXDP Build Version
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+  HypervisorType:
+    title: Hypervisor Type
+    type: string
+  HypervisorVersion:
+    title: Hypervisor Version
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+  Identity:
+    title: Identity
+    type: string
+  License:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: License
+    type: object
+  ModTime:
+    format: date-time
+    title: Modified Time
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  Moid:
+    title: MOID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  NetworkConfiguration:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      DataGatewayIpAddress:
+        title: Data Gateway IP Address
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: ips
+      DataIpAddress:
+        title: Data IP Address
+        type: string
+      DataNetmask:
+        title: Data Netmask
+        type: string
+      DataVlan:
+        title: Data VLAN
+        type: integer
+      DnsSuffix:
+        title: DNS Suffix
+        type: string
+      JumboFrameEnabled:
+        title: Jumbo Frame Enabled?
+        type: boolean
+      LiveMigrationVlan:
+        title: Live Migration VLAN
+        type: integer
+      MgmtGatewayIpAddress:
+        format: ip-addr
+        title: Management Gateway IP Address
+        type: string
+      MgmtIpAddress:
+        format: ip-addr
+        title: Management IP Address
+        type: string
+      MgmtNetmask:
+        format: ip-addr
+        title: Management Netmask
+        type: string
+      MgmtVlan:
+        title: Management VLAN
+        type: integer
+      ObjectType:
+        title: Object Type
+        type: string
+      Timezone:
+        title: Timezone
+        type: string
+      VmNetworkVlans:
+        items:
+          type: integer
+        title: VM Network VLANS
+        type: array
+    title: Network Configuration
+    type: object
+  Nodes:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+          x-samos-ref-types:
+            - type-name: CiscoIntersightNode
+              key-name: Moid
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Nodes
+    type: array
+  NtpServers:
+    items:
+      type: string
+    title: NTP Servers
+    type: array
+  ObjectType:
+    title: Object Type
+    type: string
+  Owners:
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CiscoIntersightAccount
+          key-name: Moid
+    title: Owners
+    type: array
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: owners
+  ParentCluster:
+    title: Parent Cluster
+    type: string
+  PermissionResources:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+          x-samos-ref-types:
+            - type-name: CiscoIntersightOrganization
+              key-name: Moid
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Permission Resources
+    type: array
+  RegisteredDevice:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Registered Device
+    type: object
+  SharedScope:
+    title: Shared Scope
+    type: string
+  Status:
+    title: Status
+    type: string
+  StorageCapacity:
+    title: Storage Capacity
+    type: integer
+  StorageClientIpPools:
+    items:
+      type: string
+    title: Storage Client IP Pools
+    type: array
+  StorageClientVrf:
+    title: Storage Client VRF
+    type: string
+  StorageContainers:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Storage Containers
+    type: array
+  StorageNodeCount:
+    title: Storage Node Count
+    type: integer
+  StorageUtilization:
+    title: Storage Utilization
+    type: integer
+  Summary:
+    properties:
+      ActiveNodes:
+        title: Active Nodes
+        type: string
+      Address:
+        format: ip-addr
+        title: IP Address
+        type: string
+      Boottime:
+        title: Boot Time
+        type: integer
+      ClassId:
+        title: Class ID
+        type: string
+      ClusterAccessPolicy:
+        title: Cluster Access Policy
+        type: string
+      CompressionSavings:
+        title: Compression Savings
+        type: number
+      DataReplicationCompliance:
+        title: Data Replication Compliance
+        type: string
+      DataReplicationFactor:
+        title: Data Replication Factor
+        type: string
+      DeduplicationSavings:
+        title: Deduplication Savings
+        type: number
+      Downtime:
+        title: Downtime
+        type: string
+      FreeCapacity:
+        title: Free Capacity
+        type: integer
+      HealingInfo:
+        properties:
+          ClassId:
+            title: Class ID
+            type: string
+          EstimatedCompletionTimeInSeconds:
+            title: Estimated Completion Time In Seconds
+            type: integer
+          InProgress:
+            title: In Progress?
+            type: boolean
+          Messages:
+            items:
+              type: string
+            title: Messages
+            type: array
+          MessagesIterator:
+            title: Messages Iterator
+            type: string
+          MessagesSize:
+            title: Messages Size
+            type: integer
+          ObjectType:
+            title: Object Type
+            type: string
+          PercentComplete:
+            title: Percent Complete
+            type: integer
+        title: Healing Info
+        type: object
+      Name:
+        title: Name
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      ResiliencyDetails:
+        title: Resiliency Details
+        type: string
+      ResiliencyDetailsSize:
+        title: Resiliency Details Size
+        type: integer
+      ResiliencyInfo:
+        properties:
+          ClassId:
+            title: Class ID
+            type: string
+          HddFailuresTolerable:
+            title: Hdd Failures Tolerable
+            type: integer
+          Messages:
+            items:
+              type: string
+            title: Messages
+            type: array
+          MessagesIterator:
+            items:
+              type: string
+            title: Messages Iterator
+            type: array
+          MessagesSize:
+            title: Messages Size
+            type: integer
+          NodeFailuresTolerable:
+            title: Node Failures Tolerable
+            type: integer
+          ObjectType:
+            title: Object Type
+            type: string
+          SsdFailuresTolerable:
+            title: SSD Failures Tolerable
+            type: integer
+          State:
+            title: State
+            type: string
+        title: Resiliency Info
+        type: object
+      SpaceStatus:
+        title: Space Status
+        type: string
+      State:
+        title: State
+        type: string
+      TotalCapacity:
+        title: Total Capacity
+        type: integer
+      TotalSavings:
+        title: Total Savings
+        type: number
+      Uptime:
+        title: Uptime
+        type: string
+      UsedCapacity:
+        title: Used Capacity
+        type: integer
+    title: Summary
+    type: object
+  x_tags:
+    title: x_tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CiscoIntersightTag
+          key-name: d_id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+  Tags:
+    x-samos-hidden: true
+    title: Tags
+    type: array
+    items:
+      properties:
+        AncestorDefinitions:
+          items:
+            properties:
+              ClassId:
+                title: Class ID
+                type: string
+              Moid:
+                title: MOID
+                type: string
+              ObjectType:
+                title: Object Type
+                type: string
+              link:
+                title: Link
+                type: string
+            type: object
+          title: Ancestor Definitions
+          type: array
+        Definition:
+          properties:
+            ClassId:
+              title: Class ID
+              type: string
+            Moid:
+              title: MOID
+              type: string
+            ObjectType:
+              title: Object Type
+              type: string
+            link:
+              title: Link
+              type: string
+          title: Definition
+          type: object
+        Key:
+          title: Key
+          type: string
+          x-samos-immutable: true
+        Propagated:
+          title: Propagated?
+          type: boolean
+        SysTag:
+          title: System Tag?
+          type: boolean
+        Type:
+          title: Type
+          type: string
+        Value:
+          title: Value
+          type: string
+  UpgradeStatus:
+    title: Upgrade Status
+    type: string
+  UplinkSpeed:
+    title: Uplink Speed
+    type: string
+  UtilizationPercentage:
+    title: Utilization Percentage
+    type: number
+  UtilizationTrendPercentage:
+    title: Utilization Trend Percentage
+    type: number
+  VcenterConfiguration:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      ClusterId:
+        title: Cluster ID
+        type: string
+      ClusterName:
+        title: Cluster Name
+        type: string
+      DatacenterId:
+        title: Datacenter ID
+        type: string
+      DatacenterName:
+        title: Datacenter Name
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      Url:
+        format: ip-addr
+        title: URL
+        type: string
+    title: Vcenter Configuration
+    type: object
+  VmCount:
+    title: VM Count
+    type: integer
+  Volumes:
+    items:
+      type: string
+    title: Volumes
+    type: array
+  ZoneType:
+    title: Zone Type
+    type: string

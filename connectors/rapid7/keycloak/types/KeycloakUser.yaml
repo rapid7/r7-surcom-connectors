@@ -1,0 +1,166 @@
+x-samos-type-name: KeycloakUser
+x-samos-namespace: keycloak
+title: Keycloak User
+description: A User from Keycloak.
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: username
+  - name: firstName
+  - name: lastName
+  - name: email
+
+x-samos-detail:
+  - name: username
+  - name: firstName
+  - name: lastName
+  - name: email
+  - name: emailVerified
+  - name: x_realm_id
+  - name: x_group_ids
+  - name: x_client_ids
+  - name: x_client_roles
+  - name: x_realm_roles
+  - name: attributes
+  - name: enabled
+  - name: createdTimestamp
+  - name: totp
+  - name: disableableCredentialTypes
+  - name: requiredActions
+  - name: notBefore
+  - name: access
+
+x-samos-derived-properties:
+  d_name:
+    # To fulfill name , as respective properties are alreday fulfilled.
+    type: string
+    syntax: expression
+    value: '{firstName} {lastName}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  id:
+    type: string
+    title: Id
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  username:
+    type: string
+    title: User name
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+  firstName:
+    type: string
+    title: First name
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+  lastName:
+    type: string
+    title: Last name
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+  email:
+    type: string
+    title: Email
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 1
+  emailVerified:
+    type: boolean
+    title: Email Verified?
+  attributes:
+    title: Attributes
+    type: object
+    properties:
+      is_temporary_admin:
+        title: Temporary Admin
+        type: array
+        items:
+          type: string
+  userProfileMetadata:
+    x-samos-hidden: true
+    title: User Profile Metadata
+    type: object
+
+  enabled:
+    type: boolean
+    title: Enabled?
+  createdTimestamp:
+    type: integer
+    title: Created at
+    format: epoch-millis
+  totp:
+    type: boolean
+    title: TOTP?
+  disableableCredentialTypes:
+    type: array
+    title: Disableable Credential Types
+    items:
+      type: string
+  requiredActions:
+    type: array
+    title: Required Actions
+    items:
+      type: string
+  notBefore:
+    type: integer
+    title: Not Before
+  access:
+    title: Access
+    type: object
+    properties:
+      manage:
+        title: Manage?
+        type: boolean
+
+  x_realm_id:
+    type: string
+    title: Realm
+    x-samos-ref-types:
+      - type-name: KeycloakRealm
+        key-name: id
+  x_group_ids:
+    type: array
+    title: Groups
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: KeycloakGroup
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups
+  x_client_ids:
+    type: array
+    title: Clients
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: KeycloakClient
+          key-name: id
+  x_client_roles:
+    type: array
+    title: Client Roles
+    items:
+      type: string
+  x_realm_roles:
+    type: array
+    title: Realm Roles
+    items:
+      type: string

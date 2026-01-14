@@ -1,0 +1,657 @@
+x-samos-type-name: CiscoIntersightFabricInterconnect
+x-samos-namespace: cisco.intersight
+title: Cisco Intersight Fabric Interconnect
+description: Intersight network element overview
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - Moid
+
+x-samos-table:
+  - name: Name
+  - name: Model
+  - name: FirmwareVersion
+  - name: NumEtherPorts
+  - name: SwitchType
+  - name: SystemUpTime
+  - name: CreateTime
+  - name: ModTime
+
+x-samos-detail:
+  - name: Name
+  - name: Model
+  - name: FirmwareVersion
+  - name: NumEtherPorts
+  - name: NumEtherPortsConfigured
+  - name: NumEtherPortsLinkUp
+  - name: SwitchType
+  - name: SwitchProfileName
+  - name: SystemUpTime
+  - name: PartNumber
+  - name: CreateTime
+  - name: ModTime
+  - name: UserLabel
+  - name: OutOfBandMac
+  - name: Firmware
+  - name: DefaultDomain
+  - name: AdminEvacState
+  - name: AdminInbandInterfaceState
+  - name: BundleVersion
+  - name: Serial
+  - name: Chassis
+  - name: ClassId
+  - name: AlarmSummary
+  - name: PermissionResources
+  - name: Ipv4Address
+  - name: ConfModTsBackup
+  - name: ConnectionStatus
+  - name: Dn
+  - name: NumExpansionModules
+  - name: EthernetMode
+  - name: EthernetSwitchingMode
+  - name: FpgaUpgradeNeeded
+  - name: NumFcPorts
+  - name: NumFcPortsConfigured
+  - name: NumFcPortsLinkUp
+  - name: FcMode
+  - name: FcSwitchingMode
+  - name: Owners
+  - name: FaultSummary
+  - name: OperEvacState
+  - name: OutOfBandIpGateway
+  - name: Thermal
+  - name: JumboFrameEnabled
+  - name: InbandIpAddress
+  - name: InbandIpGateway
+  - name: InbandIpMask
+  - name: InbandVlan
+  - name: OutOfBandIpAddress
+  - name: OutOfBandIpMask
+  - name: OutOfBandIpv4Address
+  - name: OutOfBandIpv4Gateway
+  - name: OutOfBandIpv4Mask
+  - name: OutOfBandIpv6Address
+  - name: OutOfBandIpv6Gateway
+  - name: OutOfBandIpv6Prefix
+  - name: InterClusterLinkState
+  - name: TotalMemory
+  - name: Presence
+  - name: ManagementMode
+  - name: ObjectType
+  - name: Revision
+  - name: Vendor
+  - name: x_tags
+  - name: IsUpgraded
+  - name: Version
+  - name: Status
+  - name: Operability
+  - name: AvailableMemory
+
+x-samos-derived-properties:
+  d_hostnames:
+    # Fulfilling hostname with the name value
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: '[Name]|[?@]'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_active:
+    # To fulfill active? field with a boolean value
+    x-samos-hidden: true
+    type: boolean
+    value: 'Operability == `online`'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  AccountMoid:
+    title: Account MOID
+    type: string
+  AdminEvacState:
+    title: Admin Evac State
+    type: string
+  AdminInbandInterfaceState:
+    title: Admin Inband Interface State
+    type: string
+  AlarmSummary:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Critical:
+        title: Critical
+        type: integer
+      Health:
+        title: Health
+        type: string
+      Info:
+        title: Info
+        type: integer
+      ObjectType:
+        title: Object Type
+        type: string
+      Suppressed:
+        title: Suppressed?
+        type: boolean
+      SuppressedCritical:
+        title: Suppressed Critical
+        type: integer
+      SuppressedInfo:
+        title: Suppressed Info
+        type: integer
+      SuppressedWarning:
+        title: Suppressed Warning
+        type: integer
+      Warning:
+        title: Warning
+        type: integer
+    title: Alarm Summary
+    type: object
+  Ancestors:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Ancestors
+    type: array
+  AvailableMemory:
+    title: Available Memory
+    type: string
+  BundleVersion:
+    title: Bundle Version
+    type: string
+  Chassis:
+    title: Chassis
+    type: string
+  ClassId:
+    title: Class ID
+    type: string
+  ConfModTs:
+    title: Conf Mod TS
+    type: string
+  ConfModTsBackup:
+    title: Conf Mod TS Backup
+    type: string
+  ConnectionStatus:
+    title: Connection Status
+    type: string
+  CreateTime:
+    format: date-time
+    title: Create Time
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  DefaultDomain:
+    title: Default Domain
+    type: string
+  DeviceMoId:
+    title: Device MOID
+    type: string
+  Dn:
+    title: Dn
+    type: string
+  DomainGroupMoid:
+    title: Domain Group MOID
+    type: string
+  EquipmentChassis:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Equipment Chassis
+    type: array
+  EthernetMode:
+    title: Ethernet Mode
+    type: string
+  EthernetSwitchingMode:
+    title: Ethernet Switching Mode
+    type: string
+  FaultSummary:
+    title: Fault Summary
+    type: integer
+  FcMode:
+    title: FC Mode
+    type: string
+  FcSwitchingMode:
+    title: FC Switching Mode
+    type: string
+  Firmware:
+    title: Firmware
+    type: string
+  FirmwareVersion:
+    title: Firmware Version
+    type: string
+  FpgaUpgradeNeeded:
+    title: FPGA Upgrade Needed?
+    type: boolean
+  InbandIpAddress:
+    title: Inband IP Address
+    type: string
+  InbandIpGateway:
+    title: Inband IP Gateway
+    type: string
+  InbandIpMask:
+    title: Inband IP Mask
+    type: string
+  InbandVlan:
+    title: Inband Vlan
+    type: integer
+  InterClusterLinkState:
+    title: Inter Cluster Link State
+    type: string
+  InventoryParent:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Inventory Parent
+    type: object
+  Ipv4Address:
+    title: IPV4 Address
+    type: string
+    format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  IsUpgraded:
+    title: Is Upgraded?
+    type: boolean
+  JumboFrameEnabled:
+    title: Jumbo Frame Enabled?
+    type: boolean
+  LocationDetails:
+    properties:
+      Address:
+        properties:
+          Address1:
+            title: Address
+            type: string
+          Address2:
+            title: Address
+            type: string
+          City:
+            title: City
+            type: string
+          ClassId:
+            format: domain-name
+            title: Class ID
+            type: string
+          Country:
+            title: Country
+            type: string
+          ObjectType:
+            title: Object Type
+            type: string
+          PostalCode:
+            title: Postal Code
+            type: string
+          StateProvince:
+            title: State Province
+            type: string
+        title: Address
+        type: object
+      ClassId:
+        title: Class ID
+        type: string
+      Coordinates:
+        properties:
+          ClassId:
+            title: Class ID
+            type: string
+          Latitude:
+            title: Latitude
+            type: number
+          Longitude:
+            title: Longitude
+            type: number
+          ObjectType:
+            title: Object Type
+            type: string
+        title: Coordinates
+        type: object
+      Name:
+        title: Name
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+    title: Location Details
+    type: object
+  ManagementMode:
+    title: Management Mode
+    type: string
+  ModTime:
+    format: date-time
+    title: Modified Time
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  Model:
+    title: Model
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+  Moid:
+    title: MOID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+  NumEtherPorts:
+    title: Number Of Ether Ports
+    type: integer
+  NumEtherPortsConfigured:
+    title: Number Of Ether Ports Configured
+    type: integer
+  NumEtherPortsLinkUp:
+    title: Number Of Ether Ports Link Up
+    type: integer
+  NumExpansionModules:
+    title: Number Of Expansion Modules
+    type: integer
+  NumFcPorts:
+    title: Number Of FC Ports
+    type: integer
+  NumFcPortsConfigured:
+    title: Number Of FC Ports Configured
+    type: integer
+  NumFcPortsLinkUp:
+    title: Number Of FC Ports Link Up
+    type: integer
+  ObjectType:
+    title: Object Type
+    type: string
+  OperEvacState:
+    title: Oper Evac State
+    type: string
+  Operability:
+    title: Operability
+    type: string
+  OutOfBandIpAddress:
+    title: Out Of Band IP Address
+    type: string
+  OutOfBandIpGateway:
+    format: ip-addr
+    title: Out Of Band IP Gateway
+    type: string
+  OutOfBandIpMask:
+    title: Out Of Band IP Mask
+    type: string
+  OutOfBandIpv4Address:
+    title: Out Of Band IPV4 Address
+    type: string
+  OutOfBandIpv4Gateway:
+    title: Out Of Band IPV4 Gateway
+    type: string
+  OutOfBandIpv4Mask:
+    title: Out Of Band IPV4 Mask
+    type: string
+  OutOfBandIpv6Address:
+    title: Out Of Band IPV6 Address
+    type: string
+  OutOfBandIpv6Gateway:
+    title: Out Of Band IPV6 Gateway
+    type: string
+  OutOfBandIpv6Prefix:
+    title: Out Of Band IPV6 Prefix
+    type: string
+  OutOfBandMac:
+    format: mac-addr
+    title: Out Of Band Mac
+    type: string
+  Owners:
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CiscoIntersightAccount
+          key-name: Moid
+    title: Owners
+    type: array
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: owners
+  Parent:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Parent
+    type: object
+  PartNumber:
+    title: Part Number
+    type: string
+  PermissionResources:
+    items:
+      properties:
+        ClassId:
+          title: Class ID
+          type: string
+        Moid:
+          title: MOID
+          type: string
+          x-samos-ref-types:
+            - type-name: CiscoIntersightOrganization
+              key-name: Moid
+        ObjectType:
+          title: Object Type
+          type: string
+        link:
+          title: Link
+          type: string
+      type: object
+    title: Permission Resources
+    type: array
+  Presence:
+    title: Presence
+    type: string
+  RegisteredDevice:
+    properties:
+      ClassId:
+        title: Class ID
+        type: string
+      Moid:
+        title: MOID
+        type: string
+      ObjectType:
+        title: Object Type
+        type: string
+      link:
+        title: Link
+        type: string
+    title: Registered Device
+    type: object
+  ReservedVlanStartId:
+    title: Reserved Vlan Start ID
+    type: integer
+  Revision:
+    title: Revision
+    type: string
+  Rn:
+    title: RN
+    type: string
+  Serial:
+    title: Serial
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+  SharedScope:
+    title: Shared Scope
+    type: string
+  SlotId:
+    title: Slot ID
+    type: integer
+  SourceObjectType:
+    title: Source Object Type
+    type: string
+  Status:
+    title: Status
+    type: string
+  SwitchId:
+    title: Switch ID
+    type: string
+  SwitchProfileName:
+    title: Switch Profile Name
+    type: string
+  SwitchType:
+    title: Switch Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  SystemUpTime:
+    title: System Up Time
+    type: string
+  x_tags:
+    title: x_tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CiscoIntersightTag
+          key-name: d_id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+  Tags:
+    x-samos-hidden: true
+    title: Tags
+    type: array
+    items:
+      properties:
+        AncestorDefinitions:
+          items:
+            properties:
+              ClassId:
+                title: Class ID
+                type: string
+              Moid:
+                title: MOID
+                type: string
+              ObjectType:
+                title: Object Type
+                type: string
+              link:
+                title: Link
+                type: string
+            type: object
+          title: Ancestor Definitions
+          type: array
+        Definition:
+          properties:
+            ClassId:
+              title: Class ID
+              type: string
+            Moid:
+              title: MOID
+              type: string
+            ObjectType:
+              title: Object Type
+              type: string
+            link:
+              title: Link
+              type: string
+          title: Definition
+          type: object
+        Key:
+          title: Key
+          type: string
+          x-samos-immutable: true
+        Propagated:
+          title: Propagated?
+          type: boolean
+        SysTag:
+          title: System Tag?
+          type: boolean
+        Type:
+          title: Type
+          type: string
+        Value:
+          title: Value
+          type: string
+  Thermal:
+    title: Thermal
+    type: string
+  TotalMemory:
+    title: Total Memory
+    type: integer
+  UserLabel:
+    title: User Label
+    type: string
+  Vendor:
+    title: Vendor
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+  Version:
+    title: Version
+    type: string

@@ -1,0 +1,70 @@
+id: anthropic
+name: Anthropic (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2025 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - AnthropicUser
+  - AnthropicWorkspace
+  - AnthropicClaudeCodeUser
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Anthropic users, workspaces, and Claude Code users
+    description: Import all users, workspaces, and Claude Code users from Anthropic
+    return_types:
+      - AnthropicUser
+      - AnthropicWorkspace
+      - AnthropicClaudeCodeUser
+
+# Configuration settings for this connector.
+settings:
+  api_key:
+    type: string
+    title: API Key
+    description: Anthropic API key with admin permissions
+    format: password
+
+  include_archived_workspaces:
+    type: boolean
+    title: Include Archived Workspaces?
+    description: If enabled, include archived workspaces in the import
+    default: false
+
+  lookback_days:
+    type: integer
+    title: Look Back Day(s)
+    description: >-
+      Number of days of Claude Code analytics to retrieve (1-90). Defaults to 7
+    default: 7
+    minimum: 1
+    maximum: 90
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Add required Python dependencies here. Pin each dependency to a specific
+# version.
+# python_dependencies:
+#  - "another_dependency==1.0.0"
+
+# Categories for this connector in the Extension Library.
+categories:
+  - iam
+
+# If true, when installing in Surface Command, the user
+# gets specific installation instructions
+show_orchestrator_ui: false

@@ -1,0 +1,75 @@
+id: glpi
+name: GLPI (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+reference-schemas:
+  - url: https://example.in1.glpi-network.cloud/api.php
+    file: refdocs/openapi.json
+
+types:
+  - GLPIComputer
+  - GLPINetworkDevice
+  - GLPIGroup
+  - GLPIUser
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: GLPI Computers, Groups, and Users
+    description: Import all Computers, Groups, and Users from GLPI CMDB
+    return_types:
+      - GLPIComputer
+      - GLPINetworkDevice
+      - GLPIGroup
+      - GLPIUser
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    example: https://example.in1.glpi-network.cloud
+    description: Base URL for the GLPI CMDB instance
+
+  username:
+    type: string
+    title: Username
+    description: Username for authenticating with the GLPI CMDB API
+
+  password:
+    type: string
+    title: Password
+    description: Password for authenticating with the GLPI CMDB API
+    format: password
+
+  client_id:
+    type: string
+    title: Client ID
+    description: OAuth Client ID for authenticating with the GLPI CMDB API
+
+  client_secret:
+    type: string
+    title: Client Secret
+    description: OAuth Client Secret for authenticating with the GLPI CMDB API
+    format: password
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - asset_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

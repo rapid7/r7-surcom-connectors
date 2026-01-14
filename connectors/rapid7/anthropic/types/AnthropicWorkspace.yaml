@@ -1,0 +1,53 @@
+x-samos-type-name: AnthropicWorkspace
+x-samos-namespace: anthropic
+title: Anthropic Workspace
+description: Workspace in Anthropic
+
+x-samos-extends-types:
+  - type-name: core.named-object
+  - type-name: core.component
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: created_at
+  - name: archived_at
+  - name: type
+
+x-samos-detail:
+  - name: type
+  - name: name
+  - name: created_at
+  - name: archived_at
+  - name: display_color
+
+properties:
+  id:
+    type: string
+    title: Id
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  type:
+    type: string
+    title: Type
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  created_at:
+    type: string
+    title: Created At
+    format: date-time
+  archived_at:
+    type: string
+    title: Archived At
+    format: date-time
+  display_color:
+    type: string
+    title: Display Color

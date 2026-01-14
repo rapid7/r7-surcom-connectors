@@ -1,0 +1,129 @@
+x-samos-type-name: KeycloakGroup
+x-samos-namespace: keycloak
+
+title: Keycloak Group
+description: A Group in Keycloak.
+
+x-samos-extends-types:
+  - type-name: UserGroup
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: path
+  - name: subGroupCount
+  - name: x_realm_id
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: path
+  - name: subGroupCount
+  - name: x_realm_id
+  - name: x_parent_id
+  - name: x_subgroups
+  - name: access
+  - name: parentId
+  - name: realmRoles
+  - name: clientRoles
+  - name: attributes
+
+properties:
+  id:
+    type: string
+    title: Id
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  path:
+    type: string
+    title: Path
+  subGroupCount:
+    type: integer
+    title: Sub Group Count
+  subGroups:
+    # usually this is always [] as there is a seperate endpoint to get this info. Hence, Hidden.
+    x-samos-hidden: true
+    type: array
+    title: Sub Group's
+    items:
+      type: json
+  attributes:
+    type: object
+    title: Attributes
+    # Properties not described as the attributes are dynamic key/value pairs.
+  realmRoles:
+    type: array
+    title: Realm Roles
+    items:
+      type: string
+  clientRoles:
+    type: array
+    title: Client Roles
+    items:
+      type: object
+      properties:
+        account:
+          title: Accounts
+          type: array
+          items:
+            type: string
+  access:
+    title: Access
+    type: object
+    properties:
+      view:
+        title: View?
+        type: boolean
+      viewMembers:
+        title: View Members?
+        type: boolean
+      manageMembers:
+        title: Manage Members?
+        type: boolean
+      manage:
+        title: Manage?
+        type: boolean
+      manageMembership:
+        title: Manage Membership?
+        type: boolean
+
+  x_realm_id:
+    type: string
+    title: Realm
+    x-samos-ref-types:
+      - type-name: KeycloakRealm
+        key-name: id
+  x_parent_id:
+    type: string
+    title: Parent Group
+    x-samos-ref-types:
+      - type-name: KeycloakGroup
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups
+  x_subgroups:
+    type: array
+    title: Sub Groups
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: KeycloakGroup
+          key-name: id

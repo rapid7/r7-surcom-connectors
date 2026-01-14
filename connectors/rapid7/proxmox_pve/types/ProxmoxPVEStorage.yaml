@@ -1,0 +1,119 @@
+x-samos-type-name: ProxmoxPVEStorage
+x-samos-namespace: proxmox.pve
+title: Proxmox PVE Storage
+description: Represents a storage resource in Proxmox Virtual Environment (PVE).
+
+x-samos-extends-types:
+  - type-name: Storage
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: id
+  - name: storage
+  - name: d_content
+  - name: type
+  - name: status
+  - name: active
+
+x-samos-detail:
+  - name: id
+  - name: storage
+  - name: d_content
+  - name: type
+  - name: plugintype
+  - name: status
+  - name: maxdisk
+  - name: active
+  - name: enabled
+  - name: used
+  - name: avail
+  - name: total
+  - name: used_fraction
+  - name: disk
+  - name: shared
+  - name: node
+
+x-samos-derived-properties:
+  d_active:
+    # The "active" property has an integer ID in the response as 1 or 0
+    # Deriving the `active` property to fulfills `core.principal:active` which is of type boolean
+    x-samos-hidden: true
+    title: Active?
+    type: boolean
+    value: 'active == `1`'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_content:
+    # The "content" property is a comma-separated string in the response
+    # Deriving the `content` property to fulfills `core.component:content` which is of type array/string list
+    title: Content List
+    type: array
+    syntax: jsonpath
+    value: '$.content.`splitlist(,, string)`'
+    items:
+      type: string
+
+properties:
+  active:
+    title: Active
+    type: integer
+  avail:
+    title: Available
+    type: integer
+  content:
+    title: Content
+    type: string
+  enabled:
+    title: Enabled
+    type: integer
+  disk:
+    title: Disk
+    type: integer
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  maxdisk:
+    title: Max Disk
+    type: integer
+  node:
+    title: Node
+    type: string
+    x-samos-ref-types:
+      - type-name: ProxmoxPVENode
+        key-name: node
+  plugintype:
+    title: Plugin Type
+    type: string
+  shared:
+    title: Shared
+    type: integer
+  status:
+    title: Status
+    type: string
+  storage:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  type:
+    title: Type
+    type: string
+  total:
+    title: Total
+    type: integer
+  used:
+    title: Used
+    type: integer
+  used_fraction:
+    title: Used Fraction
+    type: number

@@ -1,0 +1,104 @@
+x-samos-type-name: GLPIGroup
+x-samos-namespace: glpi
+title: GLPI Group
+description: Representation of a Group in GLPI.
+
+x-samos-extends-types:
+  - type-name: UserGroup
+
+$ref: https://example.in1.glpi-network.cloud/api.php#/components/schemas/Group
+
+x-samos-keys:
+  - d_id # For the unique identifier of the group type
+  - id # For the reference mapping to other types
+
+required:
+  - id
+
+x-samos-table:
+  - name: completename
+  - name: comment
+  - name: level
+  - name: d_parent_group
+  - name: entity.name
+
+x-samos-detail:
+  - name: completename
+  - name: comment
+  - name: level
+  - name: d_parent_group
+  - name: parent
+  - name: entity
+
+x-samos-derived-properties:
+  d_id:
+    # Derived property to fulfill UserGroup.id, which accepts only string type
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+
+  d_parent_group:
+    # Derived property to fulfill core.principal.groups,
+    # which accepts only string type
+    type: string
+    title: Parent Group
+    syntax: jmespath
+    value: parent.id
+    x-samos-ref-types:
+      - type-name: GLPIGroup
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups
+
+properties:
+  comment:
+    title: Comment
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  completename:
+    title: Complete Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  entity:
+    title: Entity
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+      name:
+        title: Entity
+        type: string
+  id:
+    title: ID
+    x-samos-immutable: true
+  level:
+    title: Level
+    type: integer
+  name:
+    title: Name
+    type: string
+    x-samos-correlation:
+      correlation-key: UserGroup.name
+      correlation-type: UserGroup
+      priority: 3
+  parent:
+    title: Parent
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+      name:
+        title: Parent Name
+        type: string

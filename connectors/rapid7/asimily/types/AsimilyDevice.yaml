@@ -30,6 +30,7 @@ x-samos-detail:
   - name: os
   - name: isNetworkingDevice
   - name: isUsingEndpointSecurity
+  - name: isDeviceDeActivated
   - name: serialNumber
   - name: managedBy
   - name: osVersion
@@ -135,6 +136,18 @@ x-samos-derived-properties:
     x-samos-fulfills:
       type-name: core.component
       property-name: mitigations
+
+  d_active:
+    # Derived property to convert isDeviceDeActivated to active unified property name.
+    # active core.component takes weather device is active, so negating isDeviceDeActivated value.
+    title: Active
+    x-samos-hidden: true
+    type: boolean
+    syntax: expression
+    value: 'isDeviceDeActivated == `false`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
 
 properties:
   deviceID:
@@ -279,9 +292,6 @@ properties:
   isCurrentlyInUse:
     type: boolean
     title: Currently In Use?
-    x-samos-fulfills:
-      type-name: core.component
-      property-name: active
   isNetworkingDevice:
     type: boolean
     title: Networking Device?
@@ -325,6 +335,9 @@ properties:
     type: boolean
     x-samos-hidden: true
     title: Using Endpoint Security?
+  isDeviceDeActivated:
+    type: boolean
+    title: Deactivated?
 
 x-samos-virtual:
   vulnerabilities:

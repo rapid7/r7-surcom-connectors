@@ -1,0 +1,312 @@
+x-samos-type-name: ProxmoxPVENode
+x-samos-namespace: proxmox.pve
+title: Proxmox PVE Node
+description: Proxmox PVE Node type
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+  - node
+
+x-samos-table:
+  - name: type
+  - name: node
+  - name: level
+  - name: status
+  - name: maxcpu
+  - name: uptime
+
+x-samos-detail:
+  - name: type
+  - name: node
+  - name: status
+  - name: pveversion
+  - name: kversion
+  - name: current-kernel
+  - name: cpuinfo
+  - name: boot-info
+  - name: disk
+  - name: mem
+  - name: cpu
+  - name: uptime
+  - name: level
+  - name: maxdisk
+  - name: maxmem
+  - name: maxcpu
+  - name: hastate
+  - name: idle
+  - name: wait
+  - name: rootfs
+  - name: memory
+  - name: swap
+  - name: network
+  - name: cgroup-mode
+  - name: ksm
+  - name: loadavg
+
+x-samos-derived-properties:
+  # To get IPs from the network of the nodes and fulfill Machine.ips
+  d_ips:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: "network[?type == 'bridge'].address"
+    format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  d_node:
+    # The "node" property represents the name of the node
+    title: Name
+    type: string
+    value: 'node'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+    x-samos-hidden: true
+
+properties:
+  boot-info:
+    properties:
+      mode:
+        title: Mode
+        type: string
+    title: Boot Info
+    type: object
+  cgroup-mode:
+    title: CGroup Mode
+    type: integer
+  cpu:
+    title: CPU Usage
+    type: number
+  cpuinfo:
+    properties:
+      cores:
+        title: Cores
+        type: integer
+      cpus:
+        title: CPUs
+        type: integer
+      flags:
+        title: Flags
+        type: string
+      hvm:
+        title: HVM
+        type: string
+      mhz:
+        title: MHZ
+        type: string
+      model:
+        title: Model
+        type: string
+      sockets:
+        title: Sockets
+        type: integer
+      user_hz:
+        title: User HZ
+        type: integer
+    title: CPU Info
+    type: object
+  current-kernel:
+    properties:
+      machine:
+        title: Machine
+        type: string
+      release:
+        title: Release
+        type: string
+      sysname:
+        title: System Name
+        type: string
+      version:
+        title: Version
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.endpoint
+          property-name: agent_version
+    title: Current Kernel
+    type: object
+  disk:
+    title: Disk Usage
+    type: integer
+  hastate:
+    title: HA State
+    type: string
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  idle:
+    title: Idle
+    type: integer
+  ksm:
+    properties:
+      shared:
+        title: Shared
+        type: integer
+    title: KSM
+    type: object
+  kversion:
+    title: KVersion
+    type: string
+  level:
+    title: Level
+    type: string
+  loadavg:
+    items:
+      type: string
+    title: Load Avg
+    type: array
+  maxcpu:
+    title: Max CPU
+    type: integer
+  maxdisk:
+    title: Max Disk
+    type: integer
+  maxmem:
+    title: Max Memory
+    type: integer
+  mem:
+    title: Memory Usage
+    type: integer
+  memory:
+    properties:
+      available:
+        title: Available
+        type: integer
+      free:
+        title: Free
+        type: integer
+      total:
+        title: Total
+        type: integer
+      used:
+        title: Used
+        type: integer
+    title: Memory
+    type: object
+  network:
+    items:
+      properties:
+        active:
+          title: Active
+          type: integer
+        address:
+          format: ip-addr
+          title: Address
+          type: string
+        altnames:
+          items:
+            type: string
+          title: Alt Names
+          type: array
+        autostart:
+          title: Autostart
+          type: integer
+        bridge_fd:
+          title: Bridge FD
+          type: string
+        bridge_ports:
+          title: Bridge Ports
+          type: string
+        bridge_stp:
+          title: Bridge STP
+          type: string
+        cidr:
+          title: CIDR
+          type: string
+        exists:
+          title: Exists
+          type: integer
+        families:
+          items:
+            type: string
+          title: Families
+          type: array
+        gateway:
+          format: ip-addr
+          title: Gateway
+          type: string
+        iface:
+          title: Iface
+          type: string
+        method:
+          title: Method
+          type: string
+        method6:
+          title: Method 6
+          type: string
+        netmask:
+          title: Netmask
+          type: string
+        priority:
+          title: Priority
+          type: integer
+        type:
+          title: Type
+          type: string
+      type: object
+    title: Network
+    type: array
+  node:
+    title: Name
+    type: string
+    x-samos-immutable: true
+  pveversion:
+    title: PVE Version
+    type: string
+  rootfs:
+    properties:
+      avail:
+        title: Avail
+        type: integer
+      free:
+        title: Free
+        type: integer
+      total:
+        title: Total
+        type: integer
+      used:
+        title: Used
+        type: integer
+    title: Root FS
+    type: object
+  status:
+    title: Status
+    type: string
+  swap:
+    properties:
+      free:
+        title: Free
+        type: integer
+      total:
+        title: Total
+        type: integer
+      used:
+        title: Used
+        type: integer
+    title: Swap
+    type: object
+  type:
+    title: Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  uptime:
+    title: Uptime
+    type: integer
+  wait:
+    title: Wait
+    type: number

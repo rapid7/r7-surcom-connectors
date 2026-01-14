@@ -28,22 +28,26 @@ def import_all(
     user_log.info(f"Importing all data from Workday through {settings.get('url')}")
 
     client = helpers.WorkdayClient(user_log, settings)
-    yield from _import_workers(client, user_log)
+    yield from _import_workers(client, user_log, settings)
 
     yield from _import_supervisory_organizations(client, user_log)
 
 
 def _import_workers(client: helpers.WorkdayClient,
-                    user_log: Logger):
+                    user_log: Logger,
+                    settings: Settings):
     """Fetch all workers with pagination from Workday
 
     Args:
         client (helpers.WorkdayClient): The Workday API client.
         user_log (Logger): The logger for user-related information.
+        settings (Settings): The settings for the connector.
 
     Yields:
         WorkdayWorker: A WorkdayWorker object.
     """
+    warned_inaccessible_field = False
+    termination_field = settings.get("termination_date_fieldname")
 
     params = {"limit": MAX_LIMIT_WORKER, "offset": 0}
     while True:
@@ -57,7 +61,23 @@ def _import_workers(client: helpers.WorkdayClient,
         if not workers:
             break
         for worker in workers:
+            if termination_field:
+                if termination_field not in worker:
+                    if not warned_inaccessible_field:
+                        user_log.warning(
+                            "Configured termination field '%s' is not present in WorkdayWorker response. "
+                            "The field may be inaccessible or not returned by Workday.",
+                            termination_field,
+                        )
+                        warned_inaccessible_field = True
+
+                value = worker.get(termination_field)
+                worker["x_termination_date"] = value if value else None
+            else:
+                worker["x_termination_date"] = None
+
             yield WorkdayWorker(worker)
+
         params["offset"] += len(workers)
         user_log.info(f"Collected {params['offset']}/{total} records for WorkdayWorker")
         if len(workers) < MAX_LIMIT_WORKER:

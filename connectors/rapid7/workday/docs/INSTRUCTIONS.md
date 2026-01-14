@@ -10,8 +10,13 @@
 
 # __Documentation__
   
-  This connector requires the Web Service URL, Tenant Alias, Client ID and Secret
-  and a Refresh Token to be configured.
+  For authentication, this connector requires the Web Service URL, Tenant Alias,
+  Client ID and Secret, and a Refresh Token.
+
+  Optionally, you can specify the WQL fieldname that is used for Termination Date
+  in your Workday environment.  This can be the technical name of any date field that you use
+  for tracking termination.  For example, enter `lastDayOfWork` to use the property by that name.
+  In the Surface Command schema this data will be populated as `x_termination_date`.
 
   To find these settings, follow the below steps:
 

@@ -27,6 +27,7 @@ x-samos-detail:
   - name: publicPrimaryWorkPhoneNumber
   - name: businessTitle
   - name: currentlyActive
+  - name: x_termination_date
   - name: timeInJobProfileStartDate
   - name: supervisoryOrganization_Hierarchy
   - name: supervisoryOrganization_OrganizationTop_GtOrganization
@@ -167,3 +168,14 @@ properties:
       id:
         title: ID
         type: string
+  x_termination_date: #Preceding 'x_' as this is an optional field which may not be same for WorkdayWorker types
+    title: Termination Date
+    type: string
+    format: date-time
+    nullable: true
+    description: Optional termination-related date derived from the Workday field
+      configured in settings. May be null if the field is unavailable or
+      not populated.
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: end_date
