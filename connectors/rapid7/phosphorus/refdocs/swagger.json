@@ -1,0 +1,3201 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Swagger documentation for the Phosphorus API",
+    "version": "2.0.0",
+    "title": "Phosphorus API"
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Server"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "getAlertsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "site_id": {
+              "type": "string"
+            },
+            "site_name": {
+              "type": "string"
+            },
+            "addr": {
+              "type": "string"
+            },
+            "manufacturer": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            },
+            "lost": {
+              "type": "boolean"
+            },
+            "device_type": {
+              "type": "string"
+            },
+            "alert_name": {
+              "type": "string"
+            },
+            "alert_created_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "alert_last_seen": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "alert_resolved_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "alert_severity": {
+              "type": "string"
+            },
+            "alert_subtype": {
+              "type": "string"
+            },
+            "alert_data": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "id",
+            "site_id",
+            "site_name",
+            "addr",
+            "manufacturer",
+            "model",
+            "lost",
+            "device_type",
+            "alert_name",
+            "alert_created_at",
+            "alert_last_seen",
+            "alert_severity",
+            "alert_subtype"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "firmwareObj": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "float"
+          },
+          "md5": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "cves": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "note": {
+            "type": "string"
+          },
+          "size": {
+            "type": "number",
+            "format": "float"
+          },
+          "crc32c": {
+            "type": "string"
+          },
+          "models": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "current": {
+            "type": "boolean"
+          },
+          "upgrade": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "array",
+            "items": {}
+          },
+          "severity": {
+            "type": "string"
+          },
+          "canUpdate": {
+            "type": "boolean"
+          },
+          "downgrade": {
+            "type": "boolean"
+          },
+          "userManual": {
+            "type": "string"
+          },
+          "vulnerable": {
+            "type": "boolean"
+          },
+          "releaseDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "releaseNotes": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "md5",
+          "url",
+          "note",
+          "size",
+          "crc32c",
+          "sha256",
+          "current",
+          "upgrade",
+          "version",
+          "filename",
+          "severity",
+          "canUpdate",
+          "downgrade",
+          "userManual",
+          "vulnerable",
+          "releaseDate",
+          "releaseNotes"
+        ],
+        "additionalProperties": false
+      },
+      "_alert": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "subtype": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          },
+          "global_alert": {
+            "type": "boolean"
+          },
+          "custom_alert": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "device_alert": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "required": ["id", "name", "description", "severity", "created", "subtype", "global_alert"],
+        "additionalProperties": false
+      },
+      "Site": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "host": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          },
+          "hbPort": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lastSeen": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "online": {
+            "type": "boolean"
+          },
+          "default": {
+            "type": "boolean"
+          },
+          "isLocal": {
+            "type": "boolean"
+          },
+          "acceptingScans": {
+            "type": "boolean"
+          },
+          "smMode": {
+            "type": "string"
+          },
+          "config": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          },
+          "smVersion": {
+            "type": "string"
+          },
+          "smHostInfo": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          },
+          "addr": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "host", "port", "hbPort", "name", "online", "default", "isLocal", "acceptingScans"],
+        "additionalProperties": false
+      },
+      "device": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "addr": {
+            "type": "string"
+          },
+          "hostname": {
+            "type": "string"
+          },
+          "mac": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "firmware": {
+            "type": "string"
+          },
+          "availableFirmware": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/firmwareObj"
+            }
+          },
+          "canChangePassword": {
+            "type": "boolean"
+          },
+          "canUpdate": {
+            "type": "boolean"
+          },
+          "isUpdating": {
+            "type": "boolean"
+          },
+          "lastInterrogation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastInterrogationAttempt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastInterrogationResult": {
+            "type": "boolean"
+          },
+          "lastInterrogationMetadataVersion": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          },
+          "alerts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/_alert"
+            }
+          },
+          "credentials": {
+            "type": "array",
+            "items": {}
+          },
+          "passwordPolicy": {
+            "type": "object",
+            "properties": {
+              "length": {
+                "type": "number",
+                "format": "float"
+              },
+              "strict": {
+                "type": "boolean"
+              },
+              "exclude": {
+                "type": "string"
+              },
+              "numbers": {
+                "type": "boolean"
+              },
+              "symbols": {
+                "type": "boolean"
+              },
+              "lowercase": {
+                "type": "boolean"
+              },
+              "uppercase": {
+                "type": "boolean"
+              },
+              "excludeSimilarCharacters": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "length",
+              "strict",
+              "exclude",
+              "numbers",
+              "symbols",
+              "lowercase",
+              "uppercase",
+              "excludeSimilarCharacters"
+            ],
+            "additionalProperties": false
+          },
+          "supported": {
+            "type": "boolean"
+          },
+          "created": {
+            "type": "string"
+          },
+          "modified": {
+            "type": "string"
+          },
+          "lost": {
+            "type": "boolean"
+          },
+          "unAuthId": {
+            "type": "string"
+          },
+          "enroll": {
+            "type": "boolean"
+          },
+          "tcpPorts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "udpPorts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "lastScanExtraction": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          },
+          "lastScan": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "siteId": {
+            "type": "string"
+          },
+          "site": {
+            "$ref": "#/components/schemas/Site"
+          },
+          "suppressedAlerts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/_alert"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {}
+          },
+          "credentialsRequired": {
+            "type": "boolean"
+          },
+          "hasDefaultCredentials": {
+            "type": "boolean"
+          },
+          "interrogated": {
+            "type": "boolean"
+          },
+          "invalidCredentials": {
+            "type": "boolean"
+          },
+          "outOfDateFirmware": {
+            "type": "boolean"
+          },
+          "allowChangePassword": {
+            "type": "boolean"
+          },
+          "manageable": {
+            "type": "boolean"
+          },
+          "discontinued": {
+            "type": "boolean"
+          },
+          "vulnerable": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "modelFile": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "loginInstructions": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "addr",
+          "mac",
+          "manufacturer",
+          "model",
+          "type",
+          "icon",
+          "firmware",
+          "canChangePassword",
+          "canUpdate",
+          "lastInterrogationAttempt",
+          "lastInterrogationResult",
+          "supported",
+          "created",
+          "modified",
+          "lost",
+          "unAuthId",
+          "enroll",
+          "lastScan",
+          "siteId",
+          "credentialsRequired",
+          "hasDefaultCredentials",
+          "interrogated",
+          "invalidCredentials",
+          "outOfDateFirmware",
+          "allowChangePassword",
+          "manageable",
+          "discontinued",
+          "vulnerable",
+          "name",
+          "modelFile"
+        ],
+        "additionalProperties": false
+      },
+      "getDeviceUUIDResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "device": {
+            "$ref": "#/components/schemas/device"
+          }
+        },
+        "required": ["success"],
+        "additionalProperties": false
+      },
+      "getDeviceAlertsUUIDResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/_alert"
+            }
+          },
+          "total": {
+            "type": "number",
+            "format": "float"
+          },
+          "suppressedAlerts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/_alert"
+            }
+          },
+          "suppressedAlertsCount": {
+            "type": "number",
+            "format": "float"
+          },
+          "limit": {
+            "type": "number",
+            "format": "float"
+          },
+          "offset": {
+            "type": "number",
+            "format": "float"
+          },
+          "orderBy": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          }
+        },
+        "required": ["total", "suppressedAlerts", "suppressedAlertsCount", "limit", "offset"],
+        "additionalProperties": false
+      },
+      "getDeviceDataUUIDResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            }
+          },
+          "total": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "required": ["items", "total"],
+        "additionalProperties": false
+      },
+      "logEntry": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "device": {
+            "type": "object",
+            "properties": {
+              "addr": {
+                "type": "string"
+              },
+              "model": {
+                "type": "string"
+              },
+              "manufacturer": {
+                "type": "string"
+              }
+            },
+            "required": ["addr"],
+            "additionalProperties": false
+          },
+          "user": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "message", "created"],
+        "additionalProperties": false
+      },
+      "getDeviceLogsUUIDResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/logEntry"
+            }
+          },
+          "total": {
+            "type": "number",
+            "format": "float"
+          },
+          "limit": {
+            "type": "number",
+            "format": "float"
+          },
+          "offset": {
+            "type": "number",
+            "format": "float"
+          },
+          "orderBy": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          }
+        },
+        "required": ["total", "limit", "offset"],
+        "additionalProperties": false
+      },
+      "getDeviceScansUUIDResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "string"
+                },
+                "job_id": {
+                  "type": "string"
+                },
+                "created": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "additionalProperties": false
+                },
+                "legacy": {
+                  "type": "boolean"
+                },
+                "bulk_action_id": {
+                  "type": "string"
+                }
+              },
+              "required": ["items", "legacy", "bulk_action_id"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "excludedDevicesObject": {
+        "type": "object",
+        "properties": {
+          "addr": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "mac": {
+            "type": "string"
+          },
+          "jobId": {
+            "type": "string"
+          },
+          "siteId": {
+            "type": "string"
+          }
+        },
+        "required": ["addr", "created", "model", "manufacturer", "type", "mac", "jobId", "siteId"],
+        "additionalProperties": false
+      },
+      "DynamicScanConfigMetrics": {
+        "type": "object",
+        "properties": {
+          "totalIPsScanned": {
+            "type": "number",
+            "format": "float",
+            "description": "Total number of IPs scanned"
+          },
+          "totalScanRequests": {
+            "type": "number",
+            "format": "float",
+            "description": "Total number of scan data submissions received"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Dynamic scan configuration metrics"
+      },
+      "DynamicScanConfig": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of a dynamic scan configuration"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Name of the dynamic scan config"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the dynamic scan config"
+          },
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Site ID associated with the dynamic scan config"
+          },
+          "providerId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "excludedNetworks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "limit": {
+                "type": "number",
+                "format": "float"
+              },
+              "lookBackHours": {
+                "type": "number",
+                "format": "float"
+              },
+              "schedule": {
+                "type": "object",
+                "properties": {
+                  "tz": {
+                    "type": "string"
+                  },
+                  "cron": {
+                    "type": "string"
+                  }
+                },
+                "required": ["tz", "cron"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["excludedNetworks", "limit", "lookBackHours", "schedule"],
+            "additionalProperties": false,
+            "description": "Dynamic scan configuration details"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Update timestamp"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "User ID associated with the dynamic scan config"
+          },
+          "siteName": {
+            "type": "string",
+            "description": "Name of the site associated with the dynamic scan config"
+          },
+          "providerName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the provider associated with the dynamic scan config"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/DynamicScanConfigMetrics"
+          },
+          "lastSuccessfulScan": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "ID of the last successful scan"
+              },
+              "completedAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Completed timestamp of the last successful scan"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": ["id", "name", "siteId", "config", "siteName", "enabled"],
+        "additionalProperties": false
+      },
+      "ListDynamicScanConfigsResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/DynamicScanConfig"
+        }
+      },
+      "DynamicScanConfigResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of a dynamic scan configuration"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Name of the dynamic scan config"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the dynamic scan config"
+          },
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Site ID associated with the dynamic scan config"
+          },
+          "providerId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "excludedNetworks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "limit": {
+                "type": "number",
+                "format": "float"
+              },
+              "lookBackHours": {
+                "type": "number",
+                "format": "float"
+              },
+              "schedule": {
+                "type": "object",
+                "properties": {
+                  "tz": {
+                    "type": "string"
+                  },
+                  "cron": {
+                    "type": "string"
+                  }
+                },
+                "required": ["tz", "cron"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["excludedNetworks", "limit", "lookBackHours", "schedule"],
+            "additionalProperties": false,
+            "description": "Dynamic scan configuration details"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Update timestamp"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "User ID associated with the dynamic scan config"
+          },
+          "siteName": {
+            "type": "string",
+            "description": "Name of the site associated with the dynamic scan config"
+          },
+          "providerName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the provider associated with the dynamic scan config"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/DynamicScanConfigMetrics"
+          },
+          "lastSuccessfulScan": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "ID of the last successful scan"
+              },
+              "completedAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Completed timestamp of the last successful scan"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": ["id", "name", "siteId", "config", "siteName", "enabled"],
+        "additionalProperties": false
+      },
+      "CreateDynamicScanConfigBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Name of the dynamic scan config"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the dynamic scan config"
+          },
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Site ID associated with the dynamic scan config"
+          },
+          "providerId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "excludedNetworks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "limit": {
+                "type": "number",
+                "format": "float"
+              },
+              "lookBackHours": {
+                "type": "number",
+                "format": "float"
+              },
+              "schedule": {
+                "type": "object",
+                "properties": {
+                  "tz": {
+                    "type": "string"
+                  },
+                  "cron": {
+                    "type": "string"
+                  }
+                },
+                "required": ["tz", "cron"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["excludedNetworks", "limit", "lookBackHours", "schedule"],
+            "additionalProperties": false,
+            "description": "Dynamic scan configuration details"
+          }
+        },
+        "required": ["name", "siteId", "config"],
+        "additionalProperties": false
+      },
+      "UpdateDynamicScanConfigBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Name of the dynamic scan config"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the dynamic scan config"
+          },
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Site ID associated with the dynamic scan config"
+          },
+          "providerId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "config": {
+            "type": "object",
+            "properties": {
+              "excludedNetworks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "limit": {
+                "type": "number",
+                "format": "float"
+              },
+              "lookBackHours": {
+                "type": "number",
+                "format": "float"
+              },
+              "schedule": {
+                "type": "object",
+                "properties": {
+                  "tz": {
+                    "type": "string"
+                  },
+                  "cron": {
+                    "type": "string"
+                  }
+                },
+                "required": ["tz", "cron"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["excludedNetworks", "limit", "lookBackHours", "schedule"],
+            "additionalProperties": false,
+            "description": "Dynamic scan configuration details"
+          }
+        },
+        "required": ["name", "siteId", "config"],
+        "additionalProperties": false
+      },
+      "DynamicScanSubmissionResponse": {
+        "type": "object",
+        "properties": {
+          "submittedAddresses": {
+            "type": "number",
+            "format": "float",
+            "description": "Number of network addresses submitted"
+          },
+          "invalidAddresses": {
+            "type": "number",
+            "format": "float",
+            "description": "Number of invalid network addresses that were ignored"
+          }
+        },
+        "required": ["submittedAddresses", "invalidAddresses"],
+        "additionalProperties": false
+      },
+      "DynamicScanSubmissionData": {
+        "type": "object",
+        "properties": {
+          "scanConfigId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of a dynamic scan configuration"
+          },
+          "networks": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "Network to scan"
+            },
+            "minItems": 1,
+            "description": "List of networks to scan"
+          }
+        },
+        "required": ["scanConfigId", "networks"],
+        "additionalProperties": false
+      },
+      "getSearchResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["ok"]
+          },
+          "total": {
+            "type": "number",
+            "format": "float"
+          },
+          "devices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "icon": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "addr": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "lost": {
+                  "type": "boolean"
+                },
+                "manufacturer": {
+                  "type": "string"
+                },
+                "mac": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "model": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "firmware": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "alerts": {
+                  "anyOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "severity": {
+                            "type": "string"
+                          },
+                          "created": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "subtype": {
+                            "type": "string"
+                          },
+                          "data": {
+                            "type": "object",
+                            "properties": {},
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": ["id"],
+                        "additionalProperties": false
+                      }
+                    }
+                  ]
+                },
+                "credentialName": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "lastInterrogation": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                },
+                "hostname": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "color": {
+                        "type": "string"
+                      },
+                      "automatic": {
+                        "type": "string",
+                        "enum": ["true", "false"]
+                      },
+                      "id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["name", "color", "automatic", "id"],
+                    "additionalProperties": false
+                  }
+                },
+                "siteName": {
+                  "type": "string"
+                },
+                "siteMode": {
+                  "type": "string"
+                },
+                "siteId": {
+                  "type": "string"
+                },
+                "canChangePassword": {
+                  "type": "boolean"
+                },
+                "canUpdate": {
+                  "type": "boolean"
+                },
+                "created": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "latestfirmware": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "serialnumber": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "metadata": {
+                  "type": "object",
+                  "properties": {},
+                  "additionalProperties": false
+                },
+                "lostAddr": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "passwordGroupName": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "passwordGroupId": {
+                  "type": "number",
+                  "format": "float",
+                  "nullable": true
+                },
+                "kevCount": {
+                  "type": "number",
+                  "format": "float",
+                  "nullable": true
+                },
+                "epssScore": {
+                  "type": "number",
+                  "format": "float",
+                  "nullable": true
+                },
+                "cvssScore": {
+                  "type": "number",
+                  "format": "float",
+                  "nullable": true
+                },
+                "cvssV2Score": {
+                  "type": "number",
+                  "format": "float",
+                  "nullable": true
+                },
+                "cvssV3Score": {
+                  "type": "number",
+                  "format": "float",
+                  "nullable": true
+                },
+                "cvssV31Score": {
+                  "type": "number",
+                  "format": "float",
+                  "nullable": true
+                },
+                "cvssV4Score": {
+                  "type": "number",
+                  "format": "float",
+                  "nullable": true
+                },
+                "custom_row_id": {
+                  "type": "string"
+                },
+                "searchResult": {
+                  "type": "boolean"
+                },
+                "path": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "nullable": true
+                },
+                "vulnerabilityMetrics": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {},
+                    "additionalProperties": false
+                  },
+                  "nullable": true
+                },
+                "provider": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "id",
+                "lost",
+                "manufacturer",
+                "model",
+                "type",
+                "tags",
+                "siteName",
+                "siteMode",
+                "siteId",
+                "canChangePassword",
+                "canUpdate",
+                "created",
+                "lostAddr",
+                "passwordGroupName",
+                "passwordGroupId",
+                "kevCount",
+                "epssScore",
+                "cvssScore",
+                "cvssV2Score",
+                "cvssV3Score",
+                "cvssV31Score",
+                "cvssV4Score",
+                "custom_row_id",
+                "searchResult"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "facets": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "facetCount": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "count": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "facetKey": {
+                    "type": "string"
+                  },
+                  "facetSelected": {
+                    "type": "boolean"
+                  },
+                  "facetValue": {
+                    "type": "string"
+                  },
+                  "facetValueDisplay": {
+                    "type": "string"
+                  },
+                  "val": {
+                    "type": "string"
+                  }
+                },
+                "required": ["facetKey", "facetSelected", "facetValue", "val"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "required": ["status", "total", "devices", "facets"],
+        "additionalProperties": false
+      },
+      "SiteResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "host": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          },
+          "hbPort": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lastSeen": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "online": {
+            "type": "boolean"
+          },
+          "default": {
+            "type": "boolean"
+          },
+          "isLocal": {
+            "type": "boolean"
+          },
+          "acceptingScans": {
+            "type": "boolean"
+          },
+          "smMode": {
+            "type": "string"
+          },
+          "config": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          },
+          "smVersion": {
+            "type": "string"
+          },
+          "smHostInfo": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          },
+          "addr": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "host", "port", "hbPort", "name", "online", "default", "isLocal", "acceptingScans"],
+        "additionalProperties": false
+      },
+      "createSecretResponse": {
+        "type": "object",
+        "properties": {
+          "secret": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["secret"],
+        "additionalProperties": false
+      },
+      "createSecretBody": {
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "serialNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["login", "password", "name"],
+        "additionalProperties": false
+      },
+      "getSecretsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "externalId": {
+              "type": "string"
+            }
+          },
+          "required": ["name", "externalId"],
+          "additionalProperties": false
+        }
+      },
+      "updateVaultToDefaultBody": {
+        "type": "object",
+        "properties": {
+          "isDefault": {
+            "type": "boolean"
+          }
+        },
+        "required": ["isDefault"],
+        "additionalProperties": false
+      },
+      "updateSecretResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["name", "version"],
+        "additionalProperties": false
+      },
+      "updateSecretBody": {
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["login", "password"],
+        "additionalProperties": false
+      },
+      "getReportDataResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "externalId": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "login": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["id", "name", "externalId", "provider", "version", "login", "password"],
+        "additionalProperties": false
+      }
+    },
+    "responses": {},
+    "parameters": {},
+    "examples": {},
+    "requestBodies": {
+      "CreateDynamicScanConfigBody": {
+        "description": "foo",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateDynamicScanConfigBody"
+            }
+          }
+        }
+      },
+      "UpdateDynamicScanConfigBody": {
+        "description": "foo",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UpdateDynamicScanConfigBody"
+            }
+          }
+        }
+      },
+      "DynamicScanSubmissionData": {
+        "description": "foo",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DynamicScanSubmissionData"
+            }
+          }
+        }
+      },
+      "createSecretBody": {
+        "description": "foo",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/createSecretBody"
+            }
+          }
+        }
+      },
+      "updateVaultToDefaultBody": {
+        "description": "foo",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/updateVaultToDefaultBody"
+            }
+          }
+        }
+      },
+      "updateSecretBody": {
+        "description": "foo",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/updateSecretBody"
+            }
+          }
+        }
+      }
+    },
+    "headers": {},
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-KEY"
+      }
+    },
+    "links": {},
+    "callbacks": {}
+  },
+  "paths": {
+    "/api/v2/alerts": {
+      "get": {
+        "tags": ["Alerts"],
+        "summary": "Get all alerts within a specified time range. Defaults to any active alerts in the last 24 hours.",
+        "description": "",
+        "operationId": "getAlertsv2",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "name": "startTime",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "name": "endTime",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "filter",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "includeLostDevices",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getAlertsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/device/{uuid}": {
+      "get": {
+        "tags": ["Device"],
+        "summary": "Return the current Device with a uuid specified in the URL, and optionally perform an interrogation.",
+        "description": "",
+        "operationId": "getDeviceByUUIDv2",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "boolean"
+            },
+            "name": "interrogate",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "uuid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getDeviceUUIDResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/device/{uuid}/alerts": {
+      "get": {
+        "tags": ["Device"],
+        "summary": "Get a list of available alert objects for a specific device.",
+        "description": "",
+        "operationId": "getDeviceAlertsByUUIDv2",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "name": "limit",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "name": "offset",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "name": "name",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "subtype",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "severity",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "name": "created",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "name": "last_seen",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "name": "resolved_at",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "name": "created_before",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "name": "created_after",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "uuid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getDeviceAlertsUUIDResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/device/{uuid}/certificates": {
+      "get": {
+        "tags": ["Device"],
+        "summary": "Get the available certificates for a specific device.",
+        "description": "",
+        "operationId": "getDeviceCertificateByUUIDv2",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "uuid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/device/{uuid}/credentials": {
+      "get": {
+        "tags": ["Device"],
+        "summary": "Get the available credentials for a specific device.",
+        "description": "",
+        "operationId": "getDeviceCredentialByUUIDv2",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "uuid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/device/{uuid}/data": {
+      "get": {
+        "tags": ["Device"],
+        "summary": "Get a list of available data provenance objects for a specific device.",
+        "description": "",
+        "operationId": "getDeviceDataByUUIDv2",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "uuid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getDeviceDataUUIDResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/device/{uuid}/firmware": {
+      "get": {
+        "tags": ["Device"],
+        "summary": "Get a list of available firmware objects for a specific device. No search, or filters, just a list of the firmware for the device. The item in the array that is installed will return current:true in the JSON",
+        "description": "",
+        "operationId": "getDeviceFirmwareByUUIDv2",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "uuid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/device/{uuid}/logs": {
+      "get": {
+        "tags": ["Device"],
+        "summary": "Get a list of available log objects for a specific device.",
+        "description": "",
+        "operationId": "getDeviceLogsByUUIDv2",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "limit",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "offset",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "name": "message",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "addr",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "email",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "name": "created_before",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "name": "created_after",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "uuid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getDeviceLogsUUIDResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/device/{uuid}/scans": {
+      "get": {
+        "tags": ["Device"],
+        "summary": "Get a list of available scans for a specific device.",
+        "description": "",
+        "operationId": "getDeviceScansByUUIDv2",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "number",
+              "format": "float"
+            },
+            "name": "limit",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number",
+              "format": "float"
+            },
+            "name": "offset",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "job_id",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "name": "created_before",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "name": "created_after",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "uuid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getDeviceScansUUIDResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v3/devices/excluded": {
+      "get": {
+        "tags": ["Devices"],
+        "summary": "Returns excluded devices, queryable by date, jobId",
+        "description": "",
+        "operationId": "getExcludedDevicesv3",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "jobId",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number",
+              "format": "float",
+              "minimum": 1,
+              "default": 1000
+            },
+            "name": "limit",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "number",
+              "format": "float",
+              "minimum": 1
+            },
+            "name": "offset",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "name": "startDate",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "name": "endDate",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "sortBy",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "sortDir",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/excludedDevicesObject"
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total_rows": {
+                          "type": "number",
+                          "format": "float"
+                        }
+                      },
+                      "required": ["total_rows"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["rows"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v3/dynamic-scans": {
+      "get": {
+        "tags": ["Dynamic Scans"],
+        "summary": "List all dynamic scan configs",
+        "description": "",
+        "operationId": "listDynamicScanConfigsv3",
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListDynamicScanConfigsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Dynamic Scans"],
+        "summary": "Create a dynamic scan config",
+        "description": "",
+        "operationId": "createDynamicScanConfigv3",
+        "deprecated": false,
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDynamicScanConfigBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DynamicScanConfigResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v3/dynamic-scans/{id}": {
+      "get": {
+        "tags": ["Dynamic Scans"],
+        "summary": "Get a dynamic scan config",
+        "description": "",
+        "operationId": "getDynamicScanConfigv3",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Unique identifier of a dynamic scan configuration"
+            },
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of a dynamic scan configuration",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DynamicScanConfigResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["Dynamic Scans"],
+        "summary": "Update a dynamic scan config",
+        "description": "",
+        "operationId": "updateDynamicScanConfigv3",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Unique identifier of a dynamic scan configuration"
+            },
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of a dynamic scan configuration",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDynamicScanConfigBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DynamicScanConfigResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Dynamic Scans"],
+        "summary": "Delete a dynamic scan config",
+        "description": "",
+        "operationId": "deleteDynamicScanConfigv3",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Unique identifier of a dynamic scan configuration"
+            },
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of a dynamic scan configuration",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v3/dynamic-scans/data": {
+      "post": {
+        "tags": ["Dynamic Scans"],
+        "summary": "Submit data for a dynamic scan config",
+        "description": "",
+        "operationId": "submitDynamicScanDatav3",
+        "deprecated": false,
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DynamicScanSubmissionData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DynamicScanSubmissionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v3/dynamic-scans/disable/{id}": {
+      "post": {
+        "tags": ["Dynamic Scans"],
+        "summary": "Disable a dynamic scan config",
+        "description": "",
+        "operationId": "disableDynamicScanConfigv3",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Unique identifier of a dynamic scan configuration"
+            },
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of a dynamic scan configuration",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v3/dynamic-scans/enable/{id}": {
+      "post": {
+        "tags": ["Dynamic Scans"],
+        "summary": "Enable a dynamic scan config",
+        "description": "",
+        "operationId": "enableDynamicScanConfigv3",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Unique identifier of a dynamic scan configuration"
+            },
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of a dynamic scan configuration",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v3/providers": {
+      "get": {
+        "tags": ["Providers"],
+        "summary": "Gets all providers",
+        "description": "",
+        "operationId": "getProvidersv3",
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v3/providers/{id}": {
+      "get": {
+        "tags": ["Providers"],
+        "summary": "Get provider by uuid",
+        "description": "",
+        "operationId": "getProviderByIdv3",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v3/providers/{id}/credentials": {
+      "get": {
+        "tags": ["Providers"],
+        "summary": "Returns a list of credentials available to assign",
+        "description": "",
+        "operationId": "listProviderCredentialsv3",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v3/providers/{id}/health-check": {
+      "post": {
+        "tags": ["Providers"],
+        "summary": "Performs provider health check",
+        "description": "",
+        "operationId": "performHealthCheckv3",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v3/providers/health-check": {
+      "post": {
+        "tags": ["Providers"],
+        "summary": "Performs a health check for every provider with a low concurrency",
+        "description": "",
+        "operationId": "performAllHealthChecksv3",
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/search": {
+      "get": {
+        "tags": ["Search"],
+        "summary": "The /api/v2/search endpoint allows querying of Devices based on their attributes. Queries are made by passing a query parameter q containing a query using the Search Query Syntax.",
+        "description": "",
+        "operationId": "searchv2",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "name": "q",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "name": "offset",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "default": 20
+            },
+            "name": "limit",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "default": "alerts"
+            },
+            "name": "orderBy",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "name": "desc",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "name": "facets",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "name": "graphMode",
+            "in": "query",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "boolean",
+              "description": "Include CVE metrics in the response",
+              "default": false
+            },
+            "name": "includeCves",
+            "in": "query",
+            "description": "Include CVE metrics in the response",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "boolean",
+              "description": "Include detailed alert information in the response",
+              "default": false
+            },
+            "name": "includeAlerts",
+            "in": "query",
+            "description": "Include detailed alert information in the response",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getSearchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/sites/{id}": {
+      "get": {
+        "tags": ["Sites"],
+        "summary": "Get a site",
+        "description": "",
+        "operationId": "getSitev2",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v3/vault": {
+      "post": {
+        "tags": ["Vault"],
+        "summary": "Creates a secret in the Phosphorus Vault",
+        "description": "",
+        "operationId": "createSecretv3",
+        "deprecated": false,
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createSecretBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createSecretResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": ["Vault"],
+        "summary": "Retrieve a list of secrets from the Phosphorus Vault",
+        "description": "",
+        "operationId": "listSecretsv3",
+        "deprecated": false,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getSecretsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["Vault"],
+        "summary": "Updates Phosphorus Vault to default",
+        "description": "",
+        "operationId": "updateNativeVaultToDefaultv3",
+        "deprecated": false,
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateVaultToDefaultBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getSecretsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v3/vault/{id}": {
+      "put": {
+        "tags": ["Vault"],
+        "summary": "Updates a secret in the Phosphorus Vault by creating a new version",
+        "description": "",
+        "operationId": "updateSecretv3",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateSecretBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/updateSecretResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": ["Vault"],
+        "summary": "Retrieve a specific secret out of the Phosphorus Vault",
+        "description": "",
+        "operationId": "getSecretv3",
+        "deprecated": false,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getReportDataResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,64 @@
+x-samos-type-name: ThreatLockerOSFamilyEnum
+x-samos-namespace: threatlocker
+title: ThreatLocker OS Family Enum
+description: Standard values of a ThreatLocker OS
+type: object
+x-samos-hidden: true
+x-samos-default-hide-from-graph: true
+x-samos-global-zone: true
+x-samos-extends-types:
+  - type-name: EnumOSFamily
+    subtype-priority: 1 # Connector-specific enum values use 1, the Noetic values have priority
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: value
+
+x-samos-detail:
+  - name: value
+  - name: id
+  - name: map_to
+
+x-samos-derived-properties:
+  name:
+    title: Name
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: '{value}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  d_id:
+    # Deriving id property to fulfill core.principal.id
+    # to make it into a string version
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-fulfills:
+      type-name: Enum
+      property-name: id
+
+properties:
+  id:
+    title: Id
+    type: integer
+    x-samos-immutable: true
+  value:
+    title: Value
+    type: string
+    x-samos-fulfills:
+      type-name: Enum
+      property-name: value
+
+  map_to:
+    title: Map To Id
+    type: string
+    x-samos-correlation:
+      correlation-key: EnumId
+      correlation-type: Enum
+      priority: 1

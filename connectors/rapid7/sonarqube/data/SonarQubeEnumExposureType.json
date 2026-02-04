@@ -1,0 +1,22 @@
+[
+  {
+    "id": "VULNERABILITY",
+    "value": "Vulnerability",
+    "map_to": "ExposureType: Vulnerability"
+  },
+  {
+    "id": "BUG",
+    "value": "Weakness",
+    "map_to": "ExposureType: Weakness"
+  },
+  {
+    "id": "CODE_SMELL",
+    "value": "Weakness",
+    "map_to": "ExposureType: Weakness"
+  },
+  {
+    "id": "SECURITY_HOTSPOT",
+    "value": "Vulnerability",
+    "map_to": "ExposureType: Vulnerability"
+  }
+]

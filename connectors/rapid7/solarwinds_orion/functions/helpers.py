@@ -125,18 +125,15 @@ class SolarWindsOrionClient:
         f_url = furl(url)
         self.base_url = f_url.host
         # Extract Safely port if present
-        self.port = str(f_url.port) if f_url.port else None
+        self.port = f_url.port if f_url.port else 17774
         self.swis = orionsdk.SwisClient(
             self.base_url,
             self.settings.get("username"),
             self.settings.get("password"),
             verify=self.settings.get("verify_tls"),
             session=HttpSession(),
+            port=self.port,
         )
-        # If a port is specified, set it on the swis instance
-        # otherwise, the default port 17774 will be used.
-        if self.port:
-            self.swis.port = self.port
 
     def get_nodes(self, last_node_id) -> list:
         """Retrieves all nodes from the SolarWinds Orion API,

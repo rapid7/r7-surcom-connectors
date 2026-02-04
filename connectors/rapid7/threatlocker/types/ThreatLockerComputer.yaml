@@ -1,0 +1,344 @@
+x-samos-type-name: ThreatLockerComputer
+x-samos-namespace: threatlocker
+title: ThreatLocker Computer
+description: Represents a Computer (Asset) details from ThreatLocker.
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - computerId
+
+x-samos-table:
+  - name: name
+  - name: username
+  - name: group
+  - name: organization
+  - name: operatingSystem
+  - name: threatLockerVersion
+  - name: mode
+  - name: dateCreated
+  - name: lastCheckin
+
+x-samos-detail:
+  - name: name
+  - name: organization
+  - name: hostname
+  - name: d_active
+  - name: operatingSystem
+  - name: osType
+  - name: group
+  - name: action
+  - name: computerName
+  - name: username
+  - name: driverStatusString
+  - name: lastCheckinIPAddress
+  - name: lastCheckinLocalIPAddresses
+  - name: mode
+  - name: ipOperatingSystem
+  - name: isReadyToSecure
+  - name: restartComputerNeeded
+  - name: serviceVersion
+  - name: shouldRestart
+  - name: threatLockerVersion
+  - name: d_endpoint_protection_active
+  - name: isTamperProtectionDisabled
+  - name: versionMajor
+  - name: versionMinor
+  - name: targetThreatLockerVersion
+  - name: maintenanceEndDate
+  - name: uploadBaseFile
+  - name: dateCreated
+  - name: lastCheckin
+
+x-samos-derived-properties:
+  d_active:
+    # Derived property to fulfill active with core.component property name.
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: 'driverStatusString == `Active`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_endpoint_protection_active:
+    # Derived property to fulfill endpoint_protection_active unified property name.
+    title: Endpoint Protection Active?
+    type: boolean
+    syntax: jmespath
+    value: 'driverStatusString == `Active`'
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_protection_active
+
+  d_mitigations:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+    syntax: jmespath
+    # M1038 - Execution Prevention (allowlisting in Secure mode)
+    # M1033 - Limit Software Installation
+    value: >-
+      [
+        (driverStatusString == `Active` && isTamperProtectionDisabled == `false`) && `M1033` || null,
+        (mode == `Secure` && driverStatusString == `Active` && isTamperProtectionDisabled == `false`) && `M1038` || null
+      ] | [?@]
+
+  d_qualified_hostname:
+    # Not sure if ThreatLocker computerName is ever an FQDN, but this is here
+    # just in case. J Chung 2026-Jan-21
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'computerName && contains(computerName, `.`) && computerName || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_unqualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'computerName && !contains(computerName, `.`) && computerName || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+properties:
+  action:
+    title: Action
+    type: string
+  application:
+    title: Application
+    type: string
+  appliesToType:
+    title: Applies To Type
+    type: string
+  computerGroupId:
+    title: Computer Group ID
+    type: string
+  computerId:
+    title: Computer ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  computerName:
+    title: Computer Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  dateAdded:
+    format: date-time
+    title: Date Added
+    type: string
+  dateCreated:
+    format: date-time
+    title: Date Created
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  denyCountOneDay:
+    title: Deny Count One Day
+    type: integer
+  denyCountSevenDays:
+    title: Deny Count Seven Days
+    type: integer
+  denyCountThreeDays:
+    title: Deny Count Three Days
+    type: integer
+  driverStatusString:
+    title: Driver Status String
+    type: string
+  group:
+    title: Group
+    type: string
+  hasAtLeastOneCheckin:
+    title: At Least One Checkin?
+    type: boolean
+  hasComputerPassword:
+    title: Computer Password?
+    type: boolean
+  hasConfigManagerProduct:
+    title: Config Manager Product?
+    type: boolean
+  hasInstalationAtLeastSevenDaysAgo:
+    title: Installation At Least Seven Days Ago?
+    type: boolean
+  hasUnknownVersion:
+    title: Unknown Version?
+    type: boolean
+  hasZeroDeniesFourDays:
+    title: Zero Denies Four Days?
+    type: boolean
+  hostname:
+    title: Hostname
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+  installDate:
+    title: Install Date
+    type: string
+  ipOperatingSystem:
+    title: IP Operating System
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+  isDeleted:
+    title: Deleted?
+    type: boolean
+  isInheritFromGroup:
+    title: Inherit From Group?
+    type: boolean
+  isIsolated:
+    title: Isolated?
+    type: boolean
+  isIsolationMode:
+    title: Isolation Mode?
+    type: boolean
+  isLearningModeLongerThanFiveYears:
+    title: Learning Mode Longer Than Five Years?
+    type: boolean
+  isLearningModeMoreThanSeven:
+    title: Learning Mode More Than Seven?
+    type: boolean
+  isLearningMoreThanFourDays:
+    title: Learning More Than Four Days?
+    type: boolean
+  isLockDownMode:
+    title: Lock Down Mode?
+    type: boolean
+  isLockedOut:
+    title: Locked Out?
+    type: boolean
+  isNeededReview:
+    title: Needed Review?
+    type: boolean
+  isOpsAlertsDisabled:
+    title: Ops Alerts Disabled?
+    type: boolean
+  isReadyToSecure:
+    title: Ready To Secure?
+    type: boolean
+  isTamperProtectionDisabled:
+    title: Tamper Protection Disabled?
+    type: boolean
+  lastCheckin:
+    format: date-time
+    title: Last Checkin
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  lastCheckinIPAddress:
+    format: ip-addr
+    title: Last Checkin Ip Address
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  lastCheckinLocalIPAddresses:
+    items:
+      type: string
+    title: Last Checkin Local Ip Addresses
+    type: array
+  maintenanceEndDate:
+    format: date-time
+    title: Maintenance End Date
+    type: string
+  maintenanceTypeId:
+    title: Maintenance Type ID
+    type: integer
+  maintenenceBannerIds:
+    items:
+      type: string
+    title: Maintenance Banner IDs
+    type: array
+  mode:
+    title: Mode
+    type: string
+  newThreatLockerVersion:
+    title: New Threat Locker Version
+    type: string
+  operatingSystem:
+    title: Operating System
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+  organization:
+    title: Organization
+    type: string
+  organizationId:
+    title: Organization
+    type: string
+    x-samos-ref-types:
+      - type-name: ThreatLockerOrganization
+        key-name: organizationId
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+  osType:
+    title: OS Type
+    type: integer
+    x-samos-ref-types:
+      - type-name: ThreatLockerOSFamilyEnum
+        key-name: id
+  progressBarLearning:
+    title: Progress Bar Learning
+    type: integer
+  restartComputerNeeded:
+    title: Restart Computer Needed?
+    type: boolean
+  serviceVersion:
+    title: Service Version
+    type: string
+  shouldRestart:
+    title: Should Restart?
+    type: boolean
+  startDateTime:
+    format: date-time
+    title: Start Date Time
+    type: string
+  targetThreatLockerVersion:
+    title: Target Threat Locker Version
+    type: string
+  threatLockerVersion:
+    title: Threat Locker Version
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+  threatLockerVersionId:
+    title: Threat Locker Version ID
+    type: string
+  totalRows:
+    title: Total Rows
+    type: integer
+  uploadBaseFile:
+    title: Upload Base File?
+    type: boolean
+  username:
+    title: Username
+    type: string
+  versionMajor:
+    title: Version Major
+    type: integer
+  versionMinor:
+    title: Version Minor
+    type: integer

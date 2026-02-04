@@ -1,0 +1,182 @@
+x-samos-type-name: SumoLogicCollector
+x-samos-namespace: sumo.logic
+title: Sumo Logic Collector
+description: A Collector in Sumo Logic.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: name
+  - name: alive
+  - name: collectorType
+  - name: category
+
+x-samos-detail:
+  - name: name
+  - name: alive
+  - name: collectorType
+  - name: description
+  - name: category
+  - name: timeZone
+  - name: fields
+  - name: collectorVersion
+  - name: lastSeenAlive
+  - name: hostName
+  - name: ephemeral
+  - name: targetCpu
+  - name: sourceSyncMode
+  - name: installedCollectorSubtype
+  - name: osVersion
+  - name: osName
+  - name: osArch
+
+x-samos-derived-properties:
+  d_id:
+    # Id is an integer hence typecast to str in order to fulfill core.component.id
+    type: string
+    title: ID
+    syntax: expression
+    value: '{id}'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_qualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'hostName && contains(hostName, `.`) && hostName || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_unqualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'hostName && !contains(hostName, `.`) && hostName || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_operating_system:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'join(` `, [osName || ``, osVersion || ``]) || null'
+    # The condition osName || `` is to avoid null value if osName key itself is missing.
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+properties:
+  id:
+    type: integer
+    title: Id
+    x-samos-hidden: true
+    x-samos-immutable: true
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  category:
+    type: string
+    title: Category
+  timeZone:
+    type: string
+    title: Time Zone
+  fields:
+    title: Fields
+    type: object
+    additionalProperties: true
+    # This is like a Custom data that user enters.
+  links:
+    x-samos-hidden: true
+    title: Links
+    type: array
+    items:
+      type: object
+      properties:
+        rel:
+          title: Relationship
+          type: string
+        href:
+          title: Href
+          type: string
+
+  collectorType:
+    type: string
+    title: Collector Type
+  collectorVersion:
+    type: string
+    title: Collector Version
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+  lastSeenAlive:
+    type: integer
+    title: Last Seen Alive
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+  alive:
+    type: boolean
+    title: Alive?
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+  hostName:
+    type: string
+    title: Host Name
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+  ephemeral:
+    type: boolean
+    title: Ephemeral?
+  targetCpu:
+    type: integer
+    title: Target CPU
+  sourceSyncMode:
+    type: string
+    title: Source Sync Mode
+  installedCollectorSubtype:
+    type: string
+    title: Installed Collector Subtype
+  osVersion:
+    type: string
+    title: OS Version
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+  osName:
+    type: string
+    title: Operating System
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_product
+  osArch:
+    type: string
+    title: OS Architecture
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_architecture

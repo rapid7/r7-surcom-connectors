@@ -1,11 +1,12 @@
 ﻿id: solarwinds.orion
 name: SolarWinds Orion
 author: Rapid7
-version: 1.0.0
+version: 1.1.0
 notice: Copyright © 2025 Rapid7. All rights reserved.
 
 current_changes:
-  - Remove 'Beta' label
+  - Updated orionsdk dependency to version 0.5.0
+  - Fixed port handling when not specified in the URL
 
 reference-schemas:
   - url: https://solarwinds.github.io/OrionSDK/2024.4
@@ -33,8 +34,8 @@ settings:
   url:
     type: string
     title: Base URL
-    example: https://10.17.88.100:1774
-    description: The Base URL for the SolarWinds Orion API
+    example: https://10.17.88.100:17774
+    description: The Base URL for the SolarWinds Orion API, default port is 17774
 
   username:
     type: string
@@ -74,7 +75,7 @@ runtime: py311
 # Add any Python dependencies here that your Connector needs to run.
 # Each dependency should be pinned to a specific version.
 python_dependencies:
-  - 'orionsdk==0.4.0'
+  - 'orionsdk==0.5.0'
 
 # The list of categories for this Connector in the Extension Library.
 categories:

@@ -1,11 +1,11 @@
 id: delinea.secret.server
 name: Delinea Secret Server (Beta)
 author: Rapid7
-version: 0.1.0
-notice: Copyright © 2025 Rapid7. All rights reserved.
+version: 0.2.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Initial release
+  - Fulfill `has_mfa` for DelineaSecretServerUser.
 
 types:
   - DelineaSecretServerUser

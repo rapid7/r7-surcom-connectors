@@ -1,0 +1,207 @@
+x-samos-type-name: ThreatLockerApplication
+x-samos-namespace: threatlocker
+title: ThreatLocker Application
+description: Represents an Application details from ThreatLocker.
+
+x-samos-extends-types:
+  - type-name: Software
+
+x-samos-keys:
+  - applicationId
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: osType
+  - name: categories
+  - name: organizationId
+  - name: d_active
+  - name: dateCreated
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: productName
+  - name: osType
+  - name: categories
+  - name: organizationId
+  - name: accessLevels
+  - name: businessRating
+  - name: clientApplicationName
+  - name: clientDescription
+  - name: computerCounts
+  - name: computerPolicyCounts
+  - name: concernRating
+  - name: companyName
+  - name: countriesWhereCodeCompiled
+  - name: groupPolicyCounts
+  - name: globalComputersCounts
+  - name: organizationPolicyCounts
+  - name: productDescription
+  - name: potentialRiskStrategyText
+  - name: reviewRating
+  - name: remediationText
+  - name: isManagedPatching
+  - name: isPatchEligible
+  - name: isMaintained
+  - name: d_active
+  - name: dateCreated
+
+x-samos-derived-properties:
+  # The "active" property has no value in the response
+  # Deriving this property to fulfills `core.component:active` which is of type boolean
+  d_active:
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: computerCounts > `0` && isTemporary == `false`
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  accessLevels:
+    items:
+      properties:
+        displayName:
+          title: Display Name
+          type: string
+        isProtected:
+          title: Protected?
+          type: boolean
+        orderBy:
+          title: Order By
+          type: integer
+        value:
+          title: Value
+          type: string
+      type: object
+    title: Access Levels
+    type: array
+  applicationId:
+    title: Application ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  businessRating:
+    title: Business Rating
+    type: integer
+  categories:
+    items:
+      type: string
+    title: Categories
+    type: array
+  clientApplicationName:
+    title: Client Application Name
+    type: string
+  clientDescription:
+    title: Client Description
+    type: string
+  companyName:
+    title: Company Name
+    type: string
+  computerCounts:
+    title: Computer Counts
+    type: integer
+  computerPolicyCounts:
+    title: Computer Policy Counts
+    type: integer
+  concernRating:
+    title: Concern Rating
+    type: integer
+  countriesWhereCodeCompiled:
+    items:
+      properties:
+        code:
+          title: Code
+          type: string
+        name:
+          title: Name
+          type: string
+      type: object
+    title: Countries Where Code Compiled
+    type: array
+  dateCreated:
+    format: date-time
+    title: Date Created
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  globalComputersCounts:
+    title: Global Computers Counts
+    type: integer
+  groupPolicyCounts:
+    title: Group Policy Counts
+    type: integer
+  isBuiltIn:
+    title: Built In?
+    type: boolean
+  isHidden:
+    title: Hidden?
+    type: boolean
+  isMaintained:
+    title: Maintained?
+    type: boolean
+  isManagedPatching:
+    title: Managed Patching?
+    type: boolean
+  isPatchEligible:
+    title: Patch Eligible?
+    type: boolean
+  isTemporary:
+    title: Temporary?
+    type: boolean
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  organizationId:
+    title: Organization
+    type: string
+    x-samos-ref-types:
+      - type-name: ThreatLockerOrganization
+        key-name: organizationId
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+  organizationName:
+    title: Organization Name
+    type: string
+  organizationPolicyCounts:
+    title: Organization Policy Counts
+    type: integer
+  osType:
+    title: OS Type
+    type: integer
+    x-samos-ref-types:
+      - type-name: ThreatLockerOSFamilyEnum
+        key-name: id
+  potentialRiskStrategyText:
+    title: Potential Risk Strategy Text
+    type: string
+  productDescription:
+    title: Product Description
+    type: string
+  productName:
+    title: Product Name
+    type: string
+  remediationText:
+    title: Remediation Text
+    type: string
+  researchApplicationId:
+    title: Research Application ID
+    type: string
+  reviewRating:
+    title: Review Rating
+    type: integer

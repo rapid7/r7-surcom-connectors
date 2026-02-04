@@ -1,0 +1,51 @@
+id: threatlocker
+name: ThreatLocker (Beta)
+author: Rapid7
+version: 0.2.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Improved correlation for ThreatLocker computer objects
+
+# version of the connector ID.
+types:
+  - ThreatLockerApplication
+  - ThreatLockerComputer
+  - ThreatLockerOrganization
+  - ThreatLockerOSFamilyEnum
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: ThreatLocker Computers
+    description: Import all Computer, Application, and Organization details from ThreatLocker
+    return_types:
+      - ThreatLockerApplication
+      - ThreatLockerComputer
+      - ThreatLockerOrganization
+
+# Configuration settings for this connector.
+settings:
+  api_token:
+    type: string
+    title: API Token
+    description: Token used to authenticate with ThreatLocker
+    format: password
+
+  organization_instance:
+    type: string
+    title: Organization Instance ID
+    description: The unique identifier for your ThreatLocker instance.
+      This is required to route requests to the correct regional cluster.
+    example: 'eu1'
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - endpoint_management

@@ -1,0 +1,374 @@
+x-samos-type-name: ElasticDefendEndpoint
+x-samos-namespace: elastic.defend
+title: Elastic Defend Endpoint
+description: Represents an endpoint in the Elastic Defend API.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 5
+
+x-samos-keys:
+  - metadata.event.id
+
+x-samos-table:
+  - name: metadata.host.hostname
+  - name: host_status
+  - name: metadata.Endpoint.policy.applied.name
+  - name: metadata.Endpoint.policy.applied.status
+  - name: metadata.host.os.full
+  - name: metadata.event.ingested
+
+x-samos-detail:
+  - name: metadata.host
+  - name: host_status
+  - name: metadata.agent
+  - name: last_checkin
+
+x-samos-derived-properties:
+  d_active:
+    x-samos-hidden: true
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: 'metadata.Endpoint.status == `enrolled` && metadata.Endpoint.state.orphaned == `false`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+  d_mitigations:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+    syntax: jmespath
+    # M1049 - Antivirus/Antimalware (scanning for malicious files)
+    # M1040 - Behavior Prevention on Endpoint (ability to kill/suspend processes)
+    value: >-
+      [
+        (metadata.Endpoint.status == `enrolled` && metadata.Endpoint.state.orphaned == `false` && contains(metadata.Endpoint.capabilities, `scan`)) && `M1049` || null,
+        (metadata.Endpoint.status == `enrolled` && metadata.Endpoint.state.orphaned == `false` && (contains(metadata.Endpoint.capabilities, `kill_process`) || contains(metadata.Endpoint.capabilities, `suspend_process`))) && `M1040` || null
+      ] | [?@]
+  d_name:
+    # The property "metadata.host.hostname" is already fulfilling the 'Machine:hostnames' property,
+    # We cannot fulfill the 'core.named-object:name' property from the same source,
+    # so derived the property to fulfill the 'core.named-object:name' property.
+    x-samos-hidden: true
+    title: Name
+    type: string
+    syntax: jmespath
+    value: 'metadata.host.hostname'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  host_status:
+    title: Agent Status
+    type: string
+  last_checkin:
+    format: date-time
+    title: Last Check In
+    type: string
+  metadata:
+    x-samos-hidden: true
+    title: Metadata
+    type: object
+    properties:
+      '@timestamp':
+        format: date-time
+        title: Timestamp
+        type: string
+      Endpoint:
+        title: Endpoint
+        type: object
+        properties:
+          capabilities:
+            title: Capabilities
+            type: array
+            items:
+              type: string
+          configuration:
+            title: Configuration
+            type: object
+            properties:
+              isolation:
+                title: Isolation?
+                type: boolean
+          policy:
+            title: Policy
+            type: object
+            properties:
+              applied:
+                title: Applied
+                type: object
+                properties:
+                  endpoint_policy_version:
+                    title: Endpoint Policy Version
+                    type: string
+                  id:
+                    title: ID
+                    type: string
+                  name:
+                    title: Policy
+                    type: string
+                  status:
+                    title: Policy Status
+                    type: string
+                  version:
+                    title: Version
+                    type: string
+          state:
+            title: State
+            type: object
+            properties:
+              isolation:
+                title: Isolation?
+                type: boolean
+              orphaned:
+                title: Orphaned?
+                type: boolean
+              tamper_protection:
+                title: Tamper Protection?
+                type: boolean
+          status:
+            title: Status
+            type: string
+      agent:
+        title: Agent
+        type: object
+        properties:
+          build:
+            title: Build
+            type: object
+            properties:
+              original:
+                title: Original
+                type: string
+          id:
+            title: Agent ID
+            type: string
+            x-samos-correlation:
+              correlation-key: Machine.agent-software-uuid
+              correlation-type: Machine
+              priority: 4
+          type:
+            title: Type
+            type: string
+          version:
+            title: Version
+            type: string
+            x-samos-fulfills:
+              type-name: core.managed.endpoint
+              property-name: agent_version
+      data_stream:
+        title: Data Stream
+        type: object
+        properties:
+          dataset:
+            title: Dataset
+            type: string
+          namespace:
+            title: Namespace
+            type: string
+          type:
+            title: Type
+            type: string
+      elastic:
+        title: Elastic
+        type: object
+        properties:
+          agent:
+            title: Agent
+            type: object
+            properties:
+              id:
+                title: Agent ID
+                type: string
+      event:
+        title: Event
+        type: object
+        properties:
+          action:
+            title: Action
+            type: string
+          agent_id_status:
+            title: Agent ID Status
+            type: string
+          category:
+            title: Category
+            type: array
+            items:
+              type: string
+          created:
+            format: date-time
+            title: Created
+            type: string
+            x-samos-fulfills:
+              type-name: core.component
+              property-name: first_seen
+          dataset:
+            title: Dataset
+            type: string
+          id:
+            title: ID
+            type: string
+            x-samos-immutable: true
+            x-samos-fulfills:
+              type-name: core.component
+              property-name: id
+          ingested:
+            format: date-time
+            title: Last Active
+            type: string
+          kind:
+            title: Kind
+            type: string
+          module:
+            title: Module
+            type: string
+          sequence:
+            title: Sequence
+            type: integer
+          type:
+            title: Type
+            type: array
+            items:
+              type: string
+      host:
+        title: Host
+        type: object
+        properties:
+          architecture:
+            title: Architecture
+            type: string
+            x-samos-fulfills:
+              type-name: Machine
+              property-name: os_architecture
+          hostname:
+            title: Hostname
+            type: string
+            x-samos-fulfills:
+              type-name: Machine
+              property-name: hostnames
+            x-samos-correlation:
+              correlation-key: Machine.unqualified-hostname
+              correlation-type: Machine
+              priority: 2
+          id:
+            title: ID
+            type: string
+          ip:
+            title: IP
+            type: array
+            items:
+              type: string
+              format: ip-addr
+            x-samos-fulfills:
+              type-name: Machine
+              property-name: ips
+          mac:
+            title: Mac
+            type: array
+            items:
+              type: string
+              format: mac-addr
+            x-samos-fulfills:
+              type-name: Machine
+              property-name: mac_addresses
+            x-samos-correlation:
+              correlation-key: MacAddr.value
+              correlation-type: Machine
+              priority: 4
+          name:
+            title: Name
+            type: string
+          os:
+            title: OS
+            type: object
+            properties:
+              Ext:
+                title: Ext
+                type: object
+                properties:
+                  variant:
+                    title: Variant
+                    type: string
+              family:
+                title: OS Family
+                type: string
+              full:
+                title: OS Product
+                type: string
+                x-samos-fulfills:
+                  type-name: Machine
+                  property-name: os_product
+              kernel:
+                title: Kernel
+                type: string
+              name:
+                title: OS Name
+                type: string
+                x-samos-fulfills:
+                  type-name: Machine
+                  property-name: operating_system
+              platform:
+                title: OS Platform
+                type: string
+              type:
+                title: Type
+                type: string
+                x-samos-fulfills:
+                  type-name: core.managed.asset
+                  property-name: asset_type
+              version:
+                title: OS Version
+                type: string
+                x-samos-fulfills:
+                  type-name: Machine
+                  property-name: os_version
+  policy_info:
+    title: Policy Info
+    type: object
+    x-samos-hidden: true
+    # does not have much information about the policy, so hidden for now
+    properties:
+      agent:
+        title: Agent
+        type: object
+        properties:
+          applied:
+            title: Applied
+            type: object
+            properties:
+              id:
+                title: ID
+                type: string
+              revision:
+                title: Revision
+                type: integer
+          configured:
+            title: Configured
+            type: object
+            properties:
+              id:
+                title: ID
+                type: string
+              revision:
+                title: Revision
+                type: integer
+      endpoint:
+        title: Endpoint
+        type: object
+        properties:
+          id:
+            title: ID
+            type: string
+          revision:
+            title: Revision
+            type: integer

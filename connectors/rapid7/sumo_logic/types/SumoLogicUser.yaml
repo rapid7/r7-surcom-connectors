@@ -1,0 +1,148 @@
+x-samos-type-name: SumoLogicUser
+x-samos-namespace: sumo.logic
+title: Sumo Logic User
+description: A user in Sumo Logic
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: d_name
+  - name: email
+  - name: roleIds
+  - name: isActive
+  - name: lastLoginTimestamp
+  - name: isMfaEnabled
+
+x-samos-detail:
+  - name: d_name
+  - name: email
+  - name: roleIds
+  - name: isActive
+  - name: isMfaEnabled
+  - name: lastLoginTimestamp
+  - name: createdBy
+  - name: modifiedBy
+  - name: createdAt
+  - name: modifiedAt
+  - name: firstName
+  - name: lastName
+  - name: isLocked
+
+x-samos-derived-properties:
+  d_name:
+    title: Name
+    syntax: expression
+    type: string
+    value: '{firstName} {lastName}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_mitigations:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    syntax: jmespath
+    value: |
+      [
+        isMfaEnabled && `M1032` || null
+      ] | [?@]
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: mitigations
+
+properties:
+  firstName:
+    type: string
+    title: First Name
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+  lastName:
+    type: string
+    title: Last Name
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+  email:
+    type: string
+    title: Email
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 1
+  roleIds:
+    title: Roles
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: SumoLogicRole
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups
+  createdAt:
+    type: string
+    title: Created At
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+  createdBy:
+    type: string
+    title: Created By
+    x-samos-ref-types:
+      - type-name: SumoLogicUser
+        key-name: id
+  modifiedAt:
+    type: string
+    title: Modified At
+    format: date-time
+  modifiedBy:
+    type: string
+    title: Modified By
+    x-samos-ref-types:
+      - type-name: SumoLogicUser
+        key-name: id
+  id:
+    type: string
+    title: Id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  isActive:
+    type: boolean
+    title: Active?
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+  isLocked:
+    type: boolean
+    title: Locked?
+  isMfaEnabled:
+    type: boolean
+    title: MFA Enabled?
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: has_mfa
+  lastLoginTimestamp:
+    type: string
+    title: Last Login Timestamp
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen

@@ -2,10 +2,10 @@ id: datto.rmm
 name: Datto RMM
 author: Rapid7
 version: 1.2.0
-notice: Copyright © 2025 Rapid7. All rights reserved.
+notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Remove 'Beta' label
+  - Rectify epoch format typo in DattoRMMDevice type
 
 reference-schemas:
   - url: https://example_swagger.centrastage.net/api/v3/api-docs/Datto-RMM

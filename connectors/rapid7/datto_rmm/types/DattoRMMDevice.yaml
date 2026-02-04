@@ -362,7 +362,7 @@ properties:
       releaseDate:
         type: integer
         title: Release Date
-        format: epo
+        format: epoch-millis
       serialNumber:
         type: string
         title: Serial Number

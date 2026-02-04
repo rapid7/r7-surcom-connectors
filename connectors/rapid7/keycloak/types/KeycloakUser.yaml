@@ -45,6 +45,23 @@ x-samos-derived-properties:
       type-name: core.named-object
       property-name: name
 
+  d_mitigations:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    syntax: jmespath
+    value: |
+      [
+        totp && `M1032` || null
+      ] | [?@]
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: mitigations
+
 properties:
   id:
     type: string
@@ -108,6 +125,9 @@ properties:
   totp:
     type: boolean
     title: TOTP?
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: has_mfa
   disableableCredentialTypes:
     type: array
     title: Disableable Credential Types

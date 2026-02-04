@@ -1,0 +1,42 @@
+[
+  {
+    "id": "INFO",
+    "value": "None",
+    "map_to": "Severity: NONE"
+  },
+  {
+    "id": "LOW",
+    "value": "Low",
+    "map_to": "Severity: LOW"
+  },
+  {
+    "id": "MINOR",
+    "value": "Medium",
+    "map_to": "Severity: MEDIUM"
+  },
+  {
+    "id": "MEDIUM",
+    "value": "Medium",
+    "map_to": "Severity: MEDIUM"
+  },
+  {
+    "id": "MAJOR",
+    "value": "High",
+    "map_to": "Severity: HIGH"
+  },
+  {
+    "id": "HIGH",
+    "value": "High",
+    "map_to": "Severity: HIGH"
+  },
+  {
+    "id": "CRITICAL",
+    "value": "Critical",
+    "map_to": "Severity: CRITICAL"
+  },
+  {
+    "id": "BLOCKER",
+    "value": "Critical",
+    "map_to": "Severity: CRITICAL"
+  }
+]

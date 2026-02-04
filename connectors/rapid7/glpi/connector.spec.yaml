@@ -1,13 +1,13 @@
 id: glpi
-name: GLPI (Beta)
+name: GLPI
 author: Rapid7
-version: 0.1.0
+version: 1.0.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Initial release
+  - Remove 'Beta' label.
 
 reference-schemas:
   - url: https://example.in1.glpi-network.cloud/api.php
