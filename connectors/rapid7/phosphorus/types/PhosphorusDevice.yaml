@@ -1,0 +1,2363 @@
+x-samos-type-name: PhosphorusDevice
+x-samos-namespace: phosphorus
+title: Phosphorus Device
+description: Device for Phosphorus
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+$ref: https://phosphorus.io/api/swagger/public/swagger.json#/components/schemas/getSearchResponse/properties/devices/items
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: addr
+  - name: hostname
+  - name: manufacturer
+  - name: model
+  - name: type
+  - name: firmware
+  - name: mac
+  - name: d_active
+  - name: created
+  - name: lastInterrogation
+
+x-samos-detail:
+  - name: addr
+  - name: manufacturer
+  - name: icon
+  - name: lost
+  - name: mac
+  - name: model
+  - name: d_active
+  - name: type
+  - name: firmware
+  - name: credentialName
+  - name: hostname
+  - name: tags
+  - name: siteName
+  - name: siteMode
+  - name: canChangePassword
+  - name: canUpdate
+  - name: latestfirmware
+  - name: serialnumber
+  - name: lostAddr
+  - name: provider
+  - name: passwordGroupName
+  - name: passwordGroupId
+  - name: searchResult
+  - name: path
+  - name: cvssScore
+  - name: cvssV2Score
+  - name: cvssV3Score
+  - name: cvssV31Score
+  - name: cvssV4Score
+  - name: epssScore
+  - name: kevCount
+  - name: vulnerabilityMetrics
+  - name: created
+  - name: lastInterrogation
+  - name: metadata
+
+x-samos-derived-properties:
+  d_active:
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: 'metadata.status == `ONLINE`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_name:
+    # The property 'hostname' Fulfills core.named-object:hostname,
+    # so we create d_name to fulfill core.named-object:name
+    x-samos-hidden: true
+    title: Name
+    type: string
+    syntax: jmespath
+    value: hostname
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_last_seen:
+    # The property 'lastInterrogation' Fulfills core.managed.endpoint:last_scan,
+    # so we create d_last_seen to fulfill core.managed.endpoint:endpoint_last_seen
+    type: string
+    format: date-time
+    syntax: jmespath
+    value: lastInterrogation
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+
+  d_mitigations:
+    title: Mitigations
+    syntax: jmespath
+    value: '["M1016"]'
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Mitigation
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  addr:
+    format: ip-addr
+    title: IP Address
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  alerts:
+    title: Alerts
+    type: array
+    items:
+      type: object
+  canChangePassword:
+    title: Can Change Password?
+    type: boolean
+  canUpdate:
+    title: Can Update?
+    type: boolean
+  created:
+    format: date-time
+    title: Created
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_first_seen
+  credentialName:
+    title: Credential Name
+    type: string
+  custom_row_id:
+    title: Custom Row ID
+    type: string
+  cvssScore:
+    title: CVSS Score
+    type: number
+  cvssV2Score:
+    title: CVSS V2 Score
+    type: number
+  cvssV31Score:
+    title: CVSS V31 Score
+    type: number
+  cvssV3Score:
+    title: CVSS V3 Score
+    type: number
+  cvssV4Score:
+    title: CVSS V4 Score
+    type: number
+  epssScore:
+    title: EPSS Score
+    type: number
+  firmware:
+    title: Firmware
+    type: string
+  hostname:
+    title: Hostname
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+  icon:
+    title: Icon
+    type: string
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  kevCount:
+    title: Kev Count
+    type: integer
+  lastInterrogation:
+    format: date-time
+    title: Last Interrogation
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_scanned
+  latestfirmware:
+    title: Latest Firmware
+    type: string
+  lost:
+    title: Lost?
+    type: boolean
+  lostAddr:
+    title: Lost Addr
+    type: string
+  mac:
+    format: mac-addr
+    title: Mac
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+  manufacturer:
+    title: Manufacturer
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+  metadata:
+    properties:
+      AESsupport:
+        title: AES Support
+        type: string
+      BIOS:
+        title: BIOS
+        type: string
+      DNS:
+        title: DNS
+        type: string
+      DeviceID:
+        title: Device ID
+        type: string
+      DeviceName:
+        title: Device Name
+        type: string
+      DiscoveryEnabled:
+        title: Discovery Enabled
+        type: string
+      DiscoveryPort:
+        title: Discovery Port
+        type: string
+      FNumber:
+        title: F Number
+        type: string
+      FPGAVersion:
+        title: FPGA Version
+        type: string
+      FQDN:
+        title: FQDN
+        type: string
+        x-samos-correlation:
+          correlation-key: Machine.qualified-hostname
+          correlation-type: Machine
+          priority: 3
+      GMT:
+        title: GMT
+        type: string
+      IPCoreSoftwareVersion:
+        title: IP Core Software Version
+        type: string
+      IPV4Gateway:
+        format: ip-addr
+        title: IP Gateway
+        type: string
+      IPV6:
+        title: IP
+        type: string
+      IPV6Address:
+        title: IP Address
+        type: string
+      online:
+        title: Online
+        type: string
+      LiveStreamPassword:
+        title: Live Stream Password
+        type: string
+      NIB:
+        title: NIB
+        type: string
+      ProductName:
+        title: Product Name
+        type: string
+      RFL:
+        title: RFL
+        type: string
+      SSHHostkey:
+        title: SSH Host key
+        type: string
+      Subnet:
+        format: ip-addr
+        title: Subnet
+        type: string
+      TPcoreFirmware:
+        title: TP Core Firmware
+        type: string
+      activeAccessPoint:
+        title: Active Access Point
+        type: string
+      activeEncryptionMode:
+        title: Active Encryption Mode
+        type: string
+      addressingMode:
+        title: Addressing Mode
+        type: string
+      adjustment:
+        title: Adjustment
+        type: string
+      agencyModel:
+        title: Agency Model
+        type: string
+      apcModel:
+        title: APC Model
+        type: string
+      apcOSfirmware:
+        title: APC OS Firmware
+        type: string
+      apcSerialNumber:
+        title: APC Serial Number
+        type: string
+      apiRevision:
+        title: API Revision
+        type: string
+      appVersion:
+        title: App Version
+        type: string
+      applianceBuildNumber:
+        title: Appliance Build Number
+        type: string
+      appname:
+        title: App Name
+        type: string
+      audioEnable:
+        title: Audio Enable
+        type: string
+      audioMode:
+        title: Audio Mode
+        type: string
+      audioOutput:
+        title: Audio Output
+        type: string
+      authRequired:
+        title: Auth Required
+        type: string
+      baseboardVersion:
+        title: Baseboard Version
+        type: string
+      batteryPercentageRemaining:
+        title: Battery Percentage Remaining
+        type: string
+      batterySKU:
+        title: Battery SKU
+        type: string
+      batterySecondsRemaining:
+        title: Battery Seconds Remaining
+        type: string
+      beltBroken:
+        title: Belt Broken
+        type: string
+      bias:
+        title: Bias
+        type: string
+      board:
+        title: Board
+        type: string
+      boardVersion:
+        title: Board Version
+        type: string
+      bootImage:
+        title: Boot Image
+        type: string
+      bootLoader:
+        title: Boot Loader
+        type: string
+      bootLoaderVersion:
+        title: Boot Loader Version
+        type: string
+      bootMonitor:
+        title: Boot Monitor
+        type: string
+      bootTime:
+        format: date-time
+        title: Boot Time
+        type: string
+      bootloader:
+        title: Boot Loader
+        type: string
+      bootloaderRevision:
+        title: Boot Loader Revision
+        type: string
+      browserPlugins:
+        title: Browser Plugins
+        type: string
+      buildNumber:
+        title: Build Number
+        type: string
+      buildRevision:
+        title: Build Revision
+        type: string
+      calibrationCode:
+        title: Calibration Code
+        type: string
+      channelNames:
+        title: Channel Names
+        type: string
+      cipherSuiteGroup:
+        title: Cipher Suite Group
+        type: string
+      clockName:
+        title: Clock Name
+        type: string
+      connectionSSID:
+        title: Connection SSID
+        type: string
+      contact:
+        title: Contact
+        type: string
+      controlPort:
+        title: Control Port
+        type: string
+      controllerMode:
+        title: Controller Mode
+        type: string
+      controllerName:
+        title: Controller Name
+        type: string
+      controllerType:
+        title: Controller Type
+        type: string
+      countryCode:
+        title: Country Code
+        type: string
+      cpp:
+        title: CPP
+        type: string
+      cpu:
+        title: CPU
+        type: string
+      cpldVersion:
+        title: CPLD Version
+        type: string
+      currentOutputVoltage:
+        title: Current Output Voltage
+        type: string
+      currentTemperature_Celsius:
+        title: Current Temperature Celsius
+        type: string
+      current_frequency:
+        title: Current Frequency
+        type: string
+      developmentVersion:
+        title: Development Version
+        type: string
+      deviceCondition:
+        title: Device Condition
+        type: string
+      deviceFamily:
+        title: Device Family
+        type: string
+      deviceSn:
+        title: Device SN
+        type: string
+      deviceUUID:
+        format: uuid
+        title: Device UUID
+        type: string
+      dhcpLeaseTime:
+        title: DHCP Lease Time
+        type: string
+      dnsServers:
+        title: DNS Servers
+        type: string
+      docXmlVersionXmlSha256:
+        title: Doc XML Version XML SHA
+        type: string
+      documentFeederVersion:
+        title: Document Feeder Version
+        type: string
+      driverConfiguration:
+        title: Driver Configuration
+        type: string
+      drugLibraryDowngrades:
+        title: Drug Library Downgrades
+        type: string
+      dspVersion:
+        title: DSP Version
+        type: string
+      engineVersion:
+        title: Engine Version
+        type: string
+      enip:
+        title: ENIP
+        type: string
+      enipRevision:
+        title: ENIP Revision
+        type: string
+      entPhysicalDescr:
+        title: ENT Physical Descr
+        type: string
+      ethernetPort1Setup:
+        title: Ethernet Port Setup
+        type: string
+      ethernetPort2Setup:
+        title: Ethernet Port Setup
+        type: string
+      extendedName:
+        title: Extended Name
+        type: string
+      externalEstop:
+        title: External Estop
+        type: string
+      family:
+        title: Family
+        type: string
+      featureCodes:
+        title: Feature Codes
+        type: string
+      fenceOpen:
+        title: Fence Open
+        type: string
+      firmwareDatecode:
+        title: Firmware Datecode
+        type: string
+      firmwareGit:
+        title: Firmware Git
+        type: string
+      firmwareName:
+        title: Firmware Name
+        type: string
+      firmwareNumber:
+        title: Firmware Number
+        type: string
+      fontVersion:
+        title: Font Version
+        type: string
+      freeProgramMemory:
+        title: Free Program Memory
+        type: string
+      freeStorageMemory:
+        title: Free Storage Memory
+        type: string
+      ftpStatus:
+        title: FTP Status
+        type: string
+      handBroken:
+        title: Hand Broken
+        type: string
+      health:
+        title: Health
+        type: string
+      highCriticalThresholdFrequency:
+        title: High Critical Threshold Frequency
+        type: string
+      highCriticalThresholdVoltage:
+        title: High Critical Threshold Voltage
+        type: string
+      highWarningThresholdVoltage:
+        title: High Warning Threshold Voltage
+        type: string
+      hostConnectionStatus:
+        title: Host Connection Status
+        type: string
+      hostId:
+        title: Host ID
+        type: string
+      hostSV:
+        title: Host SV
+        type: string
+      hpWebServices:
+        title: HP Web Services
+        type: string
+      httpEnabled:
+        title: HTTP Enabled
+        type: string
+      httpsEnabled:
+        title: HTTPS Enabled
+        type: string
+      hwRelease:
+        title: HW Release
+        type: string
+      iDRACmodel:
+        title: IDRAC model
+        type: string
+      idracName:
+        title: IDRAC Name
+        type: string
+      idracType:
+        title: IDRAC Type
+        type: string
+      imageOutputTerminal:
+        title: Image Output Terminal
+        type: string
+      inputVoltage:
+        title: Input Voltage
+        type: string
+      ipAddress:
+        format: ip-addr
+        title: Ip Address
+        type: string
+      ipmiVersion:
+        title: IPMI Version
+        type: string
+      ipv6Address:
+        title: IPV Address
+        type: string
+      ipv6Enabled:
+        title: IPV Enabled
+        type: string
+      isCustom:
+        title: IS Custom
+        type: string
+      jetDirect:
+        title: Jet Direct
+        type: string
+      jetDirect1:
+        title: Jet Direct
+        type: string
+      jetDirect2:
+        title: Jet Direct
+        type: string
+      jetDirect3:
+        title: Jet Direct
+        type: string
+      kernel:
+        title: Kernel
+        type: string
+      kernelVersopm:
+        title: Kernel Versopm
+        type: string
+      keyPosition:
+        title: Key Position
+        type: string
+      keySwitchPosition:
+        title: Key Switch Position
+        type: string
+      labels:
+        title: Labels
+        type: string
+      lastModified:
+        title: Last Modified
+        type: string
+      lastUpgrade:
+        title: Last Upgrade
+        type: string
+      license:
+        title: License
+        type: string
+      linkOS:
+        title: Link OS
+        type: string
+      lldpMacAddress1:
+        format: mac-addr
+        title: LLDP Mac Address
+        type: string
+      lldpMacAddress2:
+        format: mac-addr
+        title: LLDP Mac Address
+        type: string
+      location:
+        title: Location
+        type: string
+      lowAirAlarm:
+        title: Low Air Alarm
+        type: string
+      lowCriticalThresholdFrequency:
+        title: Low Critical Threshold Frequency
+        type: string
+      lowCriticalThresholdVoltage:
+        title: Low Critical Threshold Voltage
+        type: string
+      lowWarningThresholdVoltage:
+        title: Low Warning Threshold Voltage
+        type: string
+      machineID:
+        title: Machine ID
+        type: string
+      machineId:
+        title: Machine ID
+        type: string
+      mainController:
+        title: Main Controller
+        type: string
+      mainImage:
+        title: Main Image
+        type: string
+      managedDevice:
+        title: Managed Device
+        type: string
+      managedDeviceSerialNumber:
+        title: Managed Device Serial Number
+        type: string
+      manufactureDate:
+        title: Manufacture Date
+        type: string
+      manufacturer:
+        title: Manufacturer
+        type: string
+      manufacturingID:
+        title: Manufacturing ID
+        type: string
+      markingEngineVersion:
+        title: Marking Engine Version
+        type: string
+      maxCurrent:
+        title: Max Current
+        type: string
+      maxFrequency:
+        title: Max Frequency
+        type: string
+      maxVoltage:
+        title: Max Voltage
+        type: string
+      minCurrent:
+        title: Min Current
+        type: string
+      minFrequency:
+        title: Min Frequency
+        type: string
+      minVoltage:
+        title: Min Voltage
+        type: string
+      modbusEnabled:
+        title: Modbus Enabled
+        type: string
+      modbusException:
+        title: Modbus Exception
+        type: string
+      modbusTCPRevision:
+        title: Modbus Tcp Revision
+        type: string
+      modeL:
+        title: Mode L
+        type: string
+      modelDate:
+        title: Model Date
+        type: string
+      modelDevice:
+        title: Model Device
+        type: string
+      modelForm:
+        title: Model Form
+        type: string
+      modelNumber:
+        title: Model Number
+        type: string
+      modelType:
+        title: Model Type
+        type: string
+      modelname:
+        title: Model Name
+        type: string
+      modem:
+        title: Modem
+        type: string
+      moduleJavaTmPlatformPartNumber:
+        title: Module Java TM Platform Part Number
+        type: string
+      moduleJavaTmPlatformVersion:
+        title: Module Java TM Platform Version
+        type: string
+      moduleName:
+        title: Module Name
+        type: string
+      modulePrinterPartNumber:
+        title: Module Printer Part Number
+        type: string
+      modulePrinterVersion:
+        title: Module Printer Version
+        type: string
+      moduleRole:
+        title: Module Role
+        type: string
+      moduleSystemPartNumber:
+        title: Module System Part Number
+        type: string
+      moduleSystemVersion:
+        title: Module System Version
+        type: string
+      moduleType:
+        title: Module Type
+        type: string
+      moduleWebSupportPartNumber:
+        title: Module Web Support Part Number
+        type: string
+      moduleWebSupportVersion:
+        title: Module Web Support Version
+        type: string
+      multicastH264Stream:
+        title: Multicast Stream
+        type: string
+      netBiosname:
+        title: Net BIOS Name
+        type: string
+      netmask:
+        format: ip-addr
+        title: Netmask
+        type: string
+      networkController:
+        title: Network Controller
+        type: string
+      networkControllerOS:
+        title: Network Controller OS
+        type: string
+      networkControllerVersion:
+        title: Network Controller Version
+        type: string
+      networkVersion:
+        title: Network Version
+        type: string
+      nmcModel:
+        title: NMC Model
+        type: string
+      nmcSerialNumber:
+        title: NMC Serial Number
+        type: string
+      nomialCurrent_Frequency:
+        title: Nomial Current Frequency
+        type: string
+      nomialOutputVoltage:
+        title: Nomial Output Voltage
+        type: string
+      nomialPowerFactor:
+        title: Nomial Power Factor
+        type: string
+      nominalCurrent:
+        title: Nominal Current
+        type: string
+      nominalFrequency:
+        title: Nominal Frequency
+        type: string
+      nominalVoltage:
+        title: Nominal Voltage
+        type: string
+      nonTeacherEnb:
+        title: Non Teacher ENB
+        type: string
+      ntpAuthenticationEnabled:
+        title: NTP Authentication Enabled
+        type: string
+      ntpEnabled:
+        title: NTP Enabled
+        type: string
+      ntpServer:
+        title: NTP Server
+        type: string
+      obiNumber:
+        title: OBI Number
+        type: string
+      onvifAcc:
+        title: Onvif Acc
+        type: string
+      onvifType:
+        title: Onvif Type
+        type: string
+      openSSL:
+        title: Open SSL
+        type: string
+      operationStatus:
+        title: Operation Status
+        type: string
+      osVersion:
+        title: OS Version
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_version
+      outputPower:
+        title: Output Power
+        type: string
+      outputSource:
+        title: Output Source
+        type: string
+      overTravel:
+        title: Over Travel
+        type: string
+      panelVersion:
+        title: Panel Version
+        type: string
+      pathToHost:
+        title: Path To Host
+        type: string
+      pcbSerialNumber:
+        title: PCB Serial Number
+        type: string
+      pcmciaEthCardAddress:
+        title: PCMCIA Eth Card Address
+        type: string
+      pctPower_Used:
+        title: PCT Power Used
+        type: string
+      pepvpnVersion:
+        title: PEP VPN Version
+        type: string
+      percentFree:
+        title: Percent Free
+        type: string
+      permanentMACAddress:
+        format: mac-addr
+        title: Permanent Mac Address
+        type: string
+      physicalFirmware:
+        title: Physical Firmware
+        type: string
+      physicalModel:
+        title: Physical Model
+        type: string
+      physicalName:
+        title: Physical Name
+        type: string
+      platform:
+        title: Platform
+        type: string
+      pluginName:
+        title: Plugin Name
+        type: string
+      pluginPort:
+        title: Plugin Port
+        type: string
+      pluginVersion:
+        title: Plugin Version
+        type: string
+      pluginVersion64:
+        title: Plugin Version
+        type: string
+      postNumber:
+        title: Post Number
+        type: string
+      postVersion:
+        title: Post Version
+        type: string
+      power:
+        title: Power
+        type: string
+      powerFactorCorrection:
+        title: Power Factor Correction
+        type: string
+      powerOnTime:
+        title: Power On Time
+        type: string
+      powerRating:
+        title: Power Rating
+        type: string
+      processor:
+        title: Processor
+        type: string
+      processorID:
+        title: Processor ID
+        type: string
+      processorId:
+        title: Processor ID
+        type: string
+      prodType:
+        title: Prod Type
+        type: string
+      product:
+        title: Product
+        type: string
+      productCode:
+        title: Product Code
+        type: string
+      productFamily:
+        title: Product Family
+        type: string
+      productID:
+        title: Product ID
+        type: string
+      productId:
+        title: Product ID
+        type: string
+      productName:
+        title: Product Name
+        type: string
+      productNumber:
+        title: Product Number
+        type: string
+      productSerialNumber:
+        title: Product Serial Number
+        type: string
+      productType:
+        title: Product Type
+        type: string
+      productVendor:
+        title: Product Vendor
+        type: string
+      productionDate:
+        title: Production Date
+        type: string
+      profinetRevision:
+        title: Profinet Revision
+        type: string
+      profinetStationName:
+        title: Profinet Station Name
+        type: string
+      profinet_FastStartUp:
+        title: Profinet Fast Startup
+        type: string
+      profinet_NetworkTopology:
+        title: Profinet Network Topology
+        type: string
+      projectName:
+        title: Project Name
+        type: string
+      qvidiumProxy:
+        title: Qvidium Proxy
+        type: string
+      ratingCurrent:
+        title: Rating Current
+        type: string
+      ratingVoltage:
+        title: Rating Voltage
+        type: string
+      rconsoleSupport:
+        title: R Console Support
+        type: string
+      redfishVersion:
+        title: Redfish Version
+        type: string
+      region:
+        title: Region
+        type: string
+      regionCode:
+        title: Region Code
+        type: string
+      release:
+        title: Release
+        type: string
+      releaseDate:
+        title: Release Date
+        type: string
+      remoteDiscovery:
+        title: Remote Discovery
+        type: string
+      remoteUserHandling:
+        title: Remote User Handling
+        type: string
+      renderingEngine:
+        title: Rendering Engine
+        type: string
+      rollbackBuild:
+        title: Rollback Build
+        type: string
+      rollbackVersion:
+        title: Rollback Version
+        type: string
+      rootVersion:
+        title: Root Version
+        type: string
+      rtjiSupport:
+        title: RTJI Support
+        type: string
+      rtsp:
+        title: RTSP
+        type: string
+      scannerVersion:
+        title: Scanner Version
+        type: string
+      scheduledUpgrades:
+        title: Scheduled Upgrades
+        type: string
+      sddisk:
+        title: SD Disk
+        type: string
+      selfTest:
+        title: Self Test
+        type: string
+      serial:
+        title: Serial
+        type: string
+      serialNumber:
+        title: Serial Number
+        type: string
+      serialNumberPrefix:
+        title: Serial Number Prefix
+        type: string
+      series:
+        title: Series
+        type: string
+      serverGen:
+        title: Server Gen
+        type: string
+      serverName:
+        title: Server Name
+        type: string
+      serviceMode:
+        title: Service Mode
+        type: string
+      serviceTag:
+        title: Service Tag
+        type: string
+      servoDisconnect:
+        title: Servo Disconnect
+        type: string
+      sessionTimeout:
+        title: Session Timeout
+        type: string
+      showAtmConfig:
+        title: Show Atm Config
+        type: string
+      showAutoRegister:
+        title: Show Auto Register
+        type: string
+      showBonjourConfig:
+        title: Show Bonjour Config
+        type: string
+      showCommConfig:
+        title: Show Comm Config
+        type: string
+      showDeviceType:
+        title: Show Device Type
+        type: string
+      showNasConfig:
+        title: Show NAS Config
+        type: string
+      showSnmpConfig:
+        title: Show SNMP Config
+        type: string
+      sku:
+        title: SKU
+        type: string
+      skuFirmware:
+        title: SKU Firmware
+        type: string
+      skuRevision:
+        title: SKU Revision
+        type: string
+      smtpServer:
+        title: SMTP Server
+        type: string
+      snmp:
+        title: SNMP
+        type: string
+      snmpCommunity:
+        title: SNMP Community
+        type: string
+      softwareEditionNo:
+        title: Software Edition No
+        type: string
+      softwareRevision:
+        title: Software Revision
+        type: string
+      softwareVersion:
+        title: Software Version
+        type: string
+      sopEstop:
+        title: SOP E Stop
+        type: string
+      specialGop728Wp:
+        title: Special GOP 728 WP
+        type: string
+      ssh:
+        title: SSH
+        type: string
+      ssh.tcp.22.banner:
+        title: SSH TCP Banner
+        type: string
+      sshEnable:
+        title: SSH Enable
+        type: string
+      sshEnabled:
+        title: SSH Enabled
+        type: string
+      sshPort:
+        title: SSH Port
+        type: string
+      sshStatus:
+        title: SSH Status
+        type: string
+      sslSupport:
+        title: SSL Support
+        type: string
+      stationName:
+        title: Station Name
+        type: string
+      status:
+        title: Status
+        type: string
+      statusHealth:
+        title: Status Health
+        type: string
+      storageConfiguration:
+        title: Storage Configuration
+        type: string
+      streamAudio:
+        title: Stream Audio
+        type: string
+      subModel:
+        title: Sub Model
+        type: string
+      subStreamAudio:
+        title: Sub Stream Audio
+        type: string
+      subStreamAudioEnabled:
+        title: Sub Stream Audio Enabled
+        type: string
+      subnetMask:
+        title: Subnet Mask
+        type: string
+      supportBeep:
+        title: Support Beep
+        type: string
+      supportVideoLoss:
+        title: Support Video Loss
+        type: string
+      supportedEAPMethods:
+        title: Supported EAP Methods
+        type: string
+      svoffDetect:
+        title: SV Off Detect
+        type: string
+      sync:
+        title: Sync
+        type: string
+      sysDesc:
+        title: Sys Desc
+        type: string
+      sysName:
+        title: Sys Name
+        type: string
+      sysUptime:
+        title: Sys Uptime
+        type: string
+      systemBackup:
+        title: System Backup
+        type: string
+      systemContact:
+        title: System Contact
+        type: string
+      systemHealth:
+        title: System Health
+        type: string
+      systemHostname:
+        title: System Hostname
+        type: string
+      systemLocation:
+        title: System Location
+        type: string
+      systemLogging:
+        title: System Logging
+        type: string
+      systemModel:
+        title: System Model
+        type: string
+      systemMonitor:
+        title: System Monitor
+        type: string
+      systemName:
+        title: System Name
+        type: string
+      systemRom:
+        title: System Rom
+        type: string
+      systemRomDate:
+        title: System Rom Date
+        type: string
+      systemSerial:
+        title: System Serial
+        type: string
+      szSupportPlugin64:
+        title: SZ Support Plugin
+        type: string
+      teachPendant:
+        title: Teach Pendant
+        type: string
+      telecontrolID:
+        title: Telecontrol ID
+        type: string
+      telnetAvailable:
+        title: Telnet Available
+        type: string
+      telnetEnabled:
+        title: Telnet Enabled
+        type: string
+      telnetPort:
+        title: Telnet Port
+        type: string
+      telnetStatus:
+        title: Telnet Status
+        type: string
+      temperatureCelsius:
+        title: Temperature Celsius
+        type: string
+      timeLastScanned:
+        title: Time Last Scanned
+        type: string
+      timeUp:
+        title: Time Up
+        type: string
+      timeZone:
+        title: Time Zone
+        type: string
+      tjiSupport:
+        title: TJI Support
+        type: string
+      tli:
+        title: TLI
+        type: string
+      tls.tcp.21.version:
+        title: TLS TCP Version
+        type: string
+      tls.tcp.4001.version:
+        title: TLS TCP 4001 Version
+        type: string
+      tls.tcp.443.version:
+        title: TLS TCP 443 Version
+        type: string
+      tls.tcp.5061.version:
+        title: TLS TCP 5061 Version
+        type: string
+      tls.tcp.5443.version:
+        title: TLS TCP 5443 Version
+        type: string
+      tls.tcp.80.version:
+        title: TLS TCP 80 Version
+        type: string
+      tls.tcp.8443.version:
+        title: TLS TCP 8443 Version
+        type: string
+      tls.tcp.9443.version:
+        title: Tls Tcp 9443 Version
+        type: string
+      tlsProtocol:
+        title: TLS Protocol
+        type: string
+      totalPhysicalMemory:
+        title: Total Physical Memory
+        type: string
+      totalProgramMemory:
+        title: Total Program Memory
+        type: string
+      totalStorageMemory:
+        title: Total Storage Memory
+        type: string
+      tpDeadman:
+        title: TP Deadman
+        type: string
+      tpEnable:
+        title: TP Enable
+        type: string
+      tpEstop:
+        title: TP Estop
+        type: string
+      type:
+        title: Type
+        type: string
+      uBoot:
+        title: U Boot
+        type: string
+      uBootVersion:
+        title: U Boot Version
+        type: string
+      ubootVersion:
+        title: U Boot Version
+        type: string
+      uname:
+        title: Uname
+        type: string
+      uniqueId:
+        title: Unique ID
+        type: string
+      upSince:
+        title: Up Since
+        type: string
+      updateSerial:
+        title: Update Serial
+        type: string
+      upnp:
+        title: Upnp
+        type: string
+      ups:
+        title: UPS
+        type: string
+      upsFirmware:
+        title: UPS Firmware
+        type: string
+      upsModel:
+        title: UPS Model
+        type: string
+      upsSerialNumber:
+        title: UPS Serial Number
+        type: string
+      uptime:
+        title: Uptime
+        type: string
+      usbSecurityKey:
+        title: USB Security Key
+        type: string
+      useMacPlugins:
+        title: Use Mac Plugins
+        type: string
+      userInterface:
+        title: User Interface
+        type: string
+      usernameToken:
+        title: Username Token
+        type: string
+      vendor:
+        title: Vendor
+        type: string
+      vendorName:
+        title: Vendor Name
+        type: string
+      version:
+        title: Version
+        type: string
+      videodetectDefaultSensitive:
+        title: Video Detect Default Sensitive
+        type: string
+      videodetectDefaultThreshold:
+        title: Video Detect Default Threshold
+        type: string
+      vmName:
+        title: VM Name
+        type: string
+      voltage:
+        title: Voltage
+        type: string
+      vrpVersion:
+        title: VRP Version
+        type: string
+      wanMac:
+        format: mac-addr
+        title: WAN Mac
+        type: string
+      webBinaryVersion:
+        title: Web Binary Version
+        type: string
+      webComponentsSha256:
+        title: Web Components Sha
+        type: string
+      webImageMonitor:
+        title: Web Image Monitor
+        type: string
+      webIndex:
+        title: Web Index
+        type: string
+      webServer:
+        title: Web Server
+        type: string
+      webServerHeader:
+        title: Web Server Header
+        type: string
+      webVersion:
+        title: Web Version
+        type: string
+      whiteBalance:
+        title: White Balance
+        type: string
+      win32AudioIntercomDll:
+        title: Win Audio Intercom DLL
+        type: string
+      win32NetStreamDll:
+        title: Win Net Stream DLL
+        type: string
+      win32PlayCtrlDll:
+        title: Win Play Ctrl DLL
+        type: string
+      win32StreamTransClientDll:
+        title: Win Stream Trans Client DLL
+        type: string
+      win32SystemTransformDll:
+        title: Win System Transform DLL
+        type: string
+      win32WebVideoActiveXOcx:
+        title: Win Web Video Active X OCX
+        type: string
+      win64AudioIntercomDll:
+        title: Win Audio Intercom DLL
+        type: string
+      win64NetStreamDll:
+        title: Win Net Stream DLL
+        type: string
+      win64PlayCtrlDll:
+        title: Win Play Ctrl DLL
+        type: string
+      win64StreamTransClientDll:
+        title: Win Stream Trans Client DLL
+        type: string
+      win64SystemTransformDll:
+        title: Win System Transform DLL
+        type: string
+      win64WebVideoActiveXOcx:
+        title: Win Web Video Active X OCX
+        type: string
+      zebraUniqueId:
+        title: Zebra Unique ID
+        type: string
+      zeroConf:
+        title: Zero Conf
+        type: string
+      zeroConfiguration:
+        title: Zero Configuration
+        type: string
+      DHCPv6:
+        title: Dhc Pv
+        type: string
+      DefaultInterface:
+        title: Default Interface
+        type: string
+      DhcpEnable:
+        title: Dhcp Enable
+        type: string
+      Domain:
+        title: Domain
+        type: string
+      EnableDhcpReservedIP:
+        title: Enable Dhcp Reserved IP
+        type: string
+      HTTPSupportInformation:
+        title: HTTP Support Information
+        type: string
+      HTTPSystemLogging:
+        title: HTTP System Logging
+        type: string
+      Hostname:
+        title: Hostname
+        type: string
+      IPFilter:
+        title: IP Filter
+        type: string
+      IPVersion6:
+        title: Ip Version
+        type: string
+      LocalNo:
+        title: Local No
+        type: string
+      LockLoginEnable:
+        title: Lock Login Enable
+        type: string
+      LockLoginTimes:
+        title: Lock Login Times
+        type: string
+      LoginFailLockTime:
+        title: Login Fail Lock Time
+        type: string
+      MTU:
+        title: MTU
+        type: string
+      MachineName:
+        title: Machine Name
+        type: string
+      MaxOnlineTime:
+        title: Max Online Time
+        type: string
+      NTP:
+        title: NTP
+        type: string
+      ONVIF:
+        title: ONVIF
+        type: string
+      PID:
+        title: PID
+        type: string
+      PLD:
+        title: PLD
+        type: string
+      RELToken:
+        title: REL Token
+        type: string
+      SAMLToken:
+        title: SAML Token
+        type: string
+      TLS10:
+        title: TLS 10
+        type: string
+      TLS12:
+        title: TLS 12
+        type: string
+      VID:
+        title: VID
+        type: string
+      X509Token:
+        title: X509 Token
+        type: string
+      accessPolicyConfig:
+        title: Access Policy Config
+        type: string
+      appLoadId:
+        title: App Load ID
+        type: string
+      applSwPartNumber:
+        title: Appl SW Part Number
+        type: string
+      applSwRevision:
+        title: Appl SW Revision
+        type: string
+      articleCode:
+        title: Article Code
+        type: string
+      audioConnectionSupport:
+        title: Audio Connection Support
+        type: string
+      audioDetectionStatus:
+        title: Audio Detection Status
+        type: string
+      audioEnabled:
+        title: Audio Enabled
+        type: string
+      audioInput:
+        title: Audio Input
+        type: string
+      audioInputType:
+        title: Audio Input Type
+        type: string
+      authentication:
+        title: Authentication
+        type: string
+      bDebugMode:
+        title: B Debug Mode
+        type: string
+      backupRomDate:
+        title: Backup Rom Date
+        type: string
+      biosVersion:
+        title: Bios Version
+        type: string
+      boaGroupPolicyAdmin:
+        title: Boa Group Policy Admin
+        type: string
+      boaGroupPolicyOperator:
+        title: Boa Group Policy Operator
+        type: string
+      boaGroupPolicyViewer:
+        title: Boa Group Policy Viewer
+        type: string
+      boardSerial:
+        title: Board Serial
+        type: string
+      bomEncoding:
+        title: Bom Encoding
+        type: string
+      bonjour:
+        title: Bonjour
+        type: string
+      bonjourName:
+        title: Bonjour Name
+        type: string
+      bootEnvironmentVersion:
+        title: Boot Environment Version
+        type: string
+      bootFirmware:
+        title: Boot Firmware
+        type: string
+      bootLoadId:
+        title: Boot Load ID
+        type: string
+      bootPartNumber:
+        title: Boot Part Number
+        type: string
+      bootReleasedDate:
+        title: Boot Released Date
+        type: string
+      bootSwRevision:
+        title: Boot Sw Revision
+        type: string
+      bootVersion:
+        title: Boot Version
+        type: string
+      build:
+        title: Build
+        type: string
+      buildDate:
+        title: Build Date
+        type: string
+      buildTimestamp:
+        title: Build Timestamp
+        type: string
+      buildVersion:
+        title: Build Version
+        type: string
+      cameraId:
+        title: Camera ID
+        type: string
+      category:
+        title: Category
+        type: string
+      cgiVersion:
+        title: CGI Version
+        type: string
+      class:
+        title: Class
+        type: string
+      codebaseVersionXmlSha256:
+        title: Codebase Version XML Sha 256
+        type: string
+      commandSet:
+        title: Command Set
+        type: string
+      configPartNumber:
+        title: Config Part Number
+        type: string
+      configSwRevision:
+        title: Config SW Revision
+        type: string
+      core3UILevel:
+        title: Core UI Level
+        type: string
+      cpuPercent:
+        title: CPU Percent
+        type: string
+      ctrlBoardSerial:
+        title: Ctrl Board Serial
+        type: string
+      current:
+        title: Current
+        type: string
+      defaultAccessPolicy:
+        title: Default Access Policy
+        type: string
+      defaultGateway:
+        title: Default Gateway
+        type: string
+      defaultHostName:
+        title: Default Host Name
+        type: string
+      default_security:
+        title: Default Security
+        type: string
+      description:
+        title: Description
+        type: string
+      deviceDescription:
+        title: Device Description
+        type: string
+      deviceFac:
+        title: Device Fac
+        type: string
+      deviceID:
+        format: uuid
+        title: Device ID
+        type: string
+      deviceId:
+        title: Device ID
+        type: string
+      deviceLocation:
+        title: Device Location
+        type: string
+      deviceName:
+        title: Device Name
+        type: string
+      deviceSerial:
+        title: Device Serial
+        type: string
+      deviceSubClass:
+        title: Device Sub Class
+        type: string
+      deviceType:
+        title: Device Type
+        type: string
+      deviceTypeNumber:
+        title: Device Type Number
+        type: string
+      deviceUuid:
+        format: uuid
+        title: Device UUID
+        type: string
+      dhcp:
+        title: Dhcp
+        type: string
+      dhcpSupport:
+        title: Dhcp Support
+        type: string
+      directoryNumber:
+        title: Directory Number
+        type: string
+      discoveryBye:
+        title: Discovery Bye
+        type: string
+      discoveryResolve:
+        title: Discovery Resolve
+        type: string
+      diskPercent:
+        title: Disk Percent
+        type: string
+      diskSize:
+        title: Disk Size
+        type: string
+      displayList:
+        title: Display List
+        type: string
+      domainName:
+        title: Domain Name
+        type: string
+      dot11Configuration:
+        title: Dot Configuration
+        type: string
+      dot1X:
+        title: Dot X
+        type: string
+      dot1XConfigurations:
+        title: Dot X Configurations
+        type: string
+      dynDNS:
+        title: DYN DNS
+        type: string
+      encoderReleasedDate:
+        title: Encoder Released Date
+        type: string
+      encoderVersion:
+        title: Encoder Version
+        type: string
+      etag:
+        title: Etag
+        type: string
+      ethernetActive:
+        title: Ethernet Active
+        type: string
+      ethernetPorts:
+        title: Ethernet Ports
+        type: string
+      extendedModelName:
+        title: Extended Model Name
+        type: string
+      fipsModeEnabled:
+        title: Fips Mode Enabled
+        type: string
+      firmware:
+        title: Firmware
+        type: string
+      firmwareDate:
+        title: Firmware Date
+        type: string
+      firmwareRelease:
+        title: Firmware Release
+        type: string
+      firmwareReleaseDate:
+        title: Firmware Release Date
+        type: string
+      firmwareReleasedDate:
+        title: Firmware Released Date
+        type: string
+      firmwareTrack:
+        title: Firmware Track
+        type: string
+      firmwareUpgrade:
+        title: Firmware Upgrade
+        type: string
+      firmwareVersion:
+        title: Firmware Version
+        type: string
+      firmwareVersionInfo:
+        title: Firmware Version Info
+        type: string
+      flash_pn:
+        title: Flash Pn
+        type: string
+      frequency:
+        title: Frequency
+        type: string
+      friendlyName:
+        title: Friendly Name
+        type: string
+      frontPanelSlot:
+        title: Front Panel Slot
+        type: string
+      frontPanelType:
+        title: Front Panel Type
+        type: string
+      ftp:
+        title: FTP
+        type: string
+      ftpTransfers:
+        title: FTP Transfers
+        type: string
+      generationNumber:
+        title: Generation Number
+        type: string
+      generationVariant:
+        title: Generation Variant
+        type: string
+      geoLocationEntries:
+        title: Geo Location Entries
+        type: string
+      hardVersion:
+        title: Hard Version
+        type: string
+      hardware:
+        title: Hardware
+        type: string
+      hardwareID:
+        title: Hardware ID
+        type: string
+      hardwareId:
+        title: Hardware ID
+        type: string
+      hardwarePlatform:
+        title: Hardware Platform
+        type: string
+      hardwareRevision:
+        title: Hardware Revision
+        type: string
+      hardwareType:
+        title: Hardware Type
+        type: string
+      hardwareVersion:
+        title: Hardware Version
+        type: string
+      hasPassword:
+        title: Has Password
+        type: string
+      hikvisionId:
+        title: Hikvision ID
+        type: string
+      hostName:
+        title: Host Name
+        type: string
+      hostname:
+        title: Hostname
+        type: string
+      hostnameFromDHCP:
+        title: Hostname From DHCP
+        type: string
+      hpUuid:
+        format: uuid
+        title: Hp UUID
+        type: string
+      httpDigest:
+        title: HTTP Digest
+        type: string
+      httpEnable:
+        title: HTTP Enable
+        type: string
+      httpFirmwareUpgrade:
+        title: HTTP Firmware Upgrade
+        type: string
+      httpSystemBackup:
+        title: HTTP System Backup
+        type: string
+      https:
+        title: HTTPs
+        type: string
+      httpsSSLStatus:
+        title: HTTPs SSL Status
+        type: string
+      hwRevision:
+        title: HW Revision
+        type: string
+      iAPI:
+        title: I API
+        type: string
+      iDeviceType:
+        title: I Device Type
+        type: string
+      iSupportHelp:
+        title: I Support Help
+        type: string
+      iloFirmwareVersion:
+        title: ILO Firmware Version
+        type: string
+      image:
+        title: Image
+        type: string
+      ipConfiguredBy:
+        title: IP Configured By
+        type: string
+      ipMasters:
+        title: IP Masters
+        type: string
+      ipTable:
+        title: IP Table
+        type: string
+      is385Intellent:
+        title: 385 Intellent
+        type: string
+      is8MFlash:
+        title: 8M Flash
+        type: string
+      isExpertParamsIntellent:
+        title: Expert Params Intellent
+        type: string
+      isHasDetectPic:
+        title: Has Detect Pic
+        type: string
+      isHasSnapFormatAs:
+        title: Has Snap Format As
+        type: string
+      isK6DeviceType:
+        title: Device Type
+        type: string
+      isSamrt1Intellent:
+        title: Samrt Intellent
+        type: string
+      isShowAzimuthDisp:
+        title: Show Azimuth Disp
+        type: string
+      isShowCertificate:
+        title: Show Certificate
+        type: string
+      isShowDuck:
+        title: Show Duck
+        type: string
+      isShowEventManage:
+        title: Show Event Manage
+        type: string
+      isShowExposureSpeed:
+        title: Show Exposure Speed
+        type: string
+      isShowFaceDetect:
+        title: Show Face Detect
+        type: string
+      isShowFastPosition:
+        title: Show Fast Position
+        type: string
+      isShowFontSize:
+        title: Show Font Size
+        type: string
+      isShowGamma:
+        title: Show Gamma
+        type: string
+      isShowHttps:
+        title: Show HTTPs
+        type: string
+      isShowLdap:
+        title: Show LDAP
+        type: string
+      isShowLocationInfo:
+        title: Show Location Info
+        type: string
+      isShowMouseControlPtz:
+        title: Show Mouse Control PTZ
+        type: string
+      isShowMp4DownLoad:
+        title: Show MP Down Load
+        type: string
+      isShowOsdInfo:
+        title: Show OSD Info
+        type: string
+      isShowPicOsd:
+        title: Show Pic OSD
+        type: string
+      isShowPlatform:
+        title: Show Platform
+        type: string
+      isShowPtzLimit:
+        title: Show PTZ Limit
+        type: string
+      isShowPtzZoom:
+        title: Show PTZ Zoom
+        type: string
+      isShowRoi:
+        title: Show ROI
+        type: string
+      isShowRotate2:
+        title: Show Rotate
+        type: string
+      isShowRtmp:
+        title: Show RTMP
+        type: string
+      isShowStartDeviceDiscover:
+        title: Show Start Device Discover
+        type: string
+      isShowSwitchByAlarm:
+        title: Show Switch By Alarm
+        type: string
+      isShowSyslog:
+        title: Show Syslog
+        type: string
+      isShowT2UServer:
+        title: Show T2U Server
+        type: string
+      isShowUpnpMode:
+        title: Show Upnp Mode
+        type: string
+      isShowVpnCertificate:
+        title: Show VPN Certificate
+        type: string
+      isShowWideView:
+        title: Show Wide View
+        type: string
+      ispVersion:
+        title: ISP Version
+        type: string
+      jsPluginVersion:
+        title: JS Plugin Version
+        type: string
+      kerberosToken:
+        title: Kerberos Token
+        type: string
+      kernelVersion:
+        title: Kernel Version
+        type: string
+      lastModidifiedHeader:
+        title: Last Modidified Header
+        type: string
+      lastModifiedHeader:
+        title: Last Modified Header
+        type: string
+      lastUpdate:
+        title: Last Update
+        type: string
+      lensFirmware:
+        title: Lens Firmware
+        type: string
+      linkStatus:
+        title: Link Status
+        type: string
+      linuxVersion:
+        title: Linux Version
+        type: string
+      loginDisabledWhenLocked:
+        title: Login Disabled When Locked
+        type: string
+      mac:
+        format: mac-addr
+        title: Mac1
+        type: string
+      mac2:
+        format: mac-addr
+        title: Mac2
+        type: string
+      mac3:
+        format: mac-addr
+        title: Mac3
+        type: string
+      macAddresses:
+        format: mac-addr
+        title: Mac Addresses
+        type: string
+      macPluginsVersion:
+        title: Mac Plugins Version
+        type: string
+      macWifi:
+        format: mac-addr
+        title: Mac Wifi
+        type: string
+      machineName:
+        title: Machine Name
+        type: string
+      machineType:
+        title: Machine Type
+        type: string
+      mainStreamAudio:
+        title: Main Stream Audio
+        type: string
+      mainStreamAudioEnabled:
+        title: Main Stream Audio Enabled
+        type: string
+      manufacturerURL:
+        title: Manufacturer URL
+        type: string
+      maxIpEntries:
+        title: Max Ip Entries
+        type: string
+      maxPasswordLength:
+        title: Max Password Length
+        type: string
+      maxStorageConfigurations:
+        title: Max Storage Configurations
+        type: string
+      maxUserNameLength:
+        title: Max User Name Length
+        type: string
+      maxUsers:
+        title: Max Users
+        type: string
+      mcuFirmware:
+        title: MCU Firmware
+        type: string
+      memory:
+        title: Memory
+        type: string
+      meterName:
+        title: Meter Name
+        type: string
+      meter_id:
+        title: Meter ID
+        type: string
+      mimeType:
+        title: Mime Type
+        type: string
+      mode:
+        title: Mode
+        type: string
+      model:
+        title: Model
+        type: string
+      modelDescription:
+        title: Model Description
+        type: string
+      modelName:
+        title: Model Name
+        type: string
+      modelProtocolCompatibility:
+        title: Model Protocol Compatibility
+        type: string
+      modelURL:
+        title: Model URL
+        type: string
+      moduleSlot0:
+        title: Module Slot
+        type: string
+      moduleSlot1:
+        title: Module Slot
+        type: string
+      moduleSlot2:
+        title: Module Slot
+        type: string
+      moduleSlot4:
+        title: Module Slot
+        type: string
+      moduleSlot5:
+        title: Module Slot
+        type: string
+      moduleSlot7:
+        title: Module Slot
+        type: string
+      moduleSlot9:
+        title: Module Slot
+        type: string
+      multicastStreaming:
+        title: Multicast Streaming
+        type: string
+      muteAudio:
+        title: Mute Audio
+        type: string
+      name:
+        title: Name
+        type: string
+      nasProtocolMask:
+        title: Nas Protocol Mask
+        type: string
+      netbiosName:
+        title: Netbios Name
+        type: string
+      nodeId:
+        title: Node ID
+        type: string
+      nodeVersion:
+        title: Node Version
+        type: string
+      oem:
+        title: Oem
+        type: string
+      onboardKeyGeneration:
+        title: Onboard Key Generation
+        type: string
+      onvifName:
+        title: Onvif Name
+        type: string
+      onvifVersion:
+        title: Onvif Version
+        type: string
+      partNumber:
+        title: Part Number
+        type: string
+      partsName:
+        title: Parts Name
+        type: string
+      previousFirmware:
+        title: Previous Firmware
+        type: string
+      releaseCode:
+        title: Release Code
+        type: string
+      reseller:
+        title: Reseller
+        type: string
+      securityBaselineVersion:
+        title: Security Baseline Version
+        type: string
+      sensorSerialNumber:
+        title: Sensor Serial Number
+        type: string
+      sjfiVersion:
+        title: Sjfi Version
+        type: string
+      snmpStatus:
+        title: Snmp Status
+        type: string
+      software:
+        title: Software
+        type: string
+      software_pn:
+        title: Software Pn
+        type: string
+      soundClassificationStatus:
+        title: Sound Classification Status
+        type: string
+      ssmiVersion:
+        title: Ssmi Version
+        type: string
+      state_description:
+        title: State Description
+        type: string
+      videoOutputFormat:
+        title: Video Output Format
+        type: string
+      webAppVersion:
+        title: Web App Version
+        type: string
+      systemModelName:
+        title: System Model Name
+        type: string
+    title: Metadata
+    type: object
+  model:
+    title: Model
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+  passwordGroupId:
+    title: Password Group ID
+    type: string
+  passwordGroupName:
+    title: Password Group Name
+    type: string
+  path:
+    items:
+      type: string
+    title: Path
+    type: array
+  vulnerabilityMetrics:
+    title: Vulnerability Metrics
+    type: array
+    items:
+      type: object
+  provider:
+    title: Provider
+    type: string
+  searchResult:
+    title: Search Result?
+    type: boolean
+  serialnumber:
+    title: Serial Number
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+  siteId:
+    title: Site ID
+    type: string
+    x-samos-immutable: true
+  siteMode:
+    title: Site Mode
+    type: string
+  siteName:
+    title: Site Name
+    type: string
+  tags:
+    title: Tags
+    type: array
+    items:
+      type: string
+  type:
+    title: Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+x-samos-virtual:
+  vulnerabilities:
+    type-name: Vulnerability
+    cypher-pattern: >
+      <-[:`e:Finding:applies_to`]-(:PhosphorusFinding)-[:`e:Finding:vulnerability`]->(:PhosphorusExposure)-[:`e:Exposure:vulnerabilities`]->(:PhosphorusVulnerability)
+
+  exposures:
+    type-name: Exposure
+    cypher-pattern: >
+      <-[:`e:Finding:applies_to`]-(:PhosphorusFinding)-[:`e:Finding:vulnerability`]->(:PhosphorusExposure)

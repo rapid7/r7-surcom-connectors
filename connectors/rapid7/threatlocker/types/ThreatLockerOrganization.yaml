@@ -1,0 +1,171 @@
+x-samos-type-name: ThreatLockerOrganization
+x-samos-namespace: threatlocker
+title: ThreatLocker Organization
+description: Represents an organization in ThreatLocker.
+
+x-samos-extends-types:
+  - type-name: Organization
+
+x-samos-keys:
+  - organizationId
+
+x-samos-table:
+  - name: name
+  - name: displayName
+  - name: parentId
+  - name: computerCount
+  - name: lockdown
+  - name: dateAdded
+
+x-samos-detail:
+  - name: name
+  - name: displayName
+  - name: computerCount
+  - name: lockdown
+  - name: products
+  - name: parentId
+  - name: organizationParents
+  - name: billingMethod
+  - name: activeCount
+  - name: businessClassification
+  - name: businessClassificationName
+  - name: licenseSetting
+  - name: cyberHeroManagementActive
+  - name: cyberHeroManagementConfigured
+  - name: dateAdded
+
+properties:
+  activeCount:
+    title: Active Count
+    type: integer
+  billingJson:
+    title: Billing JSON
+    type: string
+  billingMethod:
+    title: Billing Method
+    type: string
+  businessClassification:
+    title: Business Classification
+    type: integer
+  businessClassificationName:
+    title: Business Classification Name
+    type: string
+  computerCount:
+    title: Computer Count
+    type: integer
+  computerDenyCountDtos:
+    items:
+      properties:
+        oneDay:
+          title: One Day
+          type: integer
+        organizationId:
+          title: Organization ID
+          type: string
+        sevenDays:
+          title: Seven Days
+          type: integer
+        threeDays:
+          title: Three Days
+          type: integer
+      type: object
+    title: Computer Deny Count Dtos
+    type: array
+  cyberHeroManagementActive:
+    title: Cyber Hero Management Active?
+    type: boolean
+  cyberHeroManagementConfigured:
+    title: Cyber Hero Management Configured?
+    type: boolean
+  dateAdded:
+    format: date-time
+    title: Date Added
+    type: string
+  displayName:
+    title: Display Name
+    type: string
+  isIRChild:
+    title: IR Child?
+    type: boolean
+  itarCompliant:
+    title: ITAR Compliant?
+    type: boolean
+  json:
+    title: JSON
+    type: string
+  licenseSetting:
+    title: License Setting
+    type: string
+  lockdown:
+    title: Lockdown
+    type: integer
+  manualCount:
+    title: Manual Count
+    type: integer
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  organizationId:
+    title: Organization ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+  organizationParents:
+    items:
+      properties:
+        displayName:
+          title: Display Name
+          type: string
+        organizationId:
+          title: Organization ID
+          type: string
+      type: object
+    title: Organization Parents
+    type: array
+  parentId:
+    title: Parent
+    type: string
+    x-samos-ref-types:
+      - type-name: ThreatLockerOrganization
+        key-name: organizationId
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+  products:
+    items:
+      properties:
+        disablingProduct:
+          title: Disabling Product?
+          type: boolean
+        displayName:
+          title: Display Name
+          type: string
+        isOverage:
+          title: Overage?
+          type: boolean
+        isThreatLockerProtect:
+          title: Threat Locker Protect?
+          type: boolean
+        isThreatLockerUnified:
+          title: Threat Locker Unified?
+          type: boolean
+        name:
+          title: Name
+          type: string
+        organizationId:
+          title: Organization ID
+          type: string
+        productId:
+          title: Product ID
+          type: integer
+        productTrialId:
+          title: Product Trial ID
+          type: string
+      type: object
+    title: Products
+    type: array

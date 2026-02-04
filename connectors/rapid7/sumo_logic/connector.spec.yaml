@@ -1,0 +1,76 @@
+id: sumo.logic
+name: Sumo Logic (Beta)
+author: Rapid7
+version: 0.2.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Add M1032 mitigation for SumoLogicUser.
+
+types:
+  - SumoLogicCollector
+  - SumoLogicOTCollector
+  - SumoLogicCollectorTag
+  - SumoLogicUser
+  - SumoLogicRole
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Sumo Logic Collectors, Users, and Roles.
+    description: Import all collectors, users and roles from Sumo Logic.
+    return_types:
+      - SumoLogicCollector
+      - SumoLogicCollectorTag
+      - SumoLogicOTCollector
+      - SumoLogicUser
+      - SumoLogicRole
+
+settings:
+  sumologic_region:
+    type: string
+    title: Sumo Logic Region
+    description: Select the region where your Sumo Logic account is located
+    enum:
+      - AU
+      - CA
+      - DE
+      - EU
+      - FED
+      - JP
+      - KR
+      - US1
+      - US2
+    default: US1
+  access_id:
+    type: string
+    title: Access ID
+    description: Sumo Logic Access ID
+
+  access_key:
+    type: string
+    title: Access Key
+    description: Sumo Logic Access Key
+    format: password
+
+  ephemeral:
+    type: boolean
+    title: Include Ephemeral Collectors?
+    description: |
+      If enabled, the connector will retrieve both ephemeral and permanent collectors.
+    default: false
+
+runtime: py311
+
+# Add required Python dependencies here. Pin each dependency to a specific
+# version.
+# python_dependencies:
+#  - "another_dependency==1.0.0"
+
+categories:
+  - security_operations
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

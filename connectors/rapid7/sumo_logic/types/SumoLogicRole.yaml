@@ -1,0 +1,102 @@
+x-samos-type-name: SumoLogicRole
+x-samos-namespace: sumo.logic
+title: Sumo Logic Role
+description: A Role in Sumo Logic
+
+x-samos-extends-types:
+  - type-name: UserGroup
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: autofillDependencies
+  - name: createdBy
+  - name: modifiedBy
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: filterPredicate
+  - name: users
+  - name: capabilities
+  - name: autofillDependencies
+  - name: createdAt
+  - name: createdBy
+  - name: modifiedAt
+  - name: modifiedBy
+  - name: systemDefined
+
+properties:
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  filterPredicate:
+    type: string
+    title: Filter Predicate
+  users:
+    title: Users
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: SumoLogicUser
+          key-name: id
+
+  capabilities:
+    title: Capabilities
+    type: array
+    items:
+      type: string
+
+  autofillDependencies:
+    type: boolean
+    title: Autofill Dependencies?
+  createdAt:
+    type: string
+    title: Created At
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+  createdBy:
+    type: string
+    title: Created By
+    x-samos-ref-types:
+      - type-name: SumoLogicUser
+        key-name: id
+  modifiedAt:
+    type: string
+    title: Modified At
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+  modifiedBy:
+    type: string
+    title: Modified By
+    x-samos-ref-types:
+      - type-name: SumoLogicUser
+        key-name: id
+  id:
+    type: string
+    title: Id
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+  systemDefined:
+    type: boolean
+    title: System Defined?

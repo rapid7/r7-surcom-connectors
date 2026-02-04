@@ -1,0 +1,51 @@
+id: phosphorus
+name: Phosphorus (Beta)
+author: Rapid7
+version: 0.3.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Fulfill `last_seen` property on Finding
+
+reference-schemas:
+  - url: https://phosphorus.io/api/swagger/public/swagger.json
+    file: refdocs/swagger.json
+
+types:
+  - PhosphorusDevice
+  - PhosphorusExposure
+  - PhosphorusFinding
+  - PhosphorusVulnerability
+  - PhosphorusEnumSeverity
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Phosphorus Devices, Findings, Exposures and Vulnerabilities
+    description: Import Devices, Findings, Exposures, and Vulnerabilities from Phosphorus
+    return_types:
+      - PhosphorusDevice
+      - PhosphorusExposure
+      - PhosphorusFinding
+      - PhosphorusVulnerability
+
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: Base URL for the Phosphorus API
+    example: https://example.phosphorus.io
+
+  api_key:
+    type: string
+    title: API Key
+    description: API Key for Phosphorus API authentication
+    format: password
+
+runtime: py311
+
+categories:
+  - vulnerability_management
+
+show_orchestrator_ui: false

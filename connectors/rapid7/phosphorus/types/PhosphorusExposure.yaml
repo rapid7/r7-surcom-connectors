@@ -1,0 +1,89 @@
+x-samos-type-name: PhosphorusExposure
+x-samos-namespace: phosphorus
+title: Phosphorus Exposure
+description: Exposure for Phosphorus
+
+x-samos-extends-types:
+  - type-name: Exposure
+
+# Exposure types must be in the global data zone
+x-samos-global-zone: true
+
+x-samos-keys:
+  - x_id
+
+x-samos-table:
+  - name: alert_name
+  - name: severity
+  - name: subtype
+  - name: data.cves
+
+x-samos-detail:
+  - name: alert_name
+  - name: severity
+  - name: subtype
+  - name: data
+
+x-samos-derived-properties:
+  d_category:
+    # Fulfills Exposure.exposure_type: Vulnerability if CVEs present, otherwise Configuration
+    type: string
+    syntax: jmespath
+    value: '[(length(data.cves || `[]`) > `0`) && `ExposureType: Vulnerability`, (length(data.cves || `[]`) == `0`) && `ExposureType: Configuration`] | [?@] | [0]'
+    x-samos-hidden: true
+    x-samos-ref-types:
+      - type-name: NoeticEnumExposureType
+        key-name: id
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: exposure_type
+
+properties:
+  x_id:
+    title: ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: id
+  alert_name:
+    title: Alert Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  severity:
+    title: Severity
+    type: string
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: severity
+    x-samos-ref-types:
+      - type-name: PhosphorusEnumSeverity
+        key-name: id
+  subtype:
+    title: SubType
+    type: string
+  data:
+    type: object
+    title: Data
+    properties:
+      date:
+        type: string
+        title: Date
+        format: date-time
+      note:
+        type: string
+        title: Note
+      cves:
+        title: CVEs
+        type: array
+        items:
+          type: string
+          x-samos-ref-types:
+            - type-name: PhosphorusVulnerability
+              key-name: cve_id
+        x-samos-fulfills:
+          type-name: Exposure
+          property-name: vulnerabilities

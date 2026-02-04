@@ -1,0 +1,42 @@
+[
+  {
+    "id": "low",
+    "value": "Low",
+    "map_to": "Severity: LOW"
+  },
+  {
+    "id": "medium",
+    "value": "Medium",
+    "map_to": "Severity: MEDIUM"
+  },
+  {
+    "id": "high",
+    "value": "High",
+    "map_to": "Severity: HIGH"
+  },
+  {
+    "id": "critical",
+    "value": "Critical",
+    "map_to": "Severity: CRITICAL"
+  },
+  {
+    "id": "LOW",
+    "value": "Low",
+    "map_to": "Severity: LOW"
+  },
+  {
+    "id": "MEDIUM",
+    "value": "Medium",
+    "map_to": "Severity: MEDIUM"
+  },
+  {
+    "id": "HIGH",
+    "value": "High",
+    "map_to": "Severity: HIGH"
+  },
+  {
+    "id": "CRITICAL",
+    "value": "Critical",
+    "map_to": "Severity: CRITICAL"
+  }
+]

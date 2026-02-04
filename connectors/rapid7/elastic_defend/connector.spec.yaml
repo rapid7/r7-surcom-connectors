@@ -1,0 +1,52 @@
+id: elastic.defend
+name: Elastic Defend (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCase
+# version of the connector ID.
+types:
+  - ElasticDefendEndpoint
+  - ElasticDefendHostEntity
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Elastic Defend Endpoints and Hosts
+    description: Imports all endpoints and hosts from Elastic Defend
+    return_types:
+      - ElasticDefendEndpoint
+      - ElasticDefendHostEntity
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    example: https://example.us-central1.gcp.elastic.cloud/
+    description: The Base URL of the elastic cloud instance to connect to. This should include the protocol and region.
+  api_key:
+    type: string
+    title: API Key
+    format: password
+    description: The API key for the Elastic Defend API
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - endpoint_detection_response
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

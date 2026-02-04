@@ -1,0 +1,108 @@
+x-samos-type-name: PhosphorusFinding
+x-samos-namespace: phosphorus
+title: Phosphorus Finding
+description: Finding for Phosphorus
+
+x-samos-extends-types:
+  - type-name: Finding
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: severity
+  - name: device_id
+  - name: x_id
+  - name: created
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: severity
+  - name: subtype
+  - name: device_id
+  - name: x_id
+  - name: created
+  - name: data
+
+x-samos-derived-properties:
+  d_last_seen:
+    x-samos-hidden: true
+    type: string
+    format: date-time
+    syntax: expression
+    value: '{created}'
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: last_seen
+
+properties:
+  id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  severity:
+    type: string
+    title: Severity
+    x-samos-immutable: true
+  created:
+    type: string
+    title: Created
+    format: date-time
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: first_seen
+  subtype:
+    type: string
+    title: Subtype
+  data:
+    type: object
+    title: Data
+    properties:
+      date:
+        type: string
+        title: Date
+        format: date-time
+      note:
+        type: string
+        title: Note
+      cves:
+        title: CVEs
+        type: array
+        items:
+          type: string
+  device_id:
+    type: string
+    title: Device
+    x-samos-ref-types:
+      - type-name: PhosphorusDevice
+        key-name: id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to
+  x_id:
+    title: ID
+    type: string
+    x-samos-ref-types:
+      - type-name: PhosphorusExposure
+        key-name: x_id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability

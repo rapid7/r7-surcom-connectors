@@ -150,6 +150,9 @@ properties:
     type: string
     title: Last Detected At
     format: date-time
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: last_seen
   modified:
     title: Modified
     type: string
@@ -158,6 +161,9 @@ properties:
     type: string
     title: First Detected At
     format: date-time
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: first_seen
   category:
     type: string
     title: Category

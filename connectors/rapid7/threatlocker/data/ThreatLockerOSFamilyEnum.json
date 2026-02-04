@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "value": "Windows",
+    "map_to": "OSFamily: Windows"
+  },
+  {
+    "id": 2,
+    "value": "MAC",
+    "map_to": "OSFamily: macOS"
+  },
+  {
+    "id": 3,
+    "value": "Linux",
+    "map_to": "OSFamily: Linux"
+  },
+  {
+    "id": 5,
+    "value": "Windows XP",
+    "map_to": "OSFamily: Windows"
+  }
+]

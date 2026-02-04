@@ -1,0 +1,209 @@
+x-samos-type-name: SumoLogicOTCollector
+x-samos-namespace: sumo.logic
+title: Sumo Logic Open Telemetry Collector
+description: An Open Telemetry Collector in Sumo Logic.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: version.currentVersion
+  - name: ephemeral
+  - name: alive
+  - name: systemInfo.hostOsName
+  - name: systemInfo.hostIpAddress
+  - name: sourceTemplateLinkedCount
+  - name: modifiedAt
+
+x-samos-detail:
+  - name: name
+  - name: version
+  - name: category
+  - name: description
+  - name: systemInfo
+  - name: tags
+  - name: healthIncidentsTracker
+  - name: ephemeral
+  - name: alive
+  - name: isRemotelyManaged
+  - name: effectiveConfig
+  - name: timeZone
+  - name: createdAt
+  - name: createdBy
+  - name: modifiedAt
+  - name: modifiedBy
+  - name: sourceTemplateLinkedCount
+
+x-samos-derived-properties:
+  d_qualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'systemInfo.hostName && contains(systemInfo.hostName, `.`) && systemInfo.hostName || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_unqualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'systemInfo.hostName && !contains(systemInfo.hostName, `.`) && systemInfo.hostName || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_operating_system:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'join(` `, [systemInfo.hostOsName, systemInfo.hostOsVersion]) || null'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+properties:
+  id:
+    type: string
+    title: Id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  version:
+    title: Version
+    type: object
+    properties:
+      currentVersion:
+        title: Current Version
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.endpoint
+          property-name: agent_version
+      latestAvailableVersion:
+        title: Latest Available Version
+        type: string
+  category:
+    type: string
+    title: Category
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  tags:
+    title: Tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: SumoLogicCollectorTag
+          key-name: id
+
+  healthIncidentsTracker:
+    title: Health Incidents Tracker
+    type: object
+    properties:
+      errorsCount:
+        title: Errors Count
+        type: integer
+      warningsCount:
+        title: Warnings Count
+        type: integer
+  ephemeral:
+    type: boolean
+    title: Ephemeral?
+  alive:
+    type: boolean
+    title: Alive?
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+  isRemotelyManaged:
+    type: boolean
+    title: Remotely Managed?
+  effectiveConfig:
+    title: Effective Config
+    type: object
+    additionalProperties: true
+    # Config map that includes Base 64 Encoded Effective Configuration Yaml of the Remotely managed OT Collector.
+  systemInfo:
+    title: System Info
+    type: object
+    properties:
+      hostName:
+        title: Hostname
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: hostnames
+      hostOsName:
+        title: Host Operating System Name
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_product
+      hostOsVersion:
+        title: Host Operating System Version
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_version
+      hostIpAddress:
+        title: Host IP Address
+        type: string
+        format: ip-addr
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: ips
+      hostEnv:
+        title: Host Environment
+        type: string
+  timeZone:
+    type: string
+    title: Timezone
+  createdAt:
+    type: string
+    title: Created Date
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_first_seen
+  createdBy:
+    type: string
+    title: Created By
+    x-samos-ref-types:
+      - type-name: SumoLogicUser
+        key-name: id
+  modifiedAt:
+    type: string
+    title: Modified Date
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+  modifiedBy:
+    type: string
+    title: Modified By
+    x-samos-ref-types:
+      - type-name: SumoLogicUser
+        key-name: id
+  sourceTemplateLinkedCount:
+    type: integer
+    title: Source Template Linked Count

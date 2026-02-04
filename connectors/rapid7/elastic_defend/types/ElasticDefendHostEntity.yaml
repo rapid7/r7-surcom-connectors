@@ -1,0 +1,180 @@
+x-samos-type-name: ElasticDefendHostEntity
+x-samos-namespace: elastic.defend
+title: Elastic Defend Host Entity
+description: Represents a host entity in the Elastic Defend API.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 5
+
+x-samos-keys:
+  - entity.id
+
+x-samos-table:
+  - name: core.named-object:name
+  - name: d_os
+  - name: host.risk.calculated_level
+  - name: host.risk.calculated_score
+  - name: host.risk.calculated_score_norm
+  - name: event.ingested
+
+x-samos-detail:
+  - name: host
+  - name: entity
+  - name: asset
+  - name: '@timestamp'
+  - name: event.ingested
+
+x-samos-derived-properties:
+  d_architecture:
+    # The property "host.architecture" is an array, Machine:os_architecture type is string,
+    # so we derived property to the first non-null value to fulfills the Machine:os_architecture property.
+    x-samos-hidden: true
+    title: Architecture
+    type: string
+    syntax: jmespath
+    value: 'host.architecture[?@ != null] | [0]'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_architecture
+  d_os:
+    # The property "host.os.name" is an array, Machine:operating_system type is string,
+    # so we derived property to the first non-null value to fulfills the Machine:operating_system property.
+    title: OS
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'host.os.name[?@ != null] | [0]'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+properties:
+  '@timestamp':
+    format: date-time
+    title: Timestamp
+    type: string
+  asset:
+    title: Asset
+    type: object
+    properties:
+      criticality:
+        title: Criticality
+        type: string
+  entity:
+    title: Entity
+    type: object
+    properties:
+      EngineMetadata:
+        title: Engine Metadata
+        type: object
+        properties:
+          Type:
+            title: Type
+            type: string
+      id:
+        title: ID
+        type: string
+        x-samos-immutable: true
+        x-samos-fulfills:
+          type-name: core.component
+          property-name: id
+      name:
+        title: Name
+        type: string
+        x-samos-fulfills:
+          type-name: core.named-object
+          property-name: name
+      relationships:
+        properties: {}
+        title: Relationships
+        type: object
+      type:
+        title: Type
+        type: string
+  event:
+    title: Event
+    type: object
+    properties:
+      ingested:
+        format: date-time
+        title: Last Active
+        type: string
+  host:
+    title: Host
+    type: object
+    properties:
+      architecture:
+        title: Architecture
+        type: array
+        items:
+          type: string
+      hostname:
+        title: Hostname
+        type: array
+        items:
+          type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: hostnames
+        x-samos-correlation:
+          correlation-key: Machine.unqualified-hostname
+          correlation-type: Machine
+          priority: 2
+      id:
+        title: ID
+        type: array
+        items:
+          type: string
+      ip:
+        title: IP
+        type: array
+        items:
+          type: string
+          format: ip-addr
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: ips
+      mac:
+        title: Mac
+        type: array
+        items:
+          type: string
+          format: mac-addr
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: mac_addresses
+        x-samos-correlation:
+          correlation-key: MacAddr.value
+          correlation-type: Machine
+          priority: 4
+      name:
+        title: Name
+        type: string
+      os:
+        title: OS
+        type: object
+        properties:
+          name:
+            title: Name
+            type: array
+            items:
+              type: string
+          type:
+            title: Type
+            type: array
+            items:
+              type: string
+      risk:
+        title: Risk
+        type: object
+        properties:
+          calculated_level:
+            title: Calculated Level
+            type: string
+          calculated_score:
+            title: Calculated Score
+            type: string
+          calculated_score_norm:
+            title: Calculated Score Normal
+            type: string
