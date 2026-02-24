@@ -1,13 +1,14 @@
 from logging import Logger
 from . import helpers
 from .sc_settings import Settings
-from .sc_types import ThreatLockerApplication, ThreatLockerComputer, ThreatLockerOrganization
+from .sc_types import (
+    ThreatLockerApplication,
+    ThreatLockerComputer,
+    ThreatLockerOrganization,
+)
 
 
-def import_all(
-    user_log: Logger,
-    settings: Settings
-):
+def import_all(user_log: Logger, settings: Settings):
     """Import all data from ThreatLocker.
 
     Args:
@@ -19,10 +20,7 @@ def import_all(
         ThreatLockerComputer: The Computer data from ThreatLocker.
         ThreatLockerOrganization: The Organization data from ThreatLocker.
     """
-    client = helpers.ThreatLockerClient(
-        user_log=user_log,
-        settings=settings
-    )
+    client = helpers.ThreatLockerClient(user_log=user_log, settings=settings)
 
     yield from _get_applications(user_log=user_log, client=client)
     yield from _get_computers(user_log=user_log, client=client)
@@ -34,7 +32,7 @@ def _get_applications(client: helpers.ThreatLockerClient, user_log: Logger):
     params = {
         "orderBy": "name",
         "pageNumber": page_number,
-        "pageSize": 1000,
+        "pageSize": 1000,  # Applications endpoint has a max page size of 1000
         "searchBy": "app",
     }
     while True:
@@ -55,8 +53,10 @@ def _get_applications(client: helpers.ThreatLockerClient, user_log: Logger):
         last_item = pagination.get("lastItem", 0)
         total_items = pagination.get("totalItems", 0)
 
-        user_log.info(f"Fetched {last_item}/{total_items}"
-                      f"application records from page {current_page}")
+        user_log.info(
+            f"Fetched {last_item}/{total_items}"
+            f" application records from page {current_page}"
+        )
 
         if current_page >= total_pages:
             break
@@ -66,8 +66,8 @@ def _get_applications(client: helpers.ThreatLockerClient, user_log: Logger):
 def _get_computers(client: helpers.ThreatLockerClient, user_log: Logger):
     page_number = 1
     params = {
-        "pageSize": 1000,
-        "pageNumber": page_number
+        "pageSize": 500,  # Computers endpoint has a max page size of 500
+        "pageNumber": page_number,
     }
     while True:
         params["pageNumber"] = page_number
@@ -78,14 +78,15 @@ def _get_computers(client: helpers.ThreatLockerClient, user_log: Logger):
         for item in response:
             yield ThreatLockerComputer(item)
 
-        current_page = pagination["currentPage"]
-        total_pages = pagination["totalPages"]
-        last_item = pagination["lastItem"]
-        total_items = pagination["totalItems"]
+        current_page = pagination.get("currentPage", page_number)
+        total_pages = pagination.get("totalPages", page_number)
+        last_item = pagination.get("lastItem", 0)
+        total_items = pagination.get("totalItems", 0)
 
         user_log.info(
             f"Fetched {last_item}/{total_items}"
-            f" computer records from page {current_page}")
+            f" computer records from page {current_page}"
+        )
 
         if current_page >= total_pages:
             break
@@ -96,7 +97,7 @@ def _get_computers(client: helpers.ThreatLockerClient, user_log: Logger):
 def _get_organizations(client: helpers.ThreatLockerClient, user_log: Logger):
     page_number = 1
     params = {
-        "pageSize": 100,
+        "pageSize": 500,  # Organizations endpoint has a max page size of 500
         "pageNumber": page_number,
     }
 
@@ -110,14 +111,15 @@ def _get_organizations(client: helpers.ThreatLockerClient, user_log: Logger):
         for item in response:
             yield ThreatLockerOrganization(item)
 
-        current_page = pagination["currentPage"]
-        total_pages = pagination["totalPages"]
-        last_item = pagination["lastItem"]
-        total_items = pagination["totalItems"]
+        current_page = pagination.get("currentPage", page_number)
+        total_pages = pagination.get("totalPages", page_number)
+        last_item = pagination.get("lastItem", 0)
+        total_items = pagination.get("totalItems", 0)
 
         user_log.info(
             f"Fetched {last_item}/{total_items}"
-            f" organization records from page {current_page}")
+            f" organization records from page {current_page}"
+        )
 
         if current_page >= total_pages:
             break

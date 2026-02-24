@@ -1,0 +1,105 @@
+x-samos-type-name: BeyondTrustEPMGroup
+x-samos-namespace: beyondtrust.epm
+title: BeyondTrust EPM Group
+description: BeyondTrust EPM group containing computers and an assigned policy.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: core.component-group
+    subtype-priority: 5
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: computerCount
+  - name: activeComputers
+  - name: policyId
+  - name: policyRevisionStatus
+  - name: revision
+  - name: policyAssigned
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: computerCount
+  - name: activeComputers
+  - name: policyId
+  - name: policyRevisionStatus
+  - name: revision
+  - name: default
+  - name: policyAssigned
+  - name: locked
+  - name: created
+
+properties:
+  id:
+    title: Group Record ID
+    x-samos-immutable: true
+    type: string
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  computerCount:
+    title: Computer Count
+    type: integer
+  activeComputers:
+    title: Active Computers
+    type: integer
+  created:
+    title: Created
+    type: string
+    format: date-time
+  policyRevisionId:
+    title: Policy Revision ID
+    type: string
+  policyId:
+    title: Policy
+    type: string
+    x-samos-ref-types:
+      - type-name: BeyondTrustEPMPolicy
+        key-name: id
+  policyRevisionStatus:
+    title: Policy Revision Status
+    type: string
+  policyName:
+    title: Policy Name
+    type: string
+  policyAssigned:
+    title: Policy Assigned
+    type: string
+    format: date-time
+  revision:
+    title: Revision
+    type: integer
+  default:
+    title: Default Group?
+    type: boolean
+  locked:
+    title: Locked?
+    type: boolean
+  errorInfo:
+    title: Error Info
+    type: string
+    nullable: true
+
+x-samos-virtual:
+  # Fulfill the `members` property of core.component-group
+  # Computers that belong to this group are group members
+  members:
+    type-name: BeyondTrustEPMComputer
+    cypher-pattern: >
+      <-[:`e:BeyondTrustEPMComputer:groupId`]-(:BeyondTrustEPMComputer)

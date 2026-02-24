@@ -1,0 +1,99 @@
+x-samos-type-name: LansweeperClassicSoftwareInstallation
+x-samos-namespace: lansweeper.classic
+title: Lansweeper Classic Software Installation
+description: A Software Installation record from Lansweeper Classic Database.
+
+# Waiting for software installation or finding component to extend here
+# TODO: Any missing fulfills to add?
+
+x-samos-keys:
+  - SoftwareID
+
+x-samos-table:
+  - name: softID
+  - name: AssetID
+  - name: softwareVersion
+  - name: InstallLocation
+  - name: Installdate
+  - name: Lastchanged
+
+x-samos-detail:
+  - name: softwareVersion
+  - name: Installdate
+  - name: Lastchanged
+  - name: CurrentUser
+  - name: MSI
+  - name: MsStore
+  - name: InstallLocation
+  - name: CatalogSoftwareId
+  - name: Is32Bit
+  - name: LastNormalizationAttempt
+
+# x-samos-derived-properties:
+#   d_id:
+#     type: string
+#     title: ID
+#     syntax: expression
+#     value: "{SoftwareID}"
+#     x-samos-immutable: true
+#     x-samos-hidden: true
+#     x-samos-fulfills:
+#       type-name: core.component
+#       property-name: id
+
+properties:
+  SoftwareID:
+    type: integer
+    title: Software ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+  AssetID:
+    type: integer
+    title: Asset
+    x-samos-ref-types:
+      - type-name: LansweeperClassicAsset
+        key-name: AssetID
+  softID:
+    type: integer
+    title: Software
+    x-samos-hidden: true
+
+  SoftwareUniID:
+    type: string
+    title: Software Unique ID
+    x-samos-ref-types:
+      - type-name: LansweeperClassicSoftware
+        key-name: SoftwareUnique
+  softwareVersion:
+    type: string
+    title: Software Version
+  Installdate:
+    type: string
+    title: Installdate
+    format: date-time
+  Lastchanged:
+    type: string
+    title: Lastchanged
+    format: date-time
+  CurrentUser:
+    type: boolean
+    title: Current User?
+  MSI:
+    type: boolean
+    title: MSI?
+  MsStore:
+    type: boolean
+    title: MS Store?
+  InstallLocation:
+    type: string
+    title: Install Location
+  CatalogSoftwareId:
+    type: integer
+    title: Catalog Software ID
+  Is32Bit:
+    type: boolean
+    title: 32bit?
+  LastNormalizationAttempt:
+    type: string
+    title: Last Normalization Attempt
+    format: date-time

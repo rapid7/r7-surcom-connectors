@@ -1,0 +1,197 @@
+x-samos-type-name: VeracodeStaticFinding
+x-samos-namespace: veracode
+title: Veracode Static Finding
+description: A static analysis finding identified by Veracode
+
+x-samos-extends-types:
+  - type-name: Finding
+    subtype-priority: 5
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: context_guid
+  - name: scan_type
+  - name: d_cwe_id
+  - name: violates_policy
+  - name: finding_details.severity
+  - name: finding_status.first_found_date
+  - name: finding_status.last_seen_date
+
+x-samos-detail:
+  - name: context_guid
+  - name: scan_type
+  - name: d_cwe_id
+  - name: d_exposure_id
+  - name: violates_policy
+  - name: finding_details.severity
+  - name: context_type
+  - name: finding_details
+  - name: finding_status
+  - name: count
+  - name: finding_status.first_found_date
+  - name: finding_status.last_seen_date
+
+x-samos-derived-properties:
+  d_name:
+    # Derived name combining finding category and CWE for better readability
+    type: string
+    syntax: jmespath
+    value: 'join(` - CWE `, [finding_category.name, to_string(finding_details.cwe.id)])'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_cwe_id:
+    # CWE ID reference for additional vulnerability context
+    title: CWE ID
+    type: string
+    syntax: jmespath
+    value: "join('-', ['CWE', to_string(finding_details.cwe.id)])"
+    x-samos-ref-types:
+      - key-name: id
+        type-name: MitreCwe
+
+  d_exposure_id:
+    # Combining scan_type and finding_category ID to reference VeracodeStaticExposure
+    # to fulfill Finding:vulnerability
+    title: Exposure
+    type: string
+    syntax: jmespath
+    value: 'join(`-`, [scan_type, to_string(finding_category.id)])'
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability
+    x-samos-ref-types:
+      - type-name: VeracodeStaticExposure
+        key-name: d_id
+
+  d_id:
+    # derived Unique ID combining context_guid and build_id
+    # to fulfill Finding:id
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: '{context_guid}_{build_id}'
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+
+properties:
+  build_id:
+    title: Build ID
+    type: integer
+  context_guid:
+    title: Application
+    type: string
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to
+    x-samos-ref-types:
+      - key-name: guid
+        type-name: VeracodeApplication
+  context_type:
+    title: Context Type
+    type: string
+  count:
+    title: Count
+    type: integer
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  finding_category:
+    properties:
+      href:
+        title: Href
+        type: string
+      id:
+        title: ID
+        type: integer
+      name:
+        title: Category Name
+        type: string
+    title: Finding Category
+    x-samos-hidden: true
+    type: object
+  finding_details:
+    properties:
+      cwe:
+        properties:
+          href:
+            title: Href
+            type: string
+          id:
+            title: CWE ID
+            type: integer
+          name:
+            title: CWE Name
+            type: string
+        title: CWE
+        type: object
+      file_line_number:
+        title: File Line Number
+        type: integer
+      file_name:
+        title: File Name
+        type: string
+      file_path:
+        title: File Path
+        type: string
+      module:
+        title: Module
+        type: string
+      relative_location:
+        title: Relative Location
+        type: integer
+      severity:
+        title: Severity Score
+        type: integer
+    title: Finding Details
+    type: object
+  finding_status:
+    properties:
+      first_found_date:
+        format: date-time
+        title: First Seen
+        type: string
+        x-samos-fulfills:
+          type-name: Finding
+          property-name: first_seen
+      last_seen_date:
+        format: date-time
+        title: Last Seen
+        type: string
+        x-samos-fulfills:
+          type-name: Finding
+          property-name: last_seen
+      mitigation_review_status:
+        title: Mitigation Review Status
+        type: string
+      new:
+        title: New?
+        type: boolean
+      resolution:
+        title: Resolution
+        type: string
+      resolution_status:
+        title: Resolution Status
+        type: string
+      status:
+        title: Status
+        type: string
+    title: Finding Status
+    type: object
+  issue_id:
+    title: Issue ID
+    type: integer
+  scan_type:
+    title: Scan Type
+    type: string
+  violates_policy:
+    title: Violates Policy?
+    type: boolean

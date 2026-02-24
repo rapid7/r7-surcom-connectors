@@ -1,0 +1,86 @@
+x-samos-type-name: VeracodeStaticExposure
+x-samos-namespace: veracode
+title: Veracode Static Exposure
+description: An exposure identified in Static Analysis by Veracode
+
+x-samos-extends-types:
+  - type-name: Exposure
+
+x-samos-global-zone: true
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: finding_category.name
+  - name: description
+  - name: scan_type
+  - name: exploitability
+
+x-samos-detail:
+  - name: finding_category.name
+  - name: description
+  - name: scan_type
+  - name: exploitability
+  - name: attack_vector
+  - name: finding_category
+
+x-samos-derived-properties:
+  d_id:
+    # Derived Unique ID combining scan_type and finding category ID
+    # Each category represents a unique type of exposure/vulnerability
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: 'join(`-`, [scan_type, to_string(finding_category.id)])'
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: id
+
+  d_exposure_type:
+    # deriving exposure_type based on presence of exploitability
+    # to fulfill Exposure:exposure_type
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: '(exploitability != `null` && `ExposureType: Vulnerability`) || `ExposureType: Weakness`'
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: exposure_type
+    x-samos-ref-types:
+      - type-name: NoeticEnumExposureType
+        key-name: id
+
+properties:
+  attack_vector:
+    title: Attack Vector
+    type: string
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  exploitability:
+    title: Exploitability
+    type: integer
+  finding_category:
+    properties:
+      href:
+        title: Href
+        type: string
+      id:
+        title: ID
+        type: integer
+      name:
+        title: Exposure Name
+        type: string
+        x-samos-fulfills:
+          type-name: core.named-object
+          property-name: name
+    title: Finding Category
+    type: object
+  scan_type:
+    title: Scan Type
+    type: string

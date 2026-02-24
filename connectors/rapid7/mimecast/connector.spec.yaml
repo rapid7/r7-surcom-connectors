@@ -1,0 +1,56 @@
+id: mimecast
+name: Mimecast (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+types:
+  - MimecastGatewayDetail
+  - MimecastInternalDomain
+  - MimecastOutboundIpAddress
+  - MimecastThreatByRecipient
+  - MimecastUser
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Mimecast Domains, Users, Gateway Details, IP Addresses, and Threats.
+    description: Imports all domains, gatewayDetails, outbound IP addresses, threats and users from Mimecast.
+    return_types:
+      - MimecastGatewayDetail
+      - MimecastInternalDomain
+      - MimecastOutboundIpAddress
+      - MimecastThreatByRecipient
+      - MimecastUser
+
+settings:
+  client_id:
+    type: string
+    title: Client ID
+    description: OAuth client ID for Mimecast API authentication
+
+  client_secret:
+    type: string
+    title: Client Secret
+    description: OAuth client secret for Mimecast API authentication
+    format: password
+
+  lookback_days:
+    title: Lookback Days
+    description: Number of days to look back when retrieving threat data by recipient. Must be between 1 and 90 days.
+    default: 30
+    minimum: 1
+    maximum: 90
+    type: integer
+
+# Runtime platform for this connector.
+runtime: py311
+
+categories:
+  - phishing
+
+show_orchestrator_ui: false

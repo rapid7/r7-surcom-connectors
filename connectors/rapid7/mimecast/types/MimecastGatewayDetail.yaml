@@ -1,0 +1,86 @@
+x-samos-type-name: MimecastGatewayDetail
+x-samos-namespace: mimecast
+title: Mimecast Gateway Detail
+description: Gateway detail for Mimecast
+
+x-samos-extends-types:
+  - type-name: core.component-group
+  - type-name: core.named-object
+
+x-samos-keys:
+  - x_id
+
+x-samos-table:
+  - name: d_id
+  - name: inboundMxRecords.priority
+  - name: mailPlatform.google
+  - name: mailPlatform.m365
+  - name: mailPlatform.onPremisesExchange
+  - name: mailPlatform.other
+
+x-samos-detail:
+  - name: d_id
+  - name: inboundMxRecords
+  - name: mailPlatform
+  - name: outboundEnabled
+  - name: outboundHostnames
+  - name: spf
+
+x-samos-derived-properties:
+  d_id:
+    # To fulfill core.named-object.name from inboundMxRecords.hostname as it is an array
+    title: ID
+    type: string
+    syntax: jmespath
+    value: 'inboundMxRecords[0].hostname || spf'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  x_id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  inboundMxRecords:
+    items:
+      properties:
+        hostname:
+          title: Hostname
+          type: string
+        priority:
+          title: Priority
+          type: integer
+      type: object
+    title: Inbound MX Records
+    type: array
+  mailPlatform:
+    properties:
+      google:
+        title: Google?
+        type: boolean
+      m365:
+        title: M365?
+        type: boolean
+      onPremisesExchange:
+        title: On Premises Exchange?
+        type: boolean
+      other:
+        title: Other?
+        type: boolean
+    title: Mail Platform
+    type: object
+  outboundEnabled:
+    title: Outbound Enabled?
+    type: boolean
+  outboundHostnames:
+    items:
+      type: string
+    title: Outbound Hostnames
+    type: array
+  spf:
+    title: SPF
+    type: string

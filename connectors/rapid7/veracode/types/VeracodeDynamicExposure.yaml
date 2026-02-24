@@ -1,0 +1,89 @@
+x-samos-type-name: VeracodeDynamicExposure
+x-samos-namespace: veracode
+title: Veracode Dynamic Exposure
+description: An exposure identified in Dynamic Analysis by Veracode
+
+x-samos-extends-types:
+  - type-name: Exposure
+
+x-samos-global-zone: true
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: d_severity
+  - name: scan_type
+  - name: status
+
+x-samos-detail:
+  - name: d_severity
+  - name: scan_type
+  - name: status
+
+x-samos-derived-properties:
+  d_name:
+    # Derived name combining scan type, status, and severity for better readability
+    title: Exposure Name
+    type: string
+    syntax: jmespath
+    value: 'join(` - `, [scan_type, status, (severity >= `9.0` && severity <= `10.0` && `Critical` ||
+      severity >= `7.0` && severity < `9.0` && `High` ||
+      severity >= `4.0` && severity < `7.0` && `Medium` || severity >= `0.1` && severity < `4.0` && `Low` ||
+      `Info`)])'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_id:
+    # derived Unique ID combining scan_type, status, and severity
+    x-samos-immutable: true
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'join(`:`, [scan_type, status, to_string(severity)])'
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: id
+
+  d_exposure_type:
+    # deriving exposure_type based on presence of severity
+    # to fulfill Exposure:exposure_type
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'severity != `null` && `ExposureType: Vulnerability` || `ExposureType: Weakness`'
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: exposure_type
+    x-samos-ref-types:
+      - type-name: NoeticEnumExposureType
+        key-name: id
+
+  d_severity:
+    # deriving severity level based on numeric severity value
+    # to fulfill Exposure:severity
+    title: Criticality
+    type: string
+    syntax: jmespath
+    value: '(severity >= `9.0` && severity <= `10.0` && `Critical` ||
+      severity >= `7.0` && severity < `9.0` && `High` ||
+      severity >= `4.0` && severity < `7.0` && `Medium` ||
+      severity >= `0.1` && severity < `4.0` && `Low` || `Info`)'
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: severity
+    x-samos-ref-types:
+      - type-name: EnumSeverity
+        key-name: id
+
+properties:
+  severity:
+    title: Severity
+    type: number
+  status:
+    title: Status
+    type: string
+  scan_type:
+    title: Scan Type
+    type: string

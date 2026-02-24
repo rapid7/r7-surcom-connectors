@@ -1,0 +1,69 @@
+x-samos-type-name: MimecastInternalDomain
+x-samos-namespace: mimecast
+title: Mimecast Internal Domain
+description: Internal Domain for Mimecast
+
+x-samos-extends-types:
+  - type-name: Domain
+
+# Exposure types must be in the global data zone
+x-samos-global-zone: true
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: domain
+  - name: sendOnly
+  - name: local
+  - name: inboundType
+
+x-samos-detail:
+  - name: domain
+  - name: sendOnly
+  - name: local
+  - name: inboundType
+
+x-samos-derived-properties:
+  d_domain:
+    # domain already fulfills `Domain:value`
+    # so fulfills `core.owned-entity:owners` derived the property
+    title: Domain User
+    type: string
+    value: 'domain'
+    syntax: jmespath
+    x-samos-ref-types:
+      - key-name: domain
+        type-name: MimecastUser
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: owners
+
+properties:
+  id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  domain:
+    type: string
+    title: Domain
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: value
+    x-samos-correlation:
+      correlation-key: Domain.value
+      correlation-type: Domain
+      priority: 4
+  inboundType:
+    title: Inbound Type
+    type: string
+  local:
+    title: Local?
+    type: boolean
+  sendOnly:
+    title: Send Only?
+    type: boolean

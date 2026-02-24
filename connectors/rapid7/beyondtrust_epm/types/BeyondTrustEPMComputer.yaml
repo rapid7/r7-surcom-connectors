@@ -1,0 +1,356 @@
+x-samos-type-name: BeyondTrustEPMComputer
+x-samos-namespace: beyondtrust.epm
+title: BeyondTrust EPM Computer
+description: Computer endpoint registered in BeyondTrust EPM.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 5
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: endpointInformation.systemDnsHostName
+  - name: endpointInformation.osCaption
+  - name: endpointInformation.systemManufacturer
+  - name: endpointInformation.systemModel
+  - name: connectionStatus
+  - name: groupId
+  - name: policyId
+  - name: lastConnected
+
+x-samos-detail:
+  - name: endpointInformation.systemDnsHostName
+  - name: connectionStatus
+  - name: endpointInformation.osCaption
+  - name: endpointInformation.osVersion
+  - name: endpointInformation.osArchitecture
+  - name: endpointInformation.macAddress
+  - name: endpointInformation.osSerialNumber
+  - name: endpointInformation.systemManufacturer
+  - name: endpointInformation.systemModel
+  - name: agentVersion
+  - name: adapterVersion
+  - name: groupId
+  - name: policyId
+  - name: archived
+  - name: archivedOn
+  - name: authorisationState
+  - name: authorised
+  - name: authorisedOn
+  - name: deactivated
+  - name: deactivatedOn
+  - name: pendingDeactivation
+  - name: autoDeactivated
+  - name: policyRevisionStatus
+  - name: policyRevision
+  - name: policyUpdateTimeStamp
+  - name: daysDisconnected
+  - name: lastConnected
+  - name: created
+  - name: hostLastUpdated
+  - name: certificateInformation
+  - name: endpointInformation
+
+x-samos-derived-properties:
+  d_qualified_hostname:
+    # Correlation for qualified hostnames (containing a dot)
+    title: Qualified Hostname
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'endpointInformation && contains(endpointInformation.systemDnsHostName, `.`) && endpointInformation.systemDnsHostName || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_unqualified_hostname:
+    # Correlation for unqualified hostnames (no dot)
+    title: Unqualified Hostname
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'endpointInformation && !contains(endpointInformation.systemDnsHostName, `.`) && endpointInformation.systemDnsHostName || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_active:
+    # Derive active status from deactivated flag (boolean inversion needed)
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: 'deactivated == `false`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  id:
+    title: Computer Record ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  hostType:
+    title: Host Type
+    type: string
+  adapterVersion:
+    title: Adapter Version
+    type: string
+  agentVersion:
+    title: Agent Version
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+  authorisationState:
+    title: Authorization State
+    type: string
+  lastConnected:
+    title: Last Connected
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+  deactivated:
+    title: Deactivated?
+    type: boolean
+  deactivatedOn:
+    title: Deactivated On
+    type: string
+    format: date-time
+    nullable: true
+  pendingDeactivation:
+    title: Pending Deactivation?
+    type: boolean
+  autoDeactivated:
+    title: Auto Deactivated?
+    type: boolean
+  duplicateCount:
+    title: Duplicate Count
+    type: integer
+  policyId:
+    title: Policy
+    type: string
+    x-samos-ref-types:
+      - type-name: BeyondTrustEPMPolicy
+        key-name: id
+  policyName:
+    title: Policy Name
+    type: string
+  policyRevision:
+    title: Policy Revision
+    type: integer
+  hostPolicyName:
+    title: Host Policy Name
+    type: string
+  hostPolicyId:
+    title: Host Policy ID
+    type: string
+  hostPolicyRevision:
+    title: Host Policy Revision
+    type: integer
+  policyRevisionStatus:
+    title: Policy Revision Status
+    type: string
+  groupId:
+    title: Group
+    type: string
+    x-samos-ref-types:
+      - type-name: BeyondTrustEPMGroup
+        key-name: id
+  groupName:
+    title: Group Name
+    type: string
+  credentialType:
+    title: Credential Type
+    type: string
+  policyUpdateTimeStamp:
+    title: Policy Update Timestamp
+    type: string
+    format: date-time
+  authorisedOn:
+    title: Authorized On
+    type: string
+    format: date-time
+    nullable: true
+  daysDisconnected:
+    title: Days Disconnected
+    type: integer
+  connectionStatus:
+    title: Connection Status
+    type: string
+  packageManagerVersion:
+    title: Package Manager Version
+    type: string
+  archived:
+    title: Archived?
+    type: boolean
+  archivedOn:
+    title: Archived On
+    type: string
+    format: date-time
+    nullable: true
+  connected:
+    title: Connected?
+    type: boolean
+  authorised:
+    title: Authorized
+    type: string
+    format: date-time
+    nullable: true
+  created:
+    title: Created
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_first_seen
+  endpointInformation:
+    title: Endpoint Information
+    type: object
+    properties:
+      macAddress:
+        title: MAC Address
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: mac_addresses
+        x-samos-correlation:
+          correlation-key: MacAddr.value
+          correlation-type: Machine
+          priority: 4
+      osArchitecture:
+        title: OS Architecture
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_architecture
+      osCaption:
+        title: OS Caption
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_product
+      osCodeSet:
+        title: OS Code Set
+        type: string
+      osComputerDescription:
+        title: OS Computer Description
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: operating_system
+      osCountryCode:
+        title: OS Country Code
+        type: string
+      osInstallDate:
+        title: OS Install Date
+        type: string
+        format: date-time
+      osManufacturer:
+        title: OS Manufacturer
+        type: string
+      osOrganization:
+        title: OS Organization
+        type: string
+      osSerialNumber:
+        title: OS Serial Number
+        type: string
+      osSystemDirectory:
+        title: OS System Directory
+        type: string
+      osSystemDrive:
+        title: OS System Drive
+        type: string
+      osVersion:
+        title: OS Version
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_version
+      osVersionString:
+        title: OS Version String
+        type: string
+      processorCaption:
+        title: Processor Caption
+        type: string
+      processorDescription:
+        title: Processor Description
+        type: string
+      processorManufacturer:
+        title: Processor Manufacturer
+        type: string
+      processorName:
+        title: Processor Name
+        type: string
+      systemDnsHostName:
+        title: System DNS Hostname
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: hostnames
+      systemDomain:
+        title: System Domain
+        type: string
+      systemManufacturer:
+        title: System Manufacturer
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: make
+      systemModel:
+        title: System Model
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: model
+      systemName:
+        title: System Name
+        type: string
+        x-samos-fulfills:
+          type-name: core.named-object
+          property-name: name
+      systemPrimaryOwnerName:
+        title: System Primary Owner Name
+        type: string
+      systemSystemType:
+        title: System Type
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: asset_type
+      systemWorkgroup:
+        title: System Workgroup
+        type: string
+        nullable: true
+  certificateInformation:
+    title: Certificate Information
+    type: object
+    nullable: true
+  hostLastUpdated:
+    title: Host Last Updated
+    type: string
+    format: date-time
+  agentLogs:
+    title: Agent Logs
+    type: array
+    items:
+      type: object
+      nullable: true
+
+x-samos-virtual:
+  # Fulfill technical_owners: Computer → Policy → User who last modified the policy
+  # Computers inherit configuration from their assigned policy,
+  # the user who last modified that policy is the technical manager responsible for the computer's security configuration.
+  technical_owners:
+    type-name: BeyondTrustEPMUser
+    cypher-pattern: >
+      -[:`e:BeyondTrustEPMComputer:policyId`]->(:BeyondTrustEPMPolicy)-[:`e:BeyondTrustEPMPolicy:lastModifiedUserId`]->(:BeyondTrustEPMUser)

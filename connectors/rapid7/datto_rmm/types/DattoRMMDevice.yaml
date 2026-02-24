@@ -259,6 +259,9 @@ properties:
   rebootRequired:
     title: Reboot Required?
     type: boolean
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: pending_reboot
   siteId:
     title: Site ID
     type: integer

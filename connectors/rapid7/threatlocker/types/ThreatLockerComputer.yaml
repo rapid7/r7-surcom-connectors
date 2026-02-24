@@ -305,6 +305,9 @@ properties:
   restartComputerNeeded:
     title: Restart Computer Needed?
     type: boolean
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: pending_reboot
   serviceVersion:
     title: Service Version
     type: string

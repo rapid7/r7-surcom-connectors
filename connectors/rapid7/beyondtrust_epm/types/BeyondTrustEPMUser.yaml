@@ -1,0 +1,127 @@
+x-samos-type-name: BeyondTrustEPMUser
+x-samos-namespace: beyondtrust.epm
+title: BeyondTrust EPM User
+description: User account in BeyondTrust EPM with authentication, authorization, and role management.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 5
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: accountName
+  - name: emailAddress
+  - name: roleName
+  - name: disabled
+  - name: locked
+  - name: created
+
+x-samos-detail:
+  - name: accountName
+  - name: emailAddress
+  - name: roleName
+  - name: created
+  - name: lastSignedIn
+  - name: disabled
+  - name: locked
+  - name: olsonTimeZoneId
+  - name: language
+
+x-samos-derived-properties:
+  d_active:
+    title: Active?
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: 'disabled == `false`'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+properties:
+  id:
+    title: User Record ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  accountName:
+    title: Account Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  emailAddress:
+    title: Email Address
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 2
+  created:
+    title: Created
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date
+  lastSignedIn:
+    title: Last Signed In
+    type: string
+    format: date-time
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+  disabled:
+    title: Disabled?
+    type: boolean
+  roles:
+    title: Roles
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: Role ID
+          type: string
+        name:
+          title: Role Name
+          type: string
+        resourceId:
+          title: Resource ID
+          type: string
+        resourceType:
+          title: Resource Type
+          type: string
+        type:
+          title: Type
+          type: string
+          nullable: true
+    nullable: true
+  roleName:
+    title: Role Name
+    type: string
+  olsonTimeZoneId:
+    title: Olson Time Zone ID
+    type: string
+  dateTimeDisplayFormat:
+    title: DateTime Display Format
+    type: string
+  language:
+    title: Language
+    type: string
+  locked:
+    title: Locked?
+    type: boolean
+  errorInfo:
+    title: Error Info
+    type: string
+    nullable: true

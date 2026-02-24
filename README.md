@@ -16,7 +16,7 @@ You can find all available connectors in the [**Extension Library**](https://ext
 
 ## Example Connector
 
-See the [Request Response Demo](connectors/rapid7/request_response_demo) connector for a working example.
+See the [Demo Connector](connectors/rapid7/demo_connector) for a working example.
 
 ## Documentation
 

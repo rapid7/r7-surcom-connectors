@@ -1,0 +1,101 @@
+x-samos-type-name: VeracodeWebsite
+x-samos-namespace: veracode
+title: Veracode Website
+description: A website used for Dynamic Analysis in Veracode
+
+x-samos-extends-types:
+  - type-name: WebSite
+
+x-samos-keys:
+  - target_id # used by Dynamic Findings to fulfill Finding:applies_to
+
+x-samos-table:
+  - name: url
+  - name: name
+  - name: application_id
+  - name: description
+  - name: target_type
+  - name: teams
+  - name: created_at
+  - name: updated_at
+
+x-samos-detail:
+  - name: url
+  - name: name
+  - name: application_id
+  - name: description
+  - name: target_type
+  - name: teams
+  - name: protocol
+  - name: application_name
+  - name: api_specification_file_url
+  - name: is_sec_lead_only
+  - name: created_at
+  - name: updated_at
+
+properties:
+  api_specification_file_url:
+    title: API Specification File URL
+    type: string
+  application_id:
+    title: Application
+    type: integer
+    x-samos-ref-types:
+      - type-name: VeracodeApplication
+        key-name: id
+  application_name:
+    title: Application Name
+    type: string
+  application_uuid:
+    title: Application
+    type: string
+  created_at:
+    format: date-time
+    title: Created At
+    type: string
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  is_sec_lead_only:
+    title: Sec Lead Only?
+    type: boolean
+  name:
+    title: Scan Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  protocol:
+    title: Protocol
+    type: string
+  target_id:
+    x-samos-immutable: true
+    title: Target ID
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  target_type:
+    title: Target Type
+    type: string
+  teams:
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: VeracodeTeam
+          key-name: team_id
+    title: Teams
+    type: array
+  updated_at:
+    format: date-time
+    title: Updated At
+    type: string
+  url:
+    title: URL
+    type: string
+    x-samos-fulfills:
+      type-name: WebSite
+      property-name: url

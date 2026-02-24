@@ -1,0 +1,291 @@
+x-samos-type-name: VeracodeApplication
+x-samos-namespace: veracode
+title: Veracode Application
+description: An Application identified by Veracode
+
+x-samos-extends-types:
+  - type-name: System
+
+x-samos-keys:
+  - guid # to be referenced by Static Finding type file to fulfill applies_to
+  - id # to be referenced by website type file for application_id
+
+x-samos-table:
+  - name: profile.name
+  - name: profile.description
+  - name: last_policy_compliance_check_date
+  - name: last_completed_scan_date
+  - name: created
+  - name: modified
+
+x-samos-detail:
+  - name: profile.name
+  - name: profile.description
+  - name: last_policy_compliance_check_date
+  - name: last_completed_scan_date
+  - name: app_profile_url
+  - name: scans
+  - name: profile
+  - name: results_url
+  - name: created
+  - name: modified
+
+x-samos-derived-properties:
+  d_owners:
+    # deriving owners from profile.teams to fulfill core.owned-entity:owners
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: 'profile.teams[*].guid'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: VeracodeTeam
+          key-name: team_id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: owners
+
+  d_mitigations:
+    # Deriving mitigations - if there's a completed scan, the system has vulnerability scanning (M1016)
+    x-samos-hidden: true
+    title: Mitigations
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    syntax: jmespath
+    value: '[last_completed_scan_date != `null` && `M1016` || null] | [?@]'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  _links:
+    properties:
+      policy:
+        properties:
+          href:
+            title: Href
+            type: string
+        title: Policy
+        type: object
+      sandboxes:
+        properties:
+          href:
+            title: Href
+            type: string
+          templated:
+            title: Templated?
+            type: boolean
+        title: Sandboxes
+        type: object
+      self:
+        properties:
+          href:
+            title: Href
+            type: string
+        title: Self
+        type: object
+    title: Links
+    type: object
+    x-samos-hidden: true
+  alt_org_id:
+    title: Alt Org ID
+    type: integer
+  app_profile_url:
+    title: App Profile URL
+    type: string
+  created:
+    format: date-time
+    title: Created
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  guid:
+    title: Application GUID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+  last_completed_scan_date:
+    format: date-time
+    title: Last Completed Scan Date
+    type: string
+  last_policy_compliance_check_date:
+    format: date-time
+    title: Last Policy Compliance Check Date
+    type: string
+  modified:
+    format: date-time
+    title: Modified
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  oid:
+    title: Organisation ID
+    type: integer
+  profile:
+    properties:
+      archer_app_name:
+        title: Archer App Name
+        type: string
+      business_criticality:
+        title: Business Criticality
+        type: string
+        x-samos-fulfills:
+          type-name: System
+          property-name: criticality
+        x-samos-ref-types:
+          - type-name: NoeticEnumCriticality
+            key-name: id
+      business_owners:
+        items:
+          properties:
+            email:
+              title: Email
+              type: string
+            name:
+              title: System
+              type: string
+          type: object
+        title: Business Owners
+        type: array
+      business_unit:
+        properties:
+          guid:
+            title: Guid
+            type: string
+          id:
+            title: ID
+            type: integer
+          name:
+            title: Name
+            type: string
+        title: Business Unit
+        type: object
+      custom_fields:
+        title: Custom Fields
+        type: array
+        items:
+          type: object
+      description:
+        title: Description
+        type: string
+        x-samos-fulfills:
+          type-name: core.named-object
+          property-name: description
+      enterprise_id:
+        title: Enterprise ID
+        type: integer
+      git_repo_url:
+        title: Git Repo URL
+        type: string
+      name:
+        title: Name
+        type: string
+        x-samos-fulfills:
+          type-name: core.named-object
+          property-name: name
+      policies:
+        items:
+          properties:
+            guid:
+              title: Guid
+              type: string
+            is_default:
+              title: Default?
+              type: boolean
+            name:
+              title: Name
+              type: string
+            policy_compliance_status:
+              title: Policy Compliance Status
+              type: string
+          type: object
+        title: Policies
+        type: array
+      settings:
+        properties:
+          dynamic_scan_approval_not_required:
+            title: Dynamic Scan Approval Not Required?
+            type: boolean
+          nextday_consultation_allowed:
+            title: Nextday Consultation Allowed?
+            type: boolean
+          pin_static_engine_version:
+            title: Pin Static Engine Version?
+            type: boolean
+          sca_enabled:
+            title: SCA Enabled?
+            type: boolean
+          static_scan_xpa_or_dpa:
+            title: Static Scan XPA Or DPA?
+            type: boolean
+          static_scan_xpp_enabled:
+            title: Static Scan XPP Enabled?
+            type: boolean
+        title: Settings
+        type: object
+      tags:
+        title: Tags
+        type: string
+      teams:
+        items:
+          properties:
+            guid:
+              title: GUID
+              type: string
+            team_id:
+              title: Team ID
+              type: integer
+            team_name:
+              title: Team Name
+              type: string
+          type: object
+        title: Teams
+        type: array
+      upload_and_scan_sca_enabled:
+        title: Upload And Scan SCA Enabled?
+        type: boolean
+      vendor_rescan:
+        title: Vendor Rescan?
+        type: boolean
+    title: Profile
+    type: object
+  results_url:
+    title: Results URL
+    type: string
+  scans:
+    items:
+      properties:
+        internal_status:
+          title: Internal Status
+          type: string
+        modified_date:
+          format: date-time
+          title: Modified Date
+          type: string
+        scan_type:
+          title: Scan Type
+          type: string
+        scan_url:
+          title: Scan URL
+          type: string
+        status:
+          title: Status
+          type: string
+      type: object
+    title: Scans
+    type: array

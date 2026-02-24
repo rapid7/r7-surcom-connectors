@@ -1,0 +1,132 @@
+x-samos-type-name: BeyondTrustEPMPolicy
+x-samos-namespace: beyondtrust.epm
+title: BeyondTrust EPM Policy
+description: Policy metadata and revision information from BeyondTrust EPM.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: core.component
+    subtype-priority: 5
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: revision
+  - name: size
+  - name: lastModifiedUserId
+  - name: locked
+  - name: isAssignedToGroup
+  - name: lastPolicyToGroupAssignment
+  - name: lastModified
+  - name: created
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: revision
+  - name: totalRevisions
+  - name: totalAssignedRevisions
+  - name: latestAssignedRevisions
+  - name: lastModifiedUserId
+  - name: isAssignedToGroup
+  - name: lastPolicyToGroupAssignment
+  - name: locked
+  - name: lastModified
+  - name: created
+
+properties:
+  id:
+    title: Policy Record ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    title: Description
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  size:
+    title: Size (bytes)
+    type: integer
+  revision:
+    title: Revision
+    type: integer
+  totalRevisions:
+    title: Total Revisions
+    type: integer
+  totalAssignedRevisions:
+    title: Total Assigned Revisions
+    type: integer
+  latestAssignedRevisions:
+    title: Latest Assigned Revisions
+    type: integer
+  created:
+    title: Created
+    type: string
+    format: date-time
+  lastModified:
+    title: Last Modified
+    type: string
+    format: date-time
+  lastModifiedUserId:
+    title: Last Modified User
+    type: string
+    x-samos-ref-types:
+      - type-name: BeyondTrustEPMUser
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: technical_owners
+  lastModifiedUser:
+    title: Last Modified User Name
+    type: string
+  hasOpenDraft:
+    title: Has Open Draft?
+    type: boolean
+  openDraftId:
+    title: Open Draft ID
+    type: string
+    nullable: true
+  isAssignedToGroup:
+    title: Assigned To Group?
+    type: boolean
+  draftUserId:
+    title: Draft User ID
+    type: string
+    nullable: true
+  draftUser:
+    title: Draft User
+    type: string
+    nullable: true
+  lastPolicyToGroupAssignment:
+    title: Last Policy To Group Assignment
+    type: string
+    format: date-time
+  checkedOutDate:
+    title: Checked Out Date
+    type: string
+    format: date-time
+    nullable: true
+  periodLocked:
+    title: Period Locked
+    type: string
+    nullable: true
+  locked:
+    title: Locked
+    type: boolean
+  errorInfo:
+    title: Error Info
+    type: string
+    nullable: true

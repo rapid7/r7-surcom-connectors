@@ -124,14 +124,21 @@ class SolarWindsOrionClient:
         # and ensure it does not start with '//' to avoid issues with furl.
         f_url = furl(url)
         self.base_url = f_url.host
-        # Extract Safely port if present
-        self.port = f_url.port if f_url.port else 17774
+        # The SWIS API defaults to port 17774. When the URL omits a port,
+        # furl returns the scheme-default (443 for https, 80 for http).
+        # Treat standard HTTP/HTTPS ports as "unspecified" and fall back
+        # to the SWIS default, since the API never runs on 80/443.
+        SWIS_DEFAULT_PORT = 17774
+        self.port = f_url.port if f_url.port not in (None, 80, 443) else SWIS_DEFAULT_PORT
+        # SWIS queries against large Orion installations can take several minutes
+        # to respond. Use a generous read timeout (10 min) to avoid aborting
+        # queries that are still processing server-side.
         self.swis = orionsdk.SwisClient(
             self.base_url,
             self.settings.get("username"),
             self.settings.get("password"),
             verify=self.settings.get("verify_tls"),
-            session=HttpSession(),
+            session=HttpSession(timeout=(30, 600)),
             port=self.port,
         )
 

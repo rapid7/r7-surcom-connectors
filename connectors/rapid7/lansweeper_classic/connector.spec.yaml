@@ -1,0 +1,52 @@
+id: lansweeper.classic
+name: Lansweeper Classic (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+types:
+  - LansweeperClassicAsset
+  - LansweeperClassicSoftware
+  # - LansweeperClassicSoftwareInstallation
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Lansweeper Classic Assets and Software
+    description: Import all Assets and Software from Lansweeper Classic
+    return_types:
+      - LansweeperClassicAsset
+      - LansweeperClassicSoftware
+      # - LansweeperClassicSoftwareInstallation
+
+settings:
+  server:
+    type: string
+    title: Lansweeper Classic SQL Server
+    description: The URL or IP address and port of the Lansweeper Classic Database server.
+    example: example.com or 10.0.0.1:1433
+
+  username:
+    type: string
+    title: Username
+    description: The username to connect to the Lansweeper Classic Database.
+
+  password:
+    type: string
+    title: Password
+    description: The password to connect to the Lansweeper Classic Database.
+    format: password
+
+runtime: py311
+
+python_dependencies:
+  - 'pymssql==2.3.11'
+
+categories:
+  - asset_management
+
+show_orchestrator_ui: false

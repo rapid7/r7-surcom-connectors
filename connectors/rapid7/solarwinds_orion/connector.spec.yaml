@@ -1,12 +1,11 @@
 ﻿id: solarwinds.orion
 name: SolarWinds Orion
 author: Rapid7
-version: 1.1.0
+version: 1.2.0
 notice: Copyright © 2025 Rapid7. All rights reserved.
 
 current_changes:
-  - Updated orionsdk dependency to version 0.5.0
-  - Fixed port handling when not specified in the URL
+  - Increase read timeout, and fix an inconsistency in URL handling
 
 reference-schemas:
   - url: https://solarwinds.github.io/OrionSDK/2024.4
