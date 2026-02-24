@@ -1,0 +1,93 @@
+x-samos-type-name: VeracodeDynamicFinding
+x-samos-namespace: veracode
+title: Veracode Dynamic Finding
+description: A dynamic analysis finding identified by Veracode
+
+x-samos-extends-types:
+  - type-name: Finding
+    subtype-priority: 5
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: target_id
+  - name: d_exposure_id
+  - name: scan_type
+  - name: status
+  - name: max_cvss
+  - name: last_scan
+
+x-samos-detail:
+  - name: target_id
+  - name: d_exposure_id
+  - name: scan_type
+  - name: status
+  - name: max_cvss
+  - name: last_scan
+
+x-samos-derived-properties:
+  d_name:
+    # Derived name combining scan type and status for better readability
+    title: Finding Name
+    type: string
+    syntax: expression
+    value: '{scan_type} Scan - {status}'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_id:
+    # derived Unique ID combining target_id and scan_type
+    title: Finding ID
+    type: string
+    syntax: expression
+    value: '{target_id}_{scan_type}'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+
+  d_exposure_id:
+    # Combining scan_type, status, and max_cvss to create a unique identifier for the exposure
+    # to fulfill Finding:vulnerability
+    title: Exposure
+    type: string
+    syntax: jmespath
+    value: 'join(`:`, [scan_type, status, to_string(max_cvss)])'
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability
+    x-samos-ref-types:
+      - type-name: VeracodeDynamicExposure
+        key-name: d_id
+
+properties:
+  last_scan:
+    format: date-time
+    title: Last Scan
+    type: string
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: last_seen
+  max_cvss:
+    title: CVSS Score
+    type: number
+  scan_type:
+    title: Scan Type
+    type: string
+  status:
+    title: Status
+    type: string
+  target_id:
+    title: Website
+    description: The target website associated with this finding
+    type: string
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to
+    x-samos-ref-types:
+      - type-name: VeracodeWebsite
+        key-name: target_id

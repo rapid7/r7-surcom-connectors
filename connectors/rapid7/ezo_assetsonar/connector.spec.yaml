@@ -1,11 +1,11 @@
 id: ezo.assetsonar
 name: EZO AssetSonar (Beta)
 author: Rapid7
-version: 0.1.0
+version: 0.2.0
 notice: Copyright © 2025 Rapid7. All rights reserved.
 
 current_changes:
-  - Initial release
+  - Fix a data validation issue with `employee_id`
 
 types:
   - EzoAssetSonarAsset

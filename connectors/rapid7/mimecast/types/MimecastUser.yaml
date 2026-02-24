@@ -1,0 +1,76 @@
+x-samos-type-name: MimecastUser
+x-samos-namespace: mimecast
+title: Mimecast User
+description: User for Mimecast
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - id
+  - domain # To allow referencing by domain in MimecastInternalDomain
+
+x-samos-table:
+  - name: emailAddress
+  - name: name
+  - name: addressType
+  - name: domain
+
+x-samos-detail:
+  - name: emailAddress
+  - name: name
+  - name: addressType
+  - name: domain
+  - name: isAlias
+  - name: source
+
+x-samos-derived-properties:
+  d_name:
+    # name already fulfills `User:username`
+    # so this derived property fulfills `core.named-object:name`
+    x-samos-hidden: true
+    type: string
+    value: 'name'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  id:
+    type: string
+    title: Id
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+  emailAddress:
+    type: string
+    title: Email Address
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+  addressType:
+    title: Address Type
+    type: string
+  domain:
+    title: Domain
+    type: string
+    x-samos-immutable: true
+  isAlias:
+    title: Alias?
+    type: boolean
+  source:
+    title: Source
+    type: string

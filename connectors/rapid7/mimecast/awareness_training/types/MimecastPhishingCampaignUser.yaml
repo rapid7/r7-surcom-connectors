@@ -1,0 +1,130 @@
+x-samos-type-name: MimecastPhishingCampaignUser
+x-samos-namespace: mimecast
+title: Mimecast Phishing Campaign User
+description: Phishing Campaign User for Mimecast
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - name
+
+x-samos-table:
+  - name: name
+  - name: email
+  - name: templateName
+  - name: department
+  - name: status
+  - name: timeOpened
+  - name: numCampaignsSent
+  - name: numCampaignsClicked
+  - name: numCampaignsScanned
+  - name: numCampaignsClickedScanned
+  - name: numTrainingModulesAssigned
+  - name: numCorrectAnswers
+  - name: numIncorrectAnswers
+  - name: userState
+  - name: timeScheduled
+  - name: clickedIp
+  - name: timeReported
+  - name: reactionTime
+  - name: timeClicked
+  - name: timeSubmitted
+
+x-samos-detail:
+  - name: name
+  - name: email
+  - name: templateName
+  - name: department
+  - name: status
+  - name: timeOpened
+  - name: numCampaignsSent
+  - name: numCampaignsClicked
+  - name: numCampaignsScanned
+  - name: numCampaignsClickedScanned
+  - name: numTrainingModulesAssigned
+  - name: numCorrectAnswers
+  - name: numIncorrectAnswers
+  - name: userState
+  - name: timeScheduled
+  - name: clickedIp
+  - name: timeReported
+  - name: reactionTime
+  - name: timeClicked
+  - name: timeSubmitted
+
+properties:
+  name:
+    type: string
+    title: Name
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  email:
+    type: string
+    title: Email
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+  templateName:
+    type: string
+    title: Template Name
+  department:
+    type: string
+    title: Department
+    x-samos-fulfills:
+      type-name: User
+      property-name: department
+  status:
+    type: string
+    title: Status
+  timeOpened:
+    type: string
+    title: Time Opened
+  numCampaignsSent:
+    type: integer
+    title: Num Campaigns Sent
+  numCampaignsClicked:
+    type: integer
+    title: Num Campaigns Clicked
+  numCampaignsScanned:
+    type: integer
+    title: Num Campaigns Scanned
+  numCampaignsClickedScanned:
+    type: integer
+    title: Num Campaigns Clicked Scanned
+  numTrainingModulesAssigned:
+    type: integer
+    title: Num Training Modules Assigned
+  numCorrectAnswers:
+    type: integer
+    title: Num Correct Answers
+  numIncorrectAnswers:
+    type: integer
+    title: Num Incorrect Answers
+  userState:
+    type: string
+    title: User State
+  timeScheduled:
+    type: string
+    title: Time Scheduled
+  clickedIp:
+    type: string
+    title: Clicked IP
+  timeReported:
+    type: string
+    title: Time Reported
+  reactionTime:
+    type: integer
+    title: Reaction Time
+  timeClicked:
+    type: string
+    title: Time Clicked
+  timeSubmitted:
+    type: string
+    title: Time Submitted

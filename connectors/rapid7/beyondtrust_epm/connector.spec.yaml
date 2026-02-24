@@ -1,0 +1,70 @@
+id: beyondtrust.epm
+name: BeyondTrust Endpoint Privilege Management (EPM) (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - BeyondTrustEPMComputer
+  - BeyondTrustEPMGroup
+  - BeyondTrustEPMPolicy
+  - BeyondTrustEPMUser
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: BeyondTrust EPM Computers, Policies and Users
+    description: Imports all Computers, Groups, Policies, and Users from BeyondTrust EPM.
+    return_types:
+      - BeyondTrustEPMComputer
+      - BeyondTrustEPMGroup
+      - BeyondTrustEPMPolicy
+      - BeyondTrustEPMUser
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    example: https://example.pm.beyondtrustcloud.com
+    description: The base URL for your BeyondTrust EPM instance.
+
+  client_id:
+    type: string
+    title: Client ID
+    description: The Client ID for your BeyondTrust EPM API application.
+
+  client_secret:
+    type: string
+    title: Client Secret
+    description: The Client Secret for your BeyondTrust EPM API application.
+    format: password
+
+  days_disconnected:
+    type: integer
+    title: Skip Computers Disconnected For More Than (Days)
+    nullable: true
+    description: If specified, skip computers that have been disconnected longer than the threshold.
+    default: 60
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - endpoint_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

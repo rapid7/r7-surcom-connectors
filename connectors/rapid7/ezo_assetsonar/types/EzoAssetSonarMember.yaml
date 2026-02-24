@@ -253,7 +253,7 @@ properties:
     x-samos-immutable: true
   employee_id:
     title: Employee ID
-    type: integer
+    type: string
   employee_identification_number:
     title: Employee Identification Number
     type: string

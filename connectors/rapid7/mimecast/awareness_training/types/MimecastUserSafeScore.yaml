@@ -1,0 +1,86 @@
+x-samos-type-name: MimecastUserSafeScore
+x-samos-namespace: mimecast
+title: Mimecast User Safe Score
+description: User Safe Score for Mimecast
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: emailAddress
+  - name: name
+  - name: department
+  - name: risk
+  - name: humanError
+  - name: sentiment
+  - name: engagement
+  - name: knowledge
+  - name: userState
+
+x-samos-detail:
+  - name: emailAddress
+  - name: name
+  - name: department
+  - name: risk
+  - name: humanError
+  - name: sentiment
+  - name: engagement
+  - name: knowledge
+  - name: userState
+
+x-samos-derived-properties:
+  d_id:
+    type: string
+    title: ID
+    syntax: jmespath
+    value: 'emailAddress'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+properties:
+  emailAddress:
+    type: string
+    title: Email Address
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  department:
+    type: string
+    title: Department
+    x-samos-fulfills:
+      type-name: User
+      property-name: department
+  risk:
+    type: string
+    title: Risk
+  humanError:
+    type: string
+    title: Human Error
+  sentiment:
+    type: string
+    title: Sentiment
+  engagement:
+    type: string
+    title: Engagement
+  knowledge:
+    type: string
+    title: Knowledge
+  userState:
+    type: string
+    title: User State

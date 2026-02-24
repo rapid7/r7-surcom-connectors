@@ -1,0 +1,178 @@
+x-samos-type-name: MimecastAwarenessCampaignUser
+x-samos-namespace: mimecast
+title: Mimecast Awareness Campaign User
+description: Awareness Campaign User for Mimecast
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: type
+  - name: status
+  - name: created
+  - name: startDate
+  - name: endDate
+  - name: lastModified
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: type
+  - name: status
+  - name: created
+  - name: startDate
+  - name: endDate
+  - name: lastModified
+
+x-samos-derived-properties:
+  d_active:
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: "status == 'active'"
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+properties:
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    type: string
+    title: Description
+  type:
+    type: string
+    title: Type
+  status:
+    type: string
+    title: Status
+  created:
+    type: string
+    title: Created
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+  startDate:
+    type: string
+    title: Start Date
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date
+  endDate:
+    type: string
+    title: End Date
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: end_date
+  lastModified:
+    type: string
+    title: Last Modified
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+  targetAudience:
+    type: object
+    title: Target Audience
+    properties:
+      totalUsers:
+        type: integer
+        title: Total Users
+      departments:
+        type: array
+        title: Departments
+        items:
+          type: string
+      userGroups:
+        type: array
+        title: User Groups
+        items:
+          type: string
+  statistics:
+    type: object
+    title: Statistics
+    properties:
+      totalParticipants:
+        type: integer
+        title: Total Participants
+      completedTraining:
+        type: integer
+        title: Completed Training
+      failedSimulation:
+        type: integer
+        title: Failed Simulation
+      passedSimulation:
+        type: integer
+        title: Passed Simulation
+      completionRate:
+        type: number
+        title: Completion Rate
+      failureRate:
+        type: number
+        title: Failure Rate
+      averageScore:
+        type: number
+        title: Average Score
+  modules:
+    type: array
+    title: Modules
+    items:
+      type: object
+      properties:
+        moduleId:
+          type: string
+          title: Module ID
+        moduleName:
+          type: string
+          title: Module Name
+        type:
+          type: string
+          title: Type
+        duration:
+          type: integer
+          title: Duration
+        participants:
+          type: integer
+          title: Participants
+        completions:
+          type: integer
+          title: Completions
+  settings:
+    type: object
+    title: Settings
+    properties:
+      allowRetakes:
+        type: boolean
+        title: Allow Retakes?
+      passingScore:
+        type: integer
+        title: Passing Score
+      certificateEnabled:
+        type: boolean
+        title: Certificate Enabled?
+      reminderEnabled:
+        type: boolean
+        title: Reminder Enabled?
+      reminderFrequency:
+        type: string
+        title: Reminder Frequency

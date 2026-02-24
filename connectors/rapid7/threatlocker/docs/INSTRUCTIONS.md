@@ -10,19 +10,20 @@
 
 # __Documentation__
 
-  The connector requires `API Token` and  `Organization Instance ID` for fetching the API details.
+  The connector requires `API Token` and `Organization Base URL` for fetching the API details.
 
-  Follow these steps for ThreatLocker API Credential Generation:
+  Follow these steps for ThreatLocker API Configuration:
 
-  ## 1. Organization Instance ID
-  The Instance ID is found directly in your browser's address bar when you are logged into the ThreatLocker Portal.
-  Check your browser URL when logged in to confirm
+  ## 1. API Base URL
 
-  UI / Portal URL typically follows the format https://portal.[region/Organization Instance ID].threatlocker.com
-  (https://www.threatlocker.com/).
-  The [region/Organization Instance ID] consists of a Region Code and/or a Cluster Letter (e.g., g for Global, au for Australia, ae for UAE, x, etc.) corresponding to your specific environment.
-
-  ## 2. Generate the API Key (Token)
+  - The API Base URL varies according to your organization's region.
+    
+  This URL typically follows the format: `https://portalapi.[region].threatlocker.com` or `https://api.[region].threatlocker.com`
+  
+  > NOTE: For backward compatibility, you can instead provide only the region/instance identifier (e.g., `eu1`, `au`, `g`).
+  > When using an instance ID, the connector will construct the URL as `https://portalapi.[region].threatlocker.com`.
+    
+  ## 2. Generate the API Key (API Token)
   API keys are managed under the "Administrators" section because the API acts with the permissions of a specific user.
 
   1. Go to Modules > Administrators.

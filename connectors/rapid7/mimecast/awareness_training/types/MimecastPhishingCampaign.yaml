@@ -1,0 +1,183 @@
+x-samos-type-name: MimecastPhishingCampaign
+x-samos-namespace: mimecast
+title: Mimecast Phishing Campaign
+description: Phishing Campaign for Mimecast
+
+x-samos-extends-types:
+  - type-name: Threat
+
+# Exposure types must be in the global data zone
+x-samos-global-zone: true
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: id
+  - name: name
+  - name: deactivated
+  - name: launchDate
+  - name: duration
+
+x-samos-detail:
+  - name: id
+  - name: name
+  - name: templates
+  - name: landingPage
+  - name: launchDate
+  - name: locale
+  - name: timeSlotSelected
+  - name: numSubmitted
+  - name: numOpened
+  - name: numClicked
+  - name: numScanned
+  - name: numClickedScanned
+  - name: numSent
+  - name: numReported
+  - name: numErrors
+  - name: locked
+  - name: duration
+  - name: deactivated
+  - name: trackingDurationDays
+  - name: testCampaign
+  - name: dmi
+  - name: educational
+  - name: groups
+  - name: group
+
+properties:
+  id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Threat
+      property-name: id
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  templates:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: ID
+          type: string
+        displayTitle:
+          title: Display Title
+          type: string
+    title: Templates
+  landingPage:
+    type: object
+    properties:
+      id:
+        title: ID
+        type: string
+      name:
+        title: Name
+        type: string
+    title: Landing Page
+  launchDate:
+    type: string
+    title: Launch Date
+  locale:
+    type: string
+    title: Locale
+  timeSlotSelected:
+    type: string
+    title: Time Slot Selected
+  numSubmitted:
+    type: integer
+    title: Num Submitted
+  numOpened:
+    type: integer
+    title: Num Opened
+  numClicked:
+    type: integer
+    title: Num Clicked
+  numScanned:
+    type: integer
+    title: Num Scanned
+  numClickedScanned:
+    type: integer
+    title: Num Clicked Scanned
+  numSent:
+    type: integer
+    title: Num Sent
+  numReported:
+    type: integer
+    title: Num Reported
+  numErrors:
+    type: integer
+    title: Num Errors
+  locked:
+    type: boolean
+    title: Locked
+  duration:
+    type: integer
+    title: Duration
+  deactivated:
+    type: boolean
+    title: Deactivated
+  trackingDurationDays:
+    type: integer
+    title: Tracking Duration Days
+  testCampaign:
+    type: boolean
+    title: Test Campaign
+  dmi:
+    type: boolean
+    title: DMI
+  educational:
+    type: boolean
+    title: Educational
+  groups:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: ID
+          type: string
+        description:
+          title: Description
+          type: string
+        source:
+          title: Source
+          type: string
+        parentId:
+          title: Parent ID
+          type: string
+        userCount:
+          title: User Count
+          type: integer
+        folderCount:
+          title: Folder Count
+          type: integer
+    title: Groups
+  group:
+    type: object
+    properties:
+      id:
+        title: ID
+        type: string
+      description:
+        title: Description
+        type: string
+      source:
+        title: Source
+        type: string
+      parentId:
+        title: Parent ID
+        type: string
+      userCount:
+        title: User Count
+        type: integer
+      folderCount:
+        title: Folder Count
+        type: integer
+    title: Group

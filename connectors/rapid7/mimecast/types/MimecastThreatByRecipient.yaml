@@ -1,0 +1,72 @@
+x-samos-type-name: MimecastThreatByRecipient
+x-samos-namespace: mimecast
+title: Mimecast Threat By Recipient
+description: Threat by recipient details for Mimecast
+
+# This will correlate to MimecastUser by email, so we can get the user details for the recipient of the threat
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - x_id
+
+x-samos-table:
+  - name: email
+  - name: status
+  - name: malwareCount
+  - name: phishingCount
+  - name: spamCount
+
+x-samos-detail:
+  - name: email
+  - name: status
+  - name: totalCount
+  - name: unwantedCount
+  - name: untrustworthyCount
+  - name: malwareCount
+  - name: phishingCount
+  - name: spamCount
+  - name: suspiciousCount
+
+properties:
+  x_id:
+    title: Id
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  email:
+    title: Email
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+  malwareCount:
+    title: Malware Count
+    type: integer
+  phishingCount:
+    title: Phishing Count
+    type: integer
+  spamCount:
+    title: Spam Count
+    type: integer
+  status:
+    title: Status
+    type: string
+  suspiciousCount:
+    title: Suspicious Count
+    type: integer
+  totalCount:
+    title: Total Count
+    type: integer
+  untrustworthyCount:
+    title: Untrustworthy Count
+    type: integer
+  unwantedCount:
+    title: Unwanted Count
+    type: integer

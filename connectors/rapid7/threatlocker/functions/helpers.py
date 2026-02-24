@@ -6,18 +6,19 @@ should be placed here, so that it can be reused by all functions.
 
 import json
 from logging import Logger
+from urllib.parse import urlparse
 from furl import furl
 from r7_surcom_api import HttpSession
 from .sc_settings import Settings
 
+# Refer to the ThreatLocker API documentation for more details on endpoints and parameters:
+#  https://threatlocker.kb.help/api-documentation/
 
 ENDPOINTS = {
     "applications": "/portalapi/Application/ApplicationGetByParameters",
     "computers": "/portalapi/Computer/ComputerGetByAllParameters",
     "organizations": "/portalapi/Organization/OrganizationGetChildOrganizationsByParameters"
 }
-# Refer to the ThreatLocker API documentation for more details on endpoints and parameters:
-#  https://threatlocker.kb.help/api-documentation/
 
 
 # Here is an example of a simple client that interacts with a third-party API.
@@ -38,13 +39,11 @@ class ThreatLockerClient():
 
         # validate required settings
         if not all([self.api_token, self.organization_instance]):
-            raise ValueError("API token and organization instance ID must be provided.")
+            raise ValueError("API token and organization instance ID or Base URL must be provided.")
 
-        # constructing BASE URL using organization instance ID
-        self.base_url = f"https://portalapi.{self.organization_instance}.threatlocker.com"
-        self.logger.info(
-            f"ThreatLocker base URL set to: {self.base_url}"
-        )
+        # Construct and validate BASE URL
+        self.base_url = self._construct_base_url(self.organization_instance)
+        self.logger.info(f"ThreatLocker base URL set to: {self.base_url}")
         # Setup a Session using the Surcom HttpSession class
         self.session = HttpSession()
         self.session.headers.update(
@@ -53,6 +52,61 @@ class ThreatLockerClient():
                 "content-type": "application/json"
             }
         )
+
+    def _construct_base_url(self, org_input: str) -> str:
+        """
+        Validates and constructs a secure ThreatLocker Base URL.
+        Enforces HTTPS and handles shorthand instance IDs.
+        Does NOT append /portalapi to avoid double-pathing issues.
+
+        Args:
+            org_input: Either an instance ID (e.g., "eu1") or full URL
+
+        Returns:
+            Base URL for ThreatLocker API (without path)
+
+        Raises:
+            ValueError: If URL is invalid, empty, or not HTTPS
+        """
+        # 1. Empty input check
+        if not org_input or not org_input.strip():
+            raise ValueError("Organization instance input cannot be empty.")
+
+        clean_input = org_input.strip()
+
+        # 2. Handle Shorthand (e.g., "eu1", "g", "au")
+        # Must be alphanumeric and not contain dots or slashes
+        if "." not in clean_input and "/" not in clean_input:
+            # Validate shorthand is alphanumeric
+            if not clean_input.isalnum():
+                raise ValueError(
+                    f"Invalid instance ID: '{org_input}'. "
+                    "Instance IDs must be alphanumeric (e.g., eu1, us01, au)."
+                )
+            # Construct the standard domain
+            return f"https://portalapi.{clean_input.lower()}.threatlocker.com"
+
+        # 3. Scheme Fixer: If protocol is missing, assume HTTPS
+        if "://" not in clean_input:
+            clean_input = f"https://{clean_input}"
+
+        # 4. Parse and validate
+        parsed = urlparse(clean_input)
+
+        # 5. The "None" Check: Ensure hostname exists and isn't empty
+        if not parsed.hostname:
+            raise ValueError(
+                f"Could not extract a valid hostname from: '{org_input}'. "
+                "Ensure you provide a valid instance ID (e.g., eu1) or full URL "
+                "(e.g., https://portalapi.eu1.threatlocker.com)."
+            )
+
+        # 6. Security Check: Enforce HTTPS
+        if not parsed.scheme or parsed.scheme.lower() != "https":
+            raise ValueError(f"Insecure protocol '{parsed.scheme}' detected. ThreatLocker requires HTTPS.")
+
+        # 7. Final Reconstruction of hostname
+        return f"https://{parsed.hostname.lower()}"
 
     def _post_requests(self, endpoint: str, params: dict) -> list:
         """A helper method to make post requests with given API token.

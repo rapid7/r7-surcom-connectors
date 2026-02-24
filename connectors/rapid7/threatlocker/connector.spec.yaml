@@ -1,12 +1,14 @@
 id: threatlocker
-name: ThreatLocker (Beta)
+name: ThreatLocker
 author: Rapid7
-version: 0.2.0
+version: 1.0.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Improved correlation for ThreatLocker computer objects
+  - Remove 'Beta' label
+  - ThreatLockerComputer now fulfills the Machine pending_reboot property
+  - Provide full "Base URL" to handle all API endpoints (back-compatible)
 
 # version of the connector ID.
 types:
@@ -38,10 +40,10 @@ settings:
 
   organization_instance:
     type: string
-    title: Organization Instance ID
-    description: The unique identifier for your ThreatLocker instance.
+    title: API Base URL
+    description: Base URL for the ThreatLocker API.
       This is required to route requests to the correct regional cluster.
-    example: 'eu1'
+    example: https://portalapi.eu1.threatlocker.com
 
 # Runtime platform for this connector.
 runtime: py311

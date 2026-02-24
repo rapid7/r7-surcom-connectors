@@ -1,0 +1,48 @@
+x-samos-type-name: DemoConnectorUser
+x-samos-namespace: demo.connector
+title: Demo Connector User
+description: A user identity imported from Demo Connector.
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+  - email
+
+x-samos-table:
+  - name: name
+  - name: email
+
+x-samos-detail:
+  - name: name
+  - name: email
+
+properties:
+  id:
+    title: User ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  email:
+    title: Email
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 3

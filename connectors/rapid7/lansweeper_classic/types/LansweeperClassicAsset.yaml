@@ -1,0 +1,718 @@
+x-samos-type-name: LansweeperClassicAsset
+x-samos-namespace: lansweeper.classic
+title: Lansweeper Classic Asset
+description: An Asset from the Lansweeper Classic Database.
+
+x-samos-extends-types:
+  - type-name: Machine
+
+x-samos-keys:
+  - AssetID
+  - d_id
+
+x-samos-table:
+  - name: AssetName
+  - name: FQDN
+  - name: IPAddress
+  - name: Description
+  - name: Firstseen
+  - name: Lastseen
+
+x-samos-detail:
+  - name: AssetName
+  - name: Domain
+  - name: Username
+  - name: Userdomain
+  - name: FQDN
+  - name: IPAddress
+  - name: Scanserver
+  - name: Description
+  - name: Mac
+  - name: Firstseen
+  - name: Lastseen
+  - name: Lasttried
+  - name: Lasttriggered
+  - name: LastScheduled
+  - name: LastActiveScan
+  - name: LastIPScan
+  - name: LastLsPush
+  - name: LastSaved
+  - name: Uptime
+  - name: Memory
+  - name: NrProcessors
+  - name: Processor
+  - name: ServiceVersion
+  - name: LsPushVersion
+  - name: lastWorkgroupScan
+  - name: LocationID
+  - name: ManualMAC
+  - name: LastChanged
+  - name: LastLsFallBack
+  - name: BuildNumber
+  - name: Version
+  - name: LsAgentVersion
+  - name: LastLsAgent
+  - name: HostTypeId
+  - name: LastPerformanceScan
+  - name: ScannedBy
+  - name: LastSccmScan
+  - name: LastAssetRadarScan
+  - name: CloudId
+  - name: CloudStatusId
+  - name: LsAgentVersionThroughRelay
+  - name: LastLsAgentThroughRelay
+  - name: LastseenCredentials
+  - name: LasttriedCredentials
+  - name: LasttriggeredCredentials
+  - name: LsAgentVersionDirect
+  - name: LastLsAgentDirect
+  - name: UserUpn
+  - name: RecognitionDeviceId
+  - name: AssetCustom
+  - name: AssetOS
+
+x-samos-derived-properties:
+  d_id:
+    type: string
+    title: ID
+    syntax: expression
+    value: '{AssetID}'
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_hostnames:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: '[AssetName] | [] | [?@]'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+properties:
+  AssetID:
+    type: integer
+    title: Id
+    x-samos-immutable: true
+    x-samos-hidden: true
+  AssetUnique:
+    type: string
+    title: Asset Unique
+  Domain:
+    type: string
+    title: Domain
+  Username:
+    type: string
+    title: User Name
+  Userdomain:
+    type: string
+    title: User Domain
+  FQDN:
+    type: string
+    title: FQDN
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+  IPAddress:
+    type: string
+    title: IP Address
+    format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  IPNumeric:
+    type: number
+    title: IP Numeric
+  SiteID:
+    type: number
+    title: Site ID
+  Scanserver:
+    type: string
+    title: Scanserver
+  OScode:
+    type: string
+    title: OS Code
+  SP:
+    type: number
+    title: SP
+  Description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  Descriptionlock:
+    type: string
+    title: Description Lock?
+  Assettype:
+    type: integer
+    title: Asset Type
+  AssetTypeLock:
+    type: boolean
+    title: Asset Type Lock?
+  AssetName:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+  AssetNameLock:
+    type: boolean
+    title: Assetname Lock?
+  Mac:
+    type: string
+    title: MAC Address
+    format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 3
+  Firstseen:
+    type: string
+    title: First Seen
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_first_seen
+  Lastseen:
+    type: string
+    title: Last Seen
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+  Lasttried:
+    type: string
+    title: Last Tried
+    format: date-time
+  Lasttriggered:
+    type: string
+    title: Last Triggered
+    format: date-time
+  LastScheduled:
+    type: string
+    title: Last Scheduled
+    format: date-time
+  LastActiveScan:
+    type: string
+    title: Last Active Scan
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_scanned
+  LastIPScan:
+    type: string
+    title: Last IP Scan
+    format: date-time
+  LastLsPush:
+    type: string
+    title: Last LS Push
+    format: date-time
+  LastSaved:
+    type: string
+    title: Last Saved
+    format: date-time
+  Uptime:
+    type: number
+    title: Uptime
+  Memory:
+    type: number
+    title: Memory
+  NrProcessors:
+    type: number
+    title: Nr Processors
+  Processor:
+    type: string
+    title: Processor
+  ServiceVersion:
+    type: string
+    title: Service Version
+  LsPushVersion:
+    type: string
+    title: LS Push Version
+  lastWorkgroupScan:
+    type: string
+    title: Last Workgroup Scan
+    format: date-time
+  LocationID:
+    type: integer
+    title: Location ID
+  ManualMAC:
+    type: boolean
+    title: Manual MAC?
+  LastChanged:
+    type: string
+    title: Last Changed
+    format: date-time
+  LastLsFallBack:
+    type: string
+    title: Last LS Fall Back
+    format: date-time
+  BuildNumber:
+    type: string
+    title: Build Number
+  Version:
+    type: string
+    title: Version
+  LsAgentVersion:
+    type: string
+    title: LS Agent Version
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+  LastLsAgent:
+    type: string
+    title: Last LS Agent
+    format: date-time
+  HostTypeId:
+    type: integer
+    title: Host Type ID
+  LastPerformanceScan:
+    type: string
+    title: Last Performance Scan
+    format: date-time
+  ScannedBy:
+    type: integer
+    title: Scanned By
+  LastSccmScan:
+    type: string
+    title: Last SCCM Scan
+    format: date-time
+  LastAssetRadarScan:
+    type: string
+    title: Last Asset Radar Scan
+    format: date-time
+  CloudId:
+    type: string
+    title: Cloud ID
+    x-samos-correlation:
+      correlation-key: CloudInstanceId
+      correlation-type: Machine
+      priority: 4
+  CloudStatusId:
+    type: integer
+    title: Cloud Status ID
+  LsAgentVersionThroughRelay:
+    type: string
+    title: LS Agent Version Through Relay
+  LastLsAgentThroughRelay:
+    type: string
+    title: Last LS Agent Through Relay
+    format: date-time
+  LastseenCredentials:
+    type: string
+    title: Last Seen Credentials
+  LasttriedCredentials:
+    type: string
+    title: Last Tried Credentials
+  LasttriggeredCredentials:
+    type: string
+    title: Last Triggered Credentials
+  LsAgentVersionDirect:
+    type: string
+    title: LS Agent Version Direct
+  LastLsAgentDirect:
+    type: string
+    title: Last LS Agent Direct
+    format: date-time
+  CreatedBy:
+    type: integer
+    title: Created By
+  UserUpn:
+    type: string
+    title: User UPN
+  RecognitionDeviceId:
+    type: string
+    title: Recognition Device ID
+
+  AssetCustom:
+    type: object
+    title: Asset Custom
+    properties:
+      CustID:
+        title: Custom ID
+        type: integer
+        x-samos-hidden: true
+      AssetID:
+        title: Asset ID
+        type: integer
+        x-samos-hidden: true
+      State:
+        title: State
+        type: integer
+        x-samos-hidden: true
+      PurchaseDate:
+        type: string
+        title: Purchase Date
+        format: date-time
+      Warrantydate:
+        type: string
+        title: Warranty Date
+        format: date-time
+      LastPatched:
+        type: string
+        title: Last Patched
+        format: date-time
+      LastFullbackup:
+        type: string
+        title: Last Full Backup
+        format: date-time
+      LastFullimage:
+        type: string
+        title: Last Full Image
+        format: date-time
+      OrderNumber:
+        type: string
+        title: Order Number
+      Comments:
+        type: string
+        title: Comments
+      Location:
+        title: Location
+        type: string
+      LocationLock:
+        type: boolean
+        title: Location Lock?
+      Building:
+        type: string
+        title: Building
+      Department:
+        type: string
+        title: Department
+      Branchoffice:
+        type: string
+        title: Branch Office
+      BarCode:
+        type: string
+        title: Bar Code
+      Manufacturer:
+        type: string
+        title: Manufacturer
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: make
+      ManufacturerLock:
+        type: boolean
+        title: Manufacturer Lock?
+      Contact:
+        type: string
+        title: Contact
+      ContactLock:
+        type: boolean
+        title: Contact Lock?
+      Model:
+        type: string
+        title: Model
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: model
+      ModelLock:
+        type: boolean
+        title: Model Lock?
+      HTTPTitle:
+        type: string
+        title: HTTP Title
+      HttpServer:
+        type: string
+        title: HTTP Server
+      HttpsServer:
+        type: string
+        title: HTTPS Server
+      SnmpOID:
+        type: string
+        title: SNMP OID
+      SMTPheader:
+        type: string
+        title: SMTP Header
+      FTPheader:
+        type: string
+        title: FTP Header
+      Lastchanged:
+        type: string
+        title: Last Changed
+        format: date-time
+      Serialnumber:
+        type: string
+        title: Serial Number
+      SerialnumberLock:
+        type: boolean
+        title: Serial Number Lock?
+      Printedpages:
+        type: number
+        title: Printed Pages
+      Printerstatus:
+        type: string
+        title: Printer Status
+      Custom1:
+        type: string
+        title: Custom 1
+      Custom2:
+        type: string
+        title: Custom 2
+      Custom3:
+        type: string
+        title: Custom 3
+      Custom4:
+        type: string
+        title: Custom 4
+      Custom5:
+        type: string
+        title: Custom 5
+      Custom6:
+        type: string
+        title: Custom 6
+      Custom7:
+        type: string
+        title: Custom 7
+      Custom8:
+        type: string
+        title: Custom 8
+      Custom9:
+        type: string
+        title: Custom 9
+      Custom10:
+        type: string
+        title: Custom 10
+      Custom11:
+        type: string
+        title: Custom 11
+      Custom12:
+        type: string
+        title: Custom 12
+      Custom13:
+        type: string
+        title: Custom 13
+      Custom14:
+        type: string
+        title: Custom 14
+      Custom15:
+        type: string
+        title: Custom 15
+      Custom16:
+        type: string
+        title: Custom 16
+      Custom17:
+        type: string
+        title: Custom 17
+      Custom18:
+        type: string
+        title: Custom 18
+      Custom19:
+        type: string
+        title: Custom 19
+      Custom20:
+        type: string
+        title: Custom 20
+      DNSName:
+        type: string
+        title: DNS Name
+      SSHServer:
+        type: string
+        title: SSH Server
+      PurchaseDateLock:
+        type: boolean
+        title: Purchase Date Lock?
+      WarrantyDateLock:
+        type: boolean
+        title: Warranty Date Lock?
+      SystemSKU:
+        type: string
+        title: System SKU
+      PreventCleanup:
+        type: boolean
+        title: Prevent Cleanup?
+      LockSystemSKU:
+        type: boolean
+        title: Lock System SKU?
+      DmidecodeError:
+        type: boolean
+        title: Dmidecode Error?
+      PrintedColorPages:
+        type: integer
+        title: Printed Color Pages
+      PrintedMonoPages:
+        type: integer
+        title: Printed Mono Pages
+      HardwareVersion:
+        type: string
+        title: Hardware Version
+      SoftwareVersion:
+        type: string
+        title: Software Version
+      FirmwareVersion:
+        type: string
+        title: Firmware Version
+      DeviceVersion:
+        type: string
+        title: Device Version
+      CouldScanNtLogEvent:
+        type: boolean
+        title: Could Scan NT Log Event?
+      SerialNumberScanned:
+        type: string
+        title: Serial Number Scanned
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: serial_number
+        x-samos-correlation:
+          correlation-key: core.managed.asset.serial_number
+          correlation-type: Machine
+          priority: 3
+      ExtendedDisplayUniId:
+        type: integer
+        title: Extended Display Uni Id
+      IsNetworkNode:
+        type: boolean
+        title: Is Network Node?
+
+  AssetOS:
+    type: object
+    title: Asset OS
+    properties:
+      OSID:
+        type: integer
+        title: OS ID
+        x-samos-hidden: true
+      AssetID:
+        type: integer
+        title: Asset ID
+        x-samos-hidden: true
+      BuildType:
+        type: string
+        title: Build Type
+      Caption:
+        type: string
+        title: Caption
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_product
+      Codeset:
+        type: string
+        title: Codeset
+      Countrycode:
+        type: string
+        title: Country Code
+      Currenttimezone:
+        type: integer
+        title: Current Timezone
+      DataExecutionPrevention_32BitApplications:
+        type: boolean
+        title: Data Execution Prevention 32 Bit Applications?
+      DataExecutionPrevention_Available:
+        type: boolean
+        title: Data Execution Prevention Available?
+      DataExecutionPrevention_Drivers:
+        type: boolean
+        title: Data Execution Prevention Drivers?
+      DataExecutionPrevention_Supportpolicy:
+        type: integer
+        title: Data Execution Prevention Support Policy
+      Debug:
+        type: boolean
+        title: Debug?
+      EncryptionLevel:
+        type: number
+        title: Encryption Level
+      ForegroundApplicationBoost:
+        type: integer
+        title: Foreground Application Boost
+      InstallDate:
+        type: string
+        title: Install Date
+        format: date-time
+      MaxProcessMemorySize:
+        type: number
+        title: Max Process Memory Size
+      NumberOfLicensedUsers:
+        type: number
+        title: Number Of Licensed Users
+      Organization:
+        type: string
+        title: Organization
+      OSLanguage:
+        type: number
+        title: OS Language
+      OSProductSuite:
+        type: number
+        title: OS Product Suite
+      OSType:
+        type: number
+        title: OS Type
+      ProductType:
+        type: number
+        title: Product Type
+      RegisteredUser:
+        type: string
+        title: Registered User
+      SerialNumber:
+        type: string
+        title: Serial Number
+      ServicePackMajorVersion:
+        type: number
+        title: Service Pack Major Version
+      ServicePackMinorVersion:
+        type: number
+        title: Service Pack Minor Version
+      SizeStoredInPagingFiles:
+        type: number
+        title: Size Stored In Paging Files
+      Suitemask:
+        type: number
+        title: Suitemask
+      SystemDevice:
+        type: string
+        title: System Device
+      SystemDrive:
+        type: string
+        title: System Drive
+      TotalVirtualMemorysize:
+        type: number
+        title: Total Virtual Memory size
+      TotalVisibleMemorySize:
+        type: number
+        title: Total Visible Memory Size
+      Version:
+        type: string
+        title: Version
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_version
+      WindowsDirectory:
+        type: string
+        title: Windows Directory
+      Lastchanged:
+        type: string
+        title: Last Changed
+        format: date-time
+      OtherTypeDescription:
+        type: string
+        title: Other Type Description
+      PlusProductID:
+        type: string
+        title: Plus Product ID
+      PlusVersionNumber:
+        type: string
+        title: Plus Version Number
+# x-samos-virtual:
+#   installed_software:
+#     type-name: LansweeperClassicSoftware
+#     cypher-pattern: >
+#       <-[:`e:LansweeperClassicSoftwareInstallation:AssetID`]-
+#       (:`LansweeperClassicSoftwareInstallation`)-
+#       [:`e:LansweeperClassicSoftwareInstallation:SoftwareUniID`]->(:`LansweeperClassicSoftware`)
+
+# NOTE: The `installed_software` virtual relationship has been disabled because
+# the `LansweeperClassicSoftwareInstallation` type and its edges are not currently
+# imported by the connector spec/import functions. Re-enable or reintroduce this
+# virtual only after the underlying type and relationships are supported.

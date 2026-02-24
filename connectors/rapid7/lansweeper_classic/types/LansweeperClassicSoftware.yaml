@@ -1,0 +1,73 @@
+x-samos-type-name: LansweeperClassicSoftware
+x-samos-namespace: lansweeper.classic
+title: Lansweeper Classic Software
+description: A software record from Lansweeper Classic DB.
+
+x-samos-extends-types:
+  - type-name: Software
+
+x-samos-keys:
+  - SoftwareUnique
+  - SoftID
+
+x-samos-table:
+  - name: softwareName
+  - name: SoftwareVersion
+  - name: SoftwarePublisher
+  - name: Added
+
+x-samos-detail:
+  - name: softwareName
+  - name: SoftwareVersion
+  - name: SoftwarePublisher
+  - name: Added
+  - name: Approved
+  - name: OSType
+  - name: ApplicationId
+
+properties:
+  SoftID:
+    type: integer
+    title: ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+
+  softwareName:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  SoftwarePublisher:
+    type: string
+    title: Publisher
+    x-samos-fulfills:
+      type-name: Software
+      property-name: vendor
+  Approved:
+    type: integer
+    title: Approved
+  OSType:
+    type: integer
+    title: Os Type
+  Added:
+    type: string
+    title: Added At
+    format: date-time
+  ApplicationId:
+    type: string
+    title: Application ID
+  SoftwareUnique:
+    type: string
+    title: Software Unique
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  SoftwareVersion:
+    type: string
+    title: Version
+    x-samos-fulfills:
+      type-name: Software
+      property-name: version

@@ -1,0 +1,66 @@
+id: veracode
+name: Veracode (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+types:
+  - VeracodeApplication
+  - VeracodeStaticFinding
+  - VeracodeStaticExposure
+  - VeracodeDynamicFinding
+  - VeracodeDynamicExposure
+  - VeracodeWebsite
+  - VeracodeTeam
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Veracode Applications and Findings
+    description: Import all Applications, Teams, Static Findings and Dynamic Findings from Veracode
+    return_types:
+      - VeracodeApplication
+      - VeracodeStaticFinding
+      - VeracodeStaticExposure
+      - VeracodeDynamicFinding
+      - VeracodeDynamicExposure
+      - VeracodeWebsite
+      - VeracodeTeam
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: API URL
+    description: Base URL for the Veracode API
+    example: https://api.veracode.com
+    default: https://api.veracode.com
+
+  api_id:
+    type: string
+    title: API ID
+    description: Veracode API ID
+
+  api_key:
+    type: string
+    title: API Key
+    format: password
+    description: Veracode API Key
+
+runtime: py311
+
+python_dependencies:
+  - 'veracode-api-signing==26.1.0'
+
+# CWE Mapping
+depends-on:
+  - mitre.cwe.app
+
+categories:
+  - vulnerability_management

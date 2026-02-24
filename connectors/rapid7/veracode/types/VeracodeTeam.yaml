@@ -1,0 +1,87 @@
+x-samos-type-name: VeracodeTeam
+x-samos-namespace: veracode
+title: Veracode Team
+description: A team identified in Veracode
+
+x-samos-extends-types:
+  - type-name: UserGroup
+
+x-samos-keys:
+  - team_id
+
+x-samos-table:
+  - name: team_name
+  - name: business_unit.bu_name
+  - name: organization.org_name
+  - name: member_only
+  - name: scim_team
+
+x-samos-detail:
+  - name: team_name
+  - name: business_unit
+  - name: organization
+  - name: member_only
+  - name: scim_team
+
+properties:
+  _links:
+    properties:
+      self:
+        properties:
+          href:
+            title: Href
+            type: string
+        title: Self
+        type: object
+    title: ' Links'
+    type: object
+    x-samos-hidden: true
+  business_unit:
+    properties:
+      bu_id:
+        title: BU ID
+        type: string
+      bu_name:
+        title: BU Name
+        type: string
+    title: Business Unit
+    type: object
+  member_only:
+    title: Member Only?
+    type: boolean
+  organization:
+    properties:
+      api_credential_ttl:
+        title: API Credential TTL
+        type: integer
+      org_id:
+        title: Organization ID
+        type: string
+      org_legacy_id:
+        title: Organization Legacy ID
+        type: integer
+      org_name:
+        title: Organization Name
+        type: string
+    title: Organization
+    type: object
+  scim_team:
+    title: SCIM Team?
+    type: boolean
+  team_id:
+    title: Team ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+  team_legacy_id:
+    title: Team Legacy ID
+    type: integer
+  team_name:
+    title: Team Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name

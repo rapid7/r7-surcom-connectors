@@ -1,0 +1,50 @@
+x-samos-type-name: MimecastOutboundIpAddress
+x-samos-namespace: mimecast
+title: Mimecast Outbound IP Address
+description: Outbound IP address details for Mimecast
+
+x-samos-extends-types:
+  - type-name: IpAddress
+
+x-samos-global-zone: true
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: outboundIpAddress
+
+x-samos-detail:
+  - name: outboundIpAddress
+
+x-samos-derived-properties:
+  d_id:
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: outboundIpAddress
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+properties:
+  outboundIpAddress:
+    title: Outbound IP Address
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  x_ip:
+    title: IP Address
+    description: Start of the IP range (CIDR notation stripped)
+    type: string
+    format: ip-addr
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: IpAddress
+      property-name: value
+    x-samos-correlation:
+      correlation-key: IpAddress.value
+      correlation-type: IpAddress
+      priority: 4

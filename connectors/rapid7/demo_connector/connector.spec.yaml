@@ -1,0 +1,83 @@
+id: demo.connector
+name: Demo Connector
+author: Rapid7
+version: 1.0.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - DemoConnectorDevice
+  - DemoConnectorUser
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Import All
+    description: Import all devices and users from Demo Connector
+    return_types:
+      - DemoConnectorDevice
+      - DemoConnectorUser
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: URL
+    description: >-
+      Base URL of where the MockServer is hosted when you run it using the surcom-sdk.
+    example: http://host.docker.internal:1080
+    default: http://host.docker.internal:1080
+
+  api_key:
+    type: string
+    title: API Key
+    description: >-
+      API key for the MockServer that is provided in the instructions.
+      for this tutorial.
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity.
+    default: true
+
+  page_limit:
+    type: integer
+    title: Page Limit
+    description: Maximum number of items to return per page.
+    enum:
+      - 2
+      - 4
+      - 6
+    default: 6
+
+  # This is an optional setting that can be used to control pagination.
+  total_pages:
+    type: integer
+    title: Total Pages
+    description: >-
+      Total number of pages to retrieve. Set it to 0 to retrieve all pages.
+    default: 2
+    nullable: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - asset_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false
