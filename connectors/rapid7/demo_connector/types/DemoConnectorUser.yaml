@@ -19,6 +19,16 @@ x-samos-detail:
   - name: name
   - name: email
 
+x-samos-derived-properties:
+  d_email:
+    type: string
+    value: email
+    syntax: expression
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+
 properties:
   id:
     title: User ID
@@ -39,9 +49,6 @@ properties:
     title: Email
     type: string
     x-samos-immutable: true
-    x-samos-fulfills:
-      type-name: User
-      property-name: email
     x-samos-correlation:
       correlation-key: User.email
       correlation-type: User
