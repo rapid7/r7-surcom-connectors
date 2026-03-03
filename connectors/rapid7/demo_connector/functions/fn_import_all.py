@@ -1,6 +1,8 @@
 from logging import Logger
 from typing import Callable
 
+# Import `add_one` from the sampleproject dependency
+from sample.simple import add_one
 
 from . import helpers
 from .sc_settings import Settings
@@ -53,8 +55,9 @@ def _get_asset(
             user_log.info("Not getting any more pages")
             break
 
-        # Else, we increment the page number and continue
-        next_page = current_page + 1
+        # Else, we increment the page number using the `add_one` method
+        # in the sampleproject dependency and continue
+        next_page = add_one(current_page)
         user_log.debug("Moving to the next page: %d", next_page)
         current_page = next_page
 
