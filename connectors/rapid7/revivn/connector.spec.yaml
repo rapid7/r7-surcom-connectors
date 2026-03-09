@@ -1,14 +1,13 @@
 id: revivn
 name: Revivn
 author: Rapid7
-version: 1.0.0
+version: 1.1.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Remove 'Beta' flag.
-  - Fulfill `asset_tag`.
+  - Pin dependencies
 
 # IDs of Surface Command types in this connector.
 # Type IDs must be unique across all connectors. Prefix each with a SnakeCaked
@@ -42,11 +41,6 @@ settings:
 
 # Runtime platform for this connector.
 runtime: py311
-
-# Add required Python dependencies here. Pin each dependency to a specific
-# version.
-# python_dependencies:
-#  - "another_dependency==1.0.0"
 
 # Categories for this connector in the Extension Library.
 categories:

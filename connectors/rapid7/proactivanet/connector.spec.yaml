@@ -1,7 +1,7 @@
 ﻿id: proactivanet
 name: Proactivanet (Beta)
 author: Rapid7
-version: 0.1.0
+version: 0.2.0
 notice: Copyright © 2025 Rapid7. All rights reserved.
 
 reference-schemas:
@@ -11,7 +11,7 @@ reference-schemas:
 # One or two entries describing the changes in this version.
 # (Previous changelog is maintained by the publishing process)
 current_changes:
-  - Initial release
+  - Pin dependencies
 
 types:
   - ProactivanetDevice
@@ -63,11 +63,6 @@ settings:
 
 # The runtime platform for this connector.
 runtime: py311
-
-# Add any Python dependencies here that your Connector needs to run.
-# Each dependency should be pinned to a specific version.
-# python_dependencies:
-#  - "another_dependency==1.0.0"
 
 # The list of categories for this Connector in the Extension Library.
 categories:

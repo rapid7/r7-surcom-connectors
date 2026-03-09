@@ -1,12 +1,12 @@
 id: onelogin
 name: OneLogin (Beta)
 author: Rapid7
-version: 0.1.0
+version: 0.2.0
 notice: Copyright © 2025 Rapid7. All rights reserved.
 
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Initial release
+  - Pin dependencies
 
 # version of the connector ID.
 types:

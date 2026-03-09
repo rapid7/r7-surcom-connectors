@@ -13,6 +13,11 @@ class PhosphorusDevice(dict):
         super().__init__(type=self.__class__.__name__, content=content)
 
 
+class PhosphorusEnumSeverity(dict):
+    def __init__(self, content: dict):
+        super().__init__(type=self.__class__.__name__, content=content)
+
+
 class PhosphorusExposure(dict):
     def __init__(self, content: dict):
         super().__init__(type=self.__class__.__name__, content=content)

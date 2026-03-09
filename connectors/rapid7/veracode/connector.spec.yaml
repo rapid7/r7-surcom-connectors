@@ -1,11 +1,11 @@
 id: veracode
 name: Veracode (Beta)
 author: Rapid7
-version: 0.1.0
+version: 0.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Initial release
+  - Pin dependencies
 
 types:
   - VeracodeApplication
@@ -55,8 +55,10 @@ settings:
 
 runtime: py311
 
+# List any Python dependencies available on PyPI that are required by this connector.
+# `codegen` will generate a `requirements.txt` file with pinned versions of these dependencies.
 python_dependencies:
-  - 'veracode-api-signing==26.1.0'
+  - veracode-api-signing
 
 # CWE Mapping
 depends-on:

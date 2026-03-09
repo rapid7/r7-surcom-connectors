@@ -1,13 +1,12 @@
 id: asimily
 name: Asimily Risk Management (Beta)
 author: Rapid7
-version: 0.2.0
+version: 0.3.0
 notice: Copyright © 2026 Rapid7, All rights reserved.
 
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Added setting to filter only active devices
-  - Added 'Device Deactivated?' property to AsimilyDevice type
+  - Pin dependencies
 
 types:
   - AsimilyDevice

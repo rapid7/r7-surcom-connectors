@@ -1,13 +1,13 @@
 id: anthropic
 name: Anthropic (Beta)
 author: Rapid7
-version: 0.1.0
+version: 0.2.0
 notice: Copyright © 2025 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Initial release
+  - Pin dependencies
 
 # IDs of Surface Command types in this connector.
 # Type IDs must be unique across all connectors. Prefix each with a SnakeCased
@@ -55,11 +55,6 @@ settings:
 
 # Runtime platform for this connector.
 runtime: py311
-
-# Add required Python dependencies here. Pin each dependency to a specific
-# version.
-# python_dependencies:
-#  - "another_dependency==1.0.0"
 
 # Categories for this connector in the Extension Library.
 categories:

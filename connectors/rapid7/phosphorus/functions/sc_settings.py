@@ -7,7 +7,7 @@ This file is generated from the connector.spec.yaml file, using codegen:
     $ surcom connector codegen
 """
 
-from typing import TypedDict  # noqa: F401
+from typing import Any, Optional, TypedDict  # noqa: F401
 
 Settings = TypedDict('Settings', {
     'url': str,
