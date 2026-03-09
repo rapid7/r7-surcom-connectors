@@ -16,6 +16,6 @@ Settings = TypedDict('Settings', {
     'api_token': str,
     'verify_tls': bool,
     'severity': str,
-    'types': list,
+    'types': Optional[list],
     'look_back_days': int,
 })

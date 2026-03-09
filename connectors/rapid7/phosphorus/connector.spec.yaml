@@ -1,11 +1,11 @@
 id: phosphorus
 name: Phosphorus (Beta)
 author: Rapid7
-version: 0.3.0
+version: 0.4.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Fulfill `last_seen` property on Finding
+  - Pin dependencies
 
 reference-schemas:
   - url: https://phosphorus.io/api/swagger/public/swagger.json

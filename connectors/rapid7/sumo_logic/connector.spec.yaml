@@ -1,11 +1,11 @@
 id: sumo.logic
 name: Sumo Logic (Beta)
 author: Rapid7
-version: 0.2.0
+version: 0.3.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Add M1032 mitigation for SumoLogicUser.
+  - Pin dependencies
 
 types:
   - SumoLogicCollector
@@ -62,11 +62,6 @@ settings:
     default: false
 
 runtime: py311
-
-# Add required Python dependencies here. Pin each dependency to a specific
-# version.
-# python_dependencies:
-#  - "another_dependency==1.0.0"
 
 categories:
   - security_operations

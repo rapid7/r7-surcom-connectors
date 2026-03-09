@@ -13,6 +13,6 @@ Settings = TypedDict('Settings', {
     'url': str,
     'username': str,
     'password': str,
-    'verify_tls': bool,
     'node_sub_type': list,
+    'verify_tls': bool,
 })

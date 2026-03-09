@@ -2,7 +2,7 @@ from logging import Logger
 
 from .helpers import LansweeperClassicDbClient, DEFAULT_BATCH_SIZE
 from .sc_settings import Settings
-from .sc_types import LansweeperClassicAsset, LansweeperClassicSoftware, LansweeperClassicSoftwareInstallation
+from .sc_types import LansweeperClassicAsset, LansweeperClassicSoftware  # LansweeperClassicSoftwareInstallation
 
 
 def import_all(
@@ -86,30 +86,30 @@ def get_software(client: LansweeperClassicDbClient):
     client.logger.info(f"Fetched Software at Page: {page_no+1} Total: {running_total}")
 
 
-def get_software_installations(client: LansweeperClassicDbClient):
-    """Fetch Software Installations from Lansweeper Classic DB.
-    Args:
-        client: LansweeperClassicDbClient instance for database interaction.
-    Yields:
-        LansweeperClassicSoftwareInstallation instances.
-    """
-    running_total = 0
-    page_no = 0
-    query = """SELECT
-                s.*,
-                CONCAT(
-                    su.SoftID, '_', COALESCE(s.SoftwareVersion, 'UNKNOWN')
-                ) AS SoftwareUniID
-            FROM tblSoftware s
-            JOIN tblSoftwareUni su
-            ON s.SoftID = su.SoftID
-            """
-    for row in client.stream_query_items(query=query, batch_size=DEFAULT_BATCH_SIZE):
-        yield LansweeperClassicSoftwareInstallation(row)
-        running_total += 1
-        if running_total % DEFAULT_BATCH_SIZE == 0:
-            page_no += 1
-            client.logger.info(f"Fetched Software Installations at Page: {page_no} "
-                               f"Total: {running_total}")
-    client.logger.info(f"Fetched Software Installations at Page: {page_no+1} "
-                       f"Total: {running_total}")
+# def get_software_installations(client: LansweeperClassicDbClient):
+#     """Fetch Software Installations from Lansweeper Classic DB.
+#     Args:
+#         client: LansweeperClassicDbClient instance for database interaction.
+#     Yields:
+#         LansweeperClassicSoftwareInstallation instances.
+#     """
+#     running_total = 0
+#     page_no = 0
+#     query = """SELECT
+#                 s.*,
+#                 CONCAT(
+#                     su.SoftID, '_', COALESCE(s.SoftwareVersion, 'UNKNOWN')
+#                 ) AS SoftwareUniID
+#             FROM tblSoftware s
+#             JOIN tblSoftwareUni su
+#             ON s.SoftID = su.SoftID
+#             """
+#     for row in client.stream_query_items(query=query, batch_size=DEFAULT_BATCH_SIZE):
+#         yield LansweeperClassicSoftwareInstallation(row)
+#         running_total += 1
+#         if running_total % DEFAULT_BATCH_SIZE == 0:
+#             page_no += 1
+#             client.logger.info(f"Fetched Software Installations at Page: {page_no} "
+#                                f"Total: {running_total}")
+#     client.logger.info(f"Fetched Software Installations at Page: {page_no+1} "
+#                        f"Total: {running_total}")

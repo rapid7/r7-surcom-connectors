@@ -16,8 +16,3 @@ class LansweeperClassicAsset(dict):
 class LansweeperClassicSoftware(dict):
     def __init__(self, content: dict):
         super().__init__(type=self.__class__.__name__, content=content)
-
-
-class LansweeperClassicSoftwareInstallation(dict):
-    def __init__(self, content: dict):
-        super().__init__(type=self.__class__.__name__, content=content)

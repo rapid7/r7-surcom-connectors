@@ -1,11 +1,11 @@
 id: datto.rmm
 name: Datto RMM
 author: Rapid7
-version: 1.3.0
+version: 1.4.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - DattoRMMDevice now fulfills the Machine pending_reboot property
+  - Pin dependencies
 
 reference-schemas:
   - url: https://example_swagger.centrastage.net/api/v3/api-docs/Datto-RMM

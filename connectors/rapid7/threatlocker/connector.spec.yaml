@@ -1,14 +1,12 @@
 id: threatlocker
 name: ThreatLocker
 author: Rapid7
-version: 1.0.0
+version: 1.1.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Remove 'Beta' label
-  - ThreatLockerComputer now fulfills the Machine pending_reboot property
-  - Provide full "Base URL" to handle all API endpoints (back-compatible)
+  - Pin dependencies
 
 # version of the connector ID.
 types:

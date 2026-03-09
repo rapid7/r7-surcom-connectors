@@ -1,11 +1,11 @@
 ﻿id: darktrace
 name: Darktrace
 author: Rapid7
-version: 1.1.0
+version: 1.2.0
 notice: Copyright © 2025 Rapid7. All rights reserved.
 
 current_changes:
-  - Fix a data validation issue with `DarktraceDevice`
+  - Pin dependencies
 
 types:
   - DarktraceDevice
@@ -52,10 +52,6 @@ settings:
     description: If enabled, verify the server's identity
 
 runtime: py311
-
-# Add any Python dependencies here that your Connector needs to run.
-# Each dependency should be pinned to a specific version.
-# python_dependencies:  # Currently no extra dependencies
 
 categories:
   - network_firewall
