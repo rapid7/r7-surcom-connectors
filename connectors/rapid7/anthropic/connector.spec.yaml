@@ -7,7 +7,7 @@ notice: Copyright © 2025 Rapid7. All rights reserved.
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Pin dependencies
+  - Temp change to try to trigger CI
 
 # IDs of Surface Command types in this connector.
 # Type IDs must be unique across all connectors. Prefix each with a SnakeCased
