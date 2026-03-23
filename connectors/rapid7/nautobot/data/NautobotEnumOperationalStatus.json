@@ -1,0 +1,37 @@
+[
+  {
+    "id": "Active",
+    "value": "Operational",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "Planned",
+    "value": "Planned",
+    "map_to": "OperationalStatus: Planned"
+  },
+  {
+    "id": "Staged",
+    "value": "Planned",
+    "map_to": "OperationalStatus: Planned"
+  },
+  {
+    "id": "Failed",
+    "value": "Non-Operational",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "Decommissioning",
+    "value": "Non-Operational",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "Offline",
+    "value": "Non-Operational",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "Retired",
+    "value": "Retired",
+    "map_to": "OperationalStatus: Retired"
+  }
+]

@@ -1,0 +1,59 @@
+x-samos-type-name: NautobotEnumOperationalStatus
+x-samos-namespace: nautobot
+title: Nautobot Operational Status
+description: Operational status values for Nautobot assets - maps Active to Operational, Planned/Staged to Planned, Failed/Decommissioning/Offline to Non-Operational, and Retired to Retired
+type: object
+x-samos-hidden: true
+x-samos-default-hide-from-graph: true
+x-samos-global-zone: true
+x-samos-extends-types:
+  - type-name: EnumOperationalStatus
+    subtype-priority: 1 # Connector-specific enum values use 1, the Noetic values have priority
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: value
+
+x-samos-detail:
+  - name: value
+  - name: id
+  - name: map_to
+
+x-samos-derived-properties:
+  name:
+    title: Name
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: '{value}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  id:
+    title: Id
+    x-samos-immutable: true
+    type: string
+    x-samos-fulfills:
+      type-name: Enum
+      property-name: id
+    x-samos-correlation:
+      correlation-key: EnumId
+      correlation-type: Enum
+      priority: 1
+  value:
+    title: Value
+    type: string
+    x-samos-fulfills:
+      type-name: Enum
+      property-name: value
+  map_to:
+    title: Map To Id
+    type: string
+    x-samos-correlation:
+      correlation-key: EnumId
+      correlation-type: Enum
+      priority: 1

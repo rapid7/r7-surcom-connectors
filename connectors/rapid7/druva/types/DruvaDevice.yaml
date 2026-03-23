@@ -1,0 +1,222 @@
+x-samos-type-name: DruvaDevice
+x-samos-namespace: druva
+title: Druva Device
+description: An endpoint device protected by Druva inSync
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 5
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: deviceName
+  - name: deviceOS
+  - name: deviceStatus
+  - name: upgradeState
+  - name: lastConnected
+  - name: totalBackupData
+
+x-samos-detail:
+  - name: deviceName
+  - name: serialNumber
+  - name: deviceOS
+  - name: deviceOSVersion
+  - name: platformOS
+  - name: deviceStatus
+  - name: clientVersion
+  - name: upgradeState
+  - name: totalBackupData
+  - name: totalBackupDataInBytes
+  - name: lastConnected
+  - name: addedOn
+  - name: lastUpgradedOn
+  - name: d_user
+  - name: deviceMarkedInactive
+
+x-samos-derived-properties:
+  d_id: # since id comes as a integer and core.component.id expects a string, we are deriving it as a string
+    type: string
+    syntax: jmespath
+    value: deviceID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_hostnames: # since we have already fulfilled deviceName to core.named-object.name, we are deriving hostnames as an array to fulfill the hostnames property of Machine type.
+    type: array
+    syntax: jmespath
+    value: '[deviceName]|[?@]'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_qualified_hostname: # since we do not have a separate qualified hostname coming from the API, we are deriving it from deviceName by checking if it contains a dot(.)
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'deviceName && contains(deviceName, `.`) && deviceName || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_unqualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'deviceName && !contains(deviceName, `.`) && deviceName || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_active: # since core.component.active expects a boolean value, we are deriving it from deviceStatus and deviceMarkedInactive properties.
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: '(deviceStatus == `enabled`) && (deviceMarkedInactive == `false`)'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_mitigations: # since we do not have separate mitigations coming from the API, we are deriving it based on the deviceStatus and totalBackupDataInBytes properties.
+    title: Mitigations
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Mitigation
+          key-name: id
+    syntax: jmespath
+    # M1053 represents the Data Backup mitigation from the MITRE ATT&CK framework,
+    # applied when the device has backup data enabled
+    value: >-
+      [
+        (deviceStatus == `enabled` && totalBackupDataInBytes > `0`) && `M1053` || null
+      ] | [?@]
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+  d_user: # since userID is integer and we need string to reference DruvaUser type
+    title: User
+    type: string
+    syntax: jmespath
+    value: userID
+    x-samos-ref-types:
+      - type-name: DruvaUser
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: users
+
+properties:
+  deviceName:
+    type: string
+    title: Device Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  deviceID:
+    type: integer
+    title: Device ID
+    x-samos-hidden: true
+
+  serialNumber:
+    type: string
+    title: Serial Number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+
+  userID:
+    type: integer
+    title: User ID
+    x-samos-hidden: true
+
+  profileID:
+    type: integer
+    title: Profile ID
+    x-samos-hidden: true
+
+  deviceOS:
+    type: string
+    title: Operating System
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  deviceOSVersion:
+    type: string
+    title: OS Version
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+
+  platformOS:
+    type: string
+    title: Platform OS
+
+  uuid:
+    type: string
+    title: UUID
+
+  clientVersion:
+    type: string
+    title: Client Version
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+
+  upgradeState:
+    type: string
+    title: Upgrade State
+
+  addedOn:
+    type: string
+    format: date-time
+    title: Added On
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  lastUpgradedOn:
+    type: string
+    format: date-time
+    title: Last Upgraded On
+
+  deviceStatus: # deviceStatus indicates whether backup is enabled/disabled, not the device's operational state, so it cannot fulfill operational_status
+    type: string
+    title: Device Status
+
+  totalBackupData:
+    type: string
+    title: Total Backup Data
+
+  totalBackupDataInBytes:
+    type: integer
+    title: Total Backup Data (Bytes)
+
+  lastConnected:
+    type: string
+    format: date-time
+    title: Last Connected
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  deviceMarkedInactive:
+    type: boolean
+    title: Marked Inactive?

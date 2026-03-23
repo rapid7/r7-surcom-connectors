@@ -1,0 +1,94 @@
+x-samos-type-name: NautobotTag
+x-samos-namespace: nautobot
+title: Nautobot Tag
+description: A tag in Nautobot.
+x-samos-detail-prefer-type-title: true
+x-samos-global-zone: true
+x-samos-extends-types:
+  - type-name: SourceTag
+
+$ref: https://example.nautobot.com/api/swagger#/components/schemas/PaginatedTagList#/components/schemas/Tag
+
+x-samos-keys:
+  - id
+x-samos-table:
+  - name: name
+  - name: tagged_items
+  - name: color
+  - name: description
+  - name: created
+  - name: last_updated
+
+x-samos-detail:
+  - name: name
+  - name: tagged_items
+  - name: color
+  - name: description
+  - name: content_types
+  - name: created
+  - name: last_updated
+
+properties:
+  color:
+    title: Color
+    type: string
+  content_types:
+    items:
+      type: string
+    title: Content Types
+    type: array
+  created:
+    format: date-time
+    title: Created
+    type: string
+  custom_fields:
+    properties: {}
+    title: Custom Fields
+    type: object
+  description:
+    title: Description
+    type: string
+  display:
+    title: Display
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  id:
+    title: ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: id
+  last_updated:
+    format: date-time
+    title: Last Updated
+    type: string
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: value
+  natural_slug:
+    title: Natural Slug
+    type: string
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: key
+  notes_url:
+    title: Notes URL
+    type: string
+    x-samos-hidden: true
+  object_type:
+    title: Object Type
+    type: string
+  tagged_items:
+    title: Tagged Items
+    type: integer
+  url:
+    title: URL
+    type: string
+    x-samos-hidden: true

@@ -1,0 +1,960 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SAM: User accounts",
+    "description": "API for interacting with User Accounts.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Flexera",
+      "url": "https://www.flexera.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{region}.snowsoftware.io",
+      "variables": {
+        "region": {
+          "enum": ["westeurope", "australiasoutheast", "eastus2", "uksouth"],
+          "default": "westeurope"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/api/sam/estate/v1/user-accounts/{id}": {
+      "get": {
+        "description": "Returns the details of a user.",
+        "summary": "Get user",
+        "operationId": "user-accounts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique ID of the user for which details will be returned.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAccountDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Your request is invalid or improperly formed. Consequently, the API server could not understand your request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found: The operation you requested failed because a resource associated with your request could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: Your request failed due to an internal error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.user.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/user-accounts": {
+      "get": {
+        "description": "Returns a collection of users.",
+        "summary": "Get users",
+        "operationId": "user-accounts2",
+        "parameters": [
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Filter the collection of Users. Format of the query string parameter:\n\n```\n<filter name> <operator>  -<value>\n```\n\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\nuserName | The userName of a user  | String | ?filter=userName -eq \"Sammy\"\nstatus | The status of a user  | String | ?filter=status -ne \"active\"\nfullName | The fullName of a user | String | ?filter=fullName -contains \"Sammy\"\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "status -eq \"active\""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfUserAccount"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Your request is invalid or improperly formed. Consequently, the API server could not understand your request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: Your request failed due to an internal error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.user.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/user-accounts-discovery/{id}": {
+      "get": {
+        "description": "Returns discovery data for a given user.",
+        "summary": "Get user discovery data",
+        "operationId": "user-accounts-discovery",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique ID of the user account for which details will be returned.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAccountDiscoveryDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Your request is invalid or improperly formed. Consequently, the API server could not understand your request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found: The operation you requested failed because a resource associated with your request could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: Your request failed due to an internal error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.user.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/user-accounts-discovery": {
+      "get": {
+        "description": "Returns a collection of discovery data for users.",
+        "summary": "Get users discovery data",
+        "operationId": "user-accounts-discovery2",
+        "parameters": [
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Filter the collection of user discovery details. Format of the query string parameter:\n\n```\n<filter name> <operator>  -<value>\n```\n\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n domainName | The domainName for users | String | ?filter=domainName -eq \"thebagel.co\"\nsamAccountName | The samAccountName of a user  | String | ?filter=samAccountName -eq \"thebagel\\ssmith\"\nemail | The email of a user | String | ?filter=email -eq \"ssmith@thebagel.co\"\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "domainName -eq \"thebagel.co\""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfUserAccountDiscovery"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Your request is invalid or improperly formed. Consequently, the API server could not understand your request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: Your request failed due to an internal error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.user.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/user-accounts-metering": {
+      "get": {
+        "description": "Returns a collection of metering data for users.",
+        "summary": "Get users metering data",
+        "operationId": "user-accounts-metering",
+        "parameters": [
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Filter the collection account metering. Format of the query string parameter:\n\n```\n<filter name> <operator>  -<value>\n```\n\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\nmetricID | The user accounts metricID | String | ?filter=metricID -eq \"2823fbea-bd7b-4f4f-9f0c-780a5f26218c\"\napplicationID | The user accounts applicationID  | String | ?filter=applicationID  -eq \"85d5dc09-115c-40db-a2f6-09f9c935852e\"\norganizationID | The user accounts organizationID | String | ?filter=organizationID -eq\"317db6a5-e16d-4e3b-a745-1f973690e982\"\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "applicationID  -eq \"85d5dc09-115c-40db-a2f6-09f9c935852e\""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfUserAccountMetering"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Your request is invalid or improperly formed. Consequently, the API server could not understand your request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: Your request failed due to an internal error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.user.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/user-accounts/{id}/metering": {
+      "get": {
+        "description": "Returns metering data for a given user.",
+        "summary": "Get user metering data",
+        "operationId": "metering",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique ID of the user for which details will be returned.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "Filter the collection account metering. Format of the query string parameter:\n\n```\n<filter name> <operator>  -<value>\n```\n\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\nmetricID | The user accounts metricID | String | ?filter=metricID -eq \"2823fbea-bd7b-4f4f-9f0c-780a5f26218c\"\napplicationID | The user accounts applicationID  | String | ?filter=applicationID  -eq \"85d5dc09-115c-40db-a2f6-09f9c935852e\"\norganizationID | The user accounts organizationID | String | ?filter=organizationID -eq\"317db6a5-e16d-4e3b-a745-1f973690e982\"\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "applicationID  -eq \"85d5dc09-115c-40db-a2f6-09f9c935852e\""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfUserAccountMetering"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Your request is invalid or improperly formed. Consequently, the API server could not understand your request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found: The operation you requested failed because a resource associated with your request could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: Your request failed due to an internal error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.user.r"]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Link": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "href": {
+            "description": "The associated relative URL.",
+            "type": "string",
+            "example": "api/sam/estate/v1/...",
+            "nullable": true
+          },
+          "rel": {
+            "description": "Specifies the relationship between the current document and the linked document/resource.",
+            "type": "string",
+            "example": "self",
+            "nullable": true
+          },
+          "method": {
+            "description": "The method to access related resources.",
+            "type": "string",
+            "example": "GET",
+            "nullable": true
+          }
+        }
+      },
+      "UserAccountDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "d983ee47-92c9-47ad-9975-ec85d2a479a1",
+            "format": "guid"
+          },
+          "userName": {
+            "type": "string",
+            "example": "ssmith",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "example": "Active",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "ssmith@thebagel.co",
+            "nullable": true
+          },
+          "organizationId": {
+            "type": "string",
+            "example": "8b4f2d90-99e7-408a-bad6-68d491e94dba",
+            "format": "guid"
+          },
+          "fullName": {
+            "type": "string",
+            "example": "Sammy Smith",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "789-654-1236",
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
+            "example": "Austin",
+            "nullable": true
+          },
+          "roomNumber": {
+            "type": "string",
+            "example": "5716",
+            "nullable": true
+          },
+          "quarantineDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastLogon": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastUpdate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedBy": {
+            "type": "string",
+            "example": "Data Update Job",
+            "nullable": true
+          },
+          "_links": {
+            "type": "array",
+            "description": "A collection of links to related resources.",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      },
+      "ErrorContent": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "The HTTP status code.",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string",
+            "description": "The error message.",
+            "nullable": true
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "description": "The error details.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ErrorContent"
+              }
+            ]
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "description": "The pagination details.",
+        "additionalProperties": false,
+        "properties": {
+          "page_size": {
+            "type": "integer",
+            "description": "The page size you requested.",
+            "format": "int32",
+            "example": 100
+          },
+          "page_number": {
+            "type": "integer",
+            "description": "The page number you requested.",
+            "format": "int32",
+            "example": 1
+          },
+          "total_pages": {
+            "type": "integer",
+            "description": "The total number of pages.",
+            "format": "int32",
+            "nullable": true,
+            "example": 1
+          }
+        }
+      },
+      "UserAccount": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "8b4f2d90-99e7-408a-bad6-68d491e94dba",
+            "format": "guid"
+          },
+          "userName": {
+            "type": "string",
+            "example": "ssmith",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "example": "Active",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "ssmith@thebagel.co",
+            "nullable": true
+          },
+          "fullName": {
+            "type": "string",
+            "example": "Sammy Smith",
+            "nullable": true
+          },
+          "_links": {
+            "type": "array",
+            "description": "A collection of links to related resources.",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      },
+      "FilteredResponseWithLinksOfUserAccount": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          },
+          "items": {
+            "type": "array",
+
+            "items": {
+              "$ref": "#/components/schemas/UserAccount"
+            }
+          },
+          "_links": {
+            "type": "array",
+            "description": "A collection of links to related resources.",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      },
+      "UserAccountDiscoveryDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "objectId": {
+            "type": "string",
+            "example": "",
+            "format": "guid"
+          },
+          "domainName": {
+            "type": "string",
+            "example": "thebagel",
+            "nullable": true
+          },
+          "samAccountName": {
+            "type": "string",
+            "example": "thebagel\\ssmith",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Sammy",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Smith",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "ssmith@thebegel.co",
+            "nullable": true
+          },
+          "homePhoneNumber": {
+            "type": "string",
+            "example": "789-654-1236",
+            "nullable": true
+          },
+          "mobilePhoneNumber": {
+            "type": "string",
+            "example": "",
+            "nullable": true
+          },
+          "lastLogonActivity": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "whenCreated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "whenChanged": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "userAccountControl": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "managerName": {
+            "type": "string",
+            "example": "Billy Hare",
+            "nullable": true
+          },
+          "managerEmail": {
+            "type": "string",
+            "example": "bhare@thebagel.co",
+            "nullable": true
+          },
+          "organizationalUnit": {
+            "type": "string",
+            "example": "Laurel_MI",
+            "nullable": true
+          },
+          "userPrincipalName": {
+            "type": "string",
+            "example": "ssmith@thebegel.co",
+            "nullable": true
+          },
+          "_links": {
+            "type": "array",
+            "description": "A collection of links to related resources.",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      },
+      "UserAccountDiscovery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "objectId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "domainName": {
+            "type": "string",
+            "example": "thebagel.co",
+            "nullable": true
+          },
+          "samAccountName": {
+            "type": "string",
+            "example": "thebagel\\ssmith",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "ssmith@thebagel.co",
+            "nullable": true
+          },
+          "_links": {
+            "type": "array",
+            "description": "A collection of links to related resources.",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      },
+      "FilteredResponseWithLinksOfUserAccountDiscovery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+
+            "items": {
+              "$ref": "#/components/schemas/UserAccountDiscovery"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          },
+          "_links": {
+            "type": "array",
+            "description": "A collection of links to related resources.",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      },
+      "UserAccountMetering": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "metricID": {
+            "type": "string",
+            "example": "2823fbea-bd7b-4f4f-9f0c-780a5f26218c",
+            "format": "guid"
+          },
+          "applicationId": {
+            "type": "string",
+            "example": "85d5dc09-115c-40db-a2f6-09f9c935852e",
+            "format": "guid"
+          },
+          "organizationId": {
+            "type": "string",
+            "example": "317db6a5-e16d-4e3b-a745-1f973690e982",
+            "format": "guid"
+          },
+          "initialRequirement": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "includedInBundle": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "outsideMetricPeriod": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "secondaryUseRightsDesktopLaptop": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "secondaryUseRightsDevice": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "extendedCoverageForDcc": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "extendedCoverageForHost": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "multipleVersionEdition": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "virtualDesktopInfrastructure": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minimumRequirement": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "coreFactor": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "requirement": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "_links": {
+            "type": "array",
+            "description": "A collection of links to related resources.",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      },
+      "FilteredResponseWithLinksOfUserAccountMetering": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+
+            "items": {
+              "$ref": "#/components/schemas/UserAccountMetering"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          },
+          "_links": {
+            "type": "array",
+            "description": "A collection of links to related resources.",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

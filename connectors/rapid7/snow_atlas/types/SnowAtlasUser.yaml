@@ -1,0 +1,102 @@
+x-samos-type-name: SnowAtlasUser
+x-samos-namespace: snow.atlas
+title: Snow Atlas User
+description: Represents a user account from Snow Atlas.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: User
+
+$ref: https://example3.githubusercontent.com/SnowSoftware/snowatlas-integrations/user#/components/schemas/FilteredResponseWithLinksOfUserAccount/properties/items#/components/schemas/UserAccount
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: userName
+  - name: fullName
+  - name: email
+  - name: status
+  - name: organizationId
+  - name: lastLogon
+
+x-samos-detail:
+  - name: userName
+  - name: fullName
+  - name: email
+  - name: status
+  - name: location
+  - name: organizationId
+  - name: lastLogon
+
+properties:
+  id:
+    title: User ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  userName:
+    title: User Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+
+  fullName:
+    title: Full Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  email:
+    title: Email
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+
+  status:
+    title: Status
+    type: string
+    x-samos-ref-types:
+      - type-name: SnowAtlasOperationalStatusEnum
+        key-name: id
+
+  location:
+    title: Location
+    type: string
+
+  orgHierarchy:
+    title: Organization Hierarchy
+    type: string
+
+  organizationId:
+    title: Organization
+    type: string
+    x-samos-immutable: true
+    x-samos-ref-types:
+      - type-name: SnowAtlasOrganization
+        key-name: id
+
+  lastLogon:
+    title: Last Logon
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+
+  _links:
+    x-samos-hidden: true
+    title: Links
+    type: array
+    items:
+      type: object

@@ -1,0 +1,61 @@
+x-samos-type-name: SnowAtlasOrganization
+x-samos-namespace: snow.atlas
+title: Snow Atlas Organization
+description: Represents an organization from Snow Atlas.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Organization
+
+$ref: https://example4.githubusercontent.com/SnowSoftware/snowatlas-integrations/organization#/components/schemas/OrgTree/properties/items#/components/schemas/OrgNode
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: isLegal
+
+x-samos-detail:
+  - name: name
+  - name: isLegal
+
+properties:
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  externalId:
+    title: External ID
+    type: string
+
+  hierarchy:
+    title: Hierarchy
+    type: string
+    x-samos-immutable: true
+
+  isLegal:
+    title: Legal Entity?
+    type: boolean
+
+  parentId:
+    title: Parent Organization ID
+    type: string
+    x-samos-ref-types:
+      - type-name: SnowAtlasOrganization
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization

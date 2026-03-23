@@ -1,0 +1,455 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SAM: Mobile devices",
+    "description": "API for interacting with mobile devices.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Flexera",
+      "url": "https://www.flexera.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{region}.snowsoftware.io",
+      "variables": {
+        "region": {
+          "enum": ["westeurope", "australiasoutheast", "eastus2", "uksouth"],
+          "default": "westeurope"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/api/sam/estate/v1/mobiledevices/{id}": {
+      "get": {
+        "description": "Returns the details of a given mobile device.",
+        "summary": "Get mobile device details",
+        "operationId": "mobiledevices",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique ID of the mobile device for which details will be returned.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MobileDeviceDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Your request is invalid or improperly formed. Consequently, the API server could not understand your request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found: The operation you requested failed because a resource associated with your request could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: Your request failed due to an internal error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.mobiledevice.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/mobiledevices": {
+      "get": {
+        "description": "Returns a collection of mobile devices.",
+        "summary": "Get mobile devices",
+        "operationId": "mobiledevices2",
+        "parameters": [
+          {
+            "name": "page_size",
+            "description": "The maximum number of items in the response.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "page_number",
+            "description": "The page number.",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "default": 1
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "For more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).",
+            "schema": {
+              "type": "string",
+              "example": "status -eq \"active\""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfMobileDevice"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Your request is invalid or improperly formed. Consequently, the API server could not understand your request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: Your request failed due to an internal error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.mobiledevice.r"]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Link": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "href": {
+            "description": "The associated relative URL.",
+            "type": "string",
+            "example": "api/sam/estate/v1/...",
+            "nullable": true
+          },
+          "rel": {
+            "description": "Specifies the relationship between the current document and the linked document/resource.",
+            "type": "string",
+            "example": "self",
+            "nullable": true
+          },
+          "method": {
+            "description": "The method to access related resources.",
+            "type": "string",
+            "example": "GET",
+            "nullable": true
+          }
+        }
+      },
+      "MobileDeviceDetails": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "e288f665-0f7f-4c4d-8725-1f87427d8071",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "example": "Sammy's iPhone"
+          },
+          "organizationId": {
+            "type": "string",
+            "example": "8b4f2d90-99e7-408a-bad6-68d491e94dba",
+            "format": "guid"
+          },
+          "manufacturer": {
+            "type": "string",
+            "example": "Apple"
+          },
+          "manufacturerWebsite": {
+            "type": "string",
+            "example": "www.apple.com"
+          },
+          "model": {
+            "type": "string",
+            "example": "iPhone 14 pro"
+          },
+          "operatingSystem": {
+            "type": "string",
+            "example": "iOS"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "17896541236"
+          },
+          "status": {
+            "type": "string",
+            "example": "Active"
+          },
+          "isTablet": {
+            "type": "boolean"
+          },
+          "ipAddresses": {
+            "type": "string",
+            "example": "1.1.1.1"
+          },
+          "isAutoEditingEnabled": {
+            "type": "boolean"
+          },
+          "isQuarantineManagementDisabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "quarantineDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "clientConfigurationName": {
+            "type": "string",
+            "example": "Microsoft Intune"
+          },
+          "clientInstallDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "clientSiteName": {
+            "type": "string",
+            "example": "Laurel_MI"
+          },
+          "clientVersion": {
+            "type": "string",
+            "example": "5.39"
+          },
+          "scannerVersion": {
+            "type": "string",
+            "example": "Data Collector for MicrosoftIntune (version 5.39)"
+          },
+          "scanIdentifier": {
+            "type": "string",
+            "example": "5.39"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Invoice: I342-9872345"
+          },
+          "securityCode": {
+            "type": "string",
+            "example": "635241"
+          },
+          "hasExchangeProfile": {
+            "type": "boolean"
+          },
+          "imei": {
+            "type": "string",
+            "example": "356496178244025"
+          },
+          "imsi": {
+            "type": "string",
+            "example": "954470084188744"
+          },
+          "networkType": {
+            "type": "string",
+            "example": "4G"
+          },
+          "operator": {
+            "type": "string",
+            "example": "AT&T"
+          },
+          "operatorCountry": {
+            "type": "string",
+            "example": "North America"
+          },
+          "isRoamingEnabled": {
+            "type": "boolean"
+          },
+          "biosSerialNumber": {
+            "type": "string",
+            "example": "GR4CY88SPFT"
+          },
+          "architecture": {
+            "type": "string",
+            "example": "ARM"
+          },
+          "_links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      },
+      "ErrorContent": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "The HTTP status code.",
+            "format": "int32"
+          },
+          "message": {
+            "description": "The error message.",
+            "type": "string"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "description": "The error details.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ErrorContent"
+              }
+            ]
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "description": "The pagination details.",
+        "additionalProperties": false,
+        "properties": {
+          "page_size": {
+            "type": "integer",
+            "description": "The page size you requested.",
+            "format": "int32",
+            "default": 100
+          },
+          "page_number": {
+            "type": "integer",
+            "description": "The page number you requested.",
+            "format": "int32",
+            "default": 1
+          }
+        }
+      },
+      "MobileDevice": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "example": "Sammy's iPhone"
+          },
+          "organizationId": {
+            "type": "string",
+            "example": "8b4f2d90-99e7-408a-bad6-68d491e94dba",
+            "format": "guid"
+          },
+          "manufacturer": {
+            "type": "string",
+            "example": "Apple"
+          },
+          "model": {
+            "type": "string",
+            "example": "iPhone 14 Pro"
+          },
+          "operatingSystem": {
+            "type": "string",
+            "example": "iOS"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "789-654-1236"
+          },
+          "status": {
+            "type": "string",
+            "example": "Active"
+          },
+          "isTablet": {
+            "type": "boolean"
+          },
+          "_links": {
+            "type": "array",
+            "description": "A collection of links to related resources.",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      },
+      "FilteredResponseWithLinksOfMobileDevice": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MobileDevice"
+            }
+          },
+          "_links": {
+            "type": "array",
+            "description": "A collection of links to related resources.",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

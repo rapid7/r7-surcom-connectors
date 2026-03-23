@@ -1,0 +1,65 @@
+id: druva
+name: Druva (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - DruvaUser
+  - DruvaDevice
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Druva Users and Devices
+    description: Import all Users and Devices from Druva
+    return_types:
+      - DruvaUser
+      - DruvaDevice
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: API Base URL
+    default: https://apis.druva.com
+    description: Base URL for the Druva API
+    # this is supposed to be unified, users in GovCloud (government-specific environments) still use distinct base URLs
+
+  client_id:
+    type: string
+    title: Client ID
+    description: User Client ID generated from the platform
+
+  client_secret:
+    type: string
+    title: Client Secret
+    description: User Client Secret generated from the platform
+    format: password
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Add required Python dependencies here. Pin each dependency to a specific
+# version.
+# python_dependencies:
+#  - "another_dependency==1.0.0"
+
+# Categories for this connector in the Extension Library.
+categories:
+  - asset_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

@@ -1,0 +1,350 @@
+x-samos-type-name: IgelUmsDevice
+x-samos-namespace: igel.ums
+title: IGEL UMS Device
+description: Thin client device managed by IGEL Universal Management Suite (UMS)
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: lastIP
+  - name: mac
+  - name: deviceType
+  - name: osType
+  - name: productId
+  - name: site
+
+x-samos-detail:
+  - name: name
+  - name: unitID
+  - name: lastIP
+  - name: mac
+  - name: firmwareID
+  - name: d_parent_ref
+  - name: movedToBin
+  - name: objectType
+  - name: links
+  - name: networkName
+  - name: site
+  - name: department
+  - name: costCenter
+  - name: comment
+  - name: assetID
+  - name: inserviceDate
+  - name: serialNumber
+  - name: productId
+  - name: umsStructuralTag
+  - name: deviceType
+  - name: deviceSerialNumber
+  - name: osType
+  - name: cpuType
+  - name: cpuSpeed
+  - name: memorySize
+  - name: flashSize
+  - name: networkSpeed
+  - name: graphicsChipset0
+  - name: graphicsChipset1
+  - name: monitorVendor1
+  - name: monitorModel1
+  - name: monitorSerialnumber1
+  - name: monitorSize1
+  - name: monitorNativeResolution1
+  - name: monitor1YearOfManufacture
+  - name: monitor1WeekOfManufacture
+  - name: monitorVendor2
+  - name: monitorModel2
+  - name: monitorSerialnumber2
+  - name: monitorSize2
+  - name: monitorNativeResolution2
+  - name: monitor2YearOfManufacture
+  - name: monitor2WeekOfManufacture
+  - name: biosVendor
+  - name: biosVersion
+  - name: biosDate
+  - name: totalUsagetime
+  - name: totalUptime
+  - name: lastBoottime
+
+x-samos-derived-properties:
+  d_parent_ref:
+    # if parentID is -1, it means the device is in the root directory and thus has no parent directory reference
+    title: Parent Directory
+    type: string
+    syntax: jmespath
+    value: "[parentID] | [?@ != '-1'] | [0]"
+    x-samos-ref-types:
+      - type-name: IgelUmsDirectory
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+  d_active:
+    x-samos-hidden: true
+    type: boolean
+    value: '!movedToBin'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  unitID:
+    title: Unit ID
+    type: string
+
+  mac:
+    title: MAC Address
+    type: string
+    format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+
+  lastIP:
+    title: Last Known IP
+    type: string
+    format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  firmwareID:
+    title: Firmware ID
+    type: string
+
+  parentID:
+    title: Parent Directory
+    type: string
+    x-samos-hidden: true
+
+  movedToBin:
+    title: Moved to Bin?
+    type: boolean
+
+  objectType:
+    title: Object Type
+    type: string
+
+  links:
+    title: Links
+    type: array
+    items:
+      type: object
+      properties:
+        rel:
+          title: Relation
+          type: string
+        href:
+          title: URL
+          type: string
+          # IGEL link targets can be non-URL values (e.g., "root" in the provided sample data)
+          # Hence, we cannot enforce a URL format here.
+
+  networkName:
+    title: Network Name
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  site:
+    title: Site
+    type: string
+
+  department:
+    title: Department
+    type: string
+
+  costCenter:
+    title: Cost Center
+    type: string
+
+  comment:
+    title: Comment
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  assetID:
+    title: Asset ID
+    type: string
+
+  inserviceDate:
+    title: In-Service Date
+    type: string
+
+  serialNumber:
+    title: Serial Number
+    type: string
+
+  productId:
+    title: Product ID
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+
+  umsStructuralTag:
+    title: UMS Structural Tag
+    type: string
+
+  cpuSpeed:
+    title: CPU Speed (MHz)
+    type: integer
+
+  cpuType:
+    title: CPU Type
+    type: string
+
+  deviceType:
+    title: Device Type
+    type: string
+
+  deviceSerialNumber:
+    title: Device Serial Number
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+
+  osType:
+    title: OS Type
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  flashSize:
+    title: Flash Size (MB)
+    type: integer
+
+  memorySize:
+    title: Memory Size (MB)
+    type: integer
+
+  networkSpeed:
+    title: Network Speed (Mbps)
+    type: integer
+
+  graphicsChipset0:
+    title: Graphics Chipset (Primary)
+    type: string
+
+  graphicsChipset1:
+    title: Graphics Chipset (Secondary)
+    type: string
+
+  monitorVendor1:
+    title: Monitor 1 Vendor
+    type: string
+
+  monitorModel1:
+    title: Monitor 1 Model
+    type: string
+
+  monitorSerialnumber1:
+    title: Monitor 1 Serial Number
+    type: string
+
+  monitorSize1:
+    title: Monitor 1 Size (inches)
+    type: integer
+
+  monitorNativeResolution1:
+    title: Monitor 1 Native Resolution
+    type: string
+
+  monitor1YearOfManufacture:
+    title: Monitor 1 Year of Manufacture
+    type: string
+
+  monitor1WeekOfManufacture:
+    title: Monitor 1 Week of Manufacture
+    type: string
+
+  monitorVendor2:
+    title: Monitor 2 Vendor
+    type: string
+
+  monitorModel2:
+    title: Monitor 2 Model
+    type: string
+
+  monitorSerialnumber2:
+    title: Monitor 2 Serial Number
+    type: string
+
+  monitorSize2:
+    title: Monitor 2 Size (inches)
+    type: integer
+
+  monitorNativeResolution2:
+    title: Monitor 2 Native Resolution
+    type: string
+
+  monitor2YearOfManufacture:
+    title: Monitor 2 Year of Manufacture
+    type: string
+
+  monitor2WeekOfManufacture:
+    title: Monitor 2 Week of Manufacture
+    type: string
+
+  biosVendor:
+    title: BIOS Vendor
+    type: string
+
+  biosVersion:
+    title: BIOS Version
+    type: string
+
+  biosDate:
+    title: BIOS Date
+    type: string
+
+  totalUsagetime:
+    title: Total Usage Time (ms)
+    type: string
+
+  totalUptime:
+    title: Total Uptime (ms)
+    type: string
+
+  lastBoottime:
+    title: Last Boot Time
+    type: string

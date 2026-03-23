@@ -1,0 +1,72 @@
+x-samos-type-name: KaseyaVSA9MachineGroup
+x-samos-namespace: kaseya.vsa9
+title: Kaseya VSA 9 Machine Group
+description: A machine group in Kaseya VSA 9
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.component-group
+
+x-samos-keys:
+  - MachineGroupId
+
+x-samos-table:
+  - name: MachineGroupName
+  - name: OrgId
+
+x-samos-detail:
+  - name: MachineGroupName
+  - name: OrgId
+  - name: ParentMachineGroupId
+  - name: Attributes
+
+properties:
+  MachineGroupId:
+    title: Machine Group ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  MachineGroupName:
+    title: Machine Group Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  ParentMachineGroupId:
+    title: Parent Machine Group ID
+    type: string
+    x-samos-ref-types:
+      - type-name: KaseyaVSA9MachineGroup
+        key-name: MachineGroupId
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+  OrgId:
+    title: Organization Name
+    type: string
+    x-samos-ref-types:
+      - type-name: KaseyaVSA9Organization
+        key-name: OrgId
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+  Attributes:
+    title: Attributes
+    type: object
+
+x-samos-virtual:
+  members:
+    # There has to be KaseyaVSA9Agent type added as well but this kind of
+    # union reference is currently not supported by virtual edge now.
+
+    # type-name: KaseyaVSA9Agent
+    # cypher-pattern: >
+    #   <-[:`e:KaseyaVSA9Agent:MachineGroupId`]-(:KaseyaVSA9Agent)
+
+    # Added KaseyaVSA9Asset as AgentId is already getting referenced in KaseyaVSA9Asset
+    type-name: KaseyaVSA9Asset
+    cypher-pattern: >
+      <-[:`e:KaseyaVSA9Asset:MachineGroupId`]-(:KaseyaVSA9Asset)

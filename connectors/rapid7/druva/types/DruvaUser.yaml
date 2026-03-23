@@ -1,0 +1,127 @@
+x-samos-type-name: DruvaUser
+x-samos-namespace: druva
+title: Druva User
+description: Represents a user account in Druva Cloud Platform with backup and data protection settings.
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: userName
+  - name: emailID
+  - name: status
+  - name: quota
+  - name: addedOn
+  - name: privacySettingsEnabled
+
+x-samos-detail:
+  - name: userName
+  - name: emailID
+  - name: status
+  - name: profileID
+  - name: storageID
+  - name: quota
+  - name: addedOn
+  - name: privacySettingsEnabled
+
+x-samos-derived-properties:
+  d_id: # since id comes as a integer and core.principal.id expects a string, we are deriving it as a string
+    title: ID
+    type: string
+    syntax: jmespath
+    value: userID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  d_name: # since we have already fulfilled userName to username property of User type, we are fulfilling name to core.named-object.name property
+    title: Name
+    type: string
+    syntax: jmespath
+    value: userName
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_active: # since core.prinicipal.active expects a boolean value, we are deriving it from status property where if status is active then active will be true else false
+    type: boolean
+    title: Active
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'status==`active`'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+properties:
+  userName:
+    type: string
+    title: User Name
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+
+  emailID:
+    type: string
+    title: Email Address
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 1
+
+  userID:
+    type: integer
+    title: User ID
+    x-samos-hidden: true
+
+  status:
+    type: string
+    title: Account Status
+
+  profileID:
+    type: integer
+    title: Profile ID
+    x-samos-hidden: true
+
+  storageID:
+    type: integer
+    title: Storage ID
+    x-samos-hidden: true
+
+  quota:
+    type: string
+    title: Storage Quota
+
+  quotaInBytes:
+    type: integer
+    title: Quota (Bytes)
+
+  addedOn:
+    type: string
+    format: date-time
+    title: Added On
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date
+
+  ldapGUID:
+    type: string
+    title: LDAP GUID
+
+  privacySettingsEnabled:
+    type: boolean
+    title: Privacy Settings Enabled?
+
+  additionalProperties:
+    type: object
+    title: Additional Properties

@@ -1,0 +1,148 @@
+x-samos-type-name: KaseyaVSA9User
+x-samos-namespace: kaseya.vsa9
+title: Kaseya VSA 9 User
+description: A user in Kaseya VSA 9
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - d_id
+  - Email # To allow referencing ContactEmail from KaseyaVSA9Agent to this user
+
+x-samos-table:
+  - name: d_name
+  - name: Email
+  - name: CreationDate
+
+x-samos-detail:
+  - name: d_name
+  - name: Email
+  - name: FirstName
+  - name: LastName
+  - name: AdminName
+  - name: Admintype
+  - name: AdminScopeIds
+  - name: AdminRoleIds
+  - name: CreationDate
+  - name: DisableUntil
+  - name: DefaultStaffOrgId
+  - name: DefaultStaffDepartmentId
+  - name: UIMode
+  - name: ClientMinOffset
+  - name: MinOffset
+  - name: Attributes
+
+x-samos-derived-properties:
+  # Deriving id from UserId to fulfill User's id property.
+  # which requires to be string, and UserId is integer
+  d_id:
+    title: ID
+    type: string
+    syntax: jmespath
+    value: to_string(UserId)
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  d_name:
+    # Deriving full name by concatenating FirstName and LastName.
+    # to fulfill core.named-object's name property.
+    title: Full Name
+    type: string
+    syntax: jmespath
+    value: "join(' ', [FirstName, LastName])"
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  # fulfills the 'Email' string property to user:email
+  d_email:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: Email
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+
+properties:
+  UserId:
+    title: User ID
+    type: integer
+    x-samos-hidden: true
+  AdminName:
+    title: Admin Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+  AdminPassword:
+    title: Admin Password
+    type: string
+    format: password
+  Admintype:
+    title: Admin Type
+    type: integer
+  DisableUntil:
+    title: Disabled Until
+    type: string
+    format: date-time
+  CreationDate:
+    title: Creation Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+  AdminScopeIds:
+    title: Admin Scope IDs
+    type: array
+    items:
+      type: string
+  AdminRoleIds:
+    title: Admin Role IDs
+    type: array
+    items:
+      type: integer
+  FirstName:
+    title: First Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+  LastName:
+    title: Last Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+  DefaultStaffOrgId:
+    title: Default Staff Org ID
+    type: string
+  DefaultStaffDepartmentId:
+    title: Default Staff Department ID
+    type: string
+  Email:
+    title: Email
+    type: string
+    x-samos-immutable: true
+  UIMode:
+    title: UI Mode
+    type: string
+  ClientMinOffset:
+    title: Client Min Offset
+    type: integer
+  MinOffset:
+    title: Min Offset
+    type: integer
+  Attributes:
+    title: Attributes
+    type: object

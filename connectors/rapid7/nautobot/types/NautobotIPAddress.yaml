@@ -1,0 +1,786 @@
+x-samos-type-name: NautobotIPAddress
+x-samos-namespace: nautobot
+title: Nautobot IP Address
+description: IP address assignment from Nautobot including IPv4 and IPv6 addresses with their DNS names, status, and interface assignments
+x-samos-detail-prefer-type-title: true
+x-samos-global-zone: true
+x-samos-extends-types:
+  - type-name: IpAddress
+  - type-name: core.owned-entity
+    subtype-priority: 4
+
+$ref: https://example.nautobot.com/api/swagger#/components/schemas/PaginatedIPAddressList#/components/schemas/IPAddress
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: address
+  - name: type
+  - name: status.name
+  - name: role.name
+  - name: tenant.id
+  - name: dns_name
+  - name: created
+  - name: last_updated
+
+x-samos-detail:
+  - name: address
+  - name: type
+  - name: status.name
+  - name: tenant.id
+  - name: dns_name
+  - name: parent.id
+  - name: ip_version
+  - name: description
+  - name: host
+  - name: mask_length
+  - name: nat_inside
+  - name: d_tags
+  - name: created
+  - name: last_updated
+  - name: custom_fields
+  - name: url
+
+x-samos-derived-properties:
+  d_version:
+    # Derived because Nautobot provides IP version as an integer,
+    # but fulfilling core.ip-address.version requires a string value of "IPv4" or "IPv6"
+    title: IP Version
+    type: string
+    syntax: expression
+    value: '{ip_version}'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: IpAddress
+      property-name: version
+  d_status:
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: "status.name == 'Active'"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+  d_tags:
+    # tags are in array of objects, so we cannot directly fulfill source_tags which is array of strings,
+    # derived property list all ids to fulfill source_tags.
+    title: Tags
+    type: array
+    syntax: jmespath
+    value: 'tags[*].id'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: NautobotTag
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+
+properties:
+  address:
+    format: ip-addr
+    title: IP Address
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  created:
+    format: date-time
+    title: Created
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  custom_fields:
+    properties: {}
+    title: Custom Fields
+    type: object
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  display:
+    title: Display
+    type: string
+  dns_name:
+    title: DNS Name
+    type: string
+    pattern: '.*'
+  host:
+    format: ip-addr
+    title: Host
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: IpAddress
+      property-name: value
+    x-samos-correlation:
+      correlation-key: IpAddress.value
+      correlation-type: IpAddress
+      priority: 4
+  id:
+    title: ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  ip_version:
+    title: IP Version
+    type: integer
+  last_updated:
+    format: date-time
+    title: Last Updated
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  mask_length:
+    title: Mask Length
+    type: integer
+  nat_inside:
+    title: NAT Inside
+    type: object
+  natural_slug:
+    title: Natural Slug
+    type: string
+  notes_url:
+    title: Notes URL
+    type: string
+    x-samos-hidden: true
+  object_type:
+    title: Object Type
+    type: string
+  parent:
+    properties:
+      broadcast:
+        format: ip-addr
+        title: Broadcast
+        type: string
+      created:
+        format: date-time
+        title: Created
+        type: string
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+      date_allocated:
+        title: Date Allocated
+        type: string
+      description:
+        title: Description
+        type: string
+      display:
+        title: Display
+        type: string
+      id:
+        title: Parent Prefix
+        type: string
+        x-samos-ref-types:
+          - type-name: NautobotPrefix
+            key-name: id
+        x-samos-fulfills:
+          type-name: IpAddress
+          property-name: belongs_to_network
+      ip_version:
+        title: Ip Version
+        type: integer
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      namespace:
+        properties:
+          created:
+            format: date-time
+            title: Created
+            type: string
+          custom_fields:
+            properties: {}
+            title: Custom Fields
+            type: object
+          description:
+            title: Description
+            type: string
+          display:
+            title: Display
+            type: string
+          id:
+            title: ID
+            type: string
+          last_updated:
+            format: date-time
+            title: Last Updated
+            type: string
+          location:
+            title: Location
+            type: string
+          name:
+            title: Namespace
+            type: string
+          natural_slug:
+            title: Natural Slug
+            type: string
+          notes_url:
+            title: Notes URL
+            type: string
+            x-samos-hidden: true
+          object_type:
+            title: Object Type
+            type: string
+          tenant:
+            title: Tenant
+            type: object
+          url:
+            title: URL
+            type: string
+        title: Namespace
+        type: object
+      natural_slug:
+        title: Natural Slug
+        type: string
+      network:
+        format: ip-addr
+        title: Network
+        type: string
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      object_type:
+        title: Object Type
+        type: string
+      parent:
+        properties:
+          broadcast:
+            format: ip-addr
+            title: Broadcast
+            type: string
+          created:
+            format: date-time
+            title: Created
+            type: string
+          custom_fields:
+            properties: {}
+            title: Custom Fields
+            type: object
+          date_allocated:
+            title: Date Allocated
+            type: string
+          description:
+            title: Description
+            type: string
+          display:
+            title: Display
+            type: string
+          id:
+            title: ID
+            type: string
+          ip_version:
+            title: Ip Version
+            type: integer
+          last_updated:
+            format: date-time
+            title: Last Updated
+            type: string
+          namespace:
+            properties:
+              id:
+                title: ID
+                type: string
+              object_type:
+                title: Object Type
+                type: string
+              url:
+                title: URL
+                type: string
+            title: Namespace
+            type: object
+          natural_slug:
+            title: Natural Slug
+            type: string
+          network:
+            format: ip-addr
+            title: Network
+            type: string
+          notes_url:
+            title: Notes URL
+            type: string
+            x-samos-hidden: true
+          object_type:
+            title: Object Type
+            type: string
+          parent:
+            properties:
+              id:
+                title: ID
+                type: string
+              object_type:
+                title: Object Type
+                type: string
+              url:
+                title: URL
+                type: string
+            title: Parent
+            type: object
+          prefix:
+            title: Prefix
+            type: string
+          prefix_length:
+            title: Prefix Length
+            type: integer
+          rir:
+            title: Rir
+            type: object
+          role:
+            properties:
+              id:
+                title: ID
+                type: string
+              object_type:
+                title: Object Type
+                type: string
+              url:
+                title: URL
+                type: string
+            title: Role
+            type: object
+          status:
+            properties:
+              id:
+                title: ID
+                type: string
+              object_type:
+                title: Object Type
+                type: string
+              url:
+                title: URL
+                type: string
+            title: Status
+            type: object
+          tenant:
+            properties:
+              id:
+                title: ID
+                type: string
+              object_type:
+                title: Object Type
+                type: string
+              url:
+                title: URL
+                type: string
+            title: Tenant
+            type: object
+          type:
+            properties:
+              label:
+                title: Label
+                type: string
+              value:
+                title: Value
+                type: string
+            title: Type
+            type: object
+          url:
+            title: URL
+            type: string
+          vlan:
+            title: Vlan
+            type: object
+        title: Parent
+        type: object
+      prefix:
+        title: Prefix
+        type: string
+      prefix_length:
+        title: Prefix Length
+        type: integer
+      rir:
+        title: RIR
+        type: object
+      role:
+        properties:
+          color:
+            title: Color
+            type: string
+          created:
+            format: date-time
+            title: Created
+            type: string
+          custom_fields:
+            properties: {}
+            title: Custom Fields
+            type: object
+          description:
+            title: Description
+            type: string
+          display:
+            title: Display
+            type: string
+          id:
+            title: ID
+            type: string
+          last_updated:
+            format: date-time
+            title: Last Updated
+            type: string
+          name:
+            title: Name
+            type: string
+          natural_slug:
+            title: Natural Slug
+            type: string
+          notes_url:
+            title: Notes URL
+            type: string
+            x-samos-hidden: true
+          object_type:
+            title: Object Type
+            type: string
+          url:
+            title: URL
+            type: string
+          weight:
+            title: Weight
+            type: string
+        title: Role
+        type: object
+      status:
+        properties:
+          color:
+            title: Color
+            type: string
+          created:
+            format: date-time
+            title: Created
+            type: string
+          custom_fields:
+            properties: {}
+            title: Custom Fields
+            type: object
+          description:
+            title: Description
+            type: string
+          display:
+            title: Display
+            type: string
+          id:
+            title: ID
+            type: string
+          last_updated:
+            format: date-time
+            title: Last Updated
+            type: string
+          name:
+            title: Name
+            type: string
+          natural_slug:
+            title: Natural Slug
+            type: string
+          notes_url:
+            title: Notes URL
+            type: string
+            x-samos-hidden: true
+          object_type:
+            title: Object Type
+            type: string
+          url:
+            title: URL
+            type: string
+        title: Status
+        type: object
+      tenant:
+        properties:
+          comments:
+            title: Comments
+            type: string
+          created:
+            format: date-time
+            title: Created
+            type: string
+          custom_fields:
+            properties: {}
+            title: Custom Fields
+            type: object
+          description:
+            title: Description
+            type: string
+          display:
+            title: Display
+            type: string
+          id:
+            title: ID
+            type: string
+          last_updated:
+            format: date-time
+            title: Last Updated
+            type: string
+          name:
+            title: Name
+            type: string
+          natural_slug:
+            title: Natural Slug
+            type: string
+          notes_url:
+            title: Notes URL
+            type: string
+            x-samos-hidden: true
+          object_type:
+            title: Object Type
+            type: string
+          tenant_group:
+            properties:
+              id:
+                title: ID
+                type: string
+              object_type:
+                title: Object Type
+                type: string
+              url:
+                title: URL
+                type: string
+            title: Tenant Group
+            type: object
+          url:
+            title: URL
+            type: string
+        title: Tenant
+        type: object
+      type:
+        properties:
+          label:
+            title: Label
+            type: string
+          value:
+            title: Value
+            type: string
+        title: Type
+        type: object
+      url:
+        title: URL
+        type: string
+      vlan:
+        title: Vlan
+        type: string
+    title: Parent
+    type: object
+  role:
+    properties:
+      color:
+        title: Color
+        type: string
+      created:
+        format: date-time
+        title: Created
+        type: string
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+      description:
+        title: Description
+        type: string
+      display:
+        title: Display
+        type: string
+      id:
+        title: ID
+        type: string
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      name:
+        title: Role
+        type: string
+      natural_slug:
+        title: Role Natural Slug
+        type: string
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      object_type:
+        title: Object Type
+        type: string
+      url:
+        title: URL
+        type: string
+      weight:
+        title: Weight
+        type: string
+    title: Role
+    type: object
+  status:
+    properties:
+      color:
+        title: Color
+        type: string
+      created:
+        format: date-time
+        title: Created
+        type: string
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+      description:
+        title: Description
+        type: string
+      display:
+        title: Display
+        type: string
+      id:
+        title: ID
+        type: string
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      name:
+        title: Status
+        type: string
+        x-samos-ref-types:
+          - type-name: NautobotEnumOperationalStatus
+            key-name: id
+        x-samos-fulfills:
+          type-name: core.component
+          property-name: operational_status
+      natural_slug:
+        title: Natural Slug
+        type: string
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      object_type:
+        title: Object Type
+        type: string
+      url:
+        title: URL
+        type: string
+    title: Status
+    type: object
+  tags:
+    title: Tags
+    x-samos-hidden: true
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: ID
+          type: string
+        object_type:
+          title: Object Type
+          type: string
+        url:
+          title: URL
+          type: string
+  tenant:
+    properties:
+      comments:
+        title: Comments
+        type: string
+      created:
+        format: date-time
+        title: Created
+        type: string
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+      description:
+        title: Description
+        type: string
+      display:
+        title: Display
+        type: string
+      id:
+        title: Tenant
+        type: string
+        x-samos-ref-types:
+          - type-name: NautobotTenant
+            key-name: id
+        x-samos-fulfills:
+          type-name: core.owned-entity
+          property-name: organization
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      name:
+        title: Name
+        type: string
+      natural_slug:
+        title: Natural Slug
+        type: string
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      object_type:
+        title: Object Type
+        type: string
+      tenant_group:
+        properties:
+          created:
+            format: date-time
+            title: Created
+            type: string
+          custom_fields:
+            properties: {}
+            title: Custom Fields
+            type: object
+          description:
+            title: Description
+            type: string
+          display:
+            title: Display
+            type: string
+          id:
+            title: ID
+            type: string
+          last_updated:
+            format: date-time
+            title: Last Updated
+            type: string
+          name:
+            title: Name
+            type: string
+          natural_slug:
+            title: Natural Slug
+            type: string
+          notes_url:
+            title: Notes URL
+            type: string
+            x-samos-hidden: true
+          object_type:
+            title: Object Type
+            type: string
+          parent:
+            title: Parent
+            type: object
+          url:
+            title: URL
+            type: string
+        title: Tenant Group
+        type: object
+      url:
+        title: URL
+        type: string
+    title: Tenant
+    type: object
+  type:
+    title: Type
+    type: string
+  url:
+    title: URL
+    type: string
+    x-samos-hidden: true

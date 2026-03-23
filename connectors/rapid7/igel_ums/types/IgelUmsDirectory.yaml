@@ -1,0 +1,91 @@
+x-samos-type-name: IgelUmsDirectory
+x-samos-namespace: igel.ums
+title: IGEL UMS Device Directory
+description: Device directory (folder) from IGEL Universal Management Suite (UMS)
+
+x-samos-extends-types:
+  - type-name: core.component-group
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: objectType
+  - name: d_parent_ref
+  - name: movedToBin
+
+x-samos-detail:
+  - name: name
+  - name: objectType
+  - name: d_parent_ref
+  - name: movedToBin
+  - name: links
+
+x-samos-derived-properties:
+  d_parent_ref:
+    # if parentID is -1, it means the directory is in the root directory and thus has no parent directory reference
+    title: Parent Directory
+    type: string
+    syntax: jmespath
+    value: "[parentID] | [?@ != '-1'] | [0]"
+    x-samos-ref-types:
+      - type-name: IgelUmsDirectory
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+  d_active:
+    x-samos-hidden: true
+    type: boolean
+    value: '!movedToBin'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  id:
+    title: ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  objectType:
+    title: Object Type
+    type: string
+
+  parentID:
+    title: Parent Directory ID
+    type: string
+    x-samos-hidden: true
+
+  movedToBin:
+    title: Moved to Bin?
+    type: boolean
+
+  links:
+    title: Links
+    type: array
+    items:
+      type: object
+      properties:
+        rel:
+          title: Relation
+          type: string
+        href:
+          title: URL
+          type: string
+          # IGEL link targets can be non-URL values (e.g., "root" in the provided sample data)
+          # Hence, we cannot enforce a URL format here.

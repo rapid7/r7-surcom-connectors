@@ -1,0 +1,259 @@
+x-samos-type-name: NautobotCluster
+x-samos-namespace: nautobot
+title: Nautobot Cluster
+description: Virtualization or compute cluster from Nautobot representing VMware, Hyper-V, or other hypervisor clusters
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: System
+    subtype-priority: 5
+
+$ref: https://example.nautobot.com/api/swagger#/components/schemas/PaginatedClusterList#/components/schemas/Cluster
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: cluster_type.name
+  - name: cluster_group.name
+  - name: tenant.id
+  - name: device_count
+  - name: virtualmachine_count
+  - name: created
+  - name: last_updated
+
+x-samos-detail:
+  - name: name
+  - name: comments
+  - name: device_count
+  - name: virtualmachine_count
+  - name: tenant.id
+  - name: location.id
+  - name: url
+  - name: d_tags
+  - name: custom_fields
+  - name: created
+  - name: last_updated
+
+x-samos-derived-properties:
+  d_tags:
+    title: Tags
+    type: array
+    syntax: jmespath
+    value: 'tags[*].id'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: NautobotTag
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+
+properties:
+  cluster_group:
+    title: Cluster Group
+    type: object
+    properties:
+      id:
+        title: Cluster Group
+        type: string
+      object_type:
+        title: Object Type
+        type: string
+      url:
+        title: URL
+        type: string
+      display:
+        title: Cluster Group Display Name
+        type: string
+      name:
+        title: Cluster Group
+        type: string
+      natural_slug:
+        title: Cluster Group Natural Slug
+        type: string
+      description:
+        title: Cluster Group Description
+        type: string
+      created:
+        format: date-time
+        title: Cluster Group Created
+        type: string
+      last_updated:
+        format: date-time
+        title: Cluster Group Last Updated
+        type: string
+      custom_fields:
+        properties: {}
+        title: Cluster Group Custom Fields
+        type: object
+  cluster_type:
+    properties:
+      id:
+        title: ID
+        type: string
+      object_type:
+        title: Object Type
+        type: string
+      url:
+        title: URL
+        type: string
+      display:
+        title: Cluster Type Display Name
+        type: string
+      name:
+        title: Cluster Type
+        type: string
+      natural_slug:
+        title: Cluster Type Natural Slug
+        type: string
+      description:
+        title: Cluster Type Description
+        type: string
+      created:
+        format: date-time
+        title: Cluster Type Created
+        type: string
+      last_updated:
+        format: date-time
+        title: Cluster Type Last Updated
+        type: string
+      custom_fields:
+        properties: {}
+        title: Cluster Type Custom Fields
+        type: object
+    title: Cluster Type
+    type: object
+  comments:
+    title: Comments
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  created:
+    format: date-time
+    title: Created
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  custom_fields:
+    properties: {}
+    title: Custom Fields
+    type: object
+  device_count:
+    title: Device Count
+    type: integer
+  display:
+    title: Display
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  id:
+    title: ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  last_updated:
+    format: date-time
+    title: Last Updated
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  location:
+    title: Location
+    type: object
+    properties:
+      id:
+        title: Location
+        type: string
+        x-samos-ref-types:
+          - type-name: NautobotLocation
+            key-name: id
+      object_type:
+        title: Object Type
+        type: string
+      url:
+        title: URL
+        type: string
+      display:
+        title: Location Display Name
+        type: string
+      name:
+        title: Location Name
+        type: string
+      natural_slug:
+        title: Location Natural Slug
+        type: string
+      description:
+        title: Location Description
+        type: string
+      created:
+        format: date-time
+        title: Location Created
+        type: string
+      last_updated:
+        format: date-time
+        title: Location Last Updated
+        type: string
+      custom_fields:
+        properties: {}
+        title: Location Custom Fields
+        type: object
+  name:
+    title: Name
+    type: string
+  natural_slug:
+    title: Natural Slug
+    type: string
+  notes_url:
+    title: Notes URL
+    type: string
+    x-samos-hidden: true
+  object_type:
+    title: Object Type
+    type: string
+  tags:
+    items:
+      type: object
+      properties:
+        id:
+          title: ID
+          type: string
+        object_type:
+          title: Object Type
+          type: string
+        url:
+          title: URL
+          type: string
+    title: Tags
+    type: array
+  tenant:
+    title: Tenant
+    type: object
+    properties:
+      id:
+        title: Tenant
+        type: string
+        x-samos-ref-types:
+          - type-name: NautobotTenant
+            key-name: id
+      object_type:
+        title: Object Type
+        type: string
+      url:
+        title: URL
+        type: string
+  url:
+    title: URL
+    type: string
+    x-samos-hidden: true
+  virtualmachine_count:
+    title: Virtual Machine Count
+    type: integer

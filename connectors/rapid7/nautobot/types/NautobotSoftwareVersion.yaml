@@ -1,0 +1,348 @@
+x-samos-type-name: NautobotSoftwareVersion
+x-samos-namespace: nautobot
+title: Nautobot Software Version
+description: Software version definition from Nautobot representing firmware or OS versions for network devices
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Software
+    subtype-priority: 5
+
+$ref: https://example.nautobot.com/api/swagger#/components/schemas/PaginatedSoftwareVersionList#/components/schemas/SoftwareVersion
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: version
+  - name: alias
+  - name: status.name
+  - name: platform.name
+  - name: release_date
+  - name: end_of_support_date
+  - name: long_term_support
+  - name: pre_release
+  - name: created
+  - name: last_updated
+
+x-samos-detail:
+  - name: version
+  - name: display
+  - name: alias
+  - name: platform.name
+  - name: status.name
+  - name: release_date
+  - name: end_of_support_date
+  - name: long_term_support
+  - name: pre_release
+  - name: documentation_url
+  - name: notes_url
+  - name: custom_fields
+  - name: created
+  - name: last_updated
+  - name: url
+
+x-samos-derived-properties:
+  d_vendor_version:
+    # Concatenates the vendor, product, and version into a single string,
+    # for fulfilling the 'Software:Software.vendor-product-version'
+    type: string
+    title: Vendor Product Version
+    x-samos-hidden: true
+    syntax: jmespath
+    value: join(`-`,[platform.name,alias,version][?@])
+    x-samos-correlation:
+      correlation-key: Software.vendor-product-version
+      correlation-type: Software
+      priority: 3
+  d_status:
+    x-samos-hidden: true
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: "status.name == 'Active'"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  alias:
+    title: Alias
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  created:
+    format: date-time
+    title: Created
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  custom_fields:
+    properties: {}
+    title: Custom Fields
+    type: object
+  display:
+    title: Display
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  documentation_url:
+    title: Documentation URL
+    type: string
+  end_of_support_date:
+    format: date-time
+    title: End Of Support Date
+    type: string
+  id:
+    title: ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  last_updated:
+    format: date-time
+    title: Last Updated
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  long_term_support:
+    title: Long Term Support?
+    type: boolean
+  natural_slug:
+    title: Natural Slug
+    type: string
+  notes_url:
+    title: Notes URL
+    type: string
+    x-samos-hidden: true
+  object_type:
+    title: Object Type
+    type: string
+  platform:
+    properties:
+      created:
+        format: date-time
+        title: Created
+        type: string
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+      description:
+        title: Description
+        type: string
+      display:
+        title: Display
+        type: string
+      id:
+        title: ID
+        type: string
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      manufacturer:
+        properties:
+          created:
+            format: date-time
+            title: Created
+            type: string
+          custom_fields:
+            properties: {}
+            title: Custom Fields
+            type: object
+          description:
+            title: Description
+            type: string
+          display:
+            title: Display
+            type: string
+          id:
+            title: ID
+            type: string
+          last_updated:
+            format: date-time
+            title: Last Updated
+            type: string
+          name:
+            title: Manufacturer
+            type: string
+          natural_slug:
+            title: Natural Slug
+            type: string
+          notes_url:
+            title: Notes URL
+            type: string
+            x-samos-hidden: true
+          object_type:
+            title: Object Type
+            type: string
+          url:
+            title: URL
+            type: string
+        title: Manufacturer
+        type: object
+      name:
+        title: Platform
+        type: string
+        x-samos-fulfills:
+          type-name: Software
+          property-name: vendor
+      napalm_args:
+        title: Napalm Args
+        type: string
+      napalm_driver:
+        title: Napalm Driver
+        type: string
+      natural_slug:
+        title: Natural Slug
+        type: string
+      network_driver:
+        title: Network Driver
+        type: string
+      network_driver_mappings:
+        properties:
+          aerleon:
+            title: Aerleon
+            type: string
+          ansible:
+            title: Ansible
+            type: string
+          capirca:
+            title: Capirca
+            type: string
+          dna_center:
+            title: Dna Center
+            type: string
+          forward_networks:
+            title: Forward Networks
+            type: string
+          hier_config:
+            title: Hier Config
+            type: string
+          napalm:
+            title: Napalm
+            type: string
+          netmiko:
+            title: Netmiko
+            type: string
+          netutils_parser:
+            title: Netutils Parser
+            type: string
+          nist:
+            title: Nist
+            type: string
+          ntc_templates:
+            title: Ntc Templates
+            type: string
+          pyats:
+            title: Pyats
+            type: string
+          pyntc:
+            title: Pyntc
+            type: string
+          scrapli:
+            title: Scrapli
+            type: string
+        title: Network Driver Mappings
+        type: object
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      object_type:
+        title: Object Type
+        type: string
+      url:
+        title: URL
+        type: string
+    title: Platform
+    type: object
+  pre_release:
+    title: Pre Release?
+    type: boolean
+  release_date:
+    format: date-time
+    title: Release Date
+    type: string
+  status:
+    properties:
+      color:
+        title: Color
+        type: string
+      created:
+        format: date-time
+        title: Created
+        type: string
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+      description:
+        title: Description
+        type: string
+      display:
+        title: Display
+        type: string
+      id:
+        title: ID
+        type: string
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      name:
+        title: Status
+        type: string
+        x-samos-ref-types:
+          - type-name: NautobotEnumOperationalStatus
+            key-name: id
+        x-samos-fulfills:
+          type-name: core.component
+          property-name: operational_status
+      natural_slug:
+        title: Natural Slug
+        type: string
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      object_type:
+        title: Object Type
+        type: string
+      url:
+        title: URL
+        type: string
+    title: Status
+    type: object
+  tags:
+    items:
+      type: object
+      properties:
+        id:
+          title: ID
+          type: string
+          x-samos-ref-types:
+            - type-name: NautobotTag
+              key-name: id
+    title: Tags
+    type: array
+  url:
+    title: URL
+    type: string
+    x-samos-hidden: true
+  version:
+    title: Version
+    type: string
+    x-samos-fulfills:
+      type-name: Software
+      property-name: version
+    x-samos-correlation:
+      correlation-key: Software.vendor-product-version
+      correlation-type: Software
+      priority: 3

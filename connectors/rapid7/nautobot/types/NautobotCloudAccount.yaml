@@ -1,0 +1,239 @@
+x-samos-type-name: NautobotCloudAccount
+x-samos-namespace: nautobot
+title: Nautobot Cloud Account
+description: Cloud provider account from Nautobot representing AWS accounts, Azure subscriptions, or GCP projects
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: CloudAccount
+    subtype-priority: 5
+
+$ref: https://example.nautobot.com/api/swagger#/components/schemas/PaginatedCloudAccountList#/components/schemas/CloudAccount
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: account_number
+  - name: provider.name
+  - name: description
+  - name: created
+  - name: last_updated
+
+x-samos-detail:
+  - name: name
+  - name: account_number
+  - name: description
+  - name: d_tags
+  - name: url
+  - name: provider.name
+  - name: custom_fields
+  - name: created
+  - name: last_updated
+
+x-samos-derived-properties:
+  d_tags:
+    title: Tags
+    type: array
+    syntax: jmespath
+    value: 'tags[*].id'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: NautobotTag
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+
+properties:
+  account_number:
+    title: Account Number
+    type: string
+    x-samos-fulfills:
+      type-name: CloudAccount
+      property-name: account_id
+    x-samos-correlation:
+      correlation-key: CloudAccount.id
+      correlation-type: CloudAccount
+      priority: 5
+  created:
+    format: date-time
+    title: Created
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  custom_fields:
+    properties: {}
+    title: Custom Fields
+    type: object
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  display:
+    title: Display
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  id:
+    title: ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  last_updated:
+    format: date-time
+    title: Last Updated
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  name:
+    title: Name
+    type: string
+  natural_slug:
+    title: Natural Slug
+    type: string
+  notes_url:
+    title: Notes URL
+    type: string
+    x-samos-hidden: true
+  object_type:
+    title: Object Type
+    type: string
+  provider:
+    properties:
+      id:
+        title: ID
+        type: string
+      object_type:
+        title: Object Type
+        type: string
+      url:
+        title: URL
+        type: string
+      display:
+        title: Provider Display Name
+        type: string
+      name:
+        title: Provider
+        type: string
+        x-samos-fulfills:
+          type-name: core.cloud-component
+          property-name: provider
+        x-samos-ref-types:
+          - type-name: NautobotEnumCloudProvider
+            key-name: id
+      natural_slug:
+        title: Provider Natural Slug
+        type: string
+      description:
+        title: Description
+        type: string
+      created:
+        format: date-time
+        title: Created
+        type: string
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+    title: Provider
+    type: object
+  secrets_group:
+    properties:
+      id:
+        title: ID
+        type: string
+      object_type:
+        title: Object Type
+        type: string
+      url:
+        title: URL
+        type: string
+      name:
+        title: Secrets Group Name
+        type: string
+      natural_slug:
+        title: Secrets Group Natural Slug
+        type: string
+      description:
+        title: Description
+        type: string
+      created:
+        format: date-time
+        title: Created
+        type: string
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+    title: Secrets Group
+    type: object
+  tags:
+    items:
+      type: object
+      properties:
+        id:
+          title: ID
+          type: string
+        object_type:
+          title: Object Type
+          type: string
+        url:
+          title: URL
+          type: string
+        name:
+          title: Tag Name
+          type: string
+        natural_slug:
+          title: Tag Natural Slug
+          type: string
+        description:
+          title: Description
+          type: string
+        created:
+          format: date-time
+          title: Created
+          type: string
+        last_updated:
+          format: date-time
+          title: Last Updated
+          type: string
+        notes_url:
+          title: Notes URL
+          type: string
+          x-samos-hidden: true
+        custom_fields:
+          properties: {}
+          title: Custom Fields
+          type: object
+    title: Tags
+    type: array
+  url:
+    title: URL
+    type: string
+    x-samos-hidden: true

@@ -1,0 +1,186 @@
+x-samos-type-name: NautobotTenant
+x-samos-namespace: nautobot
+title: Nautobot Tenant
+description: Organizational tenant from Nautobot representing customers, business units, or departments that own or manage infrastructure resources
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Organization
+    subtype-priority: 5
+
+$ref: https://example.nautobot.com/api/swagger#/components/schemas/PaginatedTenantList#/components/schemas/Tenant
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: tenant_group.name
+  - name: description
+  - name: device_count
+  - name: ipaddress_count
+  - name: prefix_count
+  - name: virtualmachine_count
+  - name: cluster_count
+  - name: created
+  - name: last_updated
+
+x-samos-detail:
+  - name: display
+  - name: description
+  - name: cluster_count
+  - name: device_count
+  - name: ipaddress_count
+  - name: prefix_count
+  - name: virtualmachine_count
+  - name: vlan_count
+  - name: vrf_count
+  - name: location_count
+  - name: tags
+  - name: created
+  - name: last_updated
+
+properties:
+  circuit_count:
+    title: Circuit Count
+    type: integer
+  cluster_count:
+    title: Cluster Count
+    type: integer
+  comments:
+    title: Comments
+    type: string
+  created:
+    format: date-time
+    title: Created
+    type: string
+  custom_fields:
+    properties: {}
+    title: Custom Fields
+    type: object
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  device_count:
+    title: Device Count
+    type: integer
+  display:
+    title: Display
+    type: string
+  id:
+    title: ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+  ipaddress_count:
+    title: IP Address Count
+    type: integer
+  last_updated:
+    format: date-time
+    title: Last Updated
+    type: string
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  namespace_count:
+    title: Namespace Count
+    type: integer
+  natural_slug:
+    title: Natural Slug
+    type: string
+  notes_url:
+    title: Notes URL
+    type: string
+    x-samos-hidden: true
+  object_type:
+    title: Object Type
+    type: string
+  prefix_count:
+    title: Prefix Count
+    type: integer
+  rack_count:
+    title: Rack Count
+    type: integer
+  tags:
+    items:
+      type: object
+      properties:
+        id:
+          title: Tags
+          type: string
+          x-samos-ref-types:
+            - type-name: NautobotTag
+              key-name: id
+        object_type:
+          title: Object Type
+          type: string
+        url:
+          title: URL
+          type: string
+    title: Tags
+    type: array
+  tenant_group:
+    properties:
+      created:
+        format: date-time
+        title: Created
+        type: string
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+      description:
+        title: Description
+        type: string
+      display:
+        title: Display
+        type: string
+      id:
+        title: ID
+        type: string
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      name:
+        title: Tenant Group
+        type: string
+      natural_slug:
+        title: Natural Slug
+        type: string
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      object_type:
+        title: Object Type
+        type: string
+      parent:
+        title: Parent
+        type: object
+      url:
+        title: URL
+        type: string
+    title: Tenant Group
+    type: object
+  url:
+    title: URL
+    type: string
+    x-samos-hidden: true
+  virtualmachine_count:
+    title: Virtual Machine Count
+    type: integer
+  vlan_count:
+    title: VLAN Count
+    type: integer
+  vrf_count:
+    title: VRF Count
+    type: integer

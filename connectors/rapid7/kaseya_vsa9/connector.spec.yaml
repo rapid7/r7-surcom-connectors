@@ -1,0 +1,56 @@
+id: kaseya.vsa9
+name: Kaseya VSA 9 (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+types:
+  - KaseyaVSA9Asset
+  - KaseyaVSA9Agent
+  - KaseyaVSA9MachineGroup
+  - KaseyaVSA9Organization
+  - KaseyaVSA9User
+# Functions provided by this connector. Include a `test` function and
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Kaseya VSA 9 Assets, Agents and other entities.
+    description: Import all Assets, Agents, Machine groups, Organizations and Users from Kaseya VSA 9.
+    return_types:
+      - KaseyaVSA9Asset
+      - KaseyaVSA9Agent
+      - KaseyaVSA9MachineGroup
+      - KaseyaVSA9Organization
+      - KaseyaVSA9User
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: URL
+    description: The URL of the Kaseya VSA 9 instance to connect to.
+    example: https://example-instance.kaseya.net
+
+  username:
+    type: string
+    title: Username
+    description: The username to authenticate to Kaseya VSA 9.
+    example: user@example.com
+
+  personal_access_token:
+    type: string
+    title: Personal Access Token
+    format: password
+    description: The Personal Access Token to authenticate to Kaseya VSA 9.
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - endpoint_management
