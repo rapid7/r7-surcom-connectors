@@ -53,3 +53,7 @@
 
   * `page_limit` – the maximum number of records requested per page from the API. Valid options are 2, 4 and 6. The default value is 6.
   * `total_pages` – the maximum number of pages the connector will request before stopping. If the connector reaches this page limit, it will stop paginating and return the results it has collected so far. The default value is 2.
+
+  ### Filter Device Types
+
+  The `filter_device_types` setting allows you to specify a list of device types to filter the imported devices by. Only devices with types in this list will be imported. If the list is empty, all devices will be imported. This is an optional setting, so can be left blank if you want to import all device types.

@@ -1,0 +1,259 @@
+x-samos-type-name: KaseyaVSA9Asset
+x-samos-namespace: kaseya.vsa9
+title: Kaseya VSA 9 Asset
+description: An asset managed by Kaseya VSA 9
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - AssetId
+
+x-samos-table:
+  - name: DisplayName
+  - name: MachineGroup
+  - name: OSName
+  - name: OSGeneration
+  - name: IPAddresses
+  - name: LastSeenDate
+
+x-samos-detail:
+  - name: DisplayName
+  - name: MachineGroup
+  - name: OSName
+  - name: OSGeneration
+  - name: IPAddresses
+  - name: AssetName
+  - name: AssetTypeId
+  - name: OSType
+  - name: OSFamily
+  - name: DeviceManufacturer
+  - name: MACAddresses
+  - name: HostName
+  - name: IsComputerAgent
+  - name: IsMobileAgent
+  - name: IsMonitoring
+  - name: IsPatching
+  - name: IsAuditing
+  - name: IsBackingUp
+  - name: IsSecurity
+  - name: TicketCount
+  - name: AlarmCount
+  - name: IsSNMPActive
+  - name: IsVProActive
+  - name: NetworkId
+  - name: HasSSH
+  - name: SysSerialNum
+  - name: Attributes
+  - name: OrgId
+  - name: MachineGroupId
+  - name: AgentId
+  - name: ProbeId
+  - name: PrimaryProbe
+  - name: PrimaryProbeType
+  - name: NMapProbeId
+  - name: LastSeenDate
+
+x-samos-derived-properties:
+  d_qualified_hostname:
+    # Deriving for qualified hostname
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'AssetName && contains(AssetName, `.`) && AssetName || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_unqualified_hostname:
+    # Deriving for unqualified hostname
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'AssetName && !contains(AssetName, `.`) && AssetName || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+properties:
+  AssetId:
+    title: Asset ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  AssetName:
+    title: Asset Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  DisplayName:
+    title: Display Name
+    type: string
+  AssetTypeId:
+    title: Asset Type ID
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  ProbeId:
+    title: Probe ID
+    type: string
+  MachineGroupId:
+    title: Machine Group ID
+    type: string
+    x-samos-ref-types:
+      - type-name: KaseyaVSA9MachineGroup
+        key-name: MachineGroupId
+  MachineGroup:
+    title: Machine Group
+    type: string
+  OrgId:
+    title: Organization ID
+    type: string
+    x-samos-ref-types:
+      - type-name: KaseyaVSA9Organization
+        key-name: OrgId
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+  IsComputerAgent:
+    title: Computer Agent?
+    type: boolean
+  IsMobileAgent:
+    title: Mobile Agent?
+    type: boolean
+  IsMonitoring:
+    title: Monitoring?
+    type: boolean
+  IsPatching:
+    title: Patching?
+    type: boolean
+  IsAuditing:
+    title: Auditing?
+    type: boolean
+  IsBackingUp:
+    title: Backing Up?
+    type: boolean
+  IsSecurity:
+    title: Security?
+    type: boolean
+  TicketCount:
+    title: Ticket Count
+    type: integer
+  AlarmCount:
+    title: Alarm Count
+    type: integer
+  IsSNMPActive:
+    title: SNMP Active?
+    type: boolean
+  IsVProActive:
+    title: VPro Active?
+    type: boolean
+  NetworkId:
+    title: Network ID
+    type: string
+  AgentId:
+    title: Agent
+    type: string
+    x-samos-correlation:
+      correlation-key: Machine.agent-software-uuid
+      correlation-type: Machine
+      priority: 4
+
+  HasSSH:
+    title: SSH?
+    type: boolean
+  SysSerialNum:
+    title: System Serial Number
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+  RCServiceList:
+    title: RC Service List
+    type: string
+  LastSeenDate:
+    title: Last Seen Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  ProbeAgentGuid:
+    title: Probe Agent GUID
+    type: string
+    x-samos-ref-types:
+      - type-name: KaseyaVSA9Agent
+        key-name: AgentId
+  PrimaryProbe:
+    title: Primary Probe
+    type: string
+  PrimaryProbeType:
+    title: Primary Probe Type
+    type: string
+  NMapProbeId:
+    title: NMap Probe ID
+    type: string
+  HostName:
+    title: Host Name
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+  OSName:
+    title: OS Name
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+  OSType:
+    title: OS Type
+    type: string
+  OSFamily:
+    title: OS Family
+    type: string
+  OSGeneration:
+    title: OS Generation
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+  DeviceManufacturer:
+    title: Device Manufacturer
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+  IPAddresses:
+    title: IP Addresses
+    type: string
+    format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  MACAddresses:
+    title: MAC Addresses
+    type: string
+    format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+  Attributes:
+    title: Attributes
+    type: object

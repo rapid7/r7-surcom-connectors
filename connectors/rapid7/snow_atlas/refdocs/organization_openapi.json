@@ -1,0 +1,456 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SAM: Organizations",
+    "description": "API for interacting with organizations.",
+    "contact": {
+      "name": "Flexera",
+      "url": "https://www.flexera.com"
+    },
+    "version": "0.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://{region}.snowsoftware.io",
+      "variables": {
+        "region": {
+          "enum": ["westeurope", "australiasoutheast", "eastus2", "uksouth"],
+          "default": "westeurope"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/api/organizations/v1/tree": {
+      "get": {
+        "summary": "Get organizations",
+        "description": "Returns a collection of organizations.",
+        "operationId": "getTree2",
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrgTree"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Your request is invalid or improperly formed. Consequently, the API server could not understand your request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: Your request failed due to an internal error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.orgtree.crud"]
+          },
+          {
+            "BearerAuth": ["sam.orgtree.r"]
+          }
+        ]
+      }
+    },
+    "/api/organizations/v1/node/{nodeId}": {
+      "get": {
+        "summary": "Get organization",
+        "description": "Returns the details of an organization.",
+        "operationId": "getTreeNode2",
+        "parameters": [
+          {
+            "name": "nodeId",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the organization.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found: The operation you requested failed because a resource associated with your request could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: Your request failed due to an internal error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.orgtree.crud"]
+          },
+          {
+            "BearerAuth": ["sam.orgtree.r"]
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete organization",
+        "description": "Removes the given organization.",
+        "operationId": "deleteTreeNode2",
+        "parameters": [
+          {
+            "name": "nodeId",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the tree node.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad Request: Your request is invalid or improperly formed. Consequently, the API server could not understand your request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found: The operation you requested failed because a resource associated with your request could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: Your request failed due to an internal error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.orgtree.crud"]
+          }
+        ]
+      }
+    },
+    "/api/organizations/v1/node": {
+      "post": {
+        "summary": "Create organization",
+        "description": "Creates an organization.",
+        "operationId": "addTreeNode2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrgNodeInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Create_Organization"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Your request is invalid or improperly formed. Consequently, the API server could not understand your request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict: Your request cannot be completed because the requested operation would conflict with an existing item.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error: Your request failed due to an internal error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.orgtree.crud"]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "OrgNode": {
+        "type": "object",
+        "description": "Details of organizations tree node.",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique ID of the organizations tree node.",
+            "format": "guid",
+            "minLength": 1,
+            "example": "abe1cb12-02e6-4966-823b-82c942e278ef"
+          },
+          "parentId": {
+            "type": "string",
+            "description": "The unique ID of the parent to this organizations tree node.",
+            "format": "guid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the organizations tree node.",
+            "minLength": 1,
+            "example": "Organization One"
+          },
+          "isLegal": {
+            "type": "boolean",
+            "description": "```true``` if is legal; otherwise, ```false```.",
+            "example": true
+          },
+          "externalId": {
+            "type": "string",
+            "description": "The unique ID of the external org.",
+            "nullable": true,
+            "example": "Organization_One"
+          }
+        }
+      },
+      "OrgTree": {
+        "type": "object",
+        "description": "Organizations tree nodes.",
+        "additionalProperties": false,
+        "required": ["nodes"],
+        "properties": {
+          "nodes": {
+            "type": "array",
+            "description": "Collection of organizations tree nodes.",
+            "items": {
+              "$ref": "#/components/schemas/OrgNode"
+            }
+          }
+        }
+      },
+      "Organization": {
+        "type": "object",
+        "description": "Organization.",
+        "additionalProperties": false,
+        "required": ["nodes"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique ID of the organizations tree node.",
+            "format": "guid",
+            "minLength": 1,
+            "example": "abe1cb12-02e6-4966-823b-82c942e278ef"
+          },
+          "parentId": {
+            "type": "string",
+            "description": "The unique ID of the parent to this organizations tree node.",
+            "format": "guid",
+            "example": "00000000-0000-0000-0000-000000000000"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the organizations tree node.",
+            "minLength": 1,
+            "example": "Organization One"
+          },
+          "isLegal": {
+            "type": "boolean",
+            "description": "```true``` if is legal; otherwise, ```false```.",
+            "example": true
+          },
+          "externalId": {
+            "type": "string",
+            "description": "The unique ID of the external org.",
+            "nullable": true,
+            "example": "Organization_One"
+          }
+        }
+      },
+      "Create_Organization": {
+        "type": "object",
+        "description": "Organization.",
+        "additionalProperties": false,
+        "required": ["nodes"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique ID of the organizations tree node.",
+            "format": "guid",
+            "minLength": 1,
+            "example": "f3fce297-1ab4-4665-b927-51d3c46cb2c5"
+          },
+          "parentId": {
+            "type": "string",
+            "description": "The unique ID of the parent to this organizations tree node.",
+            "format": "guid",
+            "example": "abe1cb12-02e6-4966-823b-82c942e278ef"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the organizations tree node.",
+            "minLength": 1,
+            "example": "Organization Two"
+          },
+          "isLegal": {
+            "type": "boolean",
+            "description": "```true``` if is legal; otherwise, ```false```.",
+            "example": true
+          },
+          "externalId": {
+            "type": "string",
+            "description": "The unique ID of the external org.",
+            "nullable": true,
+            "example": "Organization_Two"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code"],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ErrorResponseOfError": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["error"],
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/Error"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ErrorResponseOfError"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "OrgNodeInput": {
+        "type": "object",
+        "description": "Details of organization node.",
+        "additionalProperties": false,
+        "required": ["id", "name"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The client named unique ID of this organization. Used for parent - child hierarchy.",
+            "minLength": 1,
+            "example": "Organization_Two"
+          },
+          "parentId": {
+            "type": "string",
+            "description": "The named externalId of the parent to this organization. Used for parent - child hierarchy.",
+            "nullable": true,
+            "example": "Organization_One"
+          },
+          "name": {
+            "type": "string",
+            "description": "The display name of the organization.",
+            "minLength": 1,
+            "example": "Organization Two"
+          },
+          "isLegal": {
+            "type": "boolean",
+            "description": "```true``` if is legal; otherwise, ```false```.",
+            "example": true
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

@@ -108,13 +108,15 @@ class ThreatLockerClient():
         # 7. Final Reconstruction of hostname
         return f"https://{parsed.hostname.lower()}"
 
-    def _post_requests(self, endpoint: str, params: dict) -> list:
-        """A helper method to make post requests with given API token.
+    def _post_requests(self, endpoint: str, params: dict) -> tuple[list, dict]:
+        """A helper method to make POST requests to the ThreatLocker API.
         Args:
             endpoint (str): The API endpoint to make the request to.
             params (dict): A dictionary of query parameters to include in the request.
         Returns:
-            list: The JSON response from the API.
+            tuple[list, dict]: A tuple of (items list, pagination dict).
+        Raises:
+            ValueError: If the API response is not a JSON list of items.
         """
 
         url = furl(self.base_url)
@@ -123,6 +125,19 @@ class ThreatLockerClient():
         response.raise_for_status()
 
         data = response.json() if response.content else []
+
+        # Validate the response is a list of items.
+        # A non-list response (e.g. dict) would cause invalid data to be yielded.
+        if not isinstance(data, list):
+            self.logger.error(
+                f"Unexpected API response for {endpoint} "
+                f"(HTTP {response.status_code}): {data}"
+            )
+            raise ValueError(
+                f"Expected a list of items from {endpoint}, "
+                f"but received {type(data).__name__}: {data}"
+            )
+
         pagination_info = response.headers.get("Pagination")
         pagination = {}
         if pagination_info:

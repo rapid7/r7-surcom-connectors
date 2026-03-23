@@ -1,0 +1,82 @@
+id: nautobot
+name: Nautobot (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - initial release
+
+# OpenAPI schema retrieved from the Nautobot instance.
+# This schema is filtered to include only the endpoints used by this connector,
+# in order to reduce the size of the file and avoid exceeding Surface Command's maximum file size for reference schemas.
+reference-schemas:
+  - url: https://example.nautobot.com/api/swagger
+    file: refdocs/openapi_filtered.json
+
+types:
+  - NautobotDevice
+  - NautobotDeviceGroup
+  - NautobotVirtualMachine
+  - NautobotCluster
+  - NautobotIPAddress
+  - NautobotPrefix
+  - NautobotVLAN
+  - NautobotLocation
+  - NautobotTenant
+  - NautobotTag
+  - NautobotCloudService
+  - NautobotCloudAccount
+  - NautobotSoftwareVersion
+  - NautobotEnumOperationalStatus
+  - NautobotEnumCloudProvider
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Nautobot Resources
+    description: Import device, cloud, virtualization and organizational data from Nautobot
+    return_types:
+      - NautobotDevice
+      - NautobotDeviceGroup
+      - NautobotVirtualMachine
+      - NautobotCluster
+      - NautobotIPAddress
+      - NautobotPrefix
+      - NautobotVLAN
+      - NautobotLocation
+      - NautobotTenant
+      - NautobotTag
+      - NautobotCloudService
+      - NautobotCloudAccount
+      - NautobotSoftwareVersion
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: Base URL for the Nautobot instance.
+    example: https://example.nautobot.com
+
+  api_key:
+    type: string
+    title: API Token
+    description: API Token for authentication. Generate an API token in Nautobot under your user profile and provide it here.
+    format: password
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - network_firewall
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

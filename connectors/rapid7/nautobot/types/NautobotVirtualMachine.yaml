@@ -1,0 +1,680 @@
+x-samos-type-name: NautobotVirtualMachine
+x-samos-namespace: nautobot
+title: Nautobot Virtual Machine
+description: Virtual machine from Nautobot
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+$ref: https://example.nautobot.com/api/swagger#/components/schemas/PaginatedVirtualMachineList#/components/schemas/VirtualMachine
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: status.name
+  - name: cluster.id
+  - name: role.name
+  - name: tenant.id
+  - name: vcpus
+  - name: memory
+  - name: disk
+  - name: primary_ip4.id
+  - name: created
+  - name: last_updated
+
+x-samos-detail:
+  - name: name
+  - name: d_active
+  - name: cluster.id
+  - name: platform.name
+  - name: role.name
+  - name: tenant.id
+  - name: primary_ip4.id
+  - name: vcpus
+  - name: memory
+  - name: disk
+  - name: comments
+  - name: software_version.name
+  - name: d_tags
+  - name: custom_fields
+  - name: created
+  - name: last_updated
+  - name: url
+
+x-samos-derived-properties:
+  d_active:
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: "status.name == 'Active'"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_qualified_hostname:
+    title: Qualified Hostname
+    type: string
+    syntax: jmespath
+    value: 'name && contains(name, `.`) && name || null'
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_unqualified_hostname:
+    title: Unqualified Hostname
+    type: string
+    syntax: jmespath
+    value: 'name && !contains(name, `.`) && name || null'
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_ip_addresses:
+    title: IP Addresses
+    type: array
+    syntax: jmespath
+    value: '[primary_ip4.host, primary_ip6.host][?@]'
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  d_asset_type:
+    title: Asset Type
+    type: string
+    syntax: expression
+    value: 'Virtual Machine'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  d_tags:
+    title: Tags
+    type: array
+    syntax: jmespath
+    value: 'tags[*].id'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: NautobotTag
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+
+properties:
+  cluster:
+    properties:
+      cluster_group:
+        title: Cluster Group
+        type: string
+      cluster_type:
+        properties:
+          created:
+            format: date-time
+            title: Created
+            type: string
+          custom_fields:
+            properties: {}
+            title: Custom Fields
+            type: object
+          description:
+            title: Description
+            type: string
+          display:
+            title: Display
+            type: string
+          id:
+            title: ID
+            type: string
+          last_updated:
+            format: date-time
+            title: Last Updated
+            type: string
+          name:
+            title: Name
+            type: string
+          natural_slug:
+            title: Natural Slug
+            type: string
+          notes_url:
+            title: Notes URL
+            type: string
+            x-samos-hidden: true
+          object_type:
+            title: Object Type
+            type: string
+          url:
+            title: URL
+            type: string
+        title: Cluster Type
+        type: object
+      comments:
+        title: Comments
+        type: string
+      created:
+        format: date-time
+        title: Created
+        type: string
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+      display:
+        title: Display
+        type: string
+      id:
+        title: Cluster
+        type: string
+        x-samos-ref-types:
+          - type-name: NautobotCluster
+            key-name: id
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      location:
+        title: Location
+        type: object
+      name:
+        title: Name
+        type: string
+      natural_slug:
+        title: Natural Slug
+        type: string
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      object_type:
+        title: Object Type
+        type: string
+      tenant:
+        title: Tenant
+        type: object
+      url:
+        title: URL
+        type: string
+    title: Cluster
+    type: object
+  comments:
+    title: Comments
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  created:
+    format: date-time
+    title: Created
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  custom_fields:
+    properties: {}
+    title: Custom Fields
+    type: object
+  disk:
+    title: Disk
+    type: integer
+  display:
+    title: Display
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+  id:
+    title: ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  last_updated:
+    format: date-time
+    title: Last Updated
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  local_config_context_data:
+    title: Local Config Context Data
+    type: string
+  local_config_context_data_owner_content_type:
+    title: Local Config Context Data Owner Content Type
+    type: object
+  local_config_context_data_owner_object_id:
+    title: Local Config Context Data Owner Object ID
+    type: string
+  local_config_context_schema:
+    title: Local Config Context Schema
+    type: object
+  memory:
+    title: Memory (MB)
+    type: integer
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  natural_slug:
+    title: Natural Slug
+    type: string
+  notes_url:
+    title: Notes URL
+    type: string
+    x-samos-hidden: true
+  object_type:
+    title: Object Type
+    type: string
+  platform:
+    title: Platform
+    type: object
+    properties:
+      id:
+        title: ID
+        type: string
+      object_type:
+        title: Object Type
+        type: string
+      url:
+        title: URL
+        type: string
+      name:
+        title: Platform
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: operating_system
+  primary_ip4:
+    properties:
+      address:
+        title: Address
+        type: string
+      created:
+        format: date-time
+        title: Created
+        type: string
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+      description:
+        title: Description
+        type: string
+      display:
+        title: Display
+        type: string
+      dns_name:
+        title: DNS Name
+        type: string
+      host:
+        format: ip-addr
+        title: Host
+        type: string
+      id:
+        title: IPv4 Address
+        type: string
+        x-samos-ref-types:
+          - type-name: NautobotIPAddress
+            key-name: id
+      ip_version:
+        title: IP Version
+        type: integer
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      mask_length:
+        title: Mask Length
+        type: integer
+      nat_inside:
+        title: Nat Inside
+        type: string
+      natural_slug:
+        title: Natural Slug
+        type: string
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      object_type:
+        title: Object Type
+        type: string
+      parent:
+        properties:
+          broadcast:
+            format: ip-addr
+            title: Broadcast
+            type: string
+          created:
+            format: date-time
+            title: Created
+            type: string
+          custom_fields:
+            properties: {}
+            title: Custom Fields
+            type: object
+          date_allocated:
+            title: Date Allocated
+            type: string
+          description:
+            title: Description
+            type: string
+          display:
+            title: Display
+            type: string
+          id:
+            title: ID
+            type: string
+          ip_version:
+            title: IP Version
+            type: integer
+          last_updated:
+            format: date-time
+            title: Last Updated
+            type: string
+          namespace:
+            properties:
+              id:
+                title: ID
+                type: string
+              object_type:
+                title: Object Type
+                type: string
+              url:
+                title: URL
+                type: string
+            title: Namespace
+            type: object
+          natural_slug:
+            title: Natural Slug
+            type: string
+          network:
+            format: ip-addr
+            title: Network
+            type: string
+          notes_url:
+            title: Notes URL
+            type: string
+            x-samos-hidden: true
+          object_type:
+            title: Object Type
+            type: string
+          parent:
+            properties:
+              id:
+                title: ID
+                type: string
+              object_type:
+                title: Object Type
+                type: string
+              url:
+                title: URL
+                type: string
+            title: Parent
+            type: object
+          prefix:
+            title: Prefix
+            type: string
+          prefix_length:
+            title: Prefix Length
+            type: integer
+          rir:
+            title: RIR
+            type: object
+          role:
+            title: Role
+            type: object
+          status:
+            properties:
+              id:
+                title: ID
+                type: string
+              object_type:
+                title: Object Type
+                type: string
+              url:
+                title: URL
+                type: string
+            title: Status
+            type: object
+          tenant:
+            title: Tenant
+            type: object
+          type:
+            properties:
+              label:
+                title: Label
+                type: string
+              value:
+                title: Value
+                type: string
+            title: Type
+            type: object
+          url:
+            title: URL
+            type: string
+          vlan:
+            title: Vlan
+            type: object
+        title: Parent
+        type: object
+      role:
+        title: Role
+        type: object
+      status:
+        properties:
+          color:
+            title: Color
+            type: string
+          created:
+            format: date-time
+            title: Created
+            type: string
+          custom_fields:
+            properties: {}
+            title: Custom Fields
+            type: object
+          description:
+            title: Description
+            type: string
+          display:
+            title: Display
+            type: string
+          id:
+            title: ID
+            type: string
+          last_updated:
+            format: date-time
+            title: Last Updated
+            type: string
+          name:
+            title: Name
+            type: string
+          natural_slug:
+            title: Natural Slug
+            type: string
+          notes_url:
+            title: Notes URL
+            type: string
+            x-samos-hidden: true
+          object_type:
+            title: Object Type
+            type: string
+          url:
+            title: URL
+            type: string
+        title: Status
+        type: object
+      tenant:
+        title: Tenant
+        type: object
+      type:
+        title: Type
+        type: string
+      url:
+        title: URL
+        type: string
+    title: Primary IPv4
+    type: object
+  primary_ip6:
+    title: Primary IPv6
+    type: object
+  role:
+    properties:
+      color:
+        title: Color
+        type: string
+      created:
+        format: date-time
+        title: Created
+        type: string
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+      description:
+        title: Description
+        type: string
+      display:
+        title: Display
+        type: string
+      id:
+        title: ID
+        type: string
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      name:
+        title: Role
+        type: string
+      natural_slug:
+        title: Natural Slug
+        type: string
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      object_type:
+        title: Object Type
+        type: string
+      url:
+        title: URL
+        type: string
+      weight:
+        title: Weight
+        type: string
+    title: Role
+    type: object
+  software_version:
+    title: Software Version
+    type: object
+    properties:
+      id:
+        title: ID
+        type: string
+        x-samos-ref-types:
+          - type-name: NautobotSoftwareVersion
+            key-name: id
+      object_type:
+        title: Object Type
+        type: string
+      url:
+        title: URL
+        type: string
+  status:
+    properties:
+      color:
+        title: Color
+        type: string
+      created:
+        format: date-time
+        title: Created
+        type: string
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+      description:
+        title: Description
+        type: string
+      display:
+        title: Display
+        type: string
+      id:
+        title: ID
+        type: string
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      name:
+        title: Status
+        type: string
+        x-samos-ref-types:
+          - type-name: NautobotEnumOperationalStatus
+            key-name: id
+        x-samos-fulfills:
+          type-name: core.component
+          property-name: operational_status
+      natural_slug:
+        title: Natural Slug
+        type: string
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      object_type:
+        title: Object Type
+        type: string
+      url:
+        title: URL
+        type: string
+    title: Status
+    type: object
+  tags:
+    x-samos-hidden: true
+    items:
+      type: object
+    title: Tags
+    type: array
+  tenant:
+    title: Tenant
+    type: object
+    properties:
+      id:
+        title: Tenant
+        type: string
+        x-samos-ref-types:
+          - type-name: NautobotTenant
+            key-name: id
+        x-samos-fulfills:
+          type-name: core.owned-entity
+          property-name: organization
+      object_type:
+        title: Object Type
+        type: string
+  url:
+    title: URL
+    type: string
+    x-samos-hidden: true
+  vcpus:
+    title: Vcpus
+    type: integer
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: cpus

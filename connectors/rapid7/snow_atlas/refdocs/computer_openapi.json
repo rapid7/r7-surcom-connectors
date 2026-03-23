@@ -1,0 +1,5049 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "SAM: Computers",
+    "description": "API for interacting with computers.",
+    "contact": {
+      "name": "Flexera",
+      "url": "https://www.flexera.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://{region}.snowsoftware.io",
+      "variables": {
+        "region": {
+          "enum": ["westeurope", "australiasoutheast", "eastus2", "uksouth"],
+          "default": "westeurope"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/api/sam/estate/v1/computers/bulk-update": {
+      "patch": {
+        "tags": ["Computers"],
+        "summary": "Bulk update status of computers",
+        "description": "Allows updating the status of multiple computers in bulk.",
+        "operationId": "BulkUpdateComputerStatus",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkUpdateComputerStatusRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK - Bulk status update completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkUpdateComputerStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid request body, scope, or parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sam/estate/v1/computers-metering": {
+      "get": {
+        "tags": ["Computer application metering"],
+        "summary": "Get application metering",
+        "description": "Returns a collection of metric tracking data for computer applications.",
+        "operationId": "getApplicationMetering",
+        "parameters": [
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerApplicationMetering"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/metering": {
+      "get": {
+        "tags": ["Computer application metering"],
+        "summary": "Get application metering by computer",
+        "description": "Returns a collection of metric tracking data for applications on the given computer.",
+        "operationId": "getComputerApplicationMetering",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerApplicationMetering"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/applications": {
+      "get": {
+        "tags": ["Computer applications"],
+        "summary": "Get computer's applications",
+        "description": "Returns a collection of applications for the given computer.",
+        "operationId": "getComputerApplications",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerApplications"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/applications/{applicationid}": {
+      "get": {
+        "tags": ["Computer applications"],
+        "summary": "Get computer application's details",
+        "description": "Returns the details of the given computer application.",
+        "operationId": "getComputerApplicationDetails",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "applicationid",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the application.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputerApplicationsDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers-applications": {
+      "get": {
+        "tags": ["Computer applications"],
+        "summary": "Get computer applications",
+        "description": "Returns a collection of applications.",
+        "operationId": "getComputersApplications",
+        "parameters": [
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerApplications"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers-application-usage": {
+      "get": {
+        "tags": ["Computer applications"],
+        "summary": "Get application usage data",
+        "description": "Returns a collection of application usage data.",
+        "operationId": "getApplicationUsages",
+        "parameters": [
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerApplicationUsage"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers-application-user-usage": {
+      "get": {
+        "tags": ["Computer applications"],
+        "summary": "Get application user usage",
+        "description": "Returns a collection of users' application usage data.",
+        "operationId": "getApplicationUserUsage",
+        "parameters": [
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfUserApplicationUsage"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers-application-usage/summaries": {
+      "get": {
+        "tags": ["Computer applications"],
+        "summary": "Get application usage summaries",
+        "description": "Returns a collection of application usage summaries.",
+        "operationId": "getApplicationUsageSummary",
+        "parameters": [
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerApplicationUsageSummary"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/contracts": {
+      "get": {
+        "tags": ["Computer contracts"],
+        "summary": "Get computer's contracts",
+        "description": "Returns a collection of contracts for the given computer.",
+        "operationId": "getComputerContracts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerContract"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/costs": {
+      "get": {
+        "tags": ["Computer costs"],
+        "summary": "Get computer's costs",
+        "description": "Returns the details of a computer's costs.",
+        "operationId": "getComputerCosts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputerCosts"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/hardware/displayadapters": {
+      "get": {
+        "tags": ["Computer display adapter"],
+        "summary": "Get computer's display adapters",
+        "description": "Returns a collection of display adapters for the given computer.",
+        "operationId": "getComputerDisplayAdapters",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputerDisplayAdapter"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/hardware/harddrives": {
+      "get": {
+        "tags": ["Computer drives"],
+        "summary": "Get computer's drives",
+        "description": "Returns a collection of hard drives for the given computer.",
+        "operationId": "getComputerDrives",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerDrive"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/hardware/opticaldrives": {
+      "get": {
+        "tags": ["Computer drives"],
+        "summary": "Get computer optical drives",
+        "description": "Returns a collection of optical drives for the given computer.",
+        "operationId": "getComputerOpticalDrives",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerDrive"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/hardware": {
+      "get": {
+        "tags": ["Computer hardware"],
+        "summary": "Get computer's hardware details",
+        "description": "Returns the details of the hardware for the given computer.",
+        "operationId": "getComputerHardwareDetails",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputerHardwareDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/hardware/disks/logical": {
+      "get": {
+        "tags": ["Computer logical disks"],
+        "summary": "Get computer's logical disks",
+        "description": "Returns a collection of logical disks for the given computer.",
+        "operationId": "getComputerLogicalDisks",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerLogicalDisk"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/logonhistory": {
+      "get": {
+        "tags": ["Computer logon history"],
+        "summary": "Get computer's logon history",
+        "description": "Returns a collection of logon history for the given computer.",
+        "operationId": "getComputerLogonHistory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerLogonHistory"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers-logonhistory/{userid}": {
+      "get": {
+        "tags": ["Computer logon history"],
+        "summary": "Get user's logon history on all computers",
+        "description": "Returns a collection of computer logon histories for the given user.",
+        "operationId": "getComputerLogonHistoryForUser",
+        "parameters": [
+          {
+            "name": "userid",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the user.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerLogonHistory"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/logonhistory/{userid}": {
+      "get": {
+        "tags": ["Computer logon history"],
+        "summary": "Get user's logon history on a computer",
+        "description": "Returns the details of a computer's logon history for the given user.",
+        "operationId": "getComputerLogonHistoryDetails",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userid",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the user.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputerLogonHistoryDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/hardware/monitors": {
+      "get": {
+        "tags": ["Computer monitors"],
+        "summary": "Get computer's monitors",
+        "description": "Returns a collection of monitors for the given computer.",
+        "operationId": "getComputerMonitors",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputerMonitor"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/hardware/networkadapters": {
+      "get": {
+        "tags": ["Computer network adapters"],
+        "summary": "Get computer's network adapters",
+        "description": "Returns a collection of network adapters for the given computer.",
+        "operationId": "getComputerNetworkAdapters",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerNetworkAdapters"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers-networkadapters": {
+      "get": {
+        "tags": ["Computer network adapters"],
+        "summary": "Get all network adapters",
+        "description": "Returns a collection of network adapters.",
+        "operationId": "getAllNetworkAdapters",
+        "parameters": [
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerNetworkAdapters"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/hardware/cpu": {
+      "get": {
+        "tags": ["Computer processors"],
+        "summary": "Get computer's processors",
+        "description": "Returns a collection of processors for the given computer.",
+        "operationId": "getComputerProcessors",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerProcessor"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/hardware/cpu/socketmap": {
+      "get": {
+        "tags": ["Computer processors"],
+        "summary": "Get processor socket details",
+        "description": "Returns the details of the processor sockets for the given computer.",
+        "operationId": "getComputerSocketMapDetails",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputerSocketMapDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/registry": {
+      "get": {
+        "tags": ["Computer registries"],
+        "summary": "Get computer's registries",
+        "description": "Returns a collection of registries for the given computer.",
+        "operationId": "getComputerRegistries",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerRegistry"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/remote-clients": {
+      "get": {
+        "tags": ["Computer remote clients"],
+        "summary": "Get computer's remote clients",
+        "description": "Returns a collection of remote clients for the given computer.",
+        "operationId": "getComputerRemoteClients",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerRemoteClients"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}": {
+      "get": {
+        "tags": ["Computers"],
+        "summary": "Get computer details",
+        "description": "Returns the details of the given computer.",
+        "operationId": "getComputer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputerDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Computers"],
+        "summary": "Delete computer",
+        "description": "Removes the given computer.",
+        "operationId": "deleteComputer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique ID of the computer.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/204"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.d"]
+          }
+        ]
+      },
+      "put": {
+        "tags": ["Computers"],
+        "summary": "Update computer attributes",
+        "description": "Modifies a computer by adding or updating the specified attributes.",
+        "operationId": "updateComputer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique ID of the computer.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComputerWrite"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded."
+          },
+          "400": {
+            "description": "Bad Request: Your request is invalid or improperly formed. Consequently, the API server could not understand your request.",
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "description": "Not Found: The operation you requested failed because a resource associated with your request could not be found.",
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "description": "Internal Server Error: Your request failed due to an internal error.",
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.u"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers": {
+      "get": {
+        "tags": ["Computers"],
+        "summary": "Get computers",
+        "description": "Returns a collection of computers.",
+        "operationId": "getComputers",
+        "parameters": [
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 25,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputer"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/archive": {
+      "patch": {
+        "tags": ["Computers"],
+        "summary": "Archive computer",
+        "description": "Archives the given computer.",
+        "operationId": "archiveComputer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Your request succeeded."
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.u"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/patch-auto-editing/{id}": {
+      "patch": {
+        "tags": ["Computers"],
+        "summary": "Update Disable auto editing settings for a computer",
+        "description": "Modifies Disable auto editing settings for the given computer.",
+        "operationId": "updateComputer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchRequest"
+              },
+              "example": [
+                {
+                  "op": "replace",
+                  "path": "/isAutoEditingDisabled",
+                  "value": "false"
+                }
+              ]
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputerDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          }
+        }
+      }
+    },
+    "/api/sam/estate/v1/computers/patch-organization-assigment/{id}": {
+      "patch": {
+        "tags": ["Computers"],
+        "summary": "Update Organization for a computer",
+        "description": "Modifies Organization for the given computer.",
+        "operationId": "updateComputer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchRequest"
+              },
+              "example": [
+                {
+                  "op": "replace",
+                  "path": "/organizationId",
+                  "value": "8a51eea9-68ce-4a32-906d-112ef9533f71"
+                }
+              ]
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputerDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.u"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/virtual-machines": {
+      "get": {
+        "tags": ["Computer virtual machines"],
+        "summary": "Get computer's virtual machines",
+        "description": "Returns a collection of virtual machines for the given computer.",
+        "operationId": "getComputerVirtualMachines",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique ID of the virtual machine.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerVirtualMachine"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers/{id}/environment-variables": {
+      "get": {
+        "tags": ["Computer environment variables"],
+        "summary": "Get computer's environment variables",
+        "description": "Returns a collection of environment variable for the given computer.",
+        "operationId": "getEnvironmentVariablesForComputer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique ID of the computer.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerEnvironmentVariables"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    },
+    "/api/sam/estate/v1/computers-environment-variables": {
+      "get": {
+        "tags": ["Computer environment variables"],
+        "summary": "Get computer environment variables",
+        "description": "Returns a collection of computer environment variables.",
+        "operationId": "getComputerEnvironmentVariables",
+        "parameters": [
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "The page number.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The maximum number of items in the response.",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1.0
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "The fields which you can use to filter the results. Format of the query string parameter:\n```\n?filter=<filter name> <operator> <value>\n```\nFilter name | Description | Data type | Example\n:--- | --- | --- | ---\n\nFor more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK: Your request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredResponseWithLinksOfComputerEnvironmentVariables"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["sam.computer.r"]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BulkUpdateComputerStatusRequest": {
+        "type": "object",
+        "properties": {
+          "scope": {
+            "type": "string",
+            "enum": ["Only"],
+            "description": "Scope for the bulk status update. Must be 'Only'."
+          },
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "List of computer IDs to update."
+          },
+          "body": {
+            "$ref": "#/components/schemas/BulkUpdateComputerStatusBody"
+          }
+        },
+        "required": ["scope", "ids", "body"]
+      },
+      "BulkUpdateComputerStatusBody": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["Active", "Inactive", "Quarantined"],
+            "description": "Target status value for the bulk update."
+          }
+        },
+        "required": ["Status"]
+      },
+      "BulkUpdateComputerStatusResponse": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ComputerStatusUpdateError"
+            }
+          },
+          "message": { "type": "string" },
+          "processedCount": { "type": "integer" },
+          "skippedCount": { "type": "integer" }
+        }
+      },
+      "ComputerStatusUpdateError": {
+        "type": "object",
+        "properties": {
+          "Message": { "type": "string" }
+        }
+      },
+      "PaginationResponse": {
+        "type": "object",
+        "description": "Generic response class for the pagination part. Properties are annotated using DataMemberAttribute so that we're aligned with REST style guide regarding the json payload.",
+        "additionalProperties": false,
+        "required": ["page_size", "page_number"],
+        "properties": {
+          "page_size": {
+            "type": "integer",
+            "description": "The page size you requested.",
+            "format": "int32",
+            "example": 25
+          },
+          "page_number": {
+            "type": "integer",
+            "description": "The page number you requested.",
+            "format": "int32",
+            "example": 1
+          },
+          "total_pages": {
+            "type": "integer",
+            "description": "The total number of pages.",
+            "format": "int32",
+            "nullable": true,
+            "example": 10
+          },
+          "total_items": {
+            "type": "integer",
+            "description": "The total number of items.",
+            "format": "int32",
+            "nullable": true,
+            "example": 240
+          }
+        }
+      },
+      "Link": {
+        "type": "object",
+        "required": ["href", "rel", "method"],
+        "properties": {
+          "href": {
+            "type": "string",
+            "description": "The associated relative URL.",
+            "example": "api/computers/v1/..."
+          },
+          "rel": {
+            "type": "string",
+            "description": "Specifies the relationship between the current document and the linked document/resource.",
+            "example": "self"
+          },
+          "method": {
+            "type": "string",
+            "description": "The method to access related resources.",
+            "example": "GET"
+          }
+        }
+      },
+      "BaseResponse": {
+        "type": "object",
+        "description": "Base response class.",
+        "additionalProperties": false,
+        "required": ["_links"],
+        "properties": {
+          "_links": {
+            "type": "array",
+            "description": "A collection of links to related resources.",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      },
+      "ComputerApplicationMetering": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response class for Computer application metric tracking.",
+            "additionalProperties": false,
+            "required": ["computerId", "metricId", "applicationId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "minLength": 1,
+                "example": "a2c8ef89-cb18-49ea-b3c0-122d40fc0ba7"
+              },
+              "metricId": {
+                "type": "string",
+                "description": "The unique ID of the metric used.",
+                "format": "guid",
+                "minLength": 1,
+                "example": "ca90b444-dcd0-43ce-9190-0e51af24613c"
+              },
+              "applicationId": {
+                "type": "string",
+                "description": "The unique ID of the application.",
+                "format": "guid",
+                "minLength": 1,
+                "example": "6f1cbfb3-ecc2-4e1b-8376-537ace3503c2"
+              },
+              "initialRequirement": {
+                "type": "integer",
+                "description": "The initial requirement of the metric.",
+                "format": "int32",
+                "example": 5
+              },
+              "includedInBundle": {
+                "type": "integer",
+                "description": "The number of applications included in the bundle.",
+                "format": "int32",
+                "example": 5
+              },
+              "outsideMetricPeriod": {
+                "type": "integer",
+                "description": "The number of computers outside of the metric period.",
+                "format": "int32",
+                "example": 5
+              },
+              "secondaryUseRightsDesktopLaptop": {
+                "type": "integer",
+                "description": "The number of computers with secondary use rights for a desktop or laptop.",
+                "format": "int32",
+                "example": 5
+              },
+              "secondaryUseRightsDevice": {
+                "type": "integer",
+                "description": "The number of computers with secondary use rights for a device.",
+                "format": "int32",
+                "example": 5
+              },
+              "extendedCoverageForDcc": {
+                "type": "integer",
+                "description": "The number of computers with extended coverage for DCC.",
+                "format": "int32",
+                "example": 5
+              },
+              "extendedCoverageForHost": {
+                "type": "integer",
+                "description": "The number of computers with extended coverage for host.",
+                "format": "int32",
+                "example": 5
+              },
+              "multipleVersionEdition": {
+                "type": "integer",
+                "description": "The number of computers with multiple version editions.",
+                "format": "int32",
+                "example": 5
+              },
+              "virtualDesktopInfrastructure": {
+                "type": "integer",
+                "description": "The number of computers with virtual desktop infrastructure.",
+                "format": "int32",
+                "example": 5
+              },
+              "minimumRequirement": {
+                "type": "integer",
+                "description": "The minimum requirement for the metric.",
+                "format": "int32",
+                "example": 5
+              },
+              "coreFactor": {
+                "type": "integer",
+                "description": "The core factor of the computer for the metric.",
+                "format": "int32",
+                "example": 5
+              },
+              "physicalHost": {
+                "type": "integer",
+                "description": "The physical host of the application for the metric.",
+                "format": "int32",
+                "example": 5
+              },
+              "requirement": {
+                "type": "integer",
+                "description": "The requirement for the metric.",
+                "format": "int32",
+                "example": 5
+              },
+              "computerAppExclusions": {
+                "type": "integer",
+                "description": "The number of computers which have application exclusions.",
+                "format": "int32",
+                "example": 5
+              },
+              "windowsServer": {
+                "type": "integer",
+                "description": "The number of computers which are Windows servers.",
+                "format": "int32",
+                "example": 5
+              },
+              "virtualMachine": {
+                "type": "integer",
+                "description": "The number of computers which are virtual machines.",
+                "format": "int32",
+                "example": 5
+              },
+              "unknownPhysicalHost": {
+                "type": "integer",
+                "description": "The number of computers with an unknown physical host.",
+                "format": "int32",
+                "example": 5
+              },
+              "manuallyExcluded": {
+                "type": "integer",
+                "description": "The number of computers manually excluded.",
+                "format": "int32",
+                "example": 5
+              },
+              "requirementMoved": {
+                "type": "integer",
+                "description": "The number of computers with the requirements moved.",
+                "format": "int32",
+                "example": 5
+              },
+              "windowsServerFlag": {
+                "type": "integer",
+                "description": "The number of computers with the Windows Server flag.",
+                "format": "int32",
+                "example": 5
+              },
+              "sqlServer": {
+                "type": "integer",
+                "description": "The number of computers with the SQL Server flag.",
+                "format": "int32",
+                "example": 5
+              }
+            }
+          }
+        ]
+      },
+      "FilteredResponseWithLinksOfComputerApplicationMetering": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/ComputerApplicationMetering"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ErrorContent": {
+        "type": "object",
+        "description": "Details of error.",
+        "additionalProperties": false,
+        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Http error code.",
+            "format": "int32",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "description": "Additional error message.",
+            "nullable": true,
+            "example": "Invalid GUID format: 123. All computer IDs must be in valid GUID format (00000000-0000-0000-0000-000000000000)."
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Response representing error.",
+        "additionalProperties": false,
+        "required": ["error"],
+        "properties": {
+          "error": {
+            "description": "The error details.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ErrorContent"
+              }
+            ]
+          }
+        }
+      },
+      "ComputerApplications": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response class for computer applications.",
+            "additionalProperties": false,
+            "required": ["computerId", "applicationId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "29ce62ac-d575-4ff1-90e8-b84eaed0f5d8"
+              },
+              "applicationId": {
+                "type": "string",
+                "description": "The unique ID of the application.",
+                "format": "guid",
+                "example": "29ce62ac-d575-4ff1-90e8-b84eaed0f5d8"
+              },
+              "bundleApplicationId": {
+                "type": "string",
+                "description": "The unique ID of the application bundle, or product suite, for a given application.",
+                "format": "guid",
+                "nullable": true,
+                "example": "29ce62ac-d575-4ff1-90e8-b84eaed0f5d8"
+              },
+              "firstDiscovered": {
+                "type": "string",
+                "description": "The date when the application was first discovered on the computer.",
+                "format": "date-time",
+                "nullable": true,
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "lastUsed": {
+                "type": "string",
+                "description": "The date when the application was last used on the computer.",
+                "format": "date-time",
+                "nullable": true,
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "usedCount": {
+                "type": "integer",
+                "description": "The number of times the application was used on the computer.",
+                "format": "int32",
+                "example": 10
+              },
+              "averageUsedTime": {
+                "type": "string",
+                "description": "The average time the application was used in hours.",
+                "nullable": true,
+                "format": "date-time",
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "isVirtual": {
+                "type": "boolean",
+                "description": "```true``` if the application is virtual; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "isInstalled": {
+                "type": "boolean",
+                "description": "```true``` if the application is installed on the computer; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "bundleUsagePercentage": {
+                "type": "integer",
+                "description": "The proportion of the application bundle that is used in percentage.",
+                "format": "int32",
+                "nullable": true,
+                "example": 20
+              },
+              "unbundled": {
+                "type": "boolean",
+                "description": "```true``` if the application is unbundled; otherwise, ```false```.",
+                "example": true
+              }
+            }
+          }
+        ]
+      },
+      "FilteredResponseWithLinksOfComputerApplications": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/ComputerApplications"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ComputerApplicationsDetails": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response class for computer application details.",
+            "additionalProperties": false,
+            "required": ["computerId", "applicationId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "c1d617ff-2104-411c-9c20-682017a9fefd"
+              },
+              "applicationId": {
+                "type": "string",
+                "description": "The unique ID of the application.",
+                "format": "guid",
+                "example": "c1d617ff-2104-411c-9c20-682017a9fefd"
+              },
+              "bundleApplicationId": {
+                "type": "string",
+                "description": "The unique ID of the application bundle, or product suite, for a given application.",
+                "format": "guid",
+                "nullable": true,
+                "example": "c1d617ff-2104-411c-9c20-682017a9fefd"
+              },
+              "firstDiscovered": {
+                "type": "string",
+                "description": "The date when the application was first discovered on the computer.",
+                "format": "date-time",
+                "nullable": true,
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "firstUsed": {
+                "type": "string",
+                "description": "The date when the application was first used on the computer.",
+                "format": "date-time",
+                "nullable": true,
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "lastUsed": {
+                "type": "string",
+                "description": "The date when the application was last used on the computer.",
+                "format": "date-time",
+                "nullable": true,
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "usedCount": {
+                "type": "integer",
+                "description": "The number of times the application was used on the computer.",
+                "format": "int32",
+                "example": 10
+              },
+              "usedUser": {
+                "type": "integer",
+                "description": "The number of users who used the application on the computer.",
+                "format": "int32",
+                "example": 10
+              },
+              "usedMinutes": {
+                "type": "integer",
+                "description": "The number of minutes the application was used on the computer.",
+                "format": "int64",
+                "example": 10
+              },
+              "usedDays": {
+                "type": "integer",
+                "description": "The number of days the application was used on the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 10
+              },
+              "isInstalled": {
+                "type": "boolean",
+                "description": "```true``` if the application is installed on the computer; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "isOEM": {
+                "type": "boolean",
+                "description": "```true``` if the application is OEM; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "isMSDN": {
+                "type": "boolean",
+                "description": "```true``` if the application is MSDN; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "isVirtual": {
+                "type": "boolean",
+                "description": "```true``` if the application is virtual; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "isOverridden": {
+                "type": "boolean",
+                "description": "```true``` if the application is overridden; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "packageGUID": {
+                "type": "string",
+                "description": "The unique ID of the application package.",
+                "format": "guid",
+                "nullable": true,
+                "example": "640b16bb-447f-430f-87ee-49bfe940e308"
+              },
+              "isRecognized": {
+                "type": "boolean",
+                "description": "```true``` if the application is recognized; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "isRegistry": {
+                "type": "boolean",
+                "description": "```true``` if the application is in the registry; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "averageUsedTime": {
+                "type": "string",
+                "description": "The average time the application is used in hours.",
+                "nullable": true,
+                "format": "date-time",
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "unbundled": {
+                "type": "boolean",
+                "description": "```true``` if the application is licenced individualy; otherwise, ```false```.",
+                "example": true
+              }
+            }
+          }
+        ]
+      },
+      "ComputerApplicationUsage": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response for computer application usage.",
+            "additionalProperties": false,
+            "required": ["computerId", "userId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "743ba97e-3425-4f46-99b0-9a9c791ceb3a"
+              },
+              "userId": {
+                "type": "string",
+                "description": "The unique ID of the user.",
+                "format": "guid",
+                "example": "743ba97e-3425-4f46-99b0-9a9c791ceb3a"
+              },
+              "bundleApplicationId": {
+                "type": "string",
+                "description": "The unique ID of the application bundle, or product suite, for a given application.",
+                "format": "guid",
+                "nullable": true,
+                "example": "743ba97e-3425-4f46-99b0-9a9c791ceb3a"
+              },
+              "applicationId": {
+                "type": "string",
+                "description": "The unique ID of the application.",
+                "format": "guid",
+                "example": "743ba97e-3425-4f46-99b0-9a9c791ceb3a"
+              },
+              "firstUsed": {
+                "type": "string",
+                "description": "The date and time that the application was first used on the computer.",
+                "format": "date-time",
+                "nullable": true,
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "lastUsedDate": {
+                "type": "string",
+                "description": "The date and time that the application was last used on the computer.",
+                "nullable": true,
+                "format": "date-time",
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "usedCount": {
+                "type": "integer",
+                "description": "The number of times the application was used on the computer.",
+                "format": "int32",
+                "example": 10
+              },
+              "usedMinutes": {
+                "type": "integer",
+                "description": "The number of minutes the application was used on the computer.",
+                "format": "int64",
+                "example": 10
+              },
+              "usedDays": {
+                "type": "integer",
+                "description": "The number of days the application was used on the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 10
+              },
+              "isInstalled": {
+                "type": "boolean",
+                "description": "```true``` if the application is installed on the computer; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              }
+            }
+          }
+        ]
+      },
+      "FilteredResponseWithLinksOfComputerApplicationUsage": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/ComputerApplicationUsage"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "UserApplicationUsage": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Represents usage of an application by a specific user.",
+            "additionalProperties": false,
+            "required": ["applicationId", "userId"],
+            "properties": {
+              "userId": {
+                "type": "string",
+                "description": "The unique ID of the user.",
+                "format": "guid",
+                "example": "29ce62ac-d575-4ff1-90e8-b84eaed0f5d8"
+              },
+              "applicationId": {
+                "type": "string",
+                "description": "The unique ID of the application.",
+                "format": "guid",
+                "example": "29ce62ac-d575-4ff1-90e8-b84eaed0f5d8"
+              },
+              "bundleApplicationId": {
+                "type": "string",
+                "description": "The unique ID of the application bundle, or product suite, for a given application.",
+                "format": "guid",
+                "nullable": true,
+                "example": "29ce62ac-d575-4ff1-90e8-b84eaed0f5d8"
+              },
+              "lastUsedDate": {
+                "type": "string",
+                "description": "The date that the application was last used.",
+                "nullable": true,
+                "format": "date",
+                "example": "2024-03-22"
+              }
+            }
+          }
+        ]
+      },
+      "FilteredResponseWithLinksOfUserApplicationUsage": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/UserApplicationUsage"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ComputerApplicationUsageSummary": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response class for application usage summary.",
+            "additionalProperties": false,
+            "required": ["applicationId"],
+            "properties": {
+              "applicationId": {
+                "type": "string",
+                "description": "The unique ID of the application.",
+                "format": "guid",
+                "example": "1ce2bdde-b68f-429d-aff5-bad93f544689"
+              },
+              "computers": {
+                "type": "integer",
+                "description": "The number of computers on which the application was used.",
+                "format": "int32",
+                "example": 10
+              },
+              "users": {
+                "type": "integer",
+                "description": "The number of users who used the application.",
+                "format": "int32",
+                "example": 10
+              },
+              "installations": {
+                "type": "integer",
+                "description": "The number of installations of the application.",
+                "format": "int32",
+                "example": 10
+              }
+            }
+          }
+        ]
+      },
+      "FilteredResponseWithLinksOfComputerApplicationUsageSummary": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/ComputerApplicationUsageSummary"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ComputerContract": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing connection between computer and contract.",
+            "additionalProperties": false,
+            "required": ["computerId", "contractId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "95c1d359-8d89-4a51-a8ed-444e0ab01f71"
+              },
+              "contractId": {
+                "type": "string",
+                "description": "The unique ID of the contract.",
+                "format": "guid",
+                "example": "95c1d359-8d89-4a51-a8ed-444e0ab01f71"
+              }
+            }
+          }
+        ]
+      },
+      "FilteredResponseWithLinksOfComputerContract": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/ComputerContract"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ComputerCosts": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing costs associated with a computer.",
+            "additionalProperties": false,
+            "required": ["computerId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "4f2403da-3ab5-48f8-9114-73304cfeb017"
+              },
+              "vendor": {
+                "type": "string",
+                "description": "The vendor of the computer.",
+                "nullable": true,
+                "example": "Dell Inc."
+              },
+              "purchaseDate": {
+                "type": "string",
+                "description": "The date on which the computer was purchased.",
+                "format": "date-time",
+                "nullable": true,
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "purchasePrice": {
+                "type": "number",
+                "description": "The price for which the computer was purchased.",
+                "format": "decimal",
+                "nullable": true,
+                "example": 2521.32
+              },
+              "purchaseValueBase": {
+                "type": "number",
+                "description": "The value base of the purchase of the computer.",
+                "format": "decimal",
+                "nullable": true,
+                "example": 2500.32
+              },
+              "purchaseCurrency": {
+                "type": "string",
+                "description": "The currency in which the computer was purchased.",
+                "nullable": true,
+                "example": "EUR"
+              },
+              "invoiceReference": {
+                "type": "string",
+                "description": "The invoice reference for the purchase of the computer.",
+                "nullable": true,
+                "example": "2024/03/63729P"
+              },
+              "totalCostOfInstalledApplications": {
+                "type": "number",
+                "description": "The total cost of all applications installed on the computer.",
+                "format": "decimal",
+                "nullable": true,
+                "example": 1452.28
+              },
+              "totalCost": {
+                "type": "number",
+                "description": "The total cost of the computer and installed applications.",
+                "format": "decimal",
+                "nullable": true,
+                "example": 3973.6
+              }
+            }
+          }
+        ]
+      },
+      "ComputerDisplayAdapter": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing display adapter of a computer.",
+            "additionalProperties": false,
+            "required": ["computerId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "66a6b2b7-2ff1-403f-add3-60ed14a0233a"
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the display adapter.",
+                "nullable": true,
+                "example": "NVIDIA T1200 Laptop GPU"
+              },
+              "currentResolution": {
+                "type": "string",
+                "description": "The current resolution of the computer's display adapter.",
+                "nullable": true,
+                "example": "1920 x 1200"
+              },
+              "maxResolution": {
+                "type": "string",
+                "description": "The maximum resolution of the computer's display adapter.",
+                "nullable": true,
+                "example": "2560x1440"
+              },
+              "isUpdated": {
+                "type": "boolean",
+                "description": "```true``` if the display adapter is updated; otherwise, ```false```.",
+                "example": true
+              }
+            }
+          }
+        ]
+      },
+      "ComputerDrive": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing computer storage.",
+            "additionalProperties": false,
+            "required": ["computerId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "6b8f2c7a-101e-4187-b07e-ebb4b815ef28"
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the computer's drive.",
+                "nullable": true,
+                "example": "Virtual HD ATA Device"
+              },
+              "diskSizeMB": {
+                "type": "integer",
+                "description": "The size of the computer's drive in megabytes.",
+                "format": "int32",
+                "example": 102398
+              },
+              "isUpdated": {
+                "type": "boolean",
+                "description": "```true``` if the computer's drive is updated; otherwise, ```false```.",
+                "example": true
+              }
+            }
+          }
+        ]
+      },
+      "FilteredResponseWithLinksOfComputerDrive": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/ComputerDrive"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ComputerHardwareDetails": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing details of hardware of a computer.",
+            "additionalProperties": false,
+            "required": ["computerId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "990b4de8-f11f-4904-9e86-d8a435835574"
+              },
+              "processorCount": {
+                "type": "integer",
+                "description": "The number of processors in the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 2
+              },
+              "coreCount": {
+                "type": "integer",
+                "description": "The number of cores in the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 8
+              },
+              "processorType": {
+                "type": "string",
+                "description": "The type of processors in the computer.",
+                "nullable": true,
+                "example": "11th Gen Intel Core i7-1185G7 @ 3.00GHz (3.00 GHz)"
+              },
+              "processorSpeed": {
+                "type": "integer",
+                "description": "The speed of the processor in the computer in MHz.",
+                "format": "int32",
+                "nullable": true,
+                "example": 2995
+              },
+              "memorySlots": {
+                "type": "integer",
+                "description": "The total number of memory slots in the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 8
+              },
+              "memorySlotsAvailable": {
+                "type": "integer",
+                "description": "The number of available memory slots in the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 2
+              },
+              "physicalMemory": {
+                "type": "integer",
+                "description": "The amount of physical memory in the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 16384
+              },
+              "systemDiskSpace": {
+                "type": "integer",
+                "description": "The total amount of system disk space in the computer in MB.",
+                "format": "int64",
+                "nullable": true,
+                "example": 957534
+              },
+              "systemDiskSpaceAvailable": {
+                "type": "integer",
+                "description": "The amount of available system disk space in the computer in MB.",
+                "format": "int64",
+                "nullable": true,
+                "example": 552150
+              },
+              "totalDiskSpace": {
+                "type": "integer",
+                "description": "The total amount of disk space in the computer in MB.",
+                "format": "int64",
+                "nullable": true,
+                "example": 957534
+              },
+              "totalDiskSpaceAvailable": {
+                "type": "integer",
+                "description": "The amount of available disk space in the computer in MB.",
+                "format": "int64",
+                "nullable": true,
+                "example": 552150
+              },
+              "totalDiskSpaceUsed": {
+                "type": "integer",
+                "description": "The total amount of disk space used in the computer in MB.",
+                "format": "int64",
+                "nullable": true,
+                "example": 405384
+              },
+              "socketCount": {
+                "type": "integer",
+                "description": "The number of sockets in the computer.",
+                "format": "byte",
+                "nullable": true,
+                "example": 2
+              },
+              "isSocketCountManualOverrideEnabled": {
+                "type": "boolean",
+                "description": "```true``` if the socket count manual override of the computer is enabled; otherwise, ```false```.",
+                "example": true
+              },
+              "chipModulesPerProcessor": {
+                "type": "integer",
+                "description": "The number of chip modules per processor.",
+                "format": "byte",
+                "nullable": true,
+                "example": 2
+              },
+              "processorManufacturer": {
+                "type": "string",
+                "description": "The manufacturer of the computer's processors.",
+                "nullable": true,
+                "example": "Intel"
+              },
+              "logicalProcessorCount": {
+                "type": "integer",
+                "description": "The number of logical processors in the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 12
+              }
+            }
+          }
+        ]
+      },
+      "ComputerLogicalDisk": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing a logical disks of a computer.",
+            "additionalProperties": false,
+            "required": ["computerId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "14783145-7ead-4f6a-8f56-b7c3969bfc16"
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the logical disk.",
+                "nullable": true,
+                "example": "C:"
+              },
+              "volumeName": {
+                "type": "string",
+                "description": "The name of the volume of the logical disk.",
+                "nullable": true,
+                "example": "SYSTEM"
+              },
+              "isSystemDisk": {
+                "type": "boolean",
+                "description": "```true``` if the logical disk is a system disk; otherwise, ```false```.",
+                "example": true
+              },
+              "diskSizeMB": {
+                "type": "integer",
+                "description": "The size of the logical disk in MB.",
+                "format": "int32",
+                "example": 61087
+              },
+              "freeSpaceMB": {
+                "type": "integer",
+                "description": "The free space on the logical disk in MB.",
+                "format": "int32",
+                "example": 6243
+              },
+              "isUpdated": {
+                "type": "boolean",
+                "description": "```true``` if the logical disk is updated; otherwise, ```false```.",
+                "example": true
+              }
+            }
+          }
+        ]
+      },
+      "FilteredResponseWithLinksOfComputerLogicalDisk": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/ComputerLogicalDisk"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ComputerLogonHistoryDetails": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing computer logon history for a given computer and user.",
+            "additionalProperties": false,
+            "required": ["computerId", "userId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "0d779524-e2cf-4636-a701-65ce7c3f5763"
+              },
+              "userId": {
+                "type": "string",
+                "description": "The unique ID of the user.",
+                "format": "guid",
+                "example": "c5a87d81-b035-4b38-88f8-13fabd790764"
+              },
+              "lastLogon": {
+                "type": "string",
+                "description": "The last logon of the given user on the given computer.",
+                "format": "date-time",
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "logonCount": {
+                "type": "integer",
+                "description": "The logon count for a user on the computer.",
+                "format": "int32",
+                "example": 10
+              }
+            }
+          }
+        ]
+      },
+      "ComputerLogonHistory": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ComputerLogonHistoryDetails"
+          },
+          {
+            "type": "object",
+            "description": "Response representing computer logon history for a given computer and user.",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FilteredResponseWithLinksOfComputerLogonHistory": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/ComputerLogonHistory"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ComputerMonitor": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing a monitor of a computer.",
+            "additionalProperties": false,
+            "required": ["computerId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "636d9b38-1afd-4b96-8998-01d475cc0f36"
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the computer monitor.",
+                "nullable": true,
+                "example": "Intel UHD Graphics"
+              },
+              "maxResolution": {
+                "type": "string",
+                "description": "The max resolution of the monitor.",
+                "nullable": true,
+                "example": "2560 x 1600"
+              },
+              "isUpdated": {
+                "type": "boolean",
+                "description": "```true``` if the computer monitor is updated; otherwise, ```false```."
+              }
+            }
+          }
+        ]
+      },
+      "ComputerNetworkAdapters": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing network adapter of a computer.",
+            "additionalProperties": false,
+            "required": ["computerId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "62991e94-b8c3-4227-a7cb-a853f2e6e4cc"
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the computer network adapter.",
+                "nullable": true,
+                "example": "Intel 82574L Gigabit Network Connection"
+              },
+              "ipAddress": {
+                "type": "string",
+                "description": "The IP address of the network adapter.",
+                "nullable": true,
+                "example": "10.20.19.130"
+              },
+              "macAddress": {
+                "type": "string",
+                "description": "The MAC address of the network adapter.",
+                "nullable": true,
+                "example": "00-50-56-8D-5D-B8"
+              }
+            }
+          }
+        ]
+      },
+      "FilteredResponseWithLinksOfComputerNetworkAdapters": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/ComputerNetworkAdapters"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ComputerProcessor": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing processor of a computer.",
+            "additionalProperties": false,
+            "required": ["computerId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "94cdfe57-81e2-4af6-99f4-44d15b3b6fb6"
+              },
+              "processorCount": {
+                "type": "integer",
+                "description": "The number of processors in the computer.",
+                "format": "int32",
+                "example": 2
+              },
+              "coreCount": {
+                "type": "integer",
+                "description": "The number of cores in the computer.",
+                "format": "int32",
+                "example": 8
+              },
+              "processorType": {
+                "type": "string",
+                "description": "The type of processors in the computer.",
+                "nullable": true,
+                "example": "11th Gen Intel Core i7-1185G7 @ 3.00GHz (3.00 GHz)"
+              },
+              "processorSpeed": {
+                "type": "integer",
+                "description": "The speed of the processor in the computer in MHz.",
+                "format": "int32",
+                "example": 2995
+              },
+              "processorManufacturer": {
+                "type": "string",
+                "description": "The manufacturer of the processors of the computer.",
+                "nullable": true,
+                "example": "Intel"
+              }
+            }
+          }
+        ]
+      },
+      "FilteredResponseWithLinksOfComputerProcessor": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/ComputerProcessor"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ComputerSocketMapDetails": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing socket map for a computer.",
+            "additionalProperties": false,
+            "required": ["computerId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "cf5be788-06be-4496-91b0-bfaa8c239e96"
+              },
+              "manufacturer": {
+                "type": "string",
+                "description": "The manufacturer of the sockets in the computer.",
+                "nullable": true,
+                "example": "Intel"
+              },
+              "model": {
+                "type": "string",
+                "description": "The model of the sockets in the computer.",
+                "nullable": true,
+                "example": "LGA 1151"
+              },
+              "socketCount": {
+                "type": "integer",
+                "description": "The number of sockets in the computer.",
+                "format": "int32",
+                "example": 2
+              }
+            }
+          }
+        ]
+      },
+      "ComputerRegistry": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing registry content of a computer.",
+            "additionalProperties": false,
+            "required": ["computerId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "81a160b4-75cc-4732-8d30-d8d5bd623969"
+              },
+              "registryKeyName": {
+                "type": "string",
+                "description": "The name of the registry key.",
+                "nullable": true,
+                "example": "HKEY_USERS\\Software\\Adobe\\Adobe Acrobat\\DC\\AVEntitlement"
+              },
+              "registryValueName": {
+                "type": "string",
+                "description": "The value name of the record in the registry key.",
+                "nullable": true,
+                "example": "bAppInitialized"
+              },
+              "registryValueData": {
+                "type": "string",
+                "description": "The value data in the registry key.",
+                "nullable": true,
+                "example": "1"
+              }
+            }
+          }
+        ]
+      },
+      "FilteredResponseWithLinksOfComputerRegistry": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/ComputerRegistry"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ComputerRemoteClients": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing Remote Clients associated with a computer.",
+            "additionalProperties": false,
+            "required": ["lastUsed"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "The name of the Remote Client.",
+                "nullable": true,
+                "example": "Host name"
+              },
+              "remoteClientComputerId": {
+                "type": "string",
+                "description": "The unique ID of the Remote Client computer.",
+                "format": "guid",
+                "nullable": true,
+                "example": "81a160b4-75cc-4732-8d30-d8d5bd623969"
+              },
+              "isInventoried": {
+                "type": "boolean",
+                "description": "```true``` if RemoteClientComputerId not null; otherwise, ```false```.",
+                "example": true
+              },
+              "lastUsed": {
+                "type": "string",
+                "description": "The date and time of the last logon from the  Remote Client.",
+                "format": "date-time",
+                "example": "2024-03-24T12:52:20Z"
+              }
+            }
+          }
+        ]
+      },
+      "FilteredResponseWithLinksOfComputerRemoteClients": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/ComputerRemoteClients"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ComputerDetails": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing details of a computer.",
+            "additionalProperties": false,
+            "required": ["id", "hostName", "lastScanDate", "infoTransferDate", "architecture"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "minLength": 1,
+                "example": "5043cc04-3ef2-4882-a3be-8d08b4f402c7"
+              },
+              "scanIdentifier": {
+                "type": "string",
+                "description": "The identifier used by the scan.",
+                "nullable": true,
+                "example": "MAC-C02GD9DUML7H"
+              },
+              "hostName": {
+                "type": "string",
+                "description": "The host name of the computer.",
+                "example": "AM21-S42MONITOR"
+              },
+              "domain": {
+                "type": "string",
+                "description": "The domain of the computer.",
+                "nullable": true,
+                "example": "APAC"
+              },
+              "lastScanDate": {
+                "type": "string",
+                "description": "The last date that the computer was scanned.",
+                "format": "date-time",
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "biosSerialNumber": {
+                "type": "string",
+                "description": "The BIOS serial number of the computer.",
+                "nullable": true,
+                "example": "43-01-10-TX"
+              },
+              "biosVersion": {
+                "type": "string",
+                "description": "The BIOS version of the computer.",
+                "nullable": true,
+                "example": "1.26.0"
+              },
+              "biosDate": {
+                "type": "string",
+                "description": "The BIOS date of the computer.",
+                "format": "date-time",
+                "nullable": true,
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "manufacturer": {
+                "type": "string",
+                "description": "The manufacturer of the computer.",
+                "nullable": true,
+                "example": "Lenovo"
+              },
+              "manufacturerWebsite": {
+                "type": "string",
+                "description": "Website of the computer's manufacturer.",
+                "nullable": true,
+                "example": "https://www.lenovo.com"
+              },
+              "model": {
+                "type": "string",
+                "description": "The model of the computer.",
+                "nullable": true,
+                "example": "T480s"
+              },
+              "isPortable": {
+                "type": "boolean",
+                "description": "```true``` if the computer is portable; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "infoTransferDate": {
+                "type": "string",
+                "description": "The date and time of information transfer for the computer.",
+                "format": "date-time",
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "clientInstallDate": {
+                "type": "string",
+                "description": "The date and time that the client was installed on the computer.",
+                "format": "date-time",
+                "nullable": true,
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "clientVersion": {
+                "type": "string",
+                "description": "The version of the client on the computer.",
+                "nullable": true,
+                "example": "6.14.3"
+              },
+              "clientSiteName": {
+                "type": "string",
+                "description": "The site name of the client on the computer.",
+                "nullable": true,
+                "example": "snow"
+              },
+              "clientConfigurationName": {
+                "type": "string",
+                "description": "The configuration name of the client on the computer.",
+                "nullable": true,
+                "example": "SnowAtlas"
+              },
+              "scannerVersion": {
+                "type": "string",
+                "description": "The version of the scanner for the computer.",
+                "nullable": true,
+                "example": "7.0.0"
+              },
+              "quarantineDate": {
+                "type": "string",
+                "description": "The quarantine date of the computer, if computer was quarantined.",
+                "format": "date-time",
+                "nullable": true,
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "isQuarantineManagementDisabled": {
+                "type": "boolean",
+                "description": "```true``` if the computer has quarantine management disabled; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "operatingSystem": {
+                "type": "string",
+                "description": "The operating system of the computer.",
+                "nullable": true,
+                "example": "Microsoft Windows 11 Pro"
+              },
+              "operatingSystemId": {
+                "type": "string",
+                "description": "The unique ID of the computer's operating system.",
+                "format": "guid",
+                "nullable": true,
+                "example": "c27c14a7-dcec-4f8e-b08e-cdb7263b5378"
+              },
+              "operatingSystemServicePack": {
+                "type": "string",
+                "description": "The service pack of the computer's operating system.",
+                "nullable": true,
+                "example": "SP1"
+              },
+              "operatingSystemSerialNumber": {
+                "type": "string",
+                "description": "The serial number of the computer's operating system.",
+                "nullable": true,
+                "example": "V6E3X-S6J5H-L5F5P-M4M2Y"
+              },
+              "ipAddress": {
+                "type": "string",
+                "description": "The IP address of the computer.",
+                "nullable": true,
+                "example": "10.20.20.77"
+              },
+              "isVirtual": {
+                "type": "boolean",
+                "description": "```true``` if the computer is virtual; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "hostComputerId": {
+                "type": "string",
+                "description": "The unique ID of the host computer if present.",
+                "format": "guid",
+                "nullable": true,
+                "example": "037e6448-6ad3-4279-800d-010677485bbb"
+              },
+              "siblingComputerId": {
+                "type": "string",
+                "description": "The unique ID of the sibling computer if present.",
+                "format": "guid",
+                "nullable": true,
+                "example": "687e2c50-6900-463a-b470-8c12e3677be8"
+              },
+              "isUpdated": {
+                "type": "boolean",
+                "description": "```true``` if the computer is updated; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "is64bit": {
+                "type": "boolean",
+                "description": "```true``` if the computer is 64 bit; otherwise, ```false```.",
+                "example": true
+              },
+              "isServer": {
+                "type": "boolean",
+                "description": "```true``` if the computer is a server; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "hypervisorName": {
+                "type": "string",
+                "description": "The hypervisor name of the computer.",
+                "nullable": true,
+                "example": "VMware Virtual Platform"
+              },
+              "isVdi": {
+                "type": "boolean",
+                "description": "```true``` if the computer uses virtual desktop infrastructure; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "processorValueUnit": {
+                "type": "integer",
+                "description": "The processor value unit of the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 32
+              },
+              "reportingDate": {
+                "type": "string",
+                "description": "The date and time that the computer last reported data.",
+                "format": "date-time",
+                "nullable": true,
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "architecture": {
+                "type": "string",
+                "description": "The architecture of the computer.",
+                "example": "64-bit"
+              },
+              "organizationId": {
+                "type": "string",
+                "description": "The unique ID of the organization to which the computer belongs.",
+                "format": "guid",
+                "nullable": true,
+                "example": "293cf227-bf7f-4919-b664-791f3f49e1ef"
+              },
+              "status": {
+                "type": "string",
+                "description": "The status of the computer.",
+                "nullable": true,
+                "example": "Active"
+              },
+              "isAutoEditingDisabled": {
+                "type": "boolean",
+                "description": "```true``` if the auto editing is disabled for the computer; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "purchaseDate": {
+                "type": "string",
+                "description": "The date and time that the computer was purchased.",
+                "format": "date-time",
+                "nullable": true,
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "purchaseValue": {
+                "type": "number",
+                "description": "The amount for which the computer was purchased.",
+                "format": "decimal",
+                "nullable": true,
+                "example": 2461.32
+              },
+              "purchaseCurrency": {
+                "type": "string",
+                "description": "The currency in which the computer was purchased.",
+                "nullable": true,
+                "example": "EUR"
+              },
+              "purchaseValueBase": {
+                "type": "number",
+                "description": "The value base of the purchase of the computer.",
+                "format": "decimal",
+                "nullable": true,
+                "example": 2500.32
+              },
+              "invoiceReference": {
+                "type": "string",
+                "description": "The invoice reference for the purchase of the computer.",
+                "nullable": true,
+                "example": "2024/03/63729P"
+              },
+              "notes": {
+                "type": "string",
+                "description": "The notes associated with the purchase of the computer.",
+                "nullable": true,
+                "example": "Purchased in a set with printer"
+              },
+              "securityCode": {
+                "type": "string",
+                "description": "The security code for the computer.",
+                "nullable": true,
+                "example": "A563Z"
+              },
+              "updatedDate": {
+                "type": "string",
+                "description": "The date and time that the computer was updated.",
+                "format": "date-time",
+                "nullable": true,
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "isIncludedInWindowsServerRequirement": {
+                "type": "boolean",
+                "description": "```true``` if the computer is included in the Windows Server requirement; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "mostRecentUser": {
+                "type": "string",
+                "description": "The unique ID of the most recent user of the computer.",
+                "format": "guid",
+                "nullable": true,
+                "example": "77f8f11f-e4f8-4bed-8e44-b78d66244302"
+              },
+              "mostFrequentUser": {
+                "type": "string",
+                "description": "The unique ID of the most frequent user of the computer.",
+                "format": "guid",
+                "nullable": true,
+                "example": "f2c35e21-aba4-4e0d-8c14-f3033e7b1fb7"
+              },
+              "vendor": {
+                "type": "string",
+                "description": "The vendor of the computer.",
+                "nullable": true,
+                "example": "Dell Inc."
+              },
+              "processorCount": {
+                "type": "integer",
+                "description": "The number of processors in the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 2
+              },
+              "coreCount": {
+                "type": "integer",
+                "description": "The number of cores in the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 8
+              }
+            }
+          }
+        ]
+      },
+      "Computer": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing a computer.",
+            "additionalProperties": false,
+            "required": ["id", "hostName", "lastScanDate", "status"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "minLength": 1,
+                "example": "5043cc04-3ef2-4882-a3be-8d08b4f402c7"
+              },
+              "hostName": {
+                "type": "string",
+                "description": "The host name of the computer.",
+                "minLength": 1,
+                "example": "AM21-S42MONITOR"
+              },
+              "hostComputerId": {
+                "type": "string",
+                "description": "The unique ID of the host computer.",
+                "format": "guid",
+                "nullable": true,
+                "example": "035613f6-26a5-4929-94f0-ed10a991438a"
+              },
+              "mostFrequentUser": {
+                "type": "string",
+                "description": "The unique ID of the most frequent user of the computer.",
+                "format": "guid",
+                "nullable": true,
+                "example": "f2c35e21-aba4-4e0d-8c14-f3033e7b1fb7"
+              },
+              "mostRecentUser": {
+                "type": "string",
+                "description": "The unique ID of the most recent user of the computer.",
+                "format": "guid",
+                "nullable": true,
+                "example": "77f8f11f-e4f8-4bed-8e44-b78d66244302"
+              },
+              "manufacturer": {
+                "type": "string",
+                "description": "The manufacturer of the computer.",
+                "nullable": true,
+                "example": "Lenovo"
+              },
+              "isPortable": {
+                "type": "boolean",
+                "description": "```true``` if the computer is portable; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "isVirtual": {
+                "type": "boolean",
+                "description": "```true``` if the computer is virtual; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "isServer": {
+                "type": "boolean",
+                "description": "```true``` if the computer is a server; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "model": {
+                "type": "string",
+                "description": "The model of the computer.",
+                "nullable": true,
+                "example": "T480s"
+              },
+              "operatingSystem": {
+                "type": "string",
+                "description": "The operating system of the computer.",
+                "nullable": true,
+                "example": "Microsoft Windows 11 Pro"
+              },
+              "vendor": {
+                "type": "string",
+                "description": "The vendor of the computer.",
+                "nullable": true,
+                "example": "Dell Inc."
+              },
+              "domain": {
+                "type": "string",
+                "description": "The domain of the computer.",
+                "nullable": true,
+                "example": "APAC"
+              },
+              "ipAddress": {
+                "type": "string",
+                "description": "The IP address of the computer.",
+                "nullable": true,
+                "example": "10.20.20.77"
+              },
+              "isVDI": {
+                "type": "boolean",
+                "description": "```true``` if the computer uses virtual desktop infrastructure; otherwise, ```false```.",
+                "nullable": true,
+                "example": true
+              },
+              "lastScanDate": {
+                "type": "string",
+                "description": "The date and time that the computer was last scanned.",
+                "format": "date-time",
+                "minLength": 1,
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "status": {
+                "type": "string",
+                "description": "The status of the computer.",
+                "minLength": 1,
+                "example": "Active"
+              },
+              "organizationId": {
+                "type": "string",
+                "description": "The unique ID of the organization to which the computer belongs.",
+                "format": "guid",
+                "nullable": true,
+                "example": "293cf227-bf7f-4919-b664-791f3f49e1ef"
+              },
+              "processorCount": {
+                "type": "integer",
+                "description": "The number of processors in the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 2
+              },
+              "coreCount": {
+                "type": "integer",
+                "description": "The number of cores in the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 8
+              }
+            }
+          }
+        ]
+      },
+      "ComputerWrite": {
+        "type": "object",
+        "properties": {
+          "purchaseDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date on which the computer was purchased.",
+            "nullable": true,
+            "example": "2024-03-24T12:52:20Z"
+          },
+          "purchaseValue": {
+            "type": "number",
+            "format": "decimal",
+            "description": "The amount for which the computer was purchased.",
+            "nullable": true,
+            "example": 2461.32
+          },
+          "purchaseCurrency": {
+            "type": "string",
+            "description": "The currency in which the computer was purchased.",
+            "nullable": true,
+            "example": "EUR"
+          },
+          "vendor": {
+            "type": "string",
+            "description": "The vendor of the computer.",
+            "nullable": true,
+            "example": "Dell"
+          },
+          "invoiceReference": {
+            "type": "string",
+            "description": "The invoice reference for the purchase of the computer.",
+            "nullable": true,
+            "example": "2024/03/63729P"
+          },
+          "statusCode": {
+            "type": "string",
+            "description": "The status of the computer.",
+            "nullable": true,
+            "example": "Active"
+          },
+          "organizationId": {
+            "type": "string",
+            "format": "guid",
+            "description": "The unique ID of the organization to which the computer belongs.",
+            "nullable": true,
+            "example": "293cf227-bf7f-4919-b664-791f3f49e1ef"
+          },
+          "isQuarantineManagementDisabled": {
+            "type": "boolean",
+            "description": "```true``` if the computer has quarantine management disabled; otherwise, ```false```.",
+            "nullable": true,
+            "example": true
+          },
+          "isAutoEditingDisabled": {
+            "type": "boolean",
+            "description": "```true``` if the auto editing is disabled for the computer; otherwise, ```false```.",
+            "nullable": true,
+            "example": false
+          },
+          "socketCount": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The number of sockets in the computer.",
+            "nullable": true,
+            "example": 2
+          },
+          "hostComputerId": {
+            "type": "string",
+            "format": "guid",
+            "description": "The unique ID of the host computer if present.",
+            "nullable": true,
+            "example": "8FD97CF1-FB71-469B-ACEA-39314EC26213"
+          },
+          "siblingComputerId": {
+            "type": "string",
+            "format": "guid",
+            "description": "The unique ID of the sibling computer if present.",
+            "nullable": true,
+            "example": "f2c35e21-aba4-4e0d-8c14-f3033e7b1fb7"
+          },
+          "isVirtual": {
+            "type": "boolean",
+            "description": "```true``` if the computer is virtual; otherwise, ```false```.",
+            "nullable": true,
+            "example": false
+          },
+          "isSocketCountManualOverrideEnabled": {
+            "type": "boolean",
+            "description": "```true``` if the socket count manual override of the computer is enabled; otherwise, ```false```.",
+            "nullable": true,
+            "example": true
+          },
+          "chipModulesPerProcessor": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The number of chip modules per processor.",
+            "nullable": true,
+            "example": 2
+          },
+          "notes": {
+            "type": "string",
+            "description": "The notes associated with the purchase of the computer.",
+            "nullable": true,
+            "example": "Purchased in a set with printer"
+          },
+          "securityCode": {
+            "type": "string",
+            "description": "The security code for the computer.",
+            "nullable": true,
+            "example": "A563Z"
+          },
+          "processorValueUnit": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The processor value unit of the computer.",
+            "nullable": true,
+            "example": 32
+          },
+          "biosSerialNumber": {
+            "type": "string",
+            "description": "The BIOS serial number of the computer.",
+            "nullable": true,
+            "example": "43-01-10-TX"
+          }
+        }
+      },
+      "FilteredResponseWithLinksOfComputer": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/Computer"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "PatchRequest": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "#/components/schemas/JSONPatchRequestAddReplace"
+            }
+          ]
+        }
+      },
+      "JSONPatchRequestAddReplace": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "description": "A JSON Pointer path.",
+            "type": "string",
+            "example": "/77f8f11f-e4f8-4bed-8e44-b78d66244302"
+          },
+          "value": {
+            "description": "The value to add, replace, or test.",
+            "example": "Active"
+          },
+          "op": {
+            "description": "The operation to perform.",
+            "x-enumDescriptions": {
+              "add": "Adds a value to an object or inserts it into an array.",
+              "replace": "Replaces a value.",
+              "test": "Tests that the specified value is set in the document."
+            },
+            "type": "string",
+            "enum": ["add", "replace", "test"],
+            "example": "replace"
+          }
+        },
+        "required": ["value", "op", "path"]
+      },
+      "UpdateBulkComputersRequest": {
+        "type": "object",
+        "required": ["scope", "body"],
+        "properties": {
+          "filter": {
+            "description": "For more information on the available operators and which data types those operators work on, see [Filter API call results](https://docs.snowsoftware.io/snow-atlas-api/resources/get-started-with-apis/api-conventions#filter-api-call-results).",
+            "type": "string",
+            "example": "name -eq Rover"
+          },
+          "scope": {
+            "description": "The scope of the update operation.",
+            "x-enumDescriptions": {
+              "Only": "The operation is performed only on the computers whose IDs are specified.",
+              "All": "The operation is performed on all computers.",
+              "AllExcept": "The operation is performed on every computer except those whose IDs are specified."
+            },
+            "type": "string",
+            "example": "All"
+          },
+          "ids": {
+            "description": "The IDs that the operation is performed on.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "body": {
+            "$ref": "#/components/schemas/ComputerUpdate"
+          }
+        }
+      },
+      "ComputerUpdate": {
+        "description": "The update to be applied to all IDs.",
+        "type": "object",
+        "required": ["status"],
+        "properties": {
+          "status": {
+            "description": "Status of the computer.",
+            "type": "string",
+            "example": "Active"
+          }
+        }
+      },
+      "ComputerVirtualMachineDetails": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response class for computer applications.",
+            "additionalProperties": false,
+            "required": ["id"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "29ce62ac-d575-4ff1-90e8-b84eaed0f5d8"
+              },
+              "machineId": {
+                "type": "string",
+                "description": "The unique ID of the inventory virtual machine.",
+                "format": "guid",
+                "nullable": true,
+                "example": "29ce62ac-d575-4ff1-90e8-b84eaed0f5d8"
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of the virtual machine.",
+                "nullable": true,
+                "example": "VM nr. 11"
+              },
+              "operatingSystem": {
+                "type": "string",
+                "description": "Name of the operating system installed.",
+                "nullable": true,
+                "example": "Windows 10"
+              },
+              "ip": {
+                "type": "string",
+                "description": "IP of the virtuale machine.",
+                "nullable": true,
+                "example": "192.168.1.15"
+              },
+              "manufacturer": {
+                "type": "string",
+                "description": "Manufacturer of the virtual machine.",
+                "nullable": true,
+                "example": "Broadcom"
+              },
+              "model": {
+                "type": "string",
+                "description": "Model of the virtual machine.",
+                "nullable": true,
+                "example": "VMware 17.5.2"
+              },
+              "lastScanDate": {
+                "type": "string",
+                "description": "The date and time that the virtual machine was last scanned.",
+                "format": "date-time",
+                "example": "2024-03-24T12:52:20Z"
+              },
+              "powerState": {
+                "type": "string",
+                "description": "Power state of the virtual machine.",
+                "nullable": true,
+                "example": "Shut down"
+              },
+              "processorCount": {
+                "type": "integer",
+                "description": "The number of processors in the virtual machine.",
+                "format": "int32",
+                "nullable": true,
+                "example": 2
+              },
+              "coreCount": {
+                "type": "integer",
+                "description": "The number of cores in the virtual machine.",
+                "format": "int32",
+                "nullable": true,
+                "example": 8
+              },
+              "isInventoried": {
+                "type": "boolean",
+                "description": "```true``` if Get Virtual Machines From Computers ; otherwise, ```false```.",
+                "example": true
+              }
+            }
+          }
+        ]
+      },
+      "ComputerVirtualMachine": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ComputerVirtualMachineDetails"
+          },
+          {
+            "type": "object",
+            "description": "Response representing computer virtual machines for a given computer.",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "FilteredResponseWithLinksOfComputerVirtualMachine": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/ComputerVirtualMachine"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "ComputerEnvironmentVariables": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Response representing environment variables present on a computer.",
+            "additionalProperties": false,
+            "required": ["computerId"],
+            "properties": {
+              "computerId": {
+                "type": "string",
+                "description": "The unique ID of the computer.",
+                "format": "guid",
+                "example": "ae739332-5f44-4c70-aec5-251c841366f1"
+              },
+              "environmentVariableName": {
+                "type": "string",
+                "description": "The name of the environment variables.",
+                "nullable": true,
+                "example": "CommonProgramW6432"
+              },
+              "environmentVariableValue": {
+                "type": "string",
+                "description": "The value of the environment variables.",
+                "nullable": true,
+                "example": "C:\\Program Files\\Common Files"
+              }
+            }
+          }
+        ]
+      },
+      "FilteredResponseWithLinksOfComputerEnvironmentVariables": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "description": "Generic response class supporting filtering and including links.",
+            "additionalProperties": false,
+            "required": ["items", "pagination"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "A collection of items returned in the response.",
+                "items": {
+                  "$ref": "#/components/schemas/ComputerEnvironmentVariables"
+                }
+              },
+              "pagination": {
+                "description": "The pagination details.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PaginationResponse"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "responses": {
+      "204": {
+        "description": "No Content: Your request succeeded, but the response message was empty."
+      },
+      "400": {
+        "description": "Bad Request: Your request is invalid or improperly formed. Consequently, the API server could not understand your request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "error": {
+                "code": 400,
+                "message": "Filter field name needs to be formatted as a string."
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found: The operation you requested failed because a resource associated with your request could not be found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "error": {
+                "code": 404,
+                "message": "Resource with ID '32aeda0a-80dc-475a-907f-2d250a3a8614' not found."
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error: Your request failed due to an internal error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "error": {
+                "code": 500,
+                "message": "The service encountered an unexpected condition that prevented it from fulfilling the request."
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Computer application metering"
+    },
+    {
+      "name": "Computer applications"
+    },
+    {
+      "name": "Computer contracts"
+    },
+    {
+      "name": "Computer costs"
+    },
+    {
+      "name": "Computer display adapter"
+    },
+    {
+      "name": "Computer drives"
+    },
+    {
+      "name": "Computer environment variables"
+    },
+    {
+      "name": "Computer hardware"
+    },
+    {
+      "name": "Computer logical disks"
+    },
+    {
+      "name": "Computer logon history"
+    },
+    {
+      "name": "Computer monitors"
+    },
+    {
+      "name": "Computer network adapters"
+    },
+    {
+      "name": "Computer processors"
+    },
+    {
+      "name": "Computer registries"
+    },
+    {
+      "name": "Computer remote clients"
+    },
+    {
+      "name": "Computer virtual machines"
+    },
+    {
+      "name": "Computers"
+    }
+  ]
+}

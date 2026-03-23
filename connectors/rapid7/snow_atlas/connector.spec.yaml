@@ -1,0 +1,92 @@
+id: snow.atlas
+name: Snow Atlas (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+reference-schemas:
+  - url: https://example.githubusercontent.com/SnowSoftware/snowatlas-integrations
+    file: refdocs/computer_openapi.json
+  - url: https://example1.githubusercontent.com/SnowSoftware/snowatlas-integrations/mobile_device
+    file: refdocs/mobile_device_openapi.json
+  - url: https://example4.githubusercontent.com/SnowSoftware/snowatlas-integrations/organization
+    file: refdocs/organization_openapi.json
+  - url: https://example3.githubusercontent.com/SnowSoftware/snowatlas-integrations/user
+    file: refdocs/user_openapi.json
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - SnowAtlasComputer
+  - SnowAtlasMobileDevice
+  - SnowAtlasOperationalStatusEnum
+  - SnowAtlasOrganization
+  - SnowAtlasUser
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Snow Atlas Computers, Mobile Devices, Organizations, and Users
+    description: Import all Computers, Mobile Devices, Organizations, and Users from Snow Atlas
+    return_types:
+      - SnowAtlasComputer
+      - SnowAtlasMobileDevice
+      - SnowAtlasOrganization
+      - SnowAtlasUser
+
+# Configuration settings for this connector.
+settings:
+  region:
+    type: string
+    title: Region
+    description: The region where your Snow Atlas instance is hosted.
+    example: westeurope
+
+  client_id:
+    type: string
+    title: Client ID
+    description: Client ID for Snow Atlas API authentication
+
+  client_secret:
+    type: string
+    title: Client Secret
+    description: Client Secret for Snow Atlas API authentication
+    format: password
+
+  computer_status_filter:
+    type: array
+    title: Computer Status Filter
+    description: Filter to apply when importing computers. Only computers with a matching status will be imported.
+    items:
+      type: string
+      enum:
+        - Active
+        - Inactive
+        - Quarantined
+    default:
+      - Active
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Add required Python dependencies here. Pin each dependency to a specific
+# version.
+# python_dependencies:
+#  - "another_dependency==1.0.0"
+
+# Categories for this connector in the Extension Library.
+categories:
+  - asset_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

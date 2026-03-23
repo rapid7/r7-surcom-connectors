@@ -9,11 +9,35 @@ from .sc_settings import Settings
 from .sc_types import DemoConnectorDevice, DemoConnectorUser
 
 
+def _post_process_device(settings: Settings, device: dict) -> dict:
+
+    # If the setting does not exist or is not set, we return the device
+    if not settings.get("filter_device_types"):
+        return device
+
+    device_type = device.get("type")
+
+    # If the device doesn't have a type, we return the device
+    if not device_type:
+        return device
+
+    # Else we loop each device type in our settings
+    for s_device_type in settings.get("filter_device_types"):
+
+        # If it partially matches, we return the device
+        if s_device_type.lower() in device_type.lower():
+            return device
+
+    # Else we return None
+    return None
+
+
 def _get_asset(
     user_log: Logger,
     settings: Settings,
     api_method: Callable,
-    surcom_type: dict
+    surcom_type: dict,
+    post_process_fn: Callable = None
 ):
     user_log.info("Getting '%s' from '%s'", surcom_type.__name__, settings.get("url"))
 
@@ -39,11 +63,11 @@ def _get_asset(
             # For each asset in the response, yield a Surcom type to ingest
             for asset in data:
 
-                # Ensure the ID is a string
-                if asset.get("id"):
-                    asset["id"] = str(asset["id"])
+                if post_process_fn:
+                    asset = post_process_fn(settings, asset)
 
-                yield surcom_type(asset)
+                if asset:
+                    yield surcom_type(asset)
 
         # We check if we have reached the last page
         if r.get("page") == r.get("total_pages"):
@@ -74,7 +98,8 @@ def import_all(
         user_log=user_log,
         settings=settings,
         api_method=client.get_devices,
-        surcom_type=DemoConnectorDevice
+        surcom_type=DemoConnectorDevice,
+        post_process_fn=_post_process_device
     )
 
     # Import all DemoConnectorUser

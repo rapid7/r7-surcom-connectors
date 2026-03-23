@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Active",
+    "value": "Operational",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "Inactive",
+    "value": "Non-Operational",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "Quarantined",
+    "value": "Non-Operational",
+    "map_to": "OperationalStatus: Non-Operational"
+  }
+]

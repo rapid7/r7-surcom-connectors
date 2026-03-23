@@ -1,0 +1,235 @@
+x-samos-type-name: SnowAtlasComputer
+x-samos-namespace: snow.atlas
+title: Snow Atlas Computer
+description: Represents a computer asset from Snow Atlas.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+
+$ref: https://example.githubusercontent.com/SnowSoftware/snowatlas-integrations#/components/schemas/FilteredResponseWithLinksOfComputer/allOf/properties/items#/components/schemas/Computer/allOf/properties
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: hostName
+  - name: operatingSystem
+  - name: manufacturer
+  - name: model
+  - name: ipAddress
+  - name: domain
+  - name: organizationId
+  - name: status
+  - name: lastScanDate
+
+x-samos-detail:
+  - name: hostName
+  - name: operatingSystem
+  - name: manufacturer
+  - name: model
+  - name: ipAddress
+  - name: domain
+  - name: biosSerialNumber
+  - name: biosDate
+  - name: organizationId
+  - name: status
+  - name: isVirtual
+  - name: isServer
+  - name: isPortable
+  - name: isVDI
+  - name: coreCount
+  - name: processorCount
+  - name: clientConfigurationName
+  - name: clientVersion
+  - name: scannerVersion
+  - name: lastScanDate
+  - name: mostRecentUser
+  - name: mostFrequentUser
+
+x-samos-derived-properties:
+  d_active:
+    # fulfills the 'Active' boolean property to core.component.active
+    x-samos-hidden: true
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: 'status == `Active`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_hostnames:
+    # fulfills the 'Hostnames' array property to Machine.hostnames
+    # as hostName already fulfills the core.named-object.name property, we can also use it to fulfill the hostnames property on Machine
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: hostName
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+properties:
+  id:
+    title: Computer ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  hostName:
+    title: Host Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  biosDate:
+    title: BIOS Date
+    type: string
+    format: date-time
+
+  biosSerialNumber:
+    title: BIOS Serial Number
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+
+  clientConfigurationName:
+    title: Client Configuration Name
+    type: string
+
+  clientVersion:
+    title: Client Version
+    type: string
+
+  coreCount:
+    title: Core Count
+    type: integer
+
+  domain:
+    title: Domain
+    type: string
+
+  ipAddress:
+    title: IP Address
+    type: string
+    format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  isPortable:
+    title: Portable?
+    type: boolean
+
+  isServer:
+    title: Server?
+    type: boolean
+
+  isVDI:
+    title: VDI?
+    type: boolean
+
+  isVirtual:
+    title: Virtual?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: virtual
+
+  lastScanDate:
+    title: Last Scan Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_scanned
+
+  manufacturer:
+    title: Manufacturer
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+
+  model:
+    title: Model
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+
+  mostFrequentUser:
+    title: Most Frequent User
+    type: string
+    x-samos-ref-types:
+      - type-name: SnowAtlasUser
+        key-name: id
+
+  mostRecentUser:
+    title: Most Recent User
+    type: string
+    x-samos-ref-types:
+      - type-name: SnowAtlasUser
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: users
+
+  operatingSystem:
+    title: Operating System
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  organizationHierarchy:
+    title: Organization Hierarchy
+    type: string
+
+  organizationId:
+    title: Organization
+    type: string
+    x-samos-ref-types:
+      - type-name: SnowAtlasOrganization
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+
+  processorCount:
+    title: Processor Count
+    type: integer
+
+  scannerVersion:
+    title: Scanner Version
+    type: string
+
+  status:
+    title: Status
+    type: string
+    x-samos-ref-types:
+      - type-name: SnowAtlasOperationalStatusEnum
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: operational_status
+
+  _links:
+    x-samos-hidden: true
+    title: Links
+    type: array
+    items:
+      type: object

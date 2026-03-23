@@ -6,6 +6,7 @@ This module provides a client for interacting with the SolarWinds Orion API.
 from datetime import datetime
 from logging import Logger
 import orionsdk
+import requests
 from furl import furl
 from .sc_settings import Settings
 from r7_surcom_api import HttpSession
@@ -33,7 +34,7 @@ RuntimeOSDistro, RuntimeOSVersion, RuntimeOSLabel, OSLabel,
 NetFrameworkRelease"""
 
 # SWQL query to retrieve node details.
-NODE_QUERY = """SELECT TOP 500 NodeID, ObjectSubType,IPAddress,IPAddressType,
+NODE_QUERY = """SELECT TOP 250 NodeID, ObjectSubType,IPAddress,IPAddressType,
 NodeDescription,Description,DNS,SysName,Vendor,SysObjectID,Location,Contact,
 VendorIcon,Icon,Status,PolledStatus,StatusLED,DynamicIP,Caption,
 StatusDescription,NodeStatusRootCause,NodeStatusRootCauseWithLinks,
@@ -142,6 +143,46 @@ class SolarWindsOrionClient:
             port=self.port,
         )
 
+    def _swis_query(self, query: str, **params) -> dict:
+        """Execute a SWQL query, converting transport/HTTP failures into ValueError.
+
+        The `orionsdk` client uses `requests` under the hood; failures are surfaced
+        as subclasses of `requests.exceptions.RequestException`. Surface Command's
+        runtime expects connector errors to be safe to serialize and handle, so we
+        re-raise those failures as ValueError.
+        """
+
+        try:
+            return self.swis.query(query, **params)
+        except requests.exceptions.RequestException as exc:
+            # Log full details for debugging without leaking secrets.
+            # (Query strings should not contain credentials.)
+            self.logger.debug(
+                "SWIS query failed: %s; query=%s",
+                exc,
+                (query or "")[:200],
+                exc_info=True,
+            )
+
+            if isinstance(exc, requests.exceptions.HTTPError):
+                status = getattr(getattr(exc, "response", None), "status_code", None)
+                reason = getattr(getattr(exc, "response", None), "reason", None)
+                details = reason or str(exc)
+                raise ValueError(
+                    f"SolarWinds Orion API query failed (HTTP {status}): {details}"
+                ) from exc
+
+            if isinstance(exc, requests.exceptions.Timeout):
+                raise ValueError("SolarWinds Orion API query timed out.") from exc
+
+            if isinstance(exc, requests.exceptions.SSLError):
+                raise ValueError("SolarWinds Orion API TLS error.") from exc
+
+            if isinstance(exc, requests.exceptions.ConnectionError):
+                raise ValueError("SolarWinds Orion API connection error.") from exc
+
+            raise ValueError("SolarWinds Orion API request failed.") from exc
+
     def get_nodes(self, last_node_id) -> list:
         """Retrieves all nodes from the SolarWinds Orion API,
         handling pagination using last_node_id.
@@ -190,7 +231,7 @@ class SolarWindsOrionClient:
                     f"ObjectSubType IN {node_sub_type} ORDER BY NodeID"
                 )
 
-        node_json = self.swis.query(request_query)
+        node_json = self._swis_query(request_query)
         results = node_json.get(DATA_KEY, [])
         node_parse_result = parse_date_or_none(results)
         return node_parse_result
@@ -227,7 +268,7 @@ class SolarWindsOrionClient:
             )
         # --- Process API response
 
-        application_json = self.swis.query(request_query)
+        application_json = self._swis_query(request_query)
         # --- Extract the results (list of applications) from the JSON response
         application_results = application_json.get(DATA_KEY, [])
         return application_results
@@ -259,7 +300,7 @@ class SolarWindsOrionClient:
                 f"ORDER BY ApplicationTemplateID"
             )
 
-        template_json = self.swis.query(request_query)
+        template_json = self._swis_query(request_query)
         # --- Extract the results (list of application templates)
         # from the JSON response
         template_results = template_json.get(DATA_KEY, [])
@@ -291,7 +332,7 @@ class SolarWindsOrionClient:
                 f"AgentId > {last_agent_id} "
                 f"ORDER BY AgentId"
             )
-        agent_json = self.swis.query(request_query)
+        agent_json = self._swis_query(request_query)
         # --- Extract the results (list of agents) from the JSON response
         agent_results = agent_json.get(DATA_KEY, [])
         return agent_results
@@ -316,5 +357,5 @@ def test_connection(setting: Settings, logger: Logger) -> dict:
         TEMPLATE_QUERY + " FROM Orion.APM.ApplicationTemplate",
         AGENT_QUERY + " FROM Orion.AgentManagement.Agent ORDER BY AgentId",
     ]:
-        solarwind_obj.swis.query(query)
+        solarwind_obj._swis_query(query)
     return {"status": "success", "message": "Successfully Connected"}

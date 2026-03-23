@@ -1,0 +1,62 @@
+id: igel.ums
+name: IGEL UMS (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+types:
+  - IgelUmsDevice
+  - IgelUmsDirectory
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: IGEL UMS Devices and Device Directories
+    description: Import all devices and device directories from IGEL UMS
+    return_types:
+      - IgelUmsDevice
+      - IgelUmsDirectory
+
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: Base URL for the IGEL UMS API
+    example: https://ums-server.example.com:8443
+
+  username:
+    type: string
+    title: Username
+    description: The username for IGEL UMS account used to authenticate API
+
+  password:
+    type: string
+    title: Password
+    format: password
+    description: The password for IGEL UMS account used to authenticate API
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Add required Python dependencies here. Pin each dependency to a specific
+# version.
+# python_dependencies:
+#  - "another_dependency==1.0.0"
+
+# Categories for this connector in the Extension Library.
+categories:
+  - endpoint_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: true

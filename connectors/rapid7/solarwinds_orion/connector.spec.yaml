@@ -1,11 +1,11 @@
 ﻿id: solarwinds.orion
 name: SolarWinds Orion
 author: Rapid7
-version: 1.3.0
+version: 1.4.0
 notice: Copyright © 2025 Rapid7. All rights reserved.
 
 current_changes:
-  - Pin dependencies
+  - Improve timeout and error handling for Orion API requests
 
 reference-schemas:
   - url: https://solarwinds.github.io/OrionSDK/2024.4

@@ -1,0 +1,733 @@
+x-samos-type-name: NautobotLocation
+x-samos-namespace: nautobot
+title: Nautobot Location
+description: Physical or logical location from Nautobot representing sites, buildings, data centers, or organizational hierarchies with support for parent-child relationships
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Location
+    subtype-priority: 5
+
+$ref: https://example.nautobot.com/api/swagger#/components/schemas/PaginatedLocationList#/components/schemas/Location
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: status.name
+  - name: parent.id
+  - name: tenant.id
+  - name: virtual_machine_count
+  - name: device_count
+  - name: prefix_count
+  - name: created
+  - name: last_updated
+
+x-samos-detail:
+  - name: name
+  - name: display
+  - name: description
+  - name: parent.id
+  - name: tenant.id
+  - name: status.name
+  - name: physical_address
+  - name: facility
+  - name: rack_count
+  - name: circuit_count
+  - name: prefix_count
+  - name: device_count
+  - name: virtual_machine_count
+  - name: vlan_count
+  - name: latitude
+  - name: longitude
+  - name: contact_email
+  - name: contact_name
+  - name: contact_phone
+  - name: time_zone
+  - name: created
+  - name: last_updated
+  - name: url
+
+x-samos-derived-properties:
+  d_latitude:
+    # latitude property in string but core.location.latitude requires number,
+    # derived property to convert to number for fulfilling core.location.latitude
+    title: Latitude
+    type: number
+    syntax: expression
+    value: '{latitude}'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: latitude
+  d_longitude:
+    # longitude property in string but core.location.longitude requires number,
+    # derived property to convert to number for fulfilling core.location.longitude
+    title: Longitude
+    type: number
+    syntax: expression
+    value: '{longitude}'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: longitude
+
+properties:
+  asn:
+    title: ASN
+    type: string
+  circuit_count:
+    title: Circuit Count
+    type: integer
+  comments:
+    title: Comments
+    type: string
+  contact_email:
+    title: Contact Email
+    type: string
+  contact_name:
+    title: Contact Name
+    type: string
+  contact_phone:
+    title: Contact Phone
+    type: string
+  created:
+    format: date-time
+    title: Created
+    type: string
+  custom_fields:
+    properties: {}
+    title: Custom Fields
+    type: object
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  device_count:
+    title: Device Count
+    type: integer
+  display:
+    title: Display
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  facility:
+    title: Facility
+    type: string
+  id:
+    title: ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Location
+      property-name: id
+  last_updated:
+    format: date-time
+    title: Last Updated
+    type: string
+  latitude:
+    title: Latitude
+    type: string
+  location_type:
+    properties:
+      created:
+        format: date-time
+        title: Created
+        type: string
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+      description:
+        title: Description
+        type: string
+      display:
+        title: Display
+        type: string
+      id:
+        title: ID
+        type: string
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      name:
+        title: Name
+        type: string
+      natural_slug:
+        title: Natural Slug
+        type: string
+      nestable:
+        title: Nestable?
+        type: boolean
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      object_type:
+        title: Object Type
+        type: string
+      parent:
+        properties:
+          created:
+            format: date-time
+            title: Created
+            type: string
+          custom_fields:
+            properties: {}
+            title: Custom Fields
+            type: object
+          description:
+            title: Description
+            type: string
+          display:
+            title: Display
+            type: string
+          id:
+            title: ID
+            type: string
+          last_updated:
+            format: date-time
+            title: Last Updated
+            type: string
+          name:
+            title: Name
+            type: string
+          natural_slug:
+            title: Natural Slug
+            type: string
+          nestable:
+            title: Nestable?
+            type: boolean
+          notes_url:
+            title: Notes URL
+            type: string
+            x-samos-hidden: true
+          object_type:
+            title: Object Type
+            type: string
+          parent:
+            properties:
+              id:
+                title: ID
+                type: string
+              object_type:
+                title: Object Type
+                type: string
+              url:
+                title: URL
+                type: string
+            title: Parent
+            type: object
+          url:
+            title: URL
+            type: string
+        title: Parent
+        type: object
+      url:
+        title: URL
+        type: string
+    title: Location Type
+    type: object
+  longitude:
+    title: Longitude
+    type: string
+  name:
+    title: Name
+    type: string
+    x-samos-correlation:
+      correlation-key: Location.name
+      correlation-type: Location
+      priority: 5
+  natural_slug:
+    title: Natural Slug
+    type: string
+  notes_url:
+    title: Notes URL
+    type: string
+    x-samos-hidden: true
+  object_type:
+    title: Object Type
+    type: string
+  parent:
+    properties:
+      asn:
+        title: Asn
+        type: string
+      comments:
+        title: Comments
+        type: string
+      contact_email:
+        title: Contact Email
+        type: string
+      contact_name:
+        title: Contact Name
+        type: string
+      contact_phone:
+        title: Contact Phone
+        type: string
+      created:
+        format: date-time
+        title: Created
+        type: string
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+      description:
+        title: Description
+        type: string
+      display:
+        title: Display
+        type: string
+      facility:
+        title: Facility
+        type: string
+      id:
+        title: Parent
+        type: string
+        x-samos-ref-types:
+          - type-name: NautobotLocation
+            key-name: id
+        x-samos-fulfills:
+          type-name: Location
+          property-name: is_part_of_ref
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      latitude:
+        title: Latitude
+        type: string
+      location_type:
+        properties:
+          created:
+            format: date-time
+            title: Created
+            type: string
+          custom_fields:
+            properties: {}
+            title: Custom Fields
+            type: object
+          description:
+            title: Description
+            type: string
+          display:
+            title: Display
+            type: string
+          id:
+            title: ID
+            type: string
+          last_updated:
+            format: date-time
+            title: Last Updated
+            type: string
+          name:
+            title: Name
+            type: string
+          natural_slug:
+            title: Natural Slug
+            type: string
+          nestable:
+            title: Nestable?
+            type: boolean
+          notes_url:
+            title: Notes URL
+            type: string
+            x-samos-hidden: true
+          object_type:
+            title: Object Type
+            type: string
+          parent:
+            properties:
+              id:
+                title: ID
+                type: string
+              object_type:
+                title: Object Type
+                type: string
+              url:
+                title: URL
+                type: string
+            title: Parent
+            type: object
+          url:
+            title: URL
+            type: string
+        title: Location Type
+        type: object
+      longitude:
+        title: Longitude
+        type: string
+      name:
+        title: Name
+        type: string
+      natural_slug:
+        title: Natural Slug
+        type: string
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      object_type:
+        title: Object Type
+        type: string
+      parent:
+        properties:
+          asn:
+            title: Asn
+            type: string
+          comments:
+            title: Comments
+            type: string
+          contact_email:
+            title: Contact Email
+            type: string
+          contact_name:
+            title: Contact Name
+            type: string
+          contact_phone:
+            title: Contact Phone
+            type: string
+          created:
+            format: date-time
+            title: Created
+            type: string
+          custom_fields:
+            properties: {}
+            title: Custom Fields
+            type: object
+          description:
+            title: Description
+            type: string
+          display:
+            title: Display
+            type: string
+          facility:
+            title: Facility
+            type: string
+          id:
+            title: ID
+            type: string
+          last_updated:
+            format: date-time
+            title: Last Updated
+            type: string
+          latitude:
+            title: Latitude
+            type: string
+          location_type:
+            properties:
+              id:
+                title: ID
+                type: string
+              object_type:
+                title: Object Type
+                type: string
+              url:
+                title: URL
+                type: string
+            title: Location Type
+            type: object
+          longitude:
+            title: Longitude
+            type: string
+          name:
+            title: Name
+            type: string
+          natural_slug:
+            title: Natural Slug
+            type: string
+          notes_url:
+            title: Notes URL
+            type: string
+            x-samos-hidden: true
+          object_type:
+            title: Object Type
+            type: string
+          parent:
+            title: Parent
+            type: object
+          physical_address:
+            title: Physical Address
+            type: string
+          shipping_address:
+            title: Shipping Address
+            type: string
+          status:
+            properties:
+              id:
+                title: ID
+                type: string
+              object_type:
+                title: Object Type
+                type: string
+              url:
+                title: URL
+                type: string
+            title: Status
+            type: object
+          tenant:
+            title: Tenant
+            type: object
+          time_zone:
+            title: Time Zone
+            type: string
+          url:
+            title: URL
+            type: string
+        title: Parent
+        type: object
+      physical_address:
+        title: Physical Address
+        type: string
+      shipping_address:
+        title: Shipping Address
+        type: string
+      status:
+        properties:
+          color:
+            title: Color
+            type: string
+          created:
+            format: date-time
+            title: Created
+            type: string
+          custom_fields:
+            properties: {}
+            title: Custom Fields
+            type: object
+          description:
+            title: Description
+            type: string
+          display:
+            title: Display
+            type: string
+          id:
+            title: ID
+            type: string
+          last_updated:
+            format: date-time
+            title: Last Updated
+            type: string
+          name:
+            title: Name
+            type: string
+          natural_slug:
+            title: Natural Slug
+            type: string
+          notes_url:
+            title: Notes URL
+            type: string
+            x-samos-hidden: true
+          object_type:
+            title: Object Type
+            type: string
+          url:
+            title: URL
+            type: string
+        title: Status
+        type: object
+      tenant:
+        title: Tenant
+        type: object
+      time_zone:
+        title: Time Zone
+        type: string
+      url:
+        title: URL
+        type: string
+    title: Parent
+    type: object
+  physical_address:
+    title: Physical Address
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: address
+  prefix_count:
+    title: Prefix Count
+    type: integer
+  rack_count:
+    title: Rack Count
+    type: integer
+  shipping_address:
+    title: Shipping Address
+    type: string
+  status:
+    properties:
+      color:
+        title: Color
+        type: string
+      created:
+        format: date-time
+        title: Created
+        type: string
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+      description:
+        title: Description
+        type: string
+      display:
+        title: Display
+        type: string
+      id:
+        title: ID
+        type: string
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      name:
+        title: Status
+        type: string
+      natural_slug:
+        title: Natural Slug
+        type: string
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      object_type:
+        title: Object Type
+        type: string
+      url:
+        title: URL
+        type: string
+    title: Status
+    type: object
+
+  tags:
+    title: Tags
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: Location
+          type: string
+          x-samos-ref-types:
+            - type-name: NautobotTag
+              key-name: id
+        object_type:
+          title: Object Type
+          type: string
+        url:
+          title: URL
+          type: string
+  tenant:
+    properties:
+      comments:
+        title: Comments
+        type: string
+      created:
+        format: date-time
+        title: Created
+        type: string
+      custom_fields:
+        properties: {}
+        title: Custom Fields
+        type: object
+      description:
+        title: Description
+        type: string
+      display:
+        title: Display
+        type: string
+      id:
+        title: Tenant
+        type: string
+        x-samos-ref-types:
+          - type-name: NautobotTenant
+            key-name: id
+        x-samos-fulfills:
+          type-name: core.owned-entity
+          property-name: organization
+      last_updated:
+        format: date-time
+        title: Last Updated
+        type: string
+      name:
+        title: Name
+        type: string
+      natural_slug:
+        title: Natural Slug
+        type: string
+      notes_url:
+        title: Notes URL
+        type: string
+        x-samos-hidden: true
+      object_type:
+        title: Object Type
+        type: string
+      tenant_group:
+        properties:
+          created:
+            format: date-time
+            title: Created
+            type: string
+          custom_fields:
+            properties: {}
+            title: Custom Fields
+            type: object
+          description:
+            title: Description
+            type: string
+          display:
+            title: Display
+            type: string
+          id:
+            title: ID
+            type: string
+          last_updated:
+            format: date-time
+            title: Last Updated
+            type: string
+          name:
+            title: Name
+            type: string
+          natural_slug:
+            title: Natural Slug
+            type: string
+          notes_url:
+            title: Notes URL
+            type: string
+            x-samos-hidden: true
+          object_type:
+            title: Object Type
+            type: string
+          parent:
+            title: Parent
+            type: object
+          url:
+            title: URL
+            type: string
+        title: Tenant Group
+        type: object
+      url:
+        title: URL
+        type: string
+    title: Tenant
+    type: object
+  time_zone:
+    title: Time Zone
+    type: string
+  tree_depth:
+    title: Tree Depth
+    type: string
+  url:
+    title: URL
+    type: string
+    x-samos-hidden: true
+  virtual_machine_count:
+    title: Virtual Machine Count
+    type: integer
+  vlan_count:
+    title: VLAN Count
+    type: integer

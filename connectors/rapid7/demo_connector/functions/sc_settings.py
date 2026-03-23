@@ -15,4 +15,5 @@ Settings = TypedDict('Settings', {
     'verify_tls': bool,
     'page_limit': int,
     'total_pages': Optional[int],
+    'filter_device_types': Optional[list],
 })

@@ -1,0 +1,118 @@
+x-samos-type-name: KaseyaVSA9Organization
+x-samos-namespace: kaseya.vsa9
+title: Kaseya VSA 9 Organization
+description: An organization in Kaseya VSA 9
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Organization
+
+x-samos-keys:
+  - OrgId
+
+x-samos-table:
+  - name: OrgName
+  - name: OrgRef
+  - name: OrgType
+
+x-samos-detail:
+  - name: OrgName
+  - name: OrgRef
+  - name: OrgType
+  - name: DefaultDepartmentName
+  - name: DefaultMachineGroupName
+  - name: ParentOrgId
+  - name: Website
+  - name: NoOfEmployees
+  - name: AnnualRevenue
+  - name: ContactInfo
+  - name: CustomFields
+  - name: Attributes
+
+properties:
+  OrgId:
+    title: Organization ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+  OrgName:
+    title: Organization Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  OrgRef:
+    title: Organization Reference
+    type: string
+  OrgType:
+    title: Organization Type
+    type: string
+  DefaultDepartmentName:
+    title: Default Department Name
+    type: string
+  DefaultMachineGroupName:
+    title: Default Machine Group Name
+    type: string
+  ParentOrgId:
+    title: Parent Organization ID
+    type: string
+    x-samos-ref-types:
+      - type-name: KaseyaVSA9Organization
+        key-name: OrgId
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+  Website:
+    title: Website
+    type: string
+  NoOfEmployees:
+    title: Number of Employees
+    type: integer
+  AnnualRevenue:
+    title: Annual Revenue
+    type: number
+  ContactInfo:
+    title: Contact Info
+    type: object
+    properties:
+      PreferredContactMethod:
+        title: Preferred Contact Method
+        type: string
+      PrimaryPhone:
+        title: Primary Phone
+        type: string
+      PrimaryFax:
+        title: Primary Fax
+        type: string
+      PrimaryEmail:
+        title: Primary Email
+        type: string
+      Country:
+        title: Country
+        type: string
+      Street:
+        title: Street
+        type: string
+      City:
+        title: City
+        type: string
+      State:
+        title: State
+        type: string
+      ZipCode:
+        title: Zip Code
+        type: string
+      PrimaryTextMessagePhone:
+        title: Primary Text Message Phone
+        type: string
+  CustomFields:
+    title: Custom Fields
+    type: array
+    items:
+      type: object
+  Attributes:
+    title: Attributes
+    type: object
