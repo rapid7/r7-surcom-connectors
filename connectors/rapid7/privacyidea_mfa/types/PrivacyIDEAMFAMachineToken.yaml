@@ -1,0 +1,79 @@
+x-samos-type-name: PrivacyIDEAMFAMachineToken
+x-samos-namespace: privacyidea.mfa
+title: privacyIDEA Machine Token
+description: A machine-token application mapping from privacyIDEA MFA.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.named-object
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: serial
+  - name: application
+  - name: hostname
+  - name: machine_id
+  - name: type
+  - name: resolver
+
+x-samos-detail:
+  - name: serial
+  - name: application
+  - name: hostname
+  - name: machine_id
+  - name: d_machine_key
+  - name: type
+  - name: resolver
+  - name: d_name
+  - name: options
+
+x-samos-derived-properties:
+  # Composite key to reference the machine (machine_id alone is not unique across resolvers)
+  d_machine_key:
+    title: Assigned Machine
+    type: string
+    syntax: expression
+    value: '{machine_id}:{resolver}'
+    x-samos-ref-types:
+      - type-name: PrivacyIDEAMFAMachine
+        key-name: d_id
+  d_name:
+    title: Name
+    type: string
+    syntax: expression
+    value: '{serial}:{application}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  id:
+    type: integer
+    title: Mapping ID
+    x-samos-immutable: true
+  application:
+    type: string
+    title: Application
+  serial:
+    type: string
+    title: Token Serial
+    x-samos-ref-types:
+      - type-name: PrivacyIDEAMFAToken
+        key-name: serial
+  hostname:
+    type: string
+    title: Hostname
+  machine_id:
+    type: string
+    title: Machine ID
+  type:
+    type: string
+    title: Token Type
+  resolver:
+    type: string
+    title: Machine Resolver
+  options:
+    type: object
+    title: Options

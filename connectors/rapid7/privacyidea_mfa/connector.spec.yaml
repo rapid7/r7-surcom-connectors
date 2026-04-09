@@ -1,0 +1,67 @@
+id: privacyidea.mfa
+name: PrivacyIDEA Multi-Factor Authentication
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+types:
+  - PrivacyIDEAMFAMachineToken
+  - PrivacyIDEAMFAMachine
+  - PrivacyIDEAMFAToken
+  - PrivacyIDEAMFAUser
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: privacyIDEA Users, Machines and Tokens
+    description: Import users, machines, authentication tokens, and machine-token mappings from privacyIDEA MFA.
+    return_types:
+      - PrivacyIDEAMFAMachineToken
+      - PrivacyIDEAMFAMachine
+      - PrivacyIDEAMFAToken
+      - PrivacyIDEAMFAUser
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    example: https://privacyidea.example.com
+    description: Base URL of the privacyIDEA server
+
+  username:
+    type: string
+    title: Username
+    description: Administrator username for API authentication
+
+  password:
+    type: string
+    title: Password
+    format: password
+    description: Administrator password for API authentication
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - iam
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

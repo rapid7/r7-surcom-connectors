@@ -1,11 +1,11 @@
 id: mimecast
-name: Mimecast (Beta)
+name: Mimecast
 author: Rapid7
-version: 0.2.0
+version: 1.0.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Pin dependencies
+  - Remove Beta label
 
 types:
   - MimecastGatewayDetail

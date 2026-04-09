@@ -55,14 +55,14 @@ BufferMdMissToday,BufferBgMissThisHour,BufferBgMissToday,
 BufferLgMissThisHour,BufferLgMissToday,BufferHgMissThisHour,
 BufferHgMissToday,OrionIdPrefix,OrionIdColumn,SkippedPollingCycles,
 MinutesSinceLastSync,EntityType,DetailsUrl,
-DisplayName,Category,IsOrionServer,ModernIcon"""
+DisplayName,Category,IsOrionServer"""
 
 # SWQL query to retrieve application details.
 APPLICATION_QUERY = """SELECT TOP 500 ApplicationID,Name,DisplayName,NodeID,
 ApplicationTemplateID,UnManaged,UnManageFrom,UnManageUntil,
 Created,LastModified,ID,DetailsUrl,FullyQualifiedName,ComponentOrderSettingLevel,
 CustomApplicationType,HasCredentials,Description,Status,StatusDescription,Image,
-Uri,PrimaryGroupID,InstanceType,InstanceSiteId,ModernIcon"""
+Uri,PrimaryGroupID,InstanceType,InstanceSiteId"""
 
 # SWQL query to retrieve application template details.
 TEMPLATE_QUERY = """SELECT TOP 500 ApplicationTemplateID,Name,IsMockTemplate,

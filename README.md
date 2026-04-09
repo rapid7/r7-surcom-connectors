@@ -20,7 +20,7 @@ See the [Demo Connector](connectors/rapid7/demo_connector) for a working example
 
 ## Documentation
 
-* [Understand the Attack Surface Management type system](https://docs.rapid7.com/surface-command/asm-type-system/#undefined).
+* [Understand the Attack Surface Management type system](https://docs.rapid7.com/surface-command/asm-type-system).
 - [Troubleshoot connector issues](https://docs.rapid7.com/surface-command/build-custom-connectors/#troubleshoot-your-connector).
 
 ## Support

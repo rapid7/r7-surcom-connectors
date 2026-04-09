@@ -1,0 +1,352 @@
+x-samos-type-name: SolarWindsITAMUser
+x-samos-namespace: solarwinds.itam
+title: SolarWinds ITAM User
+description: A user account from SolarWinds IT Asset Management.
+
+x-samos-extends-types:
+  - type-name: User
+
+$ref: https://api.samanage.com#/components/schemas/User
+
+x-samos-keys:
+  - d_id
+  - id
+
+x-samos-table:
+  - name: name
+  - name: email
+  - name: role.name
+  - name: site.id
+  - name: department.id
+
+x-samos-detail:
+  - name: name
+  - name: email
+  - name: title
+  - name: disabled
+  - name: role.name
+  - name: phone
+  - name: mobile_phone
+  - name: site.id
+  - name: department.id
+  - name: d_group_ids
+  - name: provider
+  - name: created_at
+  - name: updated_at
+  - name: last_login
+
+x-samos-derived-properties:
+  d_id:
+    # API returns id as integer but User:id requires string type.
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  d_active:
+    # API provides 'disabled' string and core.principal:active expects boolean.
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: '!disabled'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+  d_is_administrator:
+    # Derived because admin status must be determined from nested role.name string.
+    # Returns true when role.name equals 'Administrator'.
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: "role.name == 'Administrator'"
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_administrator
+
+  d_group_ids:
+    # API returns group_ids as integers but core.principal:groups expects strings.
+    # Ref-types on items required to match core.principal:groups reference shape.
+    title: Groups
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: SolarWindsITAMGroup
+          key-name: d_id
+    syntax: jmespath
+    value: 'group_ids[].to_string(@)'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups
+
+properties:
+  id:
+    title: ID
+    type: integer
+    x-samos-immutable: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  disabled:
+    title: Disabled?
+    type: boolean
+
+  title:
+    title: Job Title
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: title
+
+  email:
+    title: Email
+    type: string
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+
+  created_at:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date
+
+  updated_at:
+    title: Updated At
+    type: string
+    format: date-time
+
+  last_login:
+    title: Last Login
+    type: string
+    format: date-time
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+
+  phone:
+    title: Phone
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+
+  mobile_phone:
+    title: Mobile Phone
+    type: string
+    nullable: true
+
+  role:
+    title: Role
+    type: object
+    x-samos-hidden: true
+    properties:
+      id:
+        title: Role ID
+        type: integer
+      name:
+        title: Role Name
+        type: string
+      description:
+        title: Role Description
+        type: string
+      portal:
+        title: Portal?
+        type: boolean
+      show_my_tasks:
+        title: Show My Tasks?
+        type: boolean
+
+  group_ids:
+    x-samos-hidden: true
+    title: Group IDs
+    type: array
+    items:
+      type: integer
+
+  available_for_assignment:
+    title: Available For Assignment?
+    type: boolean
+
+  can_be_available_for_assignment:
+    title: Can Be Available For Assignment?
+    type: boolean
+
+  provider:
+    title: Provider
+    type: string
+
+  custom_fields_values:
+    title: Custom Fields
+    type: array
+    x-samos-hidden: true
+    items:
+      type: object
+
+  site:
+    title: Site
+    type: object
+    nullable: true
+    x-samos-hidden: true
+    properties:
+      id:
+        title: Site
+        type: integer
+        x-samos-ref-types:
+          - type-name: SolarWindsITAMSite
+            key-name: id
+      name:
+        title: Site Name
+        type: string
+      location:
+        title: Location
+        type: string
+      description:
+        title: Description
+        type: string
+        nullable: true
+      time_zone:
+        title: Time Zone
+        type: string
+        nullable: true
+      language:
+        title: Language
+        type: string
+        nullable: true
+      business_record:
+        title: Business Record
+        type: string
+        nullable: true
+
+  department:
+    title: Department
+    type: object
+    nullable: true
+    x-samos-hidden: true
+    properties:
+      id:
+        title: Department
+        type: integer
+        x-samos-ref-types:
+          - type-name: SolarWindsITAMDepartment
+            key-name: id
+      name:
+        title: Department Name
+        type: string
+        x-samos-fulfills:
+          type-name: User
+          property-name: department
+      description:
+        title: Description
+        type: string
+        nullable: true
+      default_assignee_id:
+        title: Default Assignee ID
+        type: integer
+
+  avatar:
+    title: Avatar
+    type: object
+    x-samos-hidden: true
+    properties:
+      type:
+        title: Avatar Type
+        type: string
+      initials:
+        title: Initials
+        type: string
+        nullable: true
+      color:
+        title: Color
+        type: string
+
+  reports_to:
+    title: Reports To
+    type: object
+    nullable: true
+    x-samos-hidden: true
+    properties:
+      id:
+        title: Reports To ID
+        type: integer
+      group_id:
+        title: Reports To Group ID
+        type: integer
+        nullable: true
+      name:
+        title: Reports To Name
+        type: string
+        nullable: true
+      email:
+        title: Reports To Email
+        type: string
+        nullable: true
+      disabled:
+        title: Disabled
+        type: boolean
+      is_user:
+        title: User?
+        type: boolean
+      reports_to:
+        title: Parent Reports To
+        type: object
+        properties:
+          id:
+            title: Parent Reports To ID
+            type: integer
+          avatar:
+            title: Parent Avatar
+            type: object
+            nullable: true
+          name:
+            title: Parent Name
+            type: string
+            nullable: true
+          href:
+            title: Parent Href
+            type: string
+            nullable: true
+      avatar:
+        title: Avatar
+        type: object
+        properties:
+          type:
+            title: Avatar Type
+            type: string
+          color:
+            title: Color
+            type: string
+          klass:
+            title: Klass
+            type: string
+            nullable: true
+      type:
+        title: Reports To Type
+        type: string
+      send_notifications:
+        title: Send Notifications
+        type: boolean
+      custom_fields_values:
+        title: Custom Fields Values
+        type: array
+        items:
+          type: object
+        nullable: true

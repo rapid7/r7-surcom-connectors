@@ -1,0 +1,177 @@
+x-samos-type-name: PrivacyIDEAMFAToken
+x-samos-namespace: privacyidea.mfa
+title: privacyIDEA Token
+description: An authentication token from privacyIDEA MFA.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.component
+    subtype-priority: 5
+
+x-samos-keys:
+  - id #unique identifier
+  - serial # for reference by other types (e.g. machine-token mapping)
+
+x-samos-table:
+  - name: serial
+  - name: tokentype
+  - name: description
+  - name: username
+  - name: user_realm
+  - name: active
+
+x-samos-detail:
+  - name: serial
+  - name: user_id
+  - name: tokentype
+  - name: description
+  - name: username
+  - name: d_user_key
+  - name: user_realm
+  - name: realms
+  - name: resolver
+  - name: active
+  - name: locked
+  - name: revoked
+  - name: failcount
+  - name: maxfail
+  - name: otplen
+  - name: count
+  - name: count_window
+  - name: sync_window
+  - name: container_serial
+  - name: rollout_state
+  - name: user_editable
+  - name: tokengroup
+  - name: info
+
+x-samos-derived-properties:
+  # Composite key to reference the owning user (user_id alone is not unique across resolvers)
+  d_user_key:
+    title: Assigned User
+    type: string
+    syntax: expression
+    value: '{user_id}:{resolver}'
+    x-samos-ref-types:
+      - type-name: PrivacyIDEAMFAUser
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: users
+  # Display name combining token type and serial (e.g. "hotp: OATH00008A13")
+  d_id:
+    # Derived and fulfills id unified property name for core.component:id and will accept string type.
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: expression
+    value: '{id}'
+    title: Token ID
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  d_name:
+    # Display name to fulfill core.named-object:name
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: '{tokentype}:{serial}'
+    title: Token Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  d_first_seen:
+    # Derived to fulfill core.component:first_seen
+    x-samos-hidden: true
+    type: string
+    format: date-time
+    syntax: jmespath
+    value: 'info.creation_date'
+    title: Created At
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+properties:
+  serial:
+    type: string
+    title: Serial
+    x-samos-immutable: true
+  id:
+    type: integer
+    title: Token ID
+    x-samos-hidden: true
+    x-samos-immutable: true
+  tokentype:
+    type: string
+    title: Token Type
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  username:
+    type: string
+    title: Owner Username
+  user_realm:
+    type: string
+    title: Owner Realm
+  user_id:
+    type: string
+    title: Owner User ID
+  realms:
+    type: array
+    title: Realms
+    items:
+      type: string
+  resolver:
+    type: string
+    title: Resolver
+  active:
+    type: boolean
+    title: Active?
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+  locked:
+    type: boolean
+    title: Locked?
+  revoked:
+    type: boolean
+    title: Revoked?
+  failcount:
+    type: integer
+    title: Fail Count
+  maxfail:
+    type: integer
+    title: Max Failures
+  otplen:
+    type: integer
+    title: OTP Length
+  count:
+    type: integer
+    title: Count
+  count_window:
+    type: integer
+    title: Count Window
+  sync_window:
+    type: integer
+    title: Sync Window
+  container_serial:
+    type: string
+    title: Container Serial
+  rollout_state:
+    type: string
+    title: Rollout State
+  user_editable:
+    type: boolean
+    title: User Editable?
+  tokengroup:
+    type: array
+    title: Token Groups
+    items:
+      type: string
+  info:
+    type: object
+    title: Token Info

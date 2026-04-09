@@ -1,0 +1,52 @@
+[
+  {
+    "id": "Operational",
+    "value": "Operational",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "Spare",
+    "value": "Operational",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "Hold",
+    "value": "Non-Operational",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "In Repair",
+    "value": "Non-Operational",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "Broken",
+    "value": "Non-Operational",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "Lost",
+    "value": "Non-Operational",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "Stolen",
+    "value": "Non-Operational",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "Replacement",
+    "value": "Planned",
+    "map_to": "OperationalStatus: Planned"
+  },
+  {
+    "id": "Disposed",
+    "value": "Retired",
+    "map_to": "OperationalStatus: Retired"
+  },
+  {
+    "id": "Duplicate",
+    "value": "Retired",
+    "map_to": "OperationalStatus: Retired"
+  }
+]

@@ -1,13 +1,13 @@
 id: nautobot
-name: Nautobot (Beta)
+name: Nautobot
 author: Rapid7
-version: 0.1.0
+version: 1.0.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - initial release
+  - Remove Beta label
 
 # OpenAPI schema retrieved from the Nautobot instance.
 # This schema is filtered to include only the endpoints used by this connector,

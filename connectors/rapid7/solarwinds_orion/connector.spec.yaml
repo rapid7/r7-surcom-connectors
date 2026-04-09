@@ -1,11 +1,11 @@
 ﻿id: solarwinds.orion
 name: SolarWinds Orion
 author: Rapid7
-version: 1.4.0
-notice: Copyright © 2025 Rapid7. All rights reserved.
+version: 1.5.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Improve timeout and error handling for Orion API requests
+  - Remove ModernIcon field from Node and Application queries to fix compatibility with older SolarWinds Orion versions
 
 reference-schemas:
   - url: https://solarwinds.github.io/OrionSDK/2024.4

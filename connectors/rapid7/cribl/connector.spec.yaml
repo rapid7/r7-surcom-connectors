@@ -1,13 +1,13 @@
 id: cribl
 name: Cribl
 author: Rapid7
-version: 1.1.0
+version: 1.2.0
 notice: Copyright © 2025 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Pin dependencies
+  - Add Correlation with Surface Command types using CloudInstanceId
 
 # IDs of Surface Command types in this connector.
 # Type IDs must be unique across all connectors. Prefix each with a SnakeCaked

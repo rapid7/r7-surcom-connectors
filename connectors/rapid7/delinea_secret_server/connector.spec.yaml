@@ -1,11 +1,11 @@
 id: delinea.secret.server
-name: Delinea Secret Server (Beta)
+name: Delinea Secret Server
 author: Rapid7
-version: 0.3.0
+version: 1.0.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Pin dependencies
+  - Remove Beta label
 
 types:
   - DelineaSecretServerUser

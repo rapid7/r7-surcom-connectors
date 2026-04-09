@@ -96,7 +96,6 @@ x-samos-detail:
   - name: DisplayName
   - name: Category
   - name: IsOrionServer
-  - name: ModernIcon
   - name: CustomStatus
 
 required:
@@ -432,8 +431,10 @@ properties:
     title: Orion Server?
     type: boolean
   ModernIcon:
+    # Removed from queries - not available on older SolarWinds Orion versions
     title: Modern Icon
     type: string
+    x-samos-hidden: true
   IP:
     title: IP Address
     format: ip-addr

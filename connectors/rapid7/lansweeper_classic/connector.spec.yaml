@@ -1,11 +1,11 @@
 id: lansweeper.classic
-name: Lansweeper Classic (Beta)
+name: Lansweeper Classic
 author: Rapid7
-version: 0.2.0
+version: 1.1.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Pin dependencies
+  - LansweeperClassicAsset Descriptionlock is a boolean property
 
 types:
   - LansweeperClassicAsset

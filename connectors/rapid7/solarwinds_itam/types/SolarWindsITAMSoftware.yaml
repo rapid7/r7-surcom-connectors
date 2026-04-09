@@ -1,0 +1,258 @@
+x-samos-type-name: SolarWindsITAMSoftware
+x-samos-namespace: solarwinds.itam
+title: SolarWinds ITAM Software
+description: A software product from SolarWinds IT Asset Management.
+
+# Extends Software because this represents a software product/application.
+# Software extends core.component, core.named-object providing properties like
+# vendor, version, and standard naming.
+x-samos-extends-types:
+  - type-name: Software
+
+$ref: https://api.samanage.com#/components/schemas/Software
+
+# Key: d_id (string conversion of integer id). Used as the unique identifier for this software.
+x-samos-keys:
+  - d_id
+  - id
+
+x-samos-table:
+  - name: name
+  - name: vendor.name
+  - name: version
+  - name: category.name
+  - name: installs
+  - name: first_detected
+
+x-samos-detail:
+  - name: name
+  - name: vendor.name
+  - name: version
+  - name: category.name
+  - name: installs
+  - name: hidden
+  - name: greynet
+  - name: is_primary
+  - name: windows_system_component
+  - name: disable_auto_merge
+  - name: first_detected
+  - name: created_at
+  - name: updated_at
+
+x-samos-derived-properties:
+  d_id:
+    # API returns id as integer but core.component:id requires string type.
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_vendor_product_version:
+    # Concatenates vendor name, product name, and version for Software correlation.
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'join(`-`,[vendor.name,name,version][?@])'
+    x-samos-correlation:
+      correlation-key: Software.vendor-product-version
+      correlation-type: Software
+      priority: 3
+
+properties:
+  custom:
+    title: Custom
+    type: object
+    nullable: true
+    x-samos-hidden: true
+
+  id:
+    title: ID
+    type: integer
+    x-samos-immutable: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  manufacturer:
+    title: Manufacturer
+    type: string
+    nullable: true
+
+  category:
+    title: Category
+    type: object
+    nullable: true
+    x-samos-hidden: true
+    properties:
+      id:
+        title: Category ID
+        type: integer
+      name:
+        title: Category Name
+        type: string
+        x-samos-ref-types:
+          - type-name: EnumSoftwareType
+            key-name: id
+        x-samos-fulfills:
+          type-name: Software
+          property-name: type
+
+  vendor:
+    title: Vendor
+    type: object
+    x-samos-hidden: true
+    properties:
+      id:
+        title: Vendor ID
+        type: integer
+      name:
+        title: Vendor Name
+        type: string
+        x-samos-fulfills:
+          type-name: Software
+          property-name: vendor
+      address1:
+        title: Address 1
+        type: string
+        nullable: true
+      address2:
+        title: Address 2
+        type: string
+        nullable: true
+      city:
+        title: City
+        type: string
+        nullable: true
+      state:
+        title: State
+        type: string
+        nullable: true
+      zip:
+        title: ZIP
+        type: string
+        nullable: true
+      country:
+        title: Country
+        type: string
+        nullable: true
+      business_phone:
+        title: Business Phone
+        type: string
+        nullable: true
+      tech_support:
+        title: Tech Support
+        type: string
+        nullable: true
+      customer_service:
+        title: Customer Service
+        type: string
+        nullable: true
+      url:
+        title: URL
+        type: string
+        nullable: true
+      comments:
+        title: Comments
+        type: string
+        nullable: true
+      created_at:
+        title: Created At
+        type: string
+        format: date-time
+        nullable: true
+      updated_at:
+        title: Updated At
+        type: string
+        format: date-time
+        nullable: true
+      parent_id:
+        title: Parent ID
+        type: integer
+        nullable: true
+      hidden:
+        title: Hidden?
+        type: boolean
+        nullable: true
+
+  installs:
+    title: Installations
+    type: integer
+
+  version:
+    title: Version
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: Software
+      property-name: version
+
+  disable_auto_merge:
+    title: Auto Merge Disabled?
+    type: boolean
+
+  tag:
+    title: Tag
+    type: string
+    nullable: true
+
+  hidden:
+    title: Hidden?
+    type: boolean
+
+  greynet:
+    title: Greynet?
+    type: boolean
+    nullable: true
+
+  created_at:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  updated_at:
+    title: Updated At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  first_detected:
+    title: First Detected
+    type: string
+    format: date-time
+
+  windows_system_component:
+    title: Windows System Component?
+    type: boolean
+
+  primary_id:
+    title: Primary ID
+    type: integer
+    nullable: true
+
+  is_primary:
+    title: Primary?
+    type: boolean
+
+  hardwares_href:
+    title: Hardwares URL
+    type: string
+    x-samos-hidden: true
+
+  href:
+    title: API URL
+    type: string
+    format: url
+    x-samos-hidden: true

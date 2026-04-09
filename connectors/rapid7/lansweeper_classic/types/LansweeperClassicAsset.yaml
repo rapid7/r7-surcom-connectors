@@ -146,7 +146,7 @@ properties:
       type-name: core.named-object
       property-name: description
   Descriptionlock:
-    type: string
+    type: boolean
     title: Description Lock?
   Assettype:
     type: integer

@@ -1,8 +1,8 @@
 ﻿id: proactivanet
-name: Proactivanet (Beta)
+name: Proactivanet
 author: Rapid7
-version: 0.2.0
-notice: Copyright © 2025 Rapid7. All rights reserved.
+version: 1.0.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
 
 reference-schemas:
   - url: https://www.proactivanet.com/api/swagger
@@ -11,7 +11,7 @@ reference-schemas:
 # One or two entries describing the changes in this version.
 # (Previous changelog is maintained by the publishing process)
 current_changes:
-  - Pin dependencies
+  - Remove Beta label
 
 types:
   - ProactivanetDevice

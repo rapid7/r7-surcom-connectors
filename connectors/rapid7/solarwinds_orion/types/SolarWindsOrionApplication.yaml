@@ -131,5 +131,7 @@ properties:
     title: Instance Site
     type: integer
   ModernIcon:
+    # Removed from queries - not available on older SolarWinds Orion versions
     title: Modern Icon
     type: string
+    x-samos-hidden: true

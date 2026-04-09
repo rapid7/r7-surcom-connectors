@@ -1,0 +1,148 @@
+x-samos-type-name: SolarWindsITAMGroup
+x-samos-namespace: solarwinds.itam
+title: SolarWinds ITAM Group
+description: A user group from SolarWinds IT Asset Management.
+
+# Extends UserGroup because this represents a named group of users (e.g. "Tier 1 - IT").
+# UserGroup extends core.principal providing identity properties like active, last_seen, etc.
+x-samos-extends-types:
+  - type-name: UserGroup
+
+$ref: https://api.samanage.com#/components/schemas/Group
+
+# Key: d_id (string conversion of integer id). Used by SolarWindsITAMUser.group_ids for cross-reference.
+x-samos-keys:
+  - d_id
+  - id
+
+x-samos-table:
+  - name: name
+  - name: type
+  - name: disabled
+  - name: send_notifications
+
+x-samos-detail:
+  - name: name
+  - name: type
+  - name: disabled
+  - name: send_notifications
+  - name: is_user
+  - name: memberships
+
+x-samos-derived-properties:
+  d_id:
+    # API returns id as integer but UserGroup:id requires string type.
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+
+  d_active:
+    # core.principal.active requires boolean
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: '!disabled'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+properties:
+  id:
+    title: ID
+    type: integer
+    x-samos-immutable: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-correlation:
+      correlation-key: UserGroup.name
+      correlation-type: UserGroup
+      priority: 3
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    nullable: true
+
+  disabled:
+    title: Disabled?
+    type: boolean
+
+  is_user:
+    title: User?
+    type: boolean
+
+  reports_to:
+    title: Reports To
+    type: object
+    x-samos-hidden: true
+    properties:
+      id:
+        title: Reports To ID
+        type: integer
+      avatar:
+        title: Avatar
+        type: object
+        nullable: true
+      name:
+        title: Name
+        type: string
+        nullable: true
+      href:
+        title: Href
+        type: string
+
+  avatar:
+    title: Avatar
+    type: object
+    x-samos-hidden: true
+    properties:
+      type:
+        title: Avatar Type
+        type: string
+      color:
+        title: Color
+        type: string
+      klass:
+        title: Klass
+        type: string
+
+  type:
+    title: Type
+    type: string
+
+  send_notifications:
+    title: Send Notifications?
+    type: boolean
+
+  custom_fields_values:
+    title: Custom Fields
+    type: array
+    x-samos-hidden: true
+    items:
+      type: object
+
+  memberships:
+    title: Members
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: Membership ID
+          type: integer
+        type:
+          title: Member Type
+          type: string
+        user:
+          title: User Name
+          type: string

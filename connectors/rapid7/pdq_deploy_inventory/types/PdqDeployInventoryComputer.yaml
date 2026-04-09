@@ -1,0 +1,492 @@
+x-samos-type-name: PdqDeployInventoryComputer
+x-samos-namespace: pdq.deploy.inventory
+title: PDQ Deploy Inventory Computer
+description: A computer endpoint managed by PDQ Inventory.
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: Name
+  - name: HostName
+  - name: IPAddress
+  - name: OSName
+  - name: Manufacturer
+  - name: Model
+  - name: HeartbeatDate
+
+x-samos-detail:
+  - name: Name
+  - name: HostName
+  - name: IPAddress
+  - name: MacAddress
+  - name: OSName
+  - name: OSVersion
+  - name: OSServicePack
+  - name: d_os_architecture
+  - name: Manufacturer
+  - name: Model
+  - name: Chassis
+  - name: SerialNumber
+  - name: Memory
+  - name: x_collection_ids
+  - name: IsOnline
+  - name: CurrentUser
+  - name: HeartbeatDate
+  - name: Added
+  - name: SuccessfulScanDate
+  - name: BootTime
+  - name: d_needs_reboot
+  - name: BiosVersion
+  - name: BiosManufacturer
+  - name: DotNetVersions
+  - name: PSVersion
+  - name: TimeZone
+  - name: SystemDrive
+  - name: Description
+  - name: ADDomain
+  - name: ADDistinguishedName
+
+x-samos-derived-properties:
+  d_id:
+    # ComputerId is an integer, but we want to use it as a string ID
+    type: string
+    title: ID
+    syntax: expression
+    value: '{ComputerId}'
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_hostnames:
+    type: array
+    title: Hostnames
+    x-samos-hidden: true
+    syntax: jmespath
+    value: '[HostName, Name] | [?@]'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_needs_reboot:
+    type: boolean
+    title: Needs Reboot
+    syntax: jmespath
+    value: 'NeedsReboot == `1`'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: pending_reboot
+
+  d_os_architecture:
+    type: string
+    title: OS Architecture
+    syntax: expression
+    value: '{OSArchitecture}'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_architecture
+
+  d_mitigations:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+    syntax: jmespath
+    # M1051	(Update Software) if NeedsReboot == `1`
+    value: >-
+      [
+        NeedsReboot == `1` && `M1051` || null
+      ] | [?@]
+
+properties:
+  ComputerId:
+    type: integer
+    title: Computer ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+
+  Name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  HostName:
+    type: string
+    title: Hostname
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  IPAddress:
+    type: string
+    title: IP Address
+    format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  MacAddress:
+    type: string
+    title: MAC Address
+    format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 3
+
+  OSName:
+    type: string
+    title: Operating System
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_product
+
+  OSVersion:
+    type: string
+    title: OS Version
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+
+  OSServicePack:
+    type: string
+    title: OS Service Pack
+
+  OSArchitecture:
+    type: integer
+    title: OS Architecture
+    X-samos-hidden: true
+
+  OSInstallDate:
+    type: string
+    title: OS Install Date
+    format: date-time
+
+  OSSerialNumber:
+    type: string
+    title: OS Serial Number
+
+  Manufacturer:
+    type: string
+    title: Manufacturer
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+
+  Model:
+    type: string
+    title: Model
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+
+  Chassis:
+    type: string
+    title: Chassis
+
+  SerialNumber:
+    type: string
+    title: Serial Number
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+
+  Memory:
+    type: integer
+    title: Memory (Bytes)
+
+  IsOnline:
+    type: integer
+    title: Online?
+
+  CurrentUser:
+    type: string
+    title: Current User
+
+  HeartbeatDate:
+    type: string
+    title: Last Heartbeat
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+
+  Added:
+    type: string
+    title: Added
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_first_seen
+
+  SuccessfulScanDate:
+    type: string
+    title: Last Successful Scan
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_scanned
+
+  AttemptedScanDate:
+    type: string
+    title: Last Attempted Scan
+    format: date-time
+
+  BootTime:
+    type: string
+    title: Last Boot Time
+    format: date-time
+
+  NeedsReboot:
+    type: integer
+    title: Needs Reboot
+    x-samos-hidden: true
+
+  SimpleReasonForReboot:
+    type: string
+    title: Reason for Reboot
+
+  BiosVersion:
+    type: string
+    title: BIOS Version
+
+  BiosManufacturer:
+    type: string
+    title: BIOS Manufacturer
+
+  BiosAssetTag:
+    type: string
+    title: BIOS Asset Tag
+
+  SystemDrive:
+    type: string
+    title: System Drive
+
+  SystemFamily:
+    type: string
+    title: System Family
+
+  SystemSKU:
+    type: string
+    title: System SKU
+
+  SystemVersion:
+    type: string
+    title: System Version
+
+  Description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  IEVersion:
+    type: string
+    title: IE Version
+
+  DotNetVersions:
+    type: string
+    title: .NET Versions
+
+  PSVersion:
+    type: string
+    title: PowerShell Version
+
+  TimeZone:
+    type: string
+    title: Time Zone
+
+  ADDomain:
+    type: string
+    title: AD Domain
+
+  ADDistinguishedName:
+    type: string
+    title: AD Distinguished Name
+    x-samos-correlation:
+      correlation-key: Machine.x500-dn
+      correlation-type: Machine
+      priority: 4
+
+  ADDescription:
+    type: string
+    title: AD Description
+
+  ADLocation:
+    type: string
+    title: AD Location
+
+  ADGuid:
+    type: string
+    title: AD GUID
+
+  ADLastLogon:
+    type: string
+    title: AD Last Logon
+    format: date-time
+
+  ADWhenCreated:
+    type: string
+    title: AD When Created
+    format: date-time
+
+  ADIsDisabled:
+    type: string
+    title: AD Is Disabled
+
+  SMBv1Enabled:
+    type: string
+    title: SMBv1 Enabled
+
+  SMBv1ClientEnabled:
+    type: string
+    title: SMBv1 Client Enabled
+
+  ScanUserId:
+    type: integer
+    title: Scan User ID
+
+  ScanUserName:
+    type: string
+    title: Scan User Name
+
+  ScanError:
+    type: string
+    title: Scan Error
+
+  ScanErrorMessage:
+    type: string
+    title: Scan Error Message
+
+  OS:
+    type: string
+    title: OS Code
+
+  ComputerScanId:
+    type: integer
+    title: Computer Scan ID
+
+  AllowScan:
+    type: integer
+    title: Allow Scan
+
+  RequiresDotNet:
+    type: integer
+    title: Requires .NET
+
+  ADPath:
+    type: string
+    title: AD Path
+
+  ADParentGuid:
+    type: string
+    title: AD Parent GUID
+
+  ADParentDistinguishedName:
+    type: string
+    title: AD Parent Distinguished Name
+
+  ADParentPath:
+    type: string
+    title: AD Parent Path
+
+  ADFirstName:
+    type: string
+    title: AD First Name
+
+  ADLastName:
+    type: string
+    title: AD Last Name
+
+  ADDisplayName:
+    type: string
+    title: AD Display Name
+
+  ADSyncDate:
+    type: string
+    title: AD Sync Date
+    format: date-time
+
+  ADLogonServer:
+    type: string
+    title: AD Logon Server
+
+  ScanStatus:
+    type: string
+    title: Scan Status
+
+  DetailedReasonForReboot:
+    type: string
+    title: Detailed Reason for Reboot
+
+  LastIsOnlineTime:
+    type: string
+    title: Last Is Online Time
+    format: date-time
+
+  LastIsOfflineTime:
+    type: string
+    title: Last Is Offline Time
+    format: date-time
+
+  DFStatus:
+    type: string
+    title: DF Status
+
+  DFProductCode:
+    type: string
+    title: DF Product Code
+
+  DFVersion:
+    type: string
+    title: DF Version
+
+  ConnectAgentRunning:
+    type: integer
+    title: Connect Agent Running
+
+  ConnectAgentVersion:
+    type: string
+    title: Connect Agent Version
+
+  x_collection_ids:
+    type: array
+    title: Collection
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: PdqDeployInventoryCollection
+          key-name: d_id
+
+  AddedFrom:
+    type: string
+    title: Added From

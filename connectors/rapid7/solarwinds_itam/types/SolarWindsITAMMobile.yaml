@@ -1,0 +1,264 @@
+x-samos-type-name: SolarWindsITAMMobile
+x-samos-namespace: solarwinds.itam
+title: SolarWinds ITAM Mobile
+description: A mobile device asset from SolarWinds IT Asset Management.
+
+# Extends Machine because a mobile device is a computing device (tablet, phone).
+# Machine extends core.component, core.managed.asset, core.managed.endpoint.
+# subtype-priority: 3 ensures this is a lower-priority match vs other Machine subtypes.
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+$ref: https://api.samanage.com#/components/schemas/Mobile
+
+# Key: d_id (string conversion of integer id). Used as the unique identifier for this device.
+x-samos-keys:
+  - d_id
+  - id
+
+x-samos-table:
+  - name: name
+  - name: device_type
+  - name: manufacturer
+  - name: model
+  - name: status.name
+  - name: serial_number
+  - name: site.id
+
+x-samos-detail:
+  - name: name
+  - name: device_type
+  - name: manufacturer
+  - name: model
+  - name: status.name
+  - name: serial_number
+  - name: imei
+  - name: company_issued
+  - name: service_provider
+  - name: phone_number
+  - name: site.id
+  - name: department.id
+  - name: description
+  - name: last_report
+  - name: latitude
+  - name: longitude
+
+x-samos-derived-properties:
+  d_id:
+    # API returns id as integer but core.component:id requires string type.
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_active:
+    # Converts status to boolean: true when status.name equals 'Operational'.
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: "status.name == 'Operational'"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  id:
+    title: ID
+    type: integer
+    x-samos-immutable: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  href:
+    title: API URL
+    type: string
+    x-samos-hidden: true
+
+  device_type:
+    title: Device Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  category:
+    title: Category
+    type: object
+    x-samos-hidden: true
+    properties:
+      name:
+        title: Category Name
+        type: string
+
+  status:
+    title: Status
+    type: object
+    x-samos-hidden: true
+    properties:
+      id:
+        title: Status ID
+        type: integer
+      name:
+        title: Status Name
+        type: string
+        x-samos-ref-types:
+          - type-name: SolarWindsITAMEnumOperationalStatus
+            key-name: id
+        x-samos-fulfills:
+          type-name: core.component
+          property-name: operational_status
+
+  manufacturer:
+    title: Manufacturer
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+
+  model:
+    title: Model
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+
+  service_provider:
+    title: Service Provider
+    type: string
+    nullable: true
+
+  company_issued:
+    title: Company Issued?
+    type: boolean
+
+  serial_number:
+    title: Serial Number
+    type: string
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+
+  imei:
+    title: IMEI
+    type: string
+    nullable: true
+    x-samos-correlation:
+      correlation-key: Machine.hardware-id
+      correlation-type: Machine
+      priority: 3
+
+  last_report:
+    title: Last Report
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_scanned
+
+  description:
+    title: Description
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  user:
+    title: User
+    type: object
+    nullable: true
+
+  technical_contact:
+    title: Technical Contact
+    type: object
+    nullable: true
+  site:
+    title: Site
+    type: object
+    x-samos-hidden: true
+    properties:
+      id:
+        title: Site
+        type: integer
+        x-samos-ref-types:
+          - type-name: SolarWindsITAMSite
+            key-name: id
+      name:
+        title: Site Name
+        type: string
+      location:
+        title: Location
+        type: string
+      description:
+        title: Description
+        type: string
+        nullable: true
+      time_zone:
+        title: Time Zone
+        type: string
+        nullable: true
+      language:
+        title: Language
+        type: string
+        nullable: true
+      business_record:
+        title: Business Record
+        type: string
+        nullable: true
+
+  department:
+    title: Department
+    type: object
+    x-samos-hidden: true
+    properties:
+      id:
+        title: Department
+        type: integer
+        x-samos-ref-types:
+          - type-name: SolarWindsITAMDepartment
+            key-name: id
+      name:
+        title: Department Name
+        type: string
+      description:
+        title: Description
+        type: string
+        nullable: true
+      default_assignee_id:
+        title: Default Assignee ID
+        type: integer
+
+  latitude:
+    title: Latitude
+    type: string
+    nullable: true
+  longitude:
+    title: Longitude
+    type: string
+    nullable: true
+
+  phone_number:
+    title: Phone Number
+    type: string
+    nullable: true
+
+  custom_fields_values:
+    title: Custom Fields
+    type: array
+    x-samos-hidden: true
+    items:
+      type: object
