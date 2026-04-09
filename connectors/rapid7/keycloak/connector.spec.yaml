@@ -1,13 +1,13 @@
 id: keycloak
-name: Keycloak Identity Management (Beta)
+name: Keycloak Identity Management
 author: Rapid7
-version: 0.3.0
+version: 1.0.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Pin dependencies
+  - Remove Beta label
 
 reference-schemas:
   - url: https://keycloak.org/docs-api/latest/rest-api

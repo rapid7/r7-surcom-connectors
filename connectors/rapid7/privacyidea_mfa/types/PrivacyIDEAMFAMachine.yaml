@@ -1,0 +1,94 @@
+x-samos-type-name: PrivacyIDEAMFAMachine
+x-samos-namespace: privacyidea.mfa
+title: privacyIDEA Machine
+description: A Machine from privacyIDEA MFA.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: hostname
+  - name: ip
+  - name: resolver_name
+
+x-samos-detail:
+  - name: hostname
+  - name: ip
+  - name: resolver_name
+
+x-samos-derived-properties:
+  # Composite key — machine id alone is not unique across resolvers
+  d_id:
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: expression
+    value: '{id}:{resolver_name}'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  # Display name from the first hostname in the array
+  d_name:
+    type: string
+    syntax: jmespath
+    value: 'hostname[0]'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  # Hostname containing a dot — used for qualified hostname correlation
+  d_qualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: "hostname[0] && contains(hostname[0], '.') && hostname[0] || null"
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+  # Hostname without a dot — used for unqualified hostname correlation
+  d_unqualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: "hostname[0] && !contains(hostname[0], '.') && hostname[0] || null"
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+properties:
+  id:
+    type: string
+    title: Machine ID
+    x-samos-hidden: true
+    x-samos-immutable: true
+  hostname:
+    type: array
+    title: Hostname
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+  ip:
+    type: string
+    title: IP Address
+    format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  resolver_name:
+    type: string
+    title: Resolver
+# x-samos-virtual:
+#   # Machine ← MachineToken → Token → User
+#   users:
+#     type-name: PrivacyIDEAMFAUser
+#     cypher-pattern: >
+#       <-[:`e:PrivacyIDEAMFAMachineToken:id`]-(:PrivacyIDEAMFAMachineToken)-[:`e:PrivacyIDEAMFAMachineToken:serial`]->(:PrivacyIDEAMFAToken)-[:`e:PrivacyIDEAMFAToken:user_id`]->(:PrivacyIDEAMFAUser)

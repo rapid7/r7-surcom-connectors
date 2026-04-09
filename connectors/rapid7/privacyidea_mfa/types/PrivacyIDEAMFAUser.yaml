@@ -1,0 +1,106 @@
+x-samos-type-name: PrivacyIDEAMFAUser
+x-samos-namespace: privacyidea.mfa
+title: privacyIDEA User
+description: A User from privacyIDEA MFA.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: username
+  - name: givenname
+  - name: surname
+  - name: email
+  - name: resolver
+
+x-samos-detail:
+  - name: username
+  - name: givenname
+  - name: surname
+  - name: email
+  - name: description
+  - name: phone
+  - name: mobile
+  - name: resolver
+  - name: editable
+
+x-samos-derived-properties:
+  # Composite key — userid alone is not unique across resolvers
+  d_id:
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: expression
+    value: '{userid}:{resolver}'
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  # Display name combining first and last name
+  d_name:
+    type: string
+    syntax: expression
+    value: '{givenname} {surname}'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  userid:
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    title: User ID
+  username:
+    type: string
+    title: Username
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+  givenname:
+    type: string
+    title: First Name
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+  surname:
+    type: string
+    title: Last Name
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+  email:
+    type: string
+    title: Email
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 1
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  phone:
+    type: string
+    title: Phone
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+  mobile:
+    type: string
+    title: Mobile
+  resolver:
+    type: string
+    title: Resolver
+  editable:
+    type: boolean
+    title: Editable?

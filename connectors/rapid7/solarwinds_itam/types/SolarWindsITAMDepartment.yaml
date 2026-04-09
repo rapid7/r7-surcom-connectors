@@ -1,0 +1,68 @@
+x-samos-type-name: SolarWindsITAMDepartment
+x-samos-namespace: solarwinds.itam
+title: SolarWinds ITAM Department
+description: An organizational department from SolarWinds IT Asset Management.
+
+x-samos-extends-types:
+  - type-name: core.component-group
+    subtype-priority: 3
+
+$ref: https://api.samanage.com#/components/schemas/Department
+
+x-samos-keys:
+  - d_id
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+
+x-samos-detail:
+  - name: name
+  - name: description
+
+x-samos-derived-properties:
+  d_id:
+    # the API returns id as integer but core.component:id requires string type.
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+properties:
+  id:
+    title: ID
+    type: integer
+    x-samos-immutable: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  default_assignee:
+    title: Default Assignee
+    nullable: true
+
+  default_group_assignee:
+    title: Default Group Assignee
+    nullable: true
+
+  default_assignee_id:
+    title: Default Assignee ID
+    type: integer
+    nullable: true

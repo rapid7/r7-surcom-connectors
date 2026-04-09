@@ -1,0 +1,150 @@
+x-samos-type-name: PdqDeployInventoryCollection
+x-samos-namespace: pdq.deploy.inventory
+title: PDQ Deploy Inventory Collection
+description: A collection (group) of computers in PDQ Inventory.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.component-group
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: Name
+  - name: Path
+  - name: Type
+  - name: ComputerCount
+  - name: d_active
+
+x-samos-detail:
+  - name: Name
+  - name: Description
+  - name: Path
+  - name: Type
+  - name: ComputerCount
+  - name: d_active
+  - name: d_parent_ref
+  - name: Created
+  - name: Modified
+
+x-samos-derived-properties:
+  d_id:
+    # CollectionId is an integer
+    type: string
+    title: ID
+    syntax: expression
+    value: '{CollectionId}'
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_parent_ref:
+    # ParentId is an integer, but we want to link to the parent collection by its d_id
+    type: string
+    title: Parent
+    syntax: expression
+    value: '{ParentId}'
+    x-samos-hidden: true
+    x-samos-ref-types:
+      - type-name: PdqDeployInventoryCollection
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+  d_active:
+    type: boolean
+    title: Active
+    syntax: jmespath
+    value: 'IsEnabled == `1`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  CollectionId:
+    type: integer
+    title: Collection ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+
+  Name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  Description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  Path:
+    type: string
+    title: Path
+
+  Type:
+    type: string
+    title: Collection Type
+
+  ComputerCount:
+    type: integer
+    title: Computer Count
+
+  IsEnabled:
+    type: integer
+    x-samos-hidden: true
+
+  ParentId:
+    type: integer
+    title: Parent Collection ID
+    x-samos-hidden: true
+    # we already derive it for reference
+
+  Created:
+    type: string
+    title: Created
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  Modified:
+    type: string
+    title: Modified
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  IsDrillDown:
+    type: integer
+    title: Is Drill Down
+
+  LibraryCollectionId:
+    type: integer
+    title: Library Collection ID
+
+  ReportDefinitionId:
+    type: integer
+    title: Report Definition ID
+
+  Error:
+    type: string
+    title: Error
+
+  ADDistinguishedName:
+    type: string
+    title: AD Distinguished Name
+
+x-samos-virtual:
+  members:
+    type-name: PdqDeployInventoryComputer
+    cypher-pattern: >
+      <-[:`e:PdqDeployInventoryComputer:x_collection_ids`]-(:PdqDeployInventoryComputer)

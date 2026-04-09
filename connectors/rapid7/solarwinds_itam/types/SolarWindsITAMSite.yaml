@@ -1,0 +1,99 @@
+x-samos-type-name: SolarWindsITAMSite
+x-samos-namespace: solarwinds.itam
+title: SolarWinds ITAM Site
+description: An organizational site or location from SolarWinds IT Asset Management.
+
+x-samos-extends-types:
+  - type-name: Location
+
+$ref: https://api.samanage.com#/components/schemas/Site
+
+x-samos-keys:
+  - d_id
+  - id
+
+x-samos-table:
+  - name: name
+  - name: location
+  - name: description
+  - name: time_zone
+  - name: language
+
+x-samos-detail:
+  - name: name
+  - name: location
+  - name: description
+  - name: time_zone
+  - name: language
+
+x-samos-derived-properties:
+  d_id:
+    # API returns id as integer but Location:id requires string type.
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-fulfills:
+      type-name: Location
+      property-name: id
+
+properties:
+  id:
+    title: ID
+    type: integer
+    x-samos-immutable: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-correlation:
+      correlation-key: Location.name
+      correlation-type: Location
+      priority: 3
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  location:
+    title: Location
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: address
+
+  description:
+    title: Description
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  time_zone:
+    title: Time Zone
+    type: string
+    nullable: true
+
+  language:
+    title: Language
+    type: string
+    nullable: true
+
+  default_assignee:
+    title: Default Assignee
+    type: integer
+    nullable: true
+    x-samos-hidden: true
+
+  default_group_assignee:
+    title: Default Group Assignee
+    type: integer
+    nullable: true
+    x-samos-hidden: true
+
+  business_record:
+    title: Business Record
+    type: object
+    nullable: true
+    x-samos-hidden: true

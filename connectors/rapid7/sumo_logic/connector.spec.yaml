@@ -1,11 +1,11 @@
 id: sumo.logic
-name: Sumo Logic (Beta)
+name: Sumo Logic
 author: Rapid7
-version: 0.3.0
+version: 1.0.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Pin dependencies
+  - Remove Beta label
 
 types:
   - SumoLogicCollector

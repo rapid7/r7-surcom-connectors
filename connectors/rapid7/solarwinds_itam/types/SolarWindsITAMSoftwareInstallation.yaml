@@ -1,0 +1,91 @@
+x-samos-type-name: SolarWindsITAMSoftwareInstallation
+x-samos-namespace: solarwinds.itam
+title: SolarWinds ITAM Software Installation
+description: >-
+  A cross-reference linking a hardware device to an installed software package in SolarWinds IT Asset Management.
+
+# x-samos-extends-types:
+#   - type-name: SoftwareInstall  # this still in development phase, once the base type is ready we can extend and test
+
+# Hidden junction type — used to bridge Hardware ↔ Software with metadata.
+x-samos-hidden: true
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: x_hardware_id
+  - name: x_software_id
+  - name: software_name
+  - name: software_vendor
+  - name: version
+  - name: first_detected
+  - name: updated_at
+
+x-samos-detail:
+  - name: x_hardware_id
+  - name: x_software_id
+  - name: software_name
+  - name: software_vendor
+  - name: version
+  - name: created_at
+  - name: updated_at
+  - name: first_detected
+
+x-samos-derived-properties:
+  d_id:
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: "join('_', [x_software_id, x_hardware_id])"
+
+properties:
+  x_hardware_id:
+    title: Hardware
+    type: string
+    x-samos-immutable: true
+    x-samos-ref-types:
+      - type-name: SolarWindsITAMHardware
+        key-name: d_id
+
+  x_software_id:
+    title: Software
+    type: string
+    x-samos-immutable: true
+    x-samos-ref-types:
+      - type-name: SolarWindsITAMSoftware
+        key-name: d_id
+
+  software_name:
+    title: Software Name
+    type: string
+    nullable: true
+
+  software_vendor:
+    title: Vendor
+    type: string
+    nullable: true
+
+  version:
+    title: Version
+    type: string
+    nullable: true
+
+  created_at:
+    title: Created At
+    type: string
+    format: date-time
+    nullable: true
+
+  updated_at:
+    title: Last Seen
+    type: string
+    format: date-time
+    nullable: true
+
+  first_detected:
+    title: First Detected
+    type: string
+    format: date-time
+    nullable: true

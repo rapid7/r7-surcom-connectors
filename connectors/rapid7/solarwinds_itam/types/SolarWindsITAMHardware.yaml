@@ -1,0 +1,644 @@
+x-samos-type-name: SolarWindsITAMHardware
+x-samos-namespace: solarwinds.itam
+title: SolarWinds ITAM Hardware
+description: A hardware asset from SolarWinds IT Asset Management.
+
+# Extends Machine because hardware assets are physical/virtual computing devices.
+# Machine extends core.component, core.managed.asset, core.managed.endpoint providing
+# properties like ips, mac_addresses, operating_system, serial_number, asset_tag, etc.
+# subtype-priority: 3 ensures this is a lower-priority match vs other Machine subtypes.
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+$ref: https://api.samanage.com#/components/schemas/Hardware
+
+# Key: d_id (string conversion of integer id). Used as the unique identifier for this asset.
+x-samos-keys:
+  - d_id
+  - id
+
+x-samos-table:
+  - name: name
+  - name: ip
+  - name: category.name
+  - name: status.name
+  - name: operating_system
+  - name: serial_number
+  - name: site.id
+
+x-samos-detail:
+  - name: name
+  - name: ip
+  - name: external_ip
+  - name: category.name
+  - name: status.name
+  - name: operating_system
+  - name: operating_system_version
+  - name: cpu
+  - name: physical_memory
+  - name: model
+  - name: serial_number
+  - name: asset_tag
+  - name: username
+  - name: domain
+  - name: site.id
+  - name: department.id
+  - name: owner_id
+  - name: description
+  - name: processor_speed
+  - name: latitude
+  - name: longitude
+  - name: created_at
+  - name: updated_at
+  - name: detected_at
+
+# x-samos-virtual:
+#   installed_software:
+#     type-name: Software
+#     cypher-pattern: >-
+#       <-[:`e:SolarWindsITAMSoftwareInstallation:x_hardware_id`]- (:SolarWindsITAMSoftwareInstallation) -[:`e:SolarWindsITAMSoftwareInstallation:x_software_id`]-> (:SolarWindsITAMSoftware)
+
+x-samos-derived-properties:
+  d_id:
+    # API returns id as integer but core.component:id requires string type.
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_active:
+    # Converts status to boolean: true when status.name equals 'Operational'.
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: "status.name == 'Operational'"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_mac_addresses:
+    # mac_addresses is a string but we need array[string]
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: 'networks[].mac_address'
+    items:
+      type: string
+      format: mac-addr
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 3
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+
+  d_ip_addresses:
+    # ips is string but we need array[string]
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: 'networks[].ip_address'
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  d_make:
+    # Derived because manufacturer is nested inside bioses[] array.
+    # Extracts the first BIOS manufacturer to fulfill core.managed.asset:make.
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'bioses[0].manufacturer'
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+
+  d_hostnames:
+    # Derived because Machine:hostnames expects an array but API provides single name string.
+    # Wraps name in array to fulfill Machine:hostnames.
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: '[name]'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+properties:
+  custom:
+    title: Custom
+    type: object
+    nullable: true
+    x-samos-hidden: true
+
+  href:
+    title: API URL
+    type: string
+    format: url
+    x-samos-hidden: true
+
+  id:
+    title: ID
+    type: integer
+    x-samos-immutable: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  ip:
+    title: IP Address
+    type: string
+    format: ip-addr
+
+  category:
+    title: Category
+    type: object
+    x-samos-hidden: true
+    properties:
+      id:
+        title: Category ID
+        type: integer
+      name:
+        title: Category Name
+        type: string
+
+  status:
+    title: Status
+    type: object
+    x-samos-hidden: true
+    properties:
+      id:
+        title: Status ID
+        type: integer
+      name:
+        title: Status Name
+        type: string
+        x-samos-ref-types:
+          - type-name: SolarWindsITAMEnumOperationalStatus
+            key-name: id
+        x-samos-fulfills:
+          type-name: core.component
+          property-name: operational_status
+
+  operating_system:
+    title: Operating System
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  operating_system_version:
+    title: OS Version
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+
+  cpu:
+    title: CPU
+    type: string
+
+  physical_memory:
+    title: Physical Memory (MB)
+    type: integer
+    nullable: true
+
+  domain:
+    title: Domain
+    type: string
+    nullable: true
+
+  site:
+    title: Site
+    type: object
+    nullable: true
+    properties:
+      id:
+        title: Site
+        type: integer
+        x-samos-ref-types:
+          - type-name: SolarWindsITAMSite
+            key-name: id
+      name:
+        title: Site Name
+        type: string
+      location:
+        title: Location
+        type: string
+      description:
+        title: Description
+        type: string
+        nullable: true
+      time_zone:
+        title: Time Zone
+        type: string
+        nullable: true
+      language:
+        title: Language
+        type: string
+        nullable: true
+      business_record:
+        title: Business Record
+        type: string
+        nullable: true
+
+  department:
+    title: Department
+    type: object
+    x-samos-hidden: true
+    nullable: true
+    properties:
+      id:
+        title: Department
+        type: integer
+        x-samos-ref-types:
+          - type-name: SolarWindsITAMDepartment
+            key-name: id
+      name:
+        title: Department Name
+        type: string
+      description:
+        title: Description
+        type: string
+        nullable: true
+      default_assignee_id:
+        title: Default Assignee ID
+        type: integer
+
+  username:
+    title: Username
+    type: string
+    nullable: true
+
+  asset_tag:
+    title: Asset Tag
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_tag
+
+  tag:
+    title: Tag
+    type: string
+    nullable: true
+
+  created_at:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  updated_at:
+    title: Updated At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  detected_at:
+    title: Detected At
+    type: string
+    format: date-time
+    nullable: true
+
+  serial_number:
+    title: Serial Number
+    type: string
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+
+  model:
+    title: Model
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+
+  softwares_href:
+    title: Softwares URL
+    type: string
+    x-samos-hidden: true
+
+  hidden_softwares_href:
+    title: Hidden Softwares URL
+    type: string
+    x-samos-hidden: true
+
+  risks_href:
+    title: Risks URL
+    type: string
+    x-samos-hidden: true
+
+  audits_href:
+    title: Audits URL
+    type: string
+    x-samos-hidden: true
+
+  incidents_href:
+    title: Incidents URL
+    type: string
+    x-samos-hidden: true
+
+  purchase_orders_href:
+    title: Purchase Orders URL
+    type: string
+    x-samos-hidden: true
+
+  hardware_spec_href:
+    title: Hardware Spec URL
+    type: string
+    x-samos-hidden: true
+
+  bio:
+    title: BIOS Information
+    type: array
+    nullable: true
+    x-samos-hidden: true
+    items:
+      type: object
+
+  owner:
+    title: Owner
+    type: object
+    nullable: true
+    x-samos-hidden: true
+    additionalProperties: true
+
+  technical_contact:
+    title: Technical Contact
+    type: object
+    nullable: true
+    x-samos-hidden: true
+    additionalProperties: true
+
+  barcode_encoding_format:
+    title: Barcode Encoding Format
+    type: string
+    nullable: true
+    x-samos-hidden: true
+
+  owner_id:
+    title: Owner ID
+    type: string
+    nullable: true
+    x-samos-ref-types:
+      - type-name: SolarWindsITAMUser
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: users
+
+  address:
+    title: Address
+    type: string
+    nullable: true
+
+  notes:
+    title: Notes
+    type: string
+    nullable: true
+
+  processor_speed:
+    title: Processor Speed (MHz)
+    type: integer
+    nullable: true
+
+  memory:
+    title: Memory (MB)
+    type: integer
+    nullable: true
+
+  swap:
+    title: Swap (MB)
+    type: integer
+    nullable: true
+
+  description:
+    title: Description
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  monitors:
+    title: Monitor Count
+    type: integer
+
+  bioses:
+    title: BIOS
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: ID
+          type: integer
+        ssn:
+          title: Serial Number
+          type: string
+        version:
+          title: Version
+          type: string
+          nullable: true
+        manufacturer:
+          title: Manufacturer
+          type: string
+        model:
+          title: Model
+          type: string
+          nullable: true
+        bios_date:
+          title: BIOS Date
+          type: string
+          nullable: true
+        reported_at:
+          title: Reported At
+          type: string
+          format: date-time
+        previous_ssn:
+          title: Previous Serial Number
+          type: string
+          nullable: true
+
+  networks:
+    title: Networks
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: ID
+          type: integer
+        ip_address:
+          title: IP Address
+          type: string
+          format: ip-addr
+        mac_address:
+          title: MAC Address
+          type: string
+          format: mac-addr
+        description:
+          title: Description
+          type: string
+        dhcp:
+          title: DHCP
+          type: string
+        gateway:
+          title: Gateway
+          type: string
+        status:
+          title: Status
+          type: string
+          nullable: true
+        reported_at:
+          title: Reported At
+          type: string
+          format: date-time
+        samagent_object_hash:
+          title: Agent Object Hash
+          type: string
+          nullable: true
+          x-samos-hidden: true
+
+  drives:
+    title: Drives
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: ID
+          type: integer
+        name:
+          title: Name
+          type: string
+        drive_type:
+          title: Drive Type
+          type: string
+        total_space:
+          title: Total Space
+          type: integer
+        free_space:
+          title: Free Space
+          type: integer
+        drive_name:
+          title: Drive Name
+          type: string
+          nullable: true
+        reported_at:
+          title: Reported At
+          type: string
+          format: date-time
+        samagent_object_hash:
+          title: Agent Object Hash
+          type: string
+          x-samos-hidden: true
+
+  storages:
+    title: Storage
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: ID
+          type: integer
+        name:
+          title: Name
+          type: string
+        description:
+          title: Description
+          type: string
+        manufacturer:
+          title: Manufacturer
+          type: string
+        model:
+          title: Model
+          type: string
+        storage_type:
+          title: Storage Type
+          type: string
+        size:
+          title: Size (MB)
+          type: integer
+        reported_at:
+          title: Reported At
+          type: string
+          format: date-time
+        samagent_object_hash:
+          title: Agent Object Hash
+          type: string
+          x-samos-hidden: true
+
+  latitude:
+    title: Latitude
+    type: string
+    nullable: true
+
+  longitude:
+    title: Longitude
+    type: string
+    nullable: true
+
+  active_directory:
+    title: Active Directory
+    type: string
+    nullable: true
+
+  product_number:
+    title: Product Number
+    type: string
+    nullable: true
+
+  external_ip:
+    title: External IP
+    type: string
+    nullable: true
+    format: ip-addr
+
+  custom_fields_values:
+    title: Custom Fields
+    type: array
+    x-samos-hidden: true
+    items:
+      type: object
+
+  x_installed_software_ids:
+    title: Installed Software
+    type: array
+    x-samos-hidden: true
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: SolarWindsITAMSoftware
+          key-name: d_id

@@ -1,11 +1,11 @@
 id: docusnap365
-name: Docusnap365 (Beta)
+name: Docusnap365
 author: Rapid7
-version: 0.2.0
-notice: Copyright © 2025 Rapid7. All rights reserved.
+version: 1.0.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Pin dependencies
+  - Remove Beta label
 
 types:
   - Docusnap365Site

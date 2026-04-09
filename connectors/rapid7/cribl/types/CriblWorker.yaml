@@ -247,6 +247,13 @@ properties:
           type:
             type: string
             title: Instance Type
+          instanceId:
+            type: string
+            title: Instance ID
+            x-samos-correlation:
+              correlation-key: CloudInstanceId
+              correlation-type: Machine
+              priority: 3
       os:
         type: object
         title: Operating System

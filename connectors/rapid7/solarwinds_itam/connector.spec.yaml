@@ -1,0 +1,80 @@
+id: solarwinds.itam
+name: SolarWinds IT Asset Management
+author: Rapid7
+version: 1.0.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Remove Beta label
+
+reference-schemas:
+  - url: https://api.samanage.com
+    file: refdocs/resolved_schema.json
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - SolarWindsITAMUser
+  - SolarWindsITAMGroup
+  - SolarWindsITAMSite
+  - SolarWindsITAMDepartment
+  - SolarWindsITAMHardware
+  - SolarWindsITAMMobile
+  - SolarWindsITAMSoftware
+  - SolarWindsITAMSoftwareInstallation
+  - SolarWindsITAMEnumOperationalStatus
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: SolarWinds ITAM Assets, Users, and Configuration Data
+    description: Import hardware assets, mobile devices, software, users, groups, sites, and departments from SolarWinds IT Asset Management.
+    return_types:
+      - SolarWindsITAMUser
+      - SolarWindsITAMGroup
+      - SolarWindsITAMSite
+      - SolarWindsITAMDepartment
+      - SolarWindsITAMHardware
+      - SolarWindsITAMMobile
+      - SolarWindsITAMSoftware
+      - SolarWindsITAMSoftwareInstallation
+
+# Configuration settings for this connector.
+settings:
+  region:
+    type: string
+    title: Region
+    description: The region your SolarWinds ITAM instance is hosted in.
+    enum:
+      - US
+      - EU
+      - APJ
+    default: US
+
+  json_web_token:
+    type: string
+    title: JSON Web Token
+    description: JSON Web Token (JWT) for authenticating with the SolarWinds ITAM API.
+    format: password
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Add required Python dependencies here. Pin each dependency to a specific
+# version.
+# python_dependencies:
+#  - "another_dependency==1.0.0"
+
+# Categories for this connector in the Extension Library.
+categories:
+  - asset_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

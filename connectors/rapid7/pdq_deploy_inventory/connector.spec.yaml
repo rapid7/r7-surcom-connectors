@@ -1,0 +1,56 @@
+id: pdq.deploy.inventory
+name: PDQ Deploy and Inventory (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+types:
+  - PdqDeployInventoryComputer
+  - PdqDeployInventoryCollection
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: PDQ Inventory Computers and Collections
+    description: Import computers and collections from PDQ Inventory via direct database access over SMB.
+    return_types:
+      - PdqDeployInventoryComputer
+      - PdqDeployInventoryCollection
+
+settings:
+  host:
+    type: string
+    title: PDQ Server Host
+    description: The hostname or IP address of the Windows server running PDQ Inventory.
+    example: 10.0.0.1
+
+  username:
+    type: string
+    title: Username
+    description: A Windows username with administrative share (C$) access on the PDQ server.
+
+  password:
+    type: string
+    title: Password
+    format: password
+    description: The password for the Windows account used to connect to the PDQ server.
+
+  inventory_db_path:
+    type: string
+    title: Inventory Database Path
+    description: The file path to the PDQ Inventory SQLite database on the remote server, relative to the C$ share.
+    default: ProgramData\Admin Arsenal\PDQ Inventory\Database.db
+
+runtime: py311
+
+python_dependencies:
+  - impacket
+
+categories:
+  - endpoint_management
+
+show_orchestrator_ui: false
