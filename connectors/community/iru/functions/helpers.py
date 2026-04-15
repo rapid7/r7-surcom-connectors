@@ -6,6 +6,7 @@ from r7_surcom_api import HttpSession
 from .sc_settings import Settings
 
 # Maximum number of devices per page supported by the Iru API
+# https://api-docs.kandji.io/#78209960-31a7-4e3b-a2c0-95c7e65bb5f9
 DEVICE_PER_PAGE = 300
 
 
