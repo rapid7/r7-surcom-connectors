@@ -1,0 +1,21 @@
+[
+  {
+    "active": true,
+    "archived": false,
+    "created_at": "2025-06-10T15:33:43.455991Z",
+    "department": "Sales",
+    "deprecated_user_id": "123",
+    "email": "marijo.dunbleton@example.com",
+    "id": "e122c823-52e9-468f-a612-fd698028c122",
+    "integration": {
+      "id": 1,
+      "name": "Okta",
+      "uuid": "c56c9371-7e17-4aca-8a26-55b104743c74",
+      "type": "scim"
+    },
+    "job_title": "Account Executive",
+    "name": "Marijo Dunbleton",
+    "device_count": 1,
+    "updated_at": "2025-08-15T00:05:14.156719Z"
+  }
+]

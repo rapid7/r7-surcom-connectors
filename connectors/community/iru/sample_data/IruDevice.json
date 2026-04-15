@@ -1,0 +1,155 @@
+[
+  {
+    "general": {
+      "device_id": "b5784dea-06c7-4c0f-9f5a-f1ec8d4ab9f3",
+      "device_name": "Marijo Dunbleton's MacBook Air",
+      "platform": "Mac",
+      "first_enrollment": "2025-08-20T09:13:51.294911+00:00",
+      "last_enrollment": "2025-08-20T09:13:51.294911+00:00",
+      "assigned_user": {
+        "email": "marijo.dunbleton@example.com",
+        "name": "Marijo Dunbleton",
+        "id": "e122c823-52e9-468f-a612-fd698028c122",
+        "is_archived": false,
+        "active": true
+      },
+      "blueprint_name": "Example Blueprint",
+      "blueprint_uuid": "8ab46f83-9da0-40a3-8f54-6a0a014b599f",
+      "asset_tag": "",
+      "model": "MacBook Air (13-inch, M4, 2025)",
+      "os_version": "26.1",
+      "supplemental_build_version": "25B78",
+      "supplemental_os_version_extra": "",
+      "system_version": "26.1 (25B78)",
+      "boot_volume": "Macintosh HD",
+      "time_since_boot": "1 week ago",
+      "last_user": "marijo.dunbleton"
+    },
+    "mdm": {
+      "mdm_enabled": true,
+      "supervised": true,
+      "install_date": "2025-08-20T09:13:50.871820+00:00",
+      "last_check_in": "2025-11-21T17:26:01.393166+00:00",
+      "mdm_enabled_user": [
+        "Marijo Dunbleton"
+      ]
+    },
+    "activation_lock": {
+      "bypass_code_failed": false,
+      "user_activation_lock_enabled": false,
+      "device_activation_lock_enabled": false,
+      "activation_lock_allowed_while_supervised": false,
+      "activation_lock_supported": true
+    },
+    "filevault": {
+      "filevault_enabled": true,
+      "filevault_recoverykey_type": "Personal",
+      "filevault_prk_escrowed": true,
+      "filevault_next_rotation": "2026-02-16T06:36:39.649682Z",
+      "filevault_regen_required": false
+    },
+    "lost_mode": {},
+    "automated_device_enrollment": {
+      "auto_enroll_eligible": true,
+      "auto_enrolled": true
+    },
+    "kandji_agent": {
+      "agent_installed": true,
+      "install_date": "2025-08-20T09:20:55+00:00",
+      "last_check_in": "2025-11-21T17:36:52.598463Z",
+      "agent_version": "4.6.31 (5350)"
+    },
+    "hardware_overview": {
+      "model_name": "Mac",
+      "model_identifier": "Mac16,12",
+      "processor_name": "Apple M4",
+      "processor_speed": "",
+      "number_of_processors": "10",
+      "total_number_of_cores": "10",
+      "memory": "16 GB LPDDR5",
+      "battery_health": "normal",
+      "udid": "f321b3a2-734f-46fd-a446-e6f15e75ade9",
+      "serial_number": "ABC1DEF2GHI"
+    },
+    "volumes": [
+      {
+        "name": "Data",
+        "format": "APFS (Encrypted)",
+        "percent_used": "17%",
+        "identifier": "disk3s5",
+        "capacity": "460.43 GB",
+        "available": "379.33 GB",
+        "encrypted": true
+      },
+      {
+        "name": "Macintosh HD",
+        "format": "APFS",
+        "percent_used": "17%",
+        "identifier": "disk3s1s1",
+        "capacity": "460.43 GB",
+        "available": "379.33 GB",
+        "encrypted": false
+      }
+    ],
+    "network": {
+      "local_hostname": "Marijo-Dunbletons-MacBook-Air",
+      "mac_address": "00:1a:2b:3c:4d:5e",
+      "ip_address": "192.168.1.2",
+      "public_ip": ""
+    },
+    "recovery_information": {
+      "recovery_lock_enabled": true,
+      "firmware_password_exist": false,
+      "firmware_password_pending": false,
+      "password_rotation_scheduled": "2026-02-15T11:02:42.635182Z",
+      "password_has_been_set": true
+    },
+    "users": {
+      "regular_users": [
+        {
+          "username": "marijo.dunbleton",
+          "uid": "501",
+          "path": "/Users/marijo.dunbleton",
+          "admin": true,
+          "name": "Marijo Dunbleton"
+        }
+      ],
+      "system_users": [
+        {
+          "username": "_lp",
+          "uid": "26",
+          "path": "/var/spool/cups",
+          "admin": false
+        }
+      ]
+    },
+    "installed_profiles": [
+      {
+        "name": "Example Profile",
+        "uuid": "4046f1d2-e088-416d-9398-63ded7b9629f",
+        "verified": true,
+        "identifier": "com.kandji.profile.wifi.dcd5d289-4c33-4322-a398-936123747417",
+        "organization": "Kandji, Inc.",
+        "payload_types": [
+          "com.apple.wifi.managed"
+        ],
+        "install_date": "2025-08-20T09:14:18+00:00"
+      }
+    ],
+    "apple_business_manager": {
+      "model": "MacBook Air (13-inch, M4, 2025)",
+      "color": "MIDNIGHT",
+      "description": "MBA 13 MDN/10C GPU/16GB/512GB-GBR",
+      "serial_number": "ABC1DEF2GHI",
+      "device_family": "Mac",
+      "os": "OSX",
+      "device_assigned_date": "2025-07-24T08:46:55+00:00",
+      "device_assigned_by": "-1"
+    },
+    "security_information": {
+      "remote_desktop_enabled": false
+    },
+    "cellular": {},
+    "tags": []
+  }
+]

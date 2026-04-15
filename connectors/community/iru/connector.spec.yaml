@@ -1,0 +1,48 @@
+
+id: iru
+name: Iru (Beta)
+author: Community
+version: 0.1.0
+notice: Copyright © 2025 Rapid7 and contributors.
+
+current_changes:
+  - Initial release
+
+types:
+  - IruDevice
+  - IruUser
+
+functions:
+  - id: test
+
+  - id: get_devices
+    title: Get Devices
+    description: Import all Devices
+    return_types:
+      - IruDevice
+
+  - id: get_users
+    title: Get Users
+    description: Import all Users
+    return_types:
+      - IruUser
+
+settings:
+  url:
+    type: string
+    title: URL
+    example: https://example.api.kandji.io
+    description: The base URL for the (tenant specific) Iru API
+
+  api_key:
+    type: string
+    title: API Key
+    format: password
+    description: An Iru API Key
+
+runtime: py311
+
+categories:
+  - endpoint_management
+
+show_orchestrator_ui: false
