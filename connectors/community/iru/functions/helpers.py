@@ -55,12 +55,16 @@ class IruClient():
     def _cursor_paginated_get(self, endpoint, cursor):
         url = self.base_url.copy().add(
             path=endpoint
-        ).set(
-            query_params={
-                "cursor": cursor
-            }
-        ).url
+        )
 
+        if cursor is not None:
+            url = url.set(
+                query_params={
+                    "cursor": cursor
+                }
+            )
+
+        url = url.url
         r = self.session.get(url)
         r.raise_for_status()
 

@@ -16,13 +16,13 @@ functions:
   - id: test
 
   - id: get_devices
-    title: Get Devices
+    title: Iru Devices
     description: Import all Devices
     return_types:
       - IruDevice
 
   - id: get_users
-    title: Get Users
+    title: Iru Users
     description: Import all Users
     return_types:
       - IruUser

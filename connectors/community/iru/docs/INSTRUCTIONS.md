@@ -22,7 +22,7 @@
   * Select the API key you have just created, and click on the **Configure Permissions** option.
   * Check the following permissions:
     * **Device List** (GET `/api/v1/devices`)
-    * **Device details** (GET `/api/v1/devices{device_id}/details`)
+    * **Device details** (GET `/api/v1/devices/{device_id}/details`)
     * **List users** (GET `/api/v1/users`)   
   * Click on the **Save** button.
 
