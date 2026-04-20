@@ -1,0 +1,1207 @@
+x-samos-type-name: CheckPointHarmonyEndpointAsset
+x-samos-namespace: checkpoint.harmony.endpoint
+title: Check Point Harmony Endpoint Asset
+description: Endpoint asset inventory record from Check Point Harmony Endpoint.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 5
+
+x-samos-keys:
+  - computerId
+
+x-samos-table:
+  - name: computerName
+  - name: computerIP
+  - name: computerType
+  - name: osName
+  - name: computerDeploymentStatus
+  - name: computerLastConnection
+
+x-samos-detail:
+  - name: computerName
+  - name: computerIP
+  - name: macAddress
+  - name: computerType
+  - name: endpointType
+  - name: osName
+  - name: osVersion
+  - name: group_ids
+  - name: computerDeploymentStatus
+  - name: computerCapabilities
+  - name: computerSdPackageName
+  - name: computerSdPackageVersion
+  - name: computerGroups
+  - name: computerLastLoggedInUser
+  - name: computerUserName
+  - name: domainName
+  - name: isInDomain
+  - name: deviceParents
+  - name: browserExtension
+  - name: threatEmulation
+  - name: efr
+  - name: antiBot
+  - name: antiMalware
+  - name: endpointForServers
+  - name: daWinPatchInformation
+  - name: posture
+  - name: superNode
+  - name: fde
+  - name: bladeStatus
+  - name: complianceStatus
+  - name: isolationStatus
+  - name: amStatus
+  - name: daInstalled
+  - name: computerFdeStatus
+  - name: computerLastContactedPolicyServerName
+  - name: deployedNamePolicySaAccessZones1
+  - name: enforcedNamePolicyCommonClientSettings51
+  - name: deployedNamePolicyCommonClientSettings51
+  - name: deployedNamePolicyEfr120
+  - name: deployedNamePolicyMalware20
+  - name: deployedNamePolicyTe130
+  - name: enforcedPolicyMalware20
+  - name: computerSdPolicyName
+  - name: computerFdeWilWolStatus
+  - name: enforcedNamePolicyTe130
+  - name: enforcedNamePolicyMalware20
+  - name: enforcedNamePolicyEfr120
+  - name: computerStatusSummary
+  - name: enforcedModifiedOn
+  - name: computerLastConnection
+  - name: computerSyncedon
+  - name: computerAmDatDate
+  - name: computerAmScannedon
+  - name: computerFdePrebootStatusUpdatedOn
+  - name: amUpdatedOn
+  - name: computerDeployTime
+  - name: deployedModifiedOn
+
+x-samos-derived-properties:
+  d_qualified_hostname:
+    # Only populate qualified hostname if the computerName contains a dot, otherwise it is likely an unqualified hostname. This is to prevent populating both qualified and unqualified hostname properties with the same value, which can cause confusion and issues with correlation.
+    x-samos-hidden: true
+    title: Qualified Hostname
+    type: string
+    syntax: jmespath
+    value: 'computerName && contains(computerName, `.`) && computerName || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_unqualified_hostname:
+    # Only populate unqualified hostname if the computerName does not contain a dot, otherwise it is likely a qualified hostname. This is to prevent populating both qualified and unqualified hostname properties with the same value, which can cause confusion and issues with correlation.
+    x-samos-hidden: true
+    title: Unqualified Hostname
+    type: string
+    syntax: jmespath
+    value: 'computerName && !contains(computerName, `.`) && computerName || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_ep_active:
+    title: Endpoint Protection Active?
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: "amStatus != null && amStatus != 'Not Installed'"
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_protection_active
+
+  d_mitigations:
+    # M1049 - Antivirus/Antimalware (scanning for malicious files)
+    # M1040 - Behavior Prevention on Endpoint (ability to kill/suspend processes)
+    # M1041 - Encrypt Sensitive Information
+    x-samos-hidden: true
+    title: Mitigations
+    type: array
+    syntax: jmespath
+    value: >
+      [
+        daInstalled == `true` && 'M1040',
+        amStatus && amStatus != 'Not Installed' && 'M1049',
+        computerFdeStatus && computerFdeStatus != 'Not Installed' && 'M1041'
+      ] | [?@]
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  computerId:
+    title: Computer ID
+    x-samos-immutable: true
+    type: string
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  computerName:
+    title: Computer Name
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  computerIP:
+    title: Computer IP
+    type: string
+    format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  macAddress:
+    title: MAC Address
+    type: string
+    format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+
+  computerType:
+    title: Computer Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  endpointType:
+    title: Endpoint Type
+    type: string
+
+  computerClientVersion:
+    title: Client Version
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+
+  computerSdPackageName:
+    title: Package Name
+    type: string
+
+  computerSdPackageVersion:
+    title: Package Version
+    type: string
+
+  computerDeploymentStatus:
+    title: Deployment Status
+    type: string
+
+  computerDeployTime:
+    title: Deployment Time
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_first_seen
+
+  computerLastConnection:
+    title: Last Connection
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+
+  computerLastLoggedInUser:
+    title: Last Logged In User
+    type: string
+
+  computerUserName:
+    title: User Name
+    type: string
+
+  osName:
+    title: Operating System
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  osVersion:
+    title: OS Version
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+
+  domainName:
+    title: Domain Name
+    type: string
+
+  isInDomain:
+    title: Domain?
+    type: boolean
+
+  complianceStatus:
+    title: Compliance Status
+    type: string
+
+  isolationStatus:
+    title: Isolation Status
+    type: string
+
+  amStatus:
+    title: Anti-Malware Status
+    type: string
+
+  computerFdeStatus:
+    title: Full Disk Encryption Status
+    type: string
+
+  computerLastContactedPolicyServerName:
+    title: Last Policy Server
+    type: string
+
+  daInstalled:
+    title: DA Installed?
+    type: boolean
+
+  isDeleted:
+    title: Deleted?
+    type: boolean
+
+  group_ids:
+    title: Groups
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CheckPointHarmonyEndpointGroup
+          key-name: id
+
+  group_names:
+    x-samos-hidden: true
+    title: Group Names
+    type: array
+    items:
+      type: string
+
+  id:
+    title: ID
+    type: string
+    x-samos-hidden: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  computerLastErrorCode:
+    title: Last Error Code
+    type: string
+
+  computerLastErrorDescription:
+    title: Last Error Description
+    type: string
+
+  computerSyncedon:
+    title: Synced On
+    type: string
+    format: date-time
+    x-samos-hidden: true
+
+  computerLastLoggedInPrebootUser:
+    title: Last Logged In Preboot User
+    type: string
+
+  computerFdeVersion:
+    title: FDE Version
+    type: string
+
+  computerFdeWilWolStatus:
+    title: FDE WIL/WOL Status
+    type: string
+
+  computerFdeWilWolStatusUpdatedOn:
+    title: FDE WIL/WOL Status Updated On
+    type: string
+
+  computerFdeLastRecoveryDate:
+    title: FDE Last Recovery Date
+    type: string
+
+  computerFdeTpmVersion:
+    title: FDE TPM Version
+    type: string
+
+  computerFdeTpmId:
+    title: FDE TPM ID
+    type: string
+
+  computerFdeProgress:
+    title: FDE Progress
+    type: string
+
+  amUpdatedOn:
+    title: Anti-Malware Updated On
+    type: string
+    format: date-time
+
+  distinguishedName:
+    title: Distinguished Name
+    type: string
+
+  deviceComment:
+    title: Device Comment
+    type: string
+
+  extraCol1:
+    title: Extra Column 1
+    type: string
+    x-samos-hidden: true
+
+  canonicalName:
+    title: Canonical Name
+    type: string
+
+  scannerId:
+    title: Scanner ID
+    type: string
+
+  computerAmDatVersion:
+    title: Anti-Malware DAT Version
+    type: string
+
+  computerAmDatDate:
+    title: Anti-Malware DAT Date
+    type: string
+    format: date-time
+
+  computerAmLicExpirationDate:
+    title: Anti-Malware License Expiration Date
+    type: string
+    format: date-time
+
+  computerAmTotalInfected:
+    title: Anti-Malware Total Infected
+    type: string
+
+  computerAmVersion:
+    title: Anti-Malware Version
+    type: string
+
+  computerAmInfections:
+    title: Anti-Malware Infections
+    type: array
+    items:
+      type: string
+
+  computerNotRunningBladesMask:
+    title: Not Running Blades Mask
+    type: string
+
+  computerSdPolicyName:
+    title: Software Deployment Policy Name
+    type: string
+
+  computerSdPolicyVersion:
+    title: Software Deployment Policy Version
+    type: string
+
+  computerAbState:
+    title: Anti-Bot State
+    type: string
+
+  computerAbStatusBotNames:
+    title: Anti-Bot Status Bot Names
+    type: array
+    items:
+      type: string
+
+  computerAmScannedon:
+    title: Anti-Malware Scanned On
+    type: string
+    format: date-time
+
+  computerAmTotalQuarantined:
+    title: Anti-Malware Total Quarantined
+    type: string
+
+  computerLastContactedPolicyServerIp:
+    title: Last Contacted Policy Server IP
+    type: string
+
+  computerComplianceViolationIds:
+    title: Compliance Violation IDs
+    type: array
+    items:
+      type: string
+
+  computerFdePrebootStatusUpdatedOn:
+    title: FDE Preboot Status Updated On
+    type: string
+    format: date-time
+
+  computerSmartCardStatus:
+    title: Smart Card Status
+    type: integer
+
+  computerCpuLoadCategory:
+    title: CPU Load Category
+    type: string
+
+  computerTotalCpuLoadCategory:
+    title: Total CPU Load Category
+    type: string
+
+  computerFdeTpmStatus:
+    title: FDE TPM Status
+    type: string
+
+  amProviderBrand:
+    title: Anti-Malware Provider Brand
+    type: string
+
+  computerCpuRank:
+    title: CPU Rank
+    type: string
+
+  computerTotalCpuRank:
+    title: Total CPU Rank
+    type: string
+
+  browserExtension:
+    title: Browser Extension
+    type: object
+    properties:
+      customIocStatus:
+        title: Custom IOC Status?
+        type: boolean
+      lastIocTokenArrivedTime:
+        title: Last IOC Token Arrived Time
+        type: string
+        format: date-time
+      browserExtensionTeConnection:
+        title: Browser Extension TE Connection
+        type: string
+      edgeExtensionPingRecently:
+        title: Edge Extension Ping Recently?
+        type: boolean
+      braveExtensionPingRecently:
+        title: Brave Extension Ping Recently?
+        type: boolean
+      chromeExtensionPingRecently:
+        title: Chrome Extension Ping Recently?
+        type: boolean
+      safariExtensionPingRecently:
+        title: Safari Extension Ping Recently?
+        type: boolean
+      firefoxExtensionPingRecently:
+        title: Firefox Extension Ping Recently?
+        type: boolean
+
+  threatEmulation:
+    title: Threat Emulation
+    type: object
+    properties:
+      saLastUpdate:
+        title: SA Last Update
+        type: string
+        format: date-time
+      teOverloaded:
+        title: TE Overloaded
+        type: string
+      teReputation:
+        title: TE Reputation
+        type: string
+      ofrLastUpdate:
+        title: OFR Last Update
+        type: string
+      teAvailability:
+        title: TE Availability
+        type: string
+      teCustomIocAuth:
+        title: TE Custom IOC Auth
+        type: string
+      teLastTokenArrivalTime:
+        title: TE Last Token Arrival Time
+        type: string
+        format: date-time
+
+  efr:
+    title: Endpoint Forensics
+    type: object
+    properties:
+      thErrorCode:
+        title: TH Error Code
+        type: string
+      bgLastUpdate:
+        title: BG Last Update
+        type: string
+        format: date-time
+      thErrorMessage:
+        title: TH Error Message
+        type: string
+
+  antiBot:
+    title: Anti-Bot
+    type: object
+    properties:
+      abLastUpdate:
+        title: AB Last Update
+        type: string
+        format: date-time
+      antibotCustomIocAuth:
+        title: Anti-Bot Custom IOC Auth
+        type: string
+      antibotLastTokenArrivalTime:
+        title: Anti-Bot Last Token Arrival Time
+        type: string
+        format: date-time
+
+  antiMalware:
+    title: Anti-Malware Details
+    type: object
+    properties:
+      engineName:
+        title: Engine Name
+        type: string
+      bladeStatus:
+        title: Blade Status
+        type: array
+        items:
+          type: string
+      augmentationVendors:
+        title: Augmentation Vendors
+        type: array
+        items:
+          type: object
+      rebootRequiredReason:
+        title: Reboot Required Reason
+        type: string
+      lastSignatureUpdateSource:
+        title: Last Signature Update Source
+        type: string
+      engineStatus:
+        title: Engine Status
+        type: string
+      windowsDefenderStatus:
+        title: Windows Defender Status
+        type: string
+
+  endpointForServers:
+    title: Endpoint For Servers
+    type: object
+    properties:
+      allPolicies:
+        title: All Policies
+        type: string
+      profilesPolicy6:
+        title: Profiles Policy 6
+        type: string
+      profilesPolicy10:
+        title: Profiles Policy 10
+        type: string
+      profilesPolicy11:
+        title: Profiles Policy 11
+        type: string
+      profilesPolicy20:
+        title: Profiles Policy 20
+        type: string
+      profilesPolicy22:
+        title: Profiles Policy 22
+        type: string
+      profilesPolicy30:
+        title: Profiles Policy 30
+        type: string
+      profilesPolicy35:
+        title: Profiles Policy 35
+        type: string
+      profilesPolicy45:
+        title: Profiles Policy 45
+        type: string
+      profilesPolicy51:
+        title: Profiles Policy 51
+        type: string
+      profilesPolicy55:
+        title: Profiles Policy 55
+        type: string
+      profilesPolicy60:
+        title: Profiles Policy 60
+        type: string
+      profilesPolicy91:
+        title: Profiles Policy 91
+        type: string
+      profilesPolicy100:
+        title: Profiles Policy 100
+        type: string
+      profilesPolicy120:
+        title: Profiles Policy 120
+        type: string
+      profilesPolicy130:
+        title: Profiles Policy 130
+        type: string
+
+  daWinPatchInformation:
+    title: DA Windows Patch Information
+    type: object
+    properties:
+      winPatchVersion:
+        title: Windows Patch Version
+        type: string
+      winPatchDescription:
+        title: Windows Patch Description
+        type: string
+
+  posture:
+    title: Posture
+    type: object
+    properties:
+      lastScanStatus:
+        title: Last Scan Status
+        type: string
+      lastScanManualStarted:
+        title: Last Scan Manual Started?
+        type: string
+      lastScanStatusDescription:
+        title: Last Scan Status Description
+        type: string
+
+  superNode:
+    title: Super Node
+    type: object
+    properties:
+      superNodeType:
+        title: Super Node Type
+        type: string
+      superNodeServerStatus:
+        title: Super Node Server Status
+        type: string
+      superNodeServerErrorCode:
+        title: Super Node Server Error Code
+        type: string
+      superNodeClientConnectedTo:
+        title: Super Node Client Connected To
+        type: string
+      superNodeServerErrorDescription:
+        title: Super Node Server Error Description
+        type: string
+
+  fde:
+    title: Full Disk Encryption
+    type: object
+    properties:
+      prebootType:
+        title: Preboot Type
+        type: string
+
+  bladeStatus:
+    title: Blade Status
+    type: array
+    items:
+      type: object
+      properties:
+        bladeName:
+          title: Blade Name
+          type: string
+        bladeStatus:
+          title: Blade Status
+          type: string
+        statusDescription:
+          title: Status Description
+          type: array
+          items:
+            type: object
+            properties:
+              severity:
+                title: Severity
+                type: string
+              description:
+                title: Description
+                type: object
+                properties:
+                  id:
+                    title: ID
+                    type: integer
+                  value:
+                    title: Value
+                    type: string
+                  parameters:
+                    title: Parameters
+                    type: array
+                    items:
+                      type: string
+              capabilityName:
+                title: Capability Name
+                type: string
+              recommendedActions:
+                title: Recommended Actions
+                type: object
+                properties:
+                  id:
+                    title: ID
+                    type: integer
+                  value:
+                    title: Value
+                    type: string
+                  parameters:
+                    title: Parameters
+                    type: array
+                    items:
+                      type: string
+
+  computerCapabilities:
+    title: Computer Capabilities
+    type: object
+    properties:
+      onlyInstalled:
+        title: Only Installed
+        type: array
+        items:
+          type: string
+      stoppedBlades:
+        title: Stopped Blades
+        type: array
+        items:
+          type: string
+      onlyInstalledAndRun:
+        title: Only Installed and Running
+        type: array
+        items:
+          type: string
+      onlyNotRunning:
+        title: Only Not Running
+        type: array
+        items:
+          type: string
+      onlyInstalledAndRunAndEnabled:
+        title: Only Installed, Running, and Enabled
+        type: array
+        items:
+          type: string
+
+  computerGroups:
+    title: Computer Groups
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: ID
+          type: string
+        name:
+          title: Name
+          type: string
+
+  deviceParents:
+    title: Device Parents
+    type: array
+    items:
+      type: object
+      properties:
+        nid:
+          title: Node ID
+          type: string
+        name:
+          title: Name
+          type: string
+        ouType:
+          title: OU Type
+          type: string
+        nodeType:
+          title: Node Type
+          type: string
+        readOnly:
+          title: Read Only?
+          type: boolean
+        groupType:
+          title: Group Type
+          type: string
+        domainName:
+          title: Domain Name
+          type: string
+        groupScope:
+          title: Group Scope
+          type: string
+        canonicalName:
+          title: Canonical Name
+          type: string
+        distinguishedName:
+          title: Distinguished Name
+          type: string
+
+  computerStatusSummary:
+    title: Computer Status Summary
+    type: object
+    properties:
+      AM_Status:
+        title: Anti-Malware Status
+        type: integer
+      FDE_Status:
+        title: FDE Status
+        type: integer
+      FDE_ProgressPercentage:
+        title: FDE Progress Percentage
+        type: integer
+      FDE_LastRecoveryDate:
+        title: FDE Last Recovery Date
+        type: integer
+      FDE_AcquiredUsers:
+        title: FDE Acquired Users
+        type: integer
+      FDE_TotalUsersToAcquire:
+        title: FDE Total Users To Acquire
+        type: integer
+      Compliance_Status:
+        title: Compliance Status
+        type: integer
+      SD_Status:
+        title: Software Deployment Status
+        type: integer
+      DA_Not_Running_Blades_Mask:
+        title: DA Not Running Blades Mask
+        type: integer
+      WC_Status:
+        title: WC Status
+        type: integer
+      DLP_Status:
+        title: DLP Status
+        type: integer
+      WIL_WOL_Status:
+        title: WIL/WOL Status
+        type: integer
+      Smart_Card_Driver_Status:
+        title: Smart Card Driver Status
+        type: integer
+
+  enforcedModifiedOn:
+    title: Enforced Policy Modified On
+    type: string
+    format: date-time
+
+  enforcedPolicyMalware20:
+    title: Enforced Policy - Malware
+    type: string
+
+  enforcedPolicyTe130:
+    title: Enforced Policy - Threat Emulation
+    type: string
+
+  enforcedPolicyEfr120:
+    title: Enforced Policy - Forensics
+    type: string
+
+  enforcedPolicyAntibot100:
+    title: Enforced Policy - Anti-Bot
+    type: string
+
+  enforcedPolicyMe30:
+    title: Enforced Policy - Media Encryption
+    type: string
+
+  enforcedPolicyFdeDevice35:
+    title: Enforced Policy - FDE Device
+    type: string
+
+  enforcedPolicyFdeUser36:
+    title: Enforced Policy - FDE User
+    type: string
+
+  enforcedPolicyFw10:
+    title: Enforced Policy - Firewall
+    type: string
+
+  enforcedPolicyCompliance60:
+    title: Enforced Policy - Compliance
+    type: string
+
+  enforcedPolicyApplicationControl22:
+    title: Enforced Policy - Application Control
+    type: string
+
+  enforcedPolicySaAccessZones11:
+    title: Enforced Policy - Access Zones
+    type: string
+
+  enforcedPolicyCommonClientSettings51:
+    title: Enforced Policy - Common Client Settings
+    type: string
+
+  enforcedPolicyDocSecPolicy91:
+    title: Enforced Policy - Document Security
+    type: string
+
+  enforcedVersionPolicyMalware20:
+    title: Enforced Version - Malware
+    type: string
+
+  enforcedVersionPolicyTe130:
+    title: Enforced Version - Threat Emulation
+    type: string
+
+  enforcedVersionPolicyEfr120:
+    title: Enforced Version - Forensics
+    type: string
+
+  enforcedVersionPolicyAntibot100:
+    title: Enforced Version - Anti-Bot
+    type: string
+
+  enforcedVersionPolicyMe30:
+    title: Enforced Version - Media Encryption
+    type: string
+
+  enforcedVersionPolicyFdeDevice35:
+    title: Enforced Version - FDE Device
+    type: string
+
+  enforcedVersionPolicyFdeUser36:
+    title: Enforced Version - FDE User
+    type: string
+
+  enforcedVersionPolicyFw10:
+    title: Enforced Version - Firewall
+    type: string
+
+  enforcedVersionPolicyCompliance60:
+    title: Enforced Version - Compliance
+    type: string
+
+  enforcedVersionPolicyApplicationControl22:
+    title: Enforced Version - Application Control
+    type: string
+
+  enforcedVersionPolicySaAccessZones11:
+    title: Enforced Version - Access Zones
+    type: string
+
+  enforcedVersionPolicyCommonClientSettings51:
+    title: Enforced Version - Common Client Settings
+    type: string
+
+  enforcedVersionPolicyDocSecPolicy91:
+    title: Enforced Version - Document Security
+    type: string
+
+  enforcedNamePolicyMalware20:
+    title: Enforced Name - Malware
+    type: string
+
+  enforcedNamePolicyTe130:
+    title: Enforced Name - Threat Emulation
+    type: string
+
+  enforcedNamePolicyEfr120:
+    title: Enforced Name - Forensics
+    type: string
+
+  enforcedNamePolicyAntibot100:
+    title: Enforced Name - Anti-Bot
+    type: string
+
+  enforcedNamePolicyMe30:
+    title: Enforced Name - Media Encryption
+    type: string
+
+  enforcedNamePolicyFdeDevice35:
+    title: Enforced Name - FDE Device
+    type: string
+
+  enforcedNamePolicyFdeUser36:
+    title: Enforced Name - FDE User
+    type: string
+
+  enforcedNamePolicyFw10:
+    title: Enforced Name - Firewall
+    type: string
+
+  enforcedNamePolicyCompliance60:
+    title: Enforced Name - Compliance
+    type: string
+
+  enforcedNamePolicyApplicationControl22:
+    title: Enforced Name - Application Control
+    type: string
+
+  enforcedNamePolicySaAccessZones11:
+    title: Enforced Name - Access Zones
+    type: string
+
+  enforcedNamePolicyCommonClientSettings51:
+    title: Enforced Name - Common Client Settings
+    type: string
+
+  enforcedNamePolicyDocSecPolicy91:
+    title: Enforced Name - Document Security
+    type: string
+
+  deployedModifiedOn:
+    title: Deployed Policy Modified On
+    type: string
+    format: date-time
+
+  deployedPolicyMalware20:
+    title: Deployed Policy - Malware
+    type: string
+
+  deployedPolicyTe130:
+    title: Deployed Policy - Threat Emulation
+    type: string
+
+  deployedPolicyEfr120:
+    title: Deployed Policy - Forensics
+    type: string
+
+  deployedPolicyAntibot100:
+    title: Deployed Policy - Anti-Bot
+    type: string
+
+  deployedPolicyMe30:
+    title: Deployed Policy - Media Encryption
+    type: string
+
+  deployedPolicyFdeDevice35:
+    title: Deployed Policy - FDE Device
+    type: string
+
+  deployedPolicyFdeUser36:
+    title: Deployed Policy - FDE User
+    type: string
+
+  deployedPolicyFw10:
+    title: Deployed Policy - Firewall
+    type: string
+
+  deployedPolicyCompliance60:
+    title: Deployed Policy - Compliance
+    type: string
+
+  deployedPolicyApplicationControl22:
+    title: Deployed Policy - Application Control
+    type: string
+
+  deployedPolicySaAccessZones11:
+    title: Deployed Policy - Access Zones
+    type: string
+
+  deployedPolicyCommonClientSettings51:
+    title: Deployed Policy - Common Client Settings
+    type: string
+
+  deployedPolicyDocSecPolicy91:
+    title: Deployed Policy - Document Security
+    type: string
+
+  deployedVersionPolicyMalware20:
+    title: Deployed Version - Malware
+    type: string
+
+  deployedVersionPolicyTe130:
+    title: Deployed Version - Threat Emulation
+    type: string
+
+  deployedVersionPolicyEfr120:
+    title: Deployed Version - Forensics
+    type: string
+
+  deployedVersionPolicyAntibot100:
+    title: Deployed Version - Anti-Bot
+    type: string
+
+  deployedVersionPolicyMe30:
+    title: Deployed Version - Media Encryption
+    type: string
+
+  deployedVersionPolicyFdeDevice35:
+    title: Deployed Version - FDE Device
+    type: string
+
+  deployedVersionPolicyFdeUser36:
+    title: Deployed Version - FDE User
+    type: string
+
+  deployedVersionPolicyFw10:
+    title: Deployed Version - Firewall
+    type: string
+
+  deployedVersionPolicyCompliance60:
+    title: Deployed Version - Compliance
+    type: string
+
+  deployedVersionPolicyApplicationControl22:
+    title: Deployed Version - Application Control
+    type: string
+
+  deployedVersionPolicySaAccessZones11:
+    title: Deployed Version - Access Zones
+    type: string
+
+  deployedVersionPolicyCommonClientSettings51:
+    title: Deployed Version - Common Client Settings
+    type: string
+
+  deployedVersionPolicyDocSecPolicy91:
+    title: Deployed Version - Document Security
+    type: string
+
+  deployedNamePolicyMalware20:
+    title: Deployed Name - Malware
+    type: string
+
+  deployedNamePolicyTe130:
+    title: Deployed Name - Threat Emulation
+    type: string
+
+  deployedNamePolicyEfr120:
+    title: Deployed Name - Forensics
+    type: string
+
+  deployedNamePolicyAntibot100:
+    title: Deployed Name - Anti-Bot
+    type: string
+
+  deployedNamePolicyMe30:
+    title: Deployed Name - Media Encryption
+    type: string
+
+  deployedNamePolicyFdeDevice35:
+    title: Deployed Name - FDE Device
+    type: string
+
+  deployedNamePolicyFdeUser36:
+    title: Deployed Name - FDE User
+    type: string
+
+  deployedNamePolicyFw10:
+    title: Deployed Name - Firewall
+    type: string
+
+  deployedNamePolicyCompliance60:
+    title: Deployed Name - Compliance
+    type: string
+
+  deployedNamePolicyApplicationControl22:
+    title: Deployed Name - Application Control
+    type: string
+
+  deployedNamePolicySaAccessZones11:
+    title: Deployed Name - Access Zones
+    type: string
+
+  deployedNamePolicyCommonClientSettings51:
+    title: Deployed Name - Common Client Settings
+    type: string
+
+  deployedNamePolicyDocSecPolicy91:
+    title: Deployed Name - Document Security
+    type: string

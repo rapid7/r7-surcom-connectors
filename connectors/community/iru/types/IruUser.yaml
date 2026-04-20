@@ -1,0 +1,111 @@
+x-samos-type-name: IruUser
+x-samos-namespace: iru
+
+title: Iru User
+description: A user in the Iru inventory
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: email
+  - name: name
+  - name: job_title
+  - name: department
+  - name: device_count
+
+x-samos-detail:
+  - name: id
+  - name: name
+  - name: email
+  - name: created_at
+  - name: updated_at
+  - name: job_title
+  - name: department
+  - name: device_count
+  - name: active
+  - name: archived
+  - name: integration
+
+properties:
+  active:
+    title: Active
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+  archived:
+    title: Archived
+    type: boolean
+  created_at:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+  department:
+    title: Department
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: department
+  deprecated_user_id:
+    title: Deprecated User ID
+    type: string
+    x-samos-hidden: true
+  email:
+    title: Email
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  integration:
+    title: Integration
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+      name:
+        title: Name
+        type: string
+      uuid:
+        title: UUID
+        type: string
+      type:
+        title: Type
+        type: string
+  job_title:
+    title: Job Title
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: title
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  device_count:
+    title: Device Count
+    type: integer
+  updated_at:
+    title: Updated At
+    type: string
+    format: date-time

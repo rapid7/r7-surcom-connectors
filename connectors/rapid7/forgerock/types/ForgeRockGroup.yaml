@@ -1,0 +1,86 @@
+x-samos-type-name: ForgeRockGroup
+x-samos-namespace: forgerock
+title: PingOne AIC Group
+description: A Group from PingOne Advanced Identity Cloud (ForgeRock).
+
+x-samos-extends-types:
+  - type-name: UserGroup
+    subtype-priority: 3
+
+x-samos-keys:
+  - _id
+
+x-samos-table:
+  - name: name
+  - name: description
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: condition
+  - name: d_members
+
+x-samos-derived-properties:
+  d_members:
+    title: Member Users
+    type: array
+    syntax: jmespath
+    value: 'members[*]._refResourceId'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: ForgeRockUser
+          key-name: _id
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups
+
+properties:
+  _id:
+    title: Object ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+  _rev:
+    title: Revision
+    type: string
+    x-samos-hidden: true
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: UserGroup.name
+      correlation-type: UserGroup
+      priority: 3
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  condition:
+    title: Condition
+    type: string
+  members:
+    x-samos-hidden: true
+    title: Members
+    type: array
+    items:
+      type: object
+      properties:
+        _refResourceId:
+          title: User ID
+          type: string
+        _refProperties:
+          title: Reference Properties
+          type: object
+          properties:
+            _grantType:
+              title: Grant Type
+              type: string

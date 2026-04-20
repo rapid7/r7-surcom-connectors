@@ -1,0 +1,55 @@
+x-samos-type-name: DatadogPlatformSourceTag
+x-samos-namespace: datadog.platform
+title: Datadog Platform Source Tag
+description: A tag key/value from Datadog Platform.
+type: object
+x-samos-detail-prefer-type-title: true
+x-samos-global-zone: true
+x-samos-extends-types:
+  - type-name: SourceTag
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: key
+  - name: value
+
+x-samos-detail:
+  - name: key
+  - name: value
+
+x-samos-derived-properties:
+  d_name:
+    title: Name
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: '{key}:{value}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  id:
+    title: ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    type: string
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: id
+
+  key:
+    title: Key
+    type: string
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: key
+
+  value:
+    title: Value
+    type: string
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: value

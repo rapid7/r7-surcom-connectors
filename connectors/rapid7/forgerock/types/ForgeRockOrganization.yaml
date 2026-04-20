@@ -1,0 +1,173 @@
+x-samos-type-name: ForgeRockOrganization
+x-samos-namespace: forgerock
+title: PingOne AIC Organization
+description: An Organization from PingOne Advanced Identity Cloud (ForgeRock).
+
+x-samos-extends-types:
+  - type-name: Organization
+
+x-samos-keys:
+  - _id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: d_parent
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: d_parent
+  - name: children
+  - name: ownerIDs
+  - name: adminIDs
+  - name: d_technical_owners
+  - name: d_users
+
+x-samos-derived-properties:
+  d_parent:
+    # Extract _refResourceId from nested parent object to fulfill core.owned-entity.organization
+    title: Parent Organization
+    type: string
+    syntax: jmespath
+    value: 'parent._refResourceId'
+    x-samos-ref-types:
+      - type-name: ForgeRockOrganization
+        key-name: _id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+
+  d_technical_owners:
+    # Extract _refResourceId from nested admin objects to fulfill core.owned-entity.technical_owners
+    title: Technical Owners
+    type: array
+    syntax: jmespath
+    value: 'admins[*]._refResourceId'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: ForgeRockUser
+          key-name: _id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: technical_owners
+
+  d_users:
+    # Extract _refResourceId from nested member objects to fulfill core.owned-entity.users
+    title: Business Users
+    type: array
+    syntax: jmespath
+    value: 'members[*]._refResourceId'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: ForgeRockUser
+          key-name: _id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: users
+
+properties:
+  _id:
+    title: Object ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+  _rev:
+    title: Revision
+    type: string
+    x-samos-hidden: true
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  parentIDs:
+    x-samos-hidden: true
+    title: Parent Organization
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: ForgeRockOrganization
+          key-name: _id
+  parentAdminIDs:
+    title: Parent Admin IDs
+    type: array
+    items:
+      type: string
+  parentOwnerIDs:
+    title: Parent Owner IDs
+    type: array
+    items:
+      type: string
+  ownerIDs:
+    title: Owner
+    type: array
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: owners
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: ForgeRockUser
+          key-name: _id
+  adminIDs:
+    title: Admin
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: ForgeRockUser
+          key-name: _id
+  parent:
+    x-samos-hidden: true
+    title: Parent Organization
+    type: object
+    properties:
+      _refResourceId:
+        title: Parent ID
+        type: string
+  children:
+    title: Child Organizations
+    type: array
+    items:
+      type: object
+      properties:
+        _refResourceId:
+          title: Child ID
+          type: string
+          x-samos-ref-types:
+            - type-name: ForgeRockOrganization
+              key-name: _id
+  members:
+    x-samos-hidden: true
+    title: Members
+    type: array
+    items:
+      type: object
+      properties:
+        _refResourceId:
+          title: User ID
+          type: string
+  admins:
+    x-samos-hidden: true
+    title: Admins
+    type: array
+    items:
+      type: object
+      properties:
+        _refResourceId:
+          title: User ID
+          type: string

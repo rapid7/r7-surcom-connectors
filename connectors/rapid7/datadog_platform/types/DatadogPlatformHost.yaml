@@ -1,0 +1,310 @@
+x-samos-type-name: DatadogPlatformHost
+x-samos-namespace: datadog.platform
+title: Datadog Host
+description: A host in Datadog
+type: object
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: host_name
+  - name: meta.platform
+  - name: meta.agent_version
+  - name: last_reported_time
+
+x-samos-detail:
+  - name: host_name
+  - name: aliases
+  - name: apps
+  - name: up
+  - name: is_muted
+  - name: d_ips
+  - name: mute_timeout
+  - name: sources
+  - name: x_tags
+  - name: metrics
+  - name: meta
+  - name: last_reported_time
+
+x-samos-derived-properties:
+  d_id:
+    # id is integer converted to string for fulfilling the core.component.id property
+    type: string
+    title: ID
+    syntax: expression
+    value: '{id}'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_qualified_hostnames:
+    x-samos-hidden: true
+    title: Qualified Hostnames
+    type: array
+    syntax: jmespath
+    value: '[host_name][?contains(@, `.`) == `true`]'
+    items:
+      type: string
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_unqualified_hostnames:
+    x-samos-hidden: true
+    title: Unqualified Hostnames
+    type: array
+    syntax: jmespath
+    value: '[host_name][?contains(@, `.`) == `false`]'
+    items:
+      type: string
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_ips:
+    # Concatenate IPv4 and IPv6 addresses from all network interfaces
+    title: IP Addresses
+    type: array
+    syntax: jmespath
+    value: "[meta.gohai.network.ipaddress, meta.gohai.network.ipaddress6][?@ != null && @ != '']"
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  d_os_version:
+    title: OS Version
+    type: string
+    syntax: jmespath
+    value: "[join('.', meta.nixV[?@ != null && @ != '']), join('.', meta.winV[?@ != null && @ != '']), join('.', meta.macV[?@ != null && @ != ''])][?@ != ''] | [0]"
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+
+properties:
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  host_name:
+    title: Host Name
+    type: string
+
+  aliases:
+    title: Aliases
+    type: array
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  apps:
+    title: Integrations
+    type: array
+    items:
+      type: string
+
+  sources:
+    title: Sources
+    type: array
+    items:
+      type: string
+
+  up:
+    title: Up?
+    type: boolean
+
+  is_muted:
+    title: Muted?
+    type: boolean
+
+  mute_timeout:
+    title: Mute Timeout
+    type: integer
+
+  last_reported_time:
+    title: Last Reported Time
+    type: integer
+    format: epoch-millis
+
+  tags_by_source:
+    title: Tags by Source
+    type: object
+
+  meta:
+    title: Metadata
+    type: object
+    properties:
+      agent_version:
+        title: Agent Version
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.endpoint
+          property-name: agent_version
+
+      platform:
+        title: Platform
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: operating_system
+
+      cpuCores:
+        title: CPU Cores
+        type: integer
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: cpus
+
+      machine:
+        title: Machine Architecture
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_architecture
+
+      processor:
+        title: Processor
+        type: string
+
+      agent_flavor:
+        title: Agent Flavor
+        type: string
+
+      gohai:
+        title: Go Hardware Info
+        type: object
+        properties:
+          cpu:
+            title: CPU
+            type: object
+
+          filesystem:
+            title: Filesystem
+            type: array
+            items:
+              type: object
+          memory:
+            title: Memory
+            type: object
+          network:
+            title: Network
+            type: object
+            properties:
+              interfaces:
+                title: Network Interfaces
+                type: array
+                items:
+                  type: object
+              ipaddress:
+                title: IP Addresses
+                type: string
+              ipaddress6:
+                title: IPv6 Addresses
+                type: string
+              macaddress:
+                title: MAC Addresses
+                type: string
+                x-samos-fulfills:
+                  type-name: Machine
+                  property-name: mac_addresses
+                x-samos-correlation:
+                  correlation-key: MacAddr.value
+                  correlation-type: Machine
+                  priority: 4
+
+      socket-hostname:
+        title: Socket Hostname
+        type: string
+
+      socket-fqdn:
+        title: Socket FQDN
+        type: string
+
+      host_id:
+        title: Host ID
+        type: integer
+
+      nixV:
+        title: Linux Version
+        type: array
+        items:
+          type: string
+
+      winV:
+        title: Windows Version
+        type: array
+        items:
+          type: string
+
+      macV:
+        title: macOS Version
+        type: array
+        items:
+          type: string
+
+      timezones:
+        title: Timezones
+        type: array
+        items:
+          type: string
+
+      install_method:
+        title: Install Method
+        type: object
+
+      agent_checks:
+        title: Agent Checks
+        type: array
+        items:
+          type: json
+
+  x_tags:
+    title: Tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: DatadogPlatformSourceTag
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+
+  metrics:
+    title: Metrics
+    type: object
+    properties:
+      cpu:
+        title: CPU Usage
+        type: number
+        format: float
+
+      iowait:
+        title: I/O Wait
+        type: number
+        format: float
+
+      load:
+        title: Load
+        type: number
+        format: float

@@ -1,0 +1,140 @@
+x-samos-type-name: ForgeRockApplication
+x-samos-namespace: forgerock
+title: PingOne AIC Application
+description: An Application from PingOne Advanced Identity Cloud (ForgeRock).
+
+x-samos-extends-types:
+  - type-name: System
+
+x-samos-keys:
+  - _id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: templateName
+  - name: d_users
+  - name: d_owners
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: templateName
+  - name: templateVersion
+  - name: icon
+  - name: ssoEntities
+  - name: d_users
+  - name: roles
+  - name: d_owners
+
+x-samos-derived-properties:
+  d_owners:
+    # Extract _refResourceId from nested owner objects to fulfill core.owned-entity.owners
+    title: Business Owners
+    type: array
+    syntax: jmespath
+    value: 'owners[*]._refResourceId'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: ForgeRockUser
+          key-name: _id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: owners
+
+  d_users:
+    # Extract _refResourceId from nested member objects to fulfill core.owned-entity.users
+    title: Business Users
+    type: array
+    syntax: jmespath
+    value: 'members[*]._refResourceId'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: ForgeRockUser
+          key-name: _id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: users
+
+properties:
+  _id:
+    title: Object ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  _rev:
+    title: Revision
+    type: string
+    x-samos-hidden: true
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  icon:
+    title: Icon
+    type: string
+  templateName:
+    title: Template Name
+    type: string
+  templateVersion:
+    title: Template Version
+    type: string
+  ssoEntities:
+    title: SSO Entities
+    type: object
+    properties:
+      oidcId:
+        title: OIDC Client ID
+        type: string
+      idpLoginUrl:
+        title: IdP Login URL
+        type: string
+        x-samos-correlation:
+          correlation-key: System.sso-url
+          correlation-type: System
+          priority: 4
+  members:
+    x-samos-hidden: true
+    title: Members
+    type: array
+    items:
+      type: object
+      properties:
+        _refResourceId:
+          title: User ID
+          type: string
+  roles:
+    title: Roles
+    type: array
+    items:
+      type: object
+      properties:
+        _refResourceId:
+          title: Role ID
+          type: string
+          x-samos-ref-types:
+            - type-name: ForgeRockRole
+              key-name: _id
+  owners:
+    x-samos-hidden: true
+    title: Owners
+    type: array
+    items:
+      type: object
+      properties:
+        _refResourceId:
+          title: Owner ID
+          type: string

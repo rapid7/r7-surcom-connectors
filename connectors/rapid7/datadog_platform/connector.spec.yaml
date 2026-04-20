@@ -1,0 +1,68 @@
+id: datadog.platform
+name: Datadog
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+types:
+  - DatadogPlatformHost
+  - DatadogPlatformContainerImage
+  - DatadogPlatformAgent
+  - DatadogPlatformSourceTag
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Datadog Hosts, Agents, and Container Images
+    description: Import hosts, agents, and container images from Datadog.
+    return_types:
+      - DatadogPlatformHost
+      - DatadogPlatformContainerImage
+      - DatadogPlatformAgent
+      - DatadogPlatformSourceTag
+
+settings:
+  site:
+    type: string
+    title: Site
+    description: Select the Site/region where your Datadog data center is located.
+    enum:
+      - US1
+      - US3
+      - US5
+      - EU1
+      - US1-FED
+      - AP1
+      - AP2
+    default: US1
+
+  application_key:
+    type: string
+    title: Application Key
+    description: Datadog Application Key for authentication.
+    format: password
+
+  api_key:
+    type: string
+    title: API Key
+    description: Datadog API Key for authentication.
+    format: password
+
+  only_running_images:
+    type: boolean
+    title: Only Running Container Images?
+    description: >-
+      If enabled, only container images with at least one running container will be imported.
+      If disabled, all container images will be imported.
+    default: false
+
+runtime: py311
+
+categories:
+  - cloud_security
+
+show_orchestrator_ui: false

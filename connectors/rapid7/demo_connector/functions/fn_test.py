@@ -12,6 +12,8 @@ def test(
     Test the Connection for this Connector
     """
 
+    user_log.info("Starting test Connection")
+
     client = helpers.DemoConnectorClient(user_log, settings)
 
     permissions = client.get_permissions()
@@ -19,6 +21,8 @@ def test(
     for required_permission in helpers.REQUIRED_PERMISSIONS:
         if required_permission not in permissions.get("permissions", []):
             raise ValueError(f"Missing required permission: {required_permission}")
+
+    user_log.info("Successfully connected to Demo Connector")
 
     return {
         "status": "success",

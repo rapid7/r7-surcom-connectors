@@ -1,0 +1,481 @@
+x-samos-type-name: ForgeRockUser
+x-samos-namespace: forgerock
+title: PingOne AIC User
+description: A User from PingOne Advanced Identity Cloud (ForgeRock).
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - _id
+
+x-samos-table:
+  - name: userName
+  - name: d_name
+  - name: mail
+  - name: d_active
+  - name: passwordLastChangedTime
+
+x-samos-detail:
+  - name: userName
+  - name: d_name
+  - name: mail
+  - name: d_active
+  - name: givenName
+  - name: sn
+  - name: cn
+  - name: displayName
+  - name: description
+  - name: telephoneNumber
+  - name: city
+  - name: stateProvince
+  - name: country
+  - name: postalAddress
+  - name: postalCode
+  - name: memberOfOrgIDs
+  - name: d_groups
+  - name: effectiveRoles
+  - name: effectiveApplications
+  - name: effectiveAssignments
+  - name: preferences
+  - name: profileImage
+  - name: consentedMappings
+  - name: aliasList
+  - name: kbaInfo
+  - name: devicePrintProfiles
+  - name: deviceProfiles
+  - name: oathDeviceProfiles
+  - name: pushDeviceProfiles
+  - name: webauthnDeviceProfiles
+  - name: passwordLastChangedTime
+  - name: passwordExpirationTime
+
+x-samos-derived-properties:
+  d_name:
+    # Concatenate givenName + sn to fulfill core.named-object.name
+    type: string
+    title: Full Name
+    syntax: expression
+    value: '{givenName} {sn}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_active:
+    # Convert string accountStatus to boolean for core.principal.active
+    title: Active?
+    type: boolean
+    value: 'accountStatus == `active`'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+  d_groups:
+    # Extract _refResourceId from nested objects to fulfill core.principal.groups (requires ref-types)
+    title: Groups
+    type: array
+    syntax: jmespath
+    value: 'effectiveGroups[*]._refResourceId'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: ForgeRockGroup
+          key-name: _id
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups
+
+properties:
+  _id:
+    title: Object ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  _rev:
+    title: Revision
+    type: string
+    x-samos-hidden: true
+  userName:
+    title: Username
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+  givenName:
+    title: First Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+  sn:
+    title: Last Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+  cn:
+    title: Common Name
+    type: string
+  mail:
+    title: Email
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+  displayName:
+    title: Display Name
+    type: string
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  accountStatus:
+    title: Account Status
+    type: string
+  telephoneNumber:
+    title: Phone
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+  city:
+    title: City
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: city
+  country:
+    title: Country
+    type: string
+    # No fulfillment for core.location.country as ForgeRock gives free text fields for country instead of standardized codes
+  stateProvince:
+    title: State
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: state
+  postalAddress:
+    title: Postal Address
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: address
+  postalCode:
+    title: Postal Code
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: postal_code
+  profileImage:
+    title: Profile Image
+    type: string
+  preferences:
+    title: Preferences
+    type: object
+  passwordLastChangedTime:
+    title: Password Last Changed
+    type: string
+    format: date-time
+  passwordExpirationTime:
+    title: Password Expiration
+    type: string
+    format: date-time
+  memberOfOrgIDs:
+    title: Organization Memberships
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: ForgeRockOrganization
+          key-name: _id
+  effectiveRoles:
+    title: Effective Roles
+    type: array
+    items:
+      type: object
+      properties:
+        _refResourceId:
+          title: Role ID
+          type: string
+          x-samos-ref-types:
+            - type-name: ForgeRockRole
+              key-name: _id
+  effectiveGroups:
+    x-samos-hidden: true
+    title: Effective Groups
+    type: array
+    items:
+      type: object
+      properties:
+        _refResourceId:
+          title: Group ID
+          type: string
+          x-samos-ref-types:
+            - type-name: ForgeRockGroup
+              key-name: _id
+  effectiveApplications:
+    title: Effective Applications
+    type: array
+    items:
+      type: object
+      properties:
+        _refResourceId:
+          title: Application ID
+          type: string
+          x-samos-ref-types:
+            - type-name: ForgeRockApplication
+              key-name: _id
+        name:
+          title: Application Name
+          type: string
+  effectiveAssignments:
+    title: Effective Assignments
+    type: array
+    items:
+      type: object
+  consentedMappings:
+    title: Consented Mappings
+    type: array
+    items:
+      type: object
+  aliasList:
+    title: Alias List
+    type: array
+    items:
+      type: string
+  kbaInfo:
+    title: Knowledge-Based Auth Info
+    type: array
+    items:
+      type: object
+  devicePrintProfiles:
+    title: Device Print Profiles
+    type: array
+    items:
+      type: object
+  oathDeviceProfiles:
+    title: OATH Device Profiles
+    type: array
+    items:
+      type: object
+  deviceProfiles:
+    title: Device Profiles
+    type: array
+    items:
+      type: string
+  webauthnDeviceProfiles:
+    title: WebAuthn Device Profiles
+    type: array
+    items:
+      type: object
+  pushDeviceProfiles:
+    title: Push Device Profiles
+    type: array
+    items:
+      type: string
+  frIndexedString1:
+    title: Indexed String 1
+    type: string
+  frIndexedString2:
+    title: Indexed String 2
+    type: string
+  frIndexedString3:
+    title: Indexed String 3
+    type: string
+  frIndexedString4:
+    title: Indexed String 4
+    type: string
+  frIndexedString5:
+    title: Indexed String 5
+    type: string
+  frIndexedString6:
+    title: Indexed String 6
+    type: string
+  frIndexedString7:
+    title: Indexed String 7
+    type: string
+  frIndexedString8:
+    title: Indexed String 8
+    type: string
+  frIndexedString9:
+    title: Indexed String 9
+    type: string
+  frIndexedString10:
+    title: Indexed String 10
+    type: string
+  frIndexedString11:
+    title: Indexed String 11
+    type: string
+  frIndexedString12:
+    title: Indexed String 12
+    type: string
+  frIndexedString13:
+    title: Indexed String 13
+    type: string
+  frIndexedString14:
+    title: Indexed String 14
+    type: string
+  frIndexedString15:
+    title: Indexed String 15
+    type: string
+  frIndexedString16:
+    title: Indexed String 16
+    type: string
+  frIndexedString17:
+    title: Indexed String 17
+    type: string
+  frIndexedString18:
+    title: Indexed String 18
+    type: string
+  frIndexedString19:
+    title: Indexed String 19
+    type: string
+  frIndexedString20:
+    title: Indexed String 20
+    type: string
+  frUnindexedString1:
+    title: Unindexed String 1
+    type: string
+  frUnindexedString2:
+    title: Unindexed String 2
+    type: string
+  frUnindexedString3:
+    title: Unindexed String 3
+    type: string
+  frUnindexedString4:
+    title: Unindexed String 4
+    type: string
+  frUnindexedString5:
+    title: Unindexed String 5
+    type: string
+  frIndexedDate1:
+    title: Indexed Date 1
+    type: string
+    format: date-time
+  frIndexedDate2:
+    title: Indexed Date 2
+    type: string
+    format: date-time
+  frIndexedDate3:
+    title: Indexed Date 3
+    type: string
+    format: date-time
+  frIndexedDate4:
+    title: Indexed Date 4
+    type: string
+    format: date-time
+  frIndexedDate5:
+    title: Indexed Date 5
+    type: string
+    format: date-time
+  frUnindexedDate1:
+    title: Unindexed Date 1
+    type: string
+    format: date-time
+  frUnindexedDate2:
+    title: Unindexed Date 2
+    type: string
+    format: date-time
+  frUnindexedDate3:
+    title: Unindexed Date 3
+    type: string
+    format: date-time
+  frUnindexedDate4:
+    title: Unindexed Date 4
+    type: string
+    format: date-time
+  frUnindexedDate5:
+    title: Unindexed Date 5
+    type: string
+    format: date-time
+  frIndexedInteger1:
+    title: Indexed Integer 1
+    type: integer
+  frIndexedInteger2:
+    title: Indexed Integer 2
+    type: integer
+  frIndexedInteger3:
+    title: Indexed Integer 3
+    type: integer
+  frIndexedInteger4:
+    title: Indexed Integer 4
+    type: integer
+  frIndexedInteger5:
+    title: Indexed Integer 5
+    type: integer
+  frUnindexedInteger1:
+    title: Unindexed Integer 1
+    type: integer
+  frUnindexedInteger2:
+    title: Unindexed Integer 2
+    type: integer
+  frUnindexedInteger3:
+    title: Unindexed Integer 3
+    type: integer
+  frUnindexedInteger4:
+    title: Unindexed Integer 4
+    type: integer
+  frUnindexedInteger5:
+    title: Unindexed Integer 5
+    type: integer
+  frIndexedMultivalued1:
+    title: Indexed Multivalued 1
+    type: array
+    items:
+      type: string
+  frIndexedMultivalued2:
+    title: Indexed Multivalued 2
+    type: array
+    items:
+      type: string
+  frIndexedMultivalued3:
+    title: Indexed Multivalued 3
+    type: array
+    items:
+      type: string
+  frIndexedMultivalued4:
+    title: Indexed Multivalued 4
+    type: array
+    items:
+      type: string
+  frIndexedMultivalued5:
+    title: Indexed Multivalued 5
+    type: array
+    items:
+      type: string
+  frUnindexedMultivalued1:
+    title: Unindexed Multivalued 1
+    type: array
+    items:
+      type: string
+  frUnindexedMultivalued2:
+    title: Unindexed Multivalued 2
+    type: array
+    items:
+      type: string
+  frUnindexedMultivalued3:
+    title: Unindexed Multivalued 3
+    type: array
+    items:
+      type: string
+  frUnindexedMultivalued4:
+    title: Unindexed Multivalued 4
+    type: array
+    items:
+      type: string
+  frUnindexedMultivalued5:
+    title: Unindexed Multivalued 5
+    type: array
+    items:
+      type: string

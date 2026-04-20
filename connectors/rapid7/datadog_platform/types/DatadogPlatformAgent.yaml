@@ -1,0 +1,275 @@
+x-samos-type-name: DatadogPlatformAgent
+x-samos-namespace: datadog.platform
+title: Datadog Platform Agent
+description: An agent installed on a machine monitored by Datadog.
+type: object
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - datadog_agent_key
+
+x-samos-table:
+  - name: hostname
+  - name: os
+  - name: agent_version
+  - name: integrations
+  - name: remote_agent_management
+  - name: ip_addresses
+  - name: last_restart_at
+  - name: first_seen_at
+
+x-samos-detail:
+  - name: hostname
+  - name: cloud_provider
+  - name: os
+  - name: env
+  - name: agent_version
+  - name: enabled_products
+  - name: services
+  - name: integrations
+  - name: instrumentation_status
+  - name: rc_status
+  - name: remote_agent_management
+  - name: team
+  - name: cluster_name
+  - name: pod_name
+  - name: ecs_fargate_cluster_name
+  - name: ecs_fargate_task_arn
+  - name: datadog_data_center
+  - name: fleet_policies
+  - name: x_tags
+  - name: ip_addresses
+  - name: is_single_step_instrumentation_enabled
+  - name: last_restart_at
+  - name: first_seen_at
+
+x-samos-derived-properties:
+  d_hostnames:
+    # hostname property already fulfills core.named-object.name,
+    # but we also want to fulfill Machine.hostnames which is an array of strings,
+    # so we derive a new property for that purpose.
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'hostname'
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_qualified_hostnames:
+    x-samos-hidden: true
+    title: Qualified Hostnames
+    type: array
+    syntax: jmespath
+    value: '[hostname][?contains(@, `.`) == `true`]'
+    items:
+      type: string
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_unqualified_hostnames:
+    x-samos-hidden: true
+    title: Unqualified Hostnames
+    type: array
+    syntax: jmespath
+    value: '[hostname][?contains(@, `.`) == `false`]'
+    items:
+      type: string
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+properties:
+  datadog_agent_key:
+    title: Agent Key
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  hostname:
+    title: Hostname
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  cloud_provider:
+    title: Cloud Provider
+    type: string
+
+  os:
+    title: Operating System
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  env:
+    title: Environments
+    type: array
+    items:
+      type: string
+
+  agent_version:
+    title: Agent Version
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+
+  enabled_products:
+    title: Enabled Products
+    type: array
+    items:
+      type: string
+
+  services:
+    title: Services
+    type: array
+    items:
+      type: string
+
+  integrations:
+    title: Integrations
+    type: array
+    items:
+      type: string
+
+  instrumentation_status:
+    title: Instrumentation Status
+    type: string
+
+  api_key_uuid:
+    title: API Key UUID
+    type: string
+    x-samos-hidden: true
+
+  api_key_name:
+    title: API Key Name
+    type: string
+    x-samos-hidden: true
+
+  rc_status:
+    title: Remote Configuration Status
+    type: string
+
+  remote_agent_management:
+    title: Remote Agent Management
+    type: string
+
+  team:
+    title: Team
+    type: string
+
+  cluster_name:
+    title: Cluster Name
+    type: string
+
+  pod_name:
+    title: Pod Name
+    type: string
+
+  ecs_fargate_cluster_name:
+    title: ECS Fargate Cluster Name
+    type: string
+
+  ecs_fargate_task_arn:
+    title: ECS Fargate Task ARN
+    type: string
+
+  last_restart_at:
+    title: Last Restart At
+    type: integer
+    format: epoch-millis
+
+  first_seen_at:
+    title: First Seen At
+    type: integer
+    format: epoch-millis
+
+  otel_collector_version:
+    title: OTel Collector Version
+    type: string
+
+  otel_collector_versions:
+    title: OTel Collector Versions
+    type: array
+    items:
+      type: string
+
+  datadog_data_center:
+    title: Datadog Data Center
+    type: string
+
+  fleet_policies:
+    title: Fleet Policies
+    type: array
+    items:
+      type: string
+
+  tags:
+    x-samos-hidden: true
+    title: Tags
+    type: array
+    items:
+      type: object
+      properties:
+        key:
+          title: Key
+          type: string
+        value:
+          title: Value
+          type: string
+
+  ip_addresses:
+    title: IP Addresses
+    type: array
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  otel_collector_deployment_types:
+    title: OTel Collector Deployment Types
+    type: array
+    items:
+      type: string
+
+  otel_collector_distributions:
+    title: OTel Collector Distributions
+    type: array
+    items:
+      type: string
+
+  otel_resource_attributes:
+    title: OTel Resource Attributes
+    type: array
+    items:
+      type: string
+
+  is_single_step_instrumentation_enabled:
+    title: Single Step Instrumentation Enabled?
+    type: boolean
+
+  x_tags:
+    title: Tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: DatadogPlatformSourceTag
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags

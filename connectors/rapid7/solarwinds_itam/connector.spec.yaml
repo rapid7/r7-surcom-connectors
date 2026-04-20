@@ -1,14 +1,13 @@
 id: solarwinds.itam
 name: SolarWinds IT Asset Management
 author: Rapid7
-version: 1.0.0
+version: 1.1.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Remove Beta label
-
+  - Fix pagination
 reference-schemas:
   - url: https://api.samanage.com
     file: refdocs/resolved_schema.json

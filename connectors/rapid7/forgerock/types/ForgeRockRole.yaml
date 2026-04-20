@@ -1,0 +1,80 @@
+x-samos-type-name: ForgeRockRole
+x-samos-namespace: forgerock
+title: PingOne AIC Role
+description: A Role from PingOne Advanced Identity Cloud (ForgeRock).
+
+x-samos-extends-types:
+  - type-name: core.named-object
+
+x-samos-keys:
+  - _id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: d_members
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: d_members
+  - name: condition
+  - name: temporalConstraints
+
+x-samos-derived-properties:
+  d_members:
+    # Extract _refResourceId from nested member objects for table display
+    title: Members
+    type: array
+    syntax: jmespath
+    value: 'members[*]._refResourceId'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: ForgeRockUser
+          key-name: _id
+
+properties:
+  _id:
+    title: Object ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+  _rev:
+    title: Revision
+    type: string
+    x-samos-hidden: true
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  condition:
+    title: Condition
+    type: string
+  temporalConstraints:
+    title: Temporal Constraints
+    type: array
+    items:
+      type: object
+      properties:
+        duration:
+          title: Duration
+          type: string
+  members:
+    x-samos-hidden: true
+    title: Members
+    type: array
+    items:
+      type: object
+      properties:
+        _refResourceId:
+          title: User ID
+          type: string

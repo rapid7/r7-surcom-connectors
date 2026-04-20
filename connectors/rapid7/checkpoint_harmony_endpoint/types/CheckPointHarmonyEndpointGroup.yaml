@@ -1,0 +1,47 @@
+x-samos-type-name: CheckPointHarmonyEndpointGroup
+x-samos-namespace: checkpoint.harmony.endpoint
+title: Check Point Harmony Endpoint Group
+description: Organizational group from Check Point Harmony Endpoint.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.component-group
+    subtype-priority: 5
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: type
+
+x-samos-detail:
+  - name: name
+  - name: type
+
+properties:
+  id:
+    title: Group ID
+    x-samos-immutable: true
+    type: string
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Group Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  type:
+    title: Group Type
+    type: string
+
+x-samos-virtual:
+  members:
+    type-name: CheckPointHarmonyEndpointAsset
+    cypher-pattern: >
+      <-[:`e:CheckPointHarmonyEndpointAsset:group_ids`]-(:CheckPointHarmonyEndpointAsset)

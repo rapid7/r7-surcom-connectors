@@ -270,7 +270,7 @@ def test_connection(logger: Logger, setting: Settings) -> dict:
             missing_access[realm_name] = realm_issues
     if missing_access:
         return {
-            "status": "failure",
+            "status": "error",
             "message": "Missing access to the following realms and their items. "
                        "Grant access or remove these realms from the View roles",
             "details": missing_access
