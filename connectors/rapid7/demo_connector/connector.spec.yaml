@@ -1,14 +1,13 @@
 id: demo.connector
 name: Demo Connector
 author: Rapid7
-version: 1.1.0
+version: 1.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Added a setting to filter devices by type during import
-  - Updated the import_all function with some post-processing logic
+  - Update logging in our test function
 
 # IDs of Surface Command types in this connector.
 # Type IDs must be unique across all connectors. Prefix each with a SnakeCased

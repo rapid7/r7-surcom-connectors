@@ -1,0 +1,59 @@
+id: forgerock
+name: PingOne Advanced Identity Cloud (ForgeRock)
+author: Rapid7
+version: 0.2.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Update dependencies
+
+types:
+  - ForgeRockApplication
+  - ForgeRockGroup
+  - ForgeRockOrganization
+  - ForgeRockRole
+  - ForgeRockUser
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: PingOne Advanced Identity Cloud Users, Roles, Groups, Organizations, and Applications
+    description: Users, roles, groups, organizations, and applications from PingOne Advanced Identity Cloud (ForgeRock).
+    return_types:
+      - ForgeRockApplication
+      - ForgeRockGroup
+      - ForgeRockOrganization
+      - ForgeRockRole
+      - ForgeRockUser
+
+settings:
+  url:
+    type: string
+    title: Tenant URL
+    description: The base URL of your PingOne Advanced Identity Cloud tenant (without the /am or /openidm path).
+    example: https://tenant-id.forgeblocks.com
+
+  service_account_id:
+    type: string
+    title: Service Account ID
+    description: The unique ID of the Service Account found in the Tenant Settings.
+
+  private_key:
+    type: string
+    title: Private Key (JWK)
+    description: The full JSON Web Key (JWK) string downloaded when the Service Account was created.
+    format: password
+
+python_dependencies:
+  - PyJWT
+  - cryptography
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - iam

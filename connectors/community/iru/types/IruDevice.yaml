@@ -1,0 +1,518 @@
+x-samos-type-name: IruDevice
+x-samos-namespace: iru
+
+title: Iru Device
+description: A device in the Iru inventory
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - general.device_id
+
+x-samos-table:
+  - name: general.device_name
+  - name: mdm.last_check_in
+  - name: kandji_agent.agent_version
+  - name: general.platform
+  - name: general.model
+  - name: general.assigned_user.name
+
+x-samos-detail:
+  - name: general
+  - name: mdm
+  - name: activation_lock
+  - name: filevault
+  - name: lost_mode
+  - name: automated_device_enrollment
+  - name: kandji_agent
+  - name: hardware_overview
+  - name: volumes
+  - name: network
+  - name: recovery_information
+  - name: users
+  - name: installed_profiles
+  - name: apple_business_manager
+  - name: security_information
+  - name: cellular
+  - name: tags
+
+x-samos-derived-properties:
+  d_mitigations:
+    # M1041 (Encryption), if filevault.filevault_enabled
+    # M1051 (Update Software), i.e. patch management, if mdm.mdm_enabled
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: >-
+      [
+        filevault.filevault_enabled && `M1041` || null,
+        mdm.mdm_enabled && `M1051` || null,
+      ][?@]
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Mitigation
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+  d_number_of_processors:
+    x-samos-hidden: true
+    type: integer
+    syntax: jmespath
+    value: 'hardware_overview.number_of_processors'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: cpus
+
+properties:
+  general:
+    title: General
+    type: object
+    properties:
+      device_id:
+        title: Device ID
+        type: string
+        x-samos-immutable: true
+        x-samos-fulfills:
+          type-name: core.component
+          property-name: id
+      device_name:
+        title: Device Name
+        type: string
+        x-samos-fulfills:
+          type-name: core.named-object
+          property-name: name
+      platform:
+        title: Platform
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_product
+      first_enrollment:
+        title: First Enrollment
+        type: string
+        format: date-time
+        x-samos-fulfills:
+          type-name: core.managed.endpoint
+          property-name: endpoint_first_seen
+      last_enrollment:
+        title: Last Enrollment
+        type: string
+        format: date-time
+      assigned_user:
+        title: Assigned User
+        type: object
+        properties:
+          email:
+            title: Email
+            type: string
+          name:
+            title: Name
+            type: string
+          id:
+            title: Assigned User
+            type: string
+            x-samos-ref-types:
+              - type-name: IruUser
+                key-name: id
+            x-samos-fulfills:
+              type-name: core.owned-entity
+              property-name: users
+          is_archived:
+            title: Is Archived
+            type: boolean
+          active:
+            title: Active
+            type: boolean
+            x-samos-fulfills:
+              type-name: core.component
+              property-name: active
+      blueprint_name:
+        title: Blueprint Name
+        type: string
+      blueprint_uuid:
+        title: Blueprint UUID
+        type: string
+      asset_tag:
+        title: Asset Tag
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: asset_tag
+      model:
+        title: Model
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: model
+      os_version:
+        title: OS Version
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_version
+      supplemental_build_version:
+        title: Supplemental Build Version
+        type: string
+      supplemental_os_version_extra:
+        title: Supplemental OS Version Extra
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: operating_system
+      system_version:
+        title: System Version
+        type: string
+      boot_volume:
+        title: Boot Volume
+        type: string
+      time_since_boot:
+        title: Time Since Boot
+        type: string
+      last_user:
+        title: Last User
+        type: string
+  mdm:
+    title: MDM
+    type: object
+    properties:
+      mdm_enabled:
+        title: MDM Enabled
+        type: boolean
+      supervised:
+        title: Supervised
+        type: boolean
+      install_date:
+        title: Install Date
+        type: string
+        format: date-time
+      last_check_in:
+        title: Last Check In
+        type: string
+        format: date-time
+        x-samos-fulfills:
+          type-name: core.managed.endpoint
+          property-name: endpoint_last_seen
+      mdm_enabled_user:
+        title: MDM Enabled Users
+        type: array
+        items:
+          type: string
+  activation_lock:
+    title: Activation Lock
+    type: object
+    properties:
+      bypass_code_failed:
+        title: Bypass Code Failed
+        type: boolean
+      user_activation_lock_enabled:
+        title: User Activation Lock Enabled
+        type: boolean
+      device_activation_lock_enabled:
+        title: Device Activation Lock Enabled
+        type: boolean
+      activation_lock_allowed_while_supervised:
+        title: Activation Lock Allowed While Supervised
+        type: boolean
+      activation_lock_supported:
+        title: Activation Lock Supported
+        type: boolean
+  filevault:
+    title: FileVault
+    type: object
+    properties:
+      filevault_enabled:
+        title: FileVault Enabled
+        type: boolean
+      filevault_recoverykey_type:
+        title: FileVault Recovery Key Type
+        type: string
+      filevault_prk_escrowed:
+        title: FileVault PRK Escrowed
+        type: boolean
+      filevault_next_rotation:
+        title: FileVault Next Rotation
+        type: string
+        format: date-time
+      filevault_regen_required:
+        title: FileVault Regen Required
+        type: boolean
+  automated_device_enrollment:
+    title: Automated Device Enrollment
+    type: object
+    properties:
+      auto_enroll_eligible:
+        title: Auto Enroll Eligible
+        type: boolean
+      auto_enrolled:
+        title: Auto Enrolled
+        type: boolean
+  kandji_agent:
+    title: Kandji Agent
+    type: object
+    properties:
+      agent_installed:
+        title: Agent Installed
+        type: boolean
+      install_date:
+        title: Install Date
+        type: string
+        format: date-time
+      last_check_in:
+        title: Last Check In
+        type: string
+        format: date-time
+      agent_version:
+        title: Agent Version
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.endpoint
+          property-name: agent_version
+  hardware_overview:
+    title: Hardware Overview
+    type: object
+    properties:
+      model_name:
+        title: Model Name
+        type: string
+      model_identifier:
+        title: Model Identifier
+        type: string
+      processor_name:
+        title: Processor Name
+        type: string
+      processor_speed:
+        title: Processor Speed
+        type: string
+      number_of_processors:
+        title: Number of Processors
+        type: string # should be an integer, but it's not
+      total_number_of_cores:
+        title: Total Number of Cores
+        type: string # should be an integer, but it's not
+      memory:
+        title: Memory
+        type: string # should be an integer, but it's not
+      battery_health:
+        title: Battery Health
+        type: string
+      udid:
+        title: UDID
+        type: string
+        x-samos-correlation:
+          correlation-key: Machine.hardware-id
+          correlation-type: Machine
+          priority: 3
+      serial_number:
+        title: Serial Number
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: serial_number
+        x-samos-correlation:
+          correlation-key: core.managed.asset.serial_number
+          correlation-type: Machine
+          priority: 3
+  volumes:
+    title: Volumes
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          title: Name
+          type: string
+        format:
+          title: Format
+          type: string
+        percent_used:
+          title: Percent Used
+          type: string
+        identifier:
+          title: Identifier
+          type: string
+        capacity:
+          title: Capacity
+          type: string
+        available:
+          title: Available
+          type: string
+        encrypted:
+          title: Encrypted
+          type: boolean
+  network:
+    title: Network
+    type: object
+    properties:
+      local_hostname:
+        title: Local Hostname
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: hostnames
+        x-samos-correlation:
+          correlation-key: Machine.unqualified-hostname
+          correlation-type: Machine
+          priority: 3
+      mac_address:
+        title: MAC Address
+        type: string
+        format: mac-addr
+        x-samos-correlation:
+          correlation-key: MacAddr.value
+          correlation-type: Machine
+          priority: 4
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: mac_addresses
+      ip_address:
+        title: IP Address
+        type: string
+        format: ip-addr
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: ips
+      public_ip:
+        title: Public IP
+        type: string
+        format: ip-addr
+  recovery_information:
+    title: Recovery Information
+    type: object
+    properties:
+      recovery_lock_enabled:
+        title: Recovery Lock Enabled
+        type: boolean
+      firmware_password_exist:
+        title: Firmware Password Exists
+        type: boolean
+      firmware_password_pending:
+        title: Firmware Password Pending
+        type: boolean
+      password_rotation_scheduled:
+        title: Password Rotation Scheduled
+        type: string
+        format: date-time
+      password_has_been_set:
+        title: Password Has Been Set
+        type: boolean
+  users:
+    title: Users
+    type: object
+    properties:
+      regular_users:
+        title: Regular Users
+        type: array
+        items:
+          type: object
+          properties:
+            username:
+              title: Username
+              type: string
+            uid:
+              title: UID
+              type: string
+            path:
+              title: Path
+              type: string
+            admin:
+              title: Admin
+              type: boolean
+            name:
+              title: Name
+              type: string
+      system_users:
+        title: System Users
+        type: array
+        items:
+          type: object
+          properties:
+            username:
+              title: Username
+              type: string
+            uid:
+              title: UID
+              type: string
+            path:
+              title: Path
+              type: string
+            admin:
+              title: Admin
+              type: boolean
+  installed_profiles:
+    title: Installed Profiles
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          title: Name
+          type: string
+        uuid:
+          title: UUID
+          type: string
+        verified:
+          title: Verified
+          type: boolean
+        identifier:
+          title: Identifier
+          type: string
+        organization:
+          title: Organization
+          type: string
+        payload_types:
+          title: Payload Types
+          type: array
+          items:
+            type: string
+        install_date:
+          title: Install Date
+          type: string
+          format: date-time
+  apple_business_manager:
+    title: Apple Business Manager
+    type: object
+    properties:
+      model:
+        title: Model
+        type: string
+      color:
+        title: Color
+        type: string
+      description:
+        title: Description
+        type: string
+        x-samos-fulfills:
+          type-name: core.named-object
+          property-name: description
+      serial_number:
+        title: Serial Number
+        type: string
+      device_family:
+        title: Device Family
+        type: string
+      os:
+        title: OS
+        type: string
+      device_assigned_date:
+        title: Device Assigned Date
+        type: string
+        format: date-time
+      device_assigned_by:
+        title: Device Assigned By
+        type: string
+  security_information:
+    title: Security Information
+    type: object
+    properties:
+      remote_desktop_enabled:
+        title: Remote Desktop Enabled
+        type: boolean
+  tags:
+    title: Tags
+    type: array
+    items:
+      type: string

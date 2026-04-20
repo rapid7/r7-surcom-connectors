@@ -1,0 +1,170 @@
+x-samos-type-name: DatadogPlatformContainerImage
+x-samos-namespace: datadog.platform
+title: Datadog Container Image
+description: A container image in Datadog
+type: object
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Template
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: short_image
+  - name: registry
+  - name: repository
+  - name: container_count
+  - name: images_built_at
+
+x-samos-detail:
+  - name: name
+  - name: short_image
+  - name: registry
+  - name: repository
+  - name: image_tags
+  - name: os_names
+  - name: os_architectures
+  - name: os_versions
+  - name: repo_digest
+  - name: container_count
+  - name: sizes
+  - name: sources
+  - name: x_tags
+  - name: image_flavors
+  - name: images_built_at
+
+x-samos-derived-properties:
+  d_active:
+    title: Active
+    type: boolean
+    syntax: jmespath
+    value: 'container_count > `0`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+    x-samos-correlation:
+      correlation-key: Template.id
+      correlation-type: Template
+      priority: 3
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  short_image:
+    title: Short Image Name
+    type: string
+
+  registry:
+    title: Registry
+    type: string
+
+  repository:
+    title: Repository
+    type: string
+
+  image_tags:
+    title: Image Tags
+    type: array
+    items:
+      type: string
+
+  os_names:
+    title: OS Names
+    type: array
+    items:
+      type: string
+
+  os_architectures:
+    title: OS Architectures
+    type: array
+    items:
+      type: string
+
+  os_versions:
+    title: OS Versions
+    type: array
+    items:
+      type: string
+
+  images_built_at:
+    title: Images Built At
+    type: array
+    items:
+      type: string
+      format: date-time
+
+  repo_digest:
+    title: Repository Digest
+    type: string
+
+  container_count:
+    title: Container Count
+    type: integer
+
+  sizes:
+    title: Sizes
+    type: array
+    items:
+      type: integer
+
+  sources:
+    title: Sources
+    type: array
+    items:
+      type: string
+
+  tags:
+    title: Tags
+    type: array
+    x-samos-hidden: true
+    items:
+      type: string
+
+  image_flavors:
+    title: Image Flavors
+    type: array
+    items:
+      type: object
+      properties:
+        built_at:
+          title: Built At
+          type: string
+          format: date-time
+        os_architecture:
+          title: OS Architecture
+          type: string
+        os_name:
+          title: OS Name
+          type: string
+        os_version:
+          title: OS Version
+          type: string
+        size:
+          title: Size
+          type: integer
+  x_tags:
+    title: Tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: DatadogPlatformSourceTag
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags

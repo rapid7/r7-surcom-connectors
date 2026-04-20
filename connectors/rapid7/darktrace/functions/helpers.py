@@ -128,5 +128,5 @@ def test_connection(logger: Logger, setting: Settings):
         for endpoint in ["devices", "subnets"]:
             client.make_https_get_call(endpoint=endpoint, args=args)
     except Exception as e:
-        return {"status": "failure", "message": str(e)}
+        return {"status": "error", "message": str(e)}
     return {"status": "success", "message": "Successfully Connected"}

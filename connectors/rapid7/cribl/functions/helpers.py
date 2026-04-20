@@ -68,7 +68,7 @@ class CriblAppClient():
         """
         token = self.get_token()
         if not token:
-            return {"status": "failure", "message": "Failed to retrieve access token"}
+            return {"status": "error", "message": "Failed to retrieve access token"}
         else:
             return {"status": "success", "message": "Successfully Connected"}
 

@@ -11,7 +11,7 @@
 
 certifi==2026.2.25
     # via requests
-charset-normalizer==3.4.4
+charset-normalizer==3.4.7
     # via requests
 furl==2.1.4
     # via r7_surcom_api
@@ -23,9 +23,9 @@ peppercorn==0.6
     # via sampleproject
 pyyaml==6.0.3
     # via r7_surcom_api
-r7_surcom_api==0.8.10
+r7_surcom_api==0.9.11
     # via -r requirements.in
-requests==2.32.5
+requests==2.33.1
     # via r7_surcom_api
 sampleproject==4.0.0
     # via -r requirements.in

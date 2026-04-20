@@ -28,7 +28,7 @@ ENDPOINT_TYPE_MAP = {
     "mobiles": SolarWindsITAMMobile,
 }
 
-DEFAULT_PAGE_SIZE = 10000
+DEFAULT_PAGE_SIZE = 100
 
 
 def import_all(user_log: Logger, settings: Settings):
@@ -141,7 +141,10 @@ def _import_endpoint(
 
         if total and record_count >= total:
             break
-        if len(records) < DEFAULT_PAGE_SIZE:
+
+        # Use the effective page size reported by the API (X-Per-Page header) to detect the last page.
+        effective_page_size = int(response.headers.get("X-Per-Page", DEFAULT_PAGE_SIZE))
+        if len(records) < effective_page_size:
             break
 
         page += 1

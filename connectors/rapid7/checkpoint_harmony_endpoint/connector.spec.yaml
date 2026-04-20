@@ -1,0 +1,48 @@
+id: checkpoint.harmony.endpoint
+name: Check Point Harmony Endpoint
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release.
+
+types:
+  - CheckPointHarmonyEndpointAsset
+  - CheckPointHarmonyEndpointGroup
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Check Point Harmony Endpoint Data
+    description: Import endpoint and group data from Check Point Harmony Endpoint.
+    return_types:
+      - CheckPointHarmonyEndpointAsset
+      - CheckPointHarmonyEndpointGroup
+
+settings:
+  base_url:
+    type: string
+    title: Authentication URL
+    description: Authentication URL shown when you create the Infinity Portal API key for the Endpoint service.
+    example: https://example.portal.checkpoint.com
+
+  client_id:
+    type: string
+    title: Client ID
+    description: Client ID from the Infinity Portal API key for the Endpoint service.
+
+  access_key:
+    type: string
+    title: Access Key
+    description: Access Key from the Infinity Portal API key for the Endpoint service.
+    format: password
+
+python_dependencies:
+  - chkp-harmony-endpoint-management-sdk
+
+runtime: py311
+
+categories:
+  - endpoint_detection_response
