@@ -6,7 +6,7 @@ description: A user account from SolarWinds IT Asset Management.
 x-samos-extends-types:
   - type-name: User
 
-$ref: https://api.samanage.com#/components/schemas/User
+$ref: https://example.samanage.com#/components/schemas/User
 
 x-samos-keys:
   - d_id
@@ -205,7 +205,6 @@ properties:
     title: Site
     type: object
     nullable: true
-    x-samos-hidden: true
     properties:
       id:
         title: Site
@@ -240,7 +239,6 @@ properties:
     title: Department
     type: object
     nullable: true
-    x-samos-hidden: true
     properties:
       id:
         title: Department
@@ -260,6 +258,7 @@ properties:
         nullable: true
       default_assignee_id:
         title: Default Assignee ID
+        nullable: true
         type: integer
 
   avatar:

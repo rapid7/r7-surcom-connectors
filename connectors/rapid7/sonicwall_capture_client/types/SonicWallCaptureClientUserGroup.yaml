@@ -1,0 +1,102 @@
+x-samos-type-name: SonicWallCaptureClientUserGroup
+x-samos-namespace: sonicwall.capture.client
+title: SonicWall Capture Client User Group
+description: A user group used to organize and apply policies to users in SonicWall Capture Client.
+
+x-samos-extends-types:
+  - type-name: UserGroup
+    subtype-priority: 3
+
+x-samos-keys:
+  - groupId
+
+x-samos-virtual:
+  groups:
+    type-name: UserGroup
+    cypher-pattern: >
+      <-[:`e:SonicWallCaptureClientEndpointUser:d_groups`]-(:SonicWallCaptureClientEndpointUser)
+
+x-samos-table:
+  - name: groupName
+  - name: type
+  - name: assignMode
+  - name: priority
+
+x-samos-detail:
+  - name: groupName
+  - name: kind
+  - name: assignMode
+  - name: priority
+  - name: rules
+  - name: s1Settings
+  - name: type
+
+properties:
+  groupId:
+    title: Group ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+
+  groupName:
+    title: Group Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: UserGroup.name
+      correlation-type: UserGroup
+      priority: 3
+
+  tenant:
+    title: Tenant ID
+    type: string
+    x-samos-hidden: true
+
+  kind:
+    title: Kind
+    type: string
+    x-samos-hidden: true
+
+  assignMode:
+    title: Assign Mode
+    type: string
+
+  priority:
+    title: Priority
+    type: integer
+
+  rules:
+    title: Rules
+    type: array
+    items:
+      type: object
+      properties:
+        field:
+          title: Field
+          type: string
+        operation:
+          title: Operation
+          type: string
+        value:
+          title: Value
+          type: string
+        options:
+          title: Options
+          type: string
+        _id:
+          title: Rule ID
+          type: string
+
+  s1Settings:
+    title: S1 Settings ID
+    type: string
+    x-samos-hidden: true
+
+  type:
+    title: Type
+    type: string

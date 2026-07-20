@@ -1,0 +1,108 @@
+x-samos-type-name: NudgeSecurityFinding
+x-samos-namespace: nudge.security
+title: Nudge Security Finding
+description: A specific instance of a security issue identified by Nudge Security, linking an exposure rule to an affected asset.
+
+x-samos-extends-types:
+  - type-name: Finding
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: status
+  - name: result
+  - name: resource_type_name
+  - name: creation_time
+  - name: last_check_time
+
+x-samos-detail:
+  - name: x_exposure_id
+  - name: x_app_id
+  - name: status
+  - name: result
+  - name: description
+  - name: resource_id
+  - name: resource_type_name
+  - name: creation_time
+  - name: last_check_time
+  - name: reopen_time
+  - name: resolution_time
+
+x-samos-derived-properties:
+  d_id:
+    type: string
+    syntax: jmespath
+    value: 'id'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+
+properties:
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  status:
+    title: Status
+    type: string
+  result:
+    title: Result
+    type: string
+  resource_id:
+    title: Resource ID
+    type: integer
+  resource_type_name:
+    title: Resource Type
+    type: string
+  creation_time:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: first_seen
+  last_check_time:
+    title: Last Checked At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: last_seen
+  reopen_time:
+    title: Reopened At
+    type: string
+    format: date-time
+  resolution_time:
+    title: Resolved At
+    type: string
+    format: date-time
+
+  exposure_id:
+    title: Exposure
+    type: string
+    x-samos-ref-types:
+      - type-name: NudgeSecurityExposure
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability
+
+  app_id:
+    title: App
+    type: string
+    x-samos-ref-types:
+      - type-name: NudgeSecurityApp
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to

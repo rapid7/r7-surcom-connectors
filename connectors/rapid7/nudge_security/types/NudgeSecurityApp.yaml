@@ -1,0 +1,178 @@
+x-samos-type-name: NudgeSecurityApp
+x-samos-namespace: nudge.security
+title: Nudge Security App
+description: A SaaS application discovered by Nudge Security.
+
+x-samos-extends-types:
+  - type-name: System
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id # used for references in other types
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: domain_canonical
+  - name: category
+  - name: first_date
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: domain_canonical
+  - name: category
+  - name: account_count
+  - name: adoption_percentage
+  - name: is_ignored
+  - name: d_technical_contact
+  - name: technical_contact_group_id
+  - name: service_info
+  - name: counters
+  - name: labels
+  - name: fields
+  - name: first_date
+
+x-samos-derived-properties:
+  d_id:
+    # The "id" property is an integer in the API response;
+    # derive a string to fulfill core.component.id (System extends core.component).
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_description:
+    # Promote service_info.service_description into the standard description.
+    type: string
+    title: Description
+    syntax: jmespath
+    x-samos-hidden: true
+    value: service_info.service_description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  d_technical_contact:
+    # Derive a reference to the technical contact user from technical_contact_id.
+    type: string
+    title: Technical Contact
+    syntax: jmespath
+    value: technical_contact_id
+    x-samos-ref-types:
+      - type-name: NudgeSecurityUser
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: technical_owners
+
+properties:
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  domain_canonical:
+    title: Canonical Domain
+    type: string
+  category:
+    title: Category
+    type: string
+  account_count:
+    title: Account Count
+    type: integer
+  adoption_percentage:
+    title: Adoption Percentage
+    type: integer
+  is_ignored:
+    title: Ignored?
+    type: boolean
+  first_date:
+    title: First Discovered
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  service_info:
+    title: Service Info
+    type: object
+    properties:
+      name:
+        title: Service Name
+        type: string
+      title:
+        title: Service Title
+        type: string
+      icon_url:
+        title: Icon URL
+        type: string
+      service_canonical_domain:
+        title: Service Canonical Domain
+        type: string
+      service_description:
+        title: Service Description
+        type: string
+      category:
+        title: Category
+        type: object
+        properties:
+          name:
+            title: Name
+            type: string
+          description:
+            title: Description
+            type: string
+      status_page:
+        title: Status Page
+        type: object
+        properties:
+          status_indicator:
+            title: Status Indicator
+            type: string
+          status_page_domain:
+            title: Status Page Domain
+            type: string
+  counters:
+    title: Counters
+    type: object
+    properties:
+      total_accounts:
+        title: Total Accounts
+        type: integer
+  labels:
+    title: Labels
+    type: array
+    items:
+      type: string
+  fields:
+    title: Custom Fields
+    type: array
+    items:
+      type: object
+  technical_contact_id:
+    title: Technical Contact
+    type: integer
+  technical_contact_group_id:
+    title: Technical Contact Group
+    type: integer
+    x-samos-ref-types:
+      - type-name: NudgeSecurityUserGroup
+        key-name: id
+
+x-samos-virtual:
+  users:
+    type-name: NudgeSecurityUser
+    cypher-pattern: >
+      <-[:`e:NudgeSecurityAccount:app_id`]-(:`NudgeSecurityAccount`)-[:`e:NudgeSecurityAccount:user_id`]->(:`NudgeSecurityUser`)

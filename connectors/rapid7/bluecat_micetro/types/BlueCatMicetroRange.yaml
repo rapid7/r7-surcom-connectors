@@ -1,0 +1,289 @@
+x-samos-type-name: BlueCatMicetroRange
+x-samos-namespace: bluecat.micetro
+title: BlueCat Micetro IP Range
+description: An IP address range (block or subnet) managed by BlueCat Micetro
+  DDI, representing a CIDR allocation in the IP address management hierarchy.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Network
+    subtype-priority: 5
+
+$ref: https://examp1/mmws/api/swagger.json#/components/schemas/Range
+
+x-samos-keys:
+  - ref
+
+required:
+  - ref
+
+x-samos-table:
+  - name: name
+  - name: isContainer
+  - name: subnet
+  - name: locked
+  - name: lastModified
+
+x-samos-detail:
+  - name: name
+  - name: from
+  - name: to
+  - name: isContainer
+  - name: subnet
+  - name: isLeaf
+  - name: numChildren
+  - name: utilizationPercentage
+  - name: locked
+  - name: autoAssign
+  - name: hasSchedule
+  - name: hasMonitor
+  - name: inheritAccess
+  - name: hasRogueAddresses
+  - name: authority
+  - name: customProperties
+  - name: adSiteRef
+  - name: folderRef
+  - name: cloudNetworkRef
+  - name: superscope
+  - name: discoveredProperties
+  - name: clientClassAssociations
+  - name: adSiteDisplayName
+  - name: created
+  - name: lastModified
+
+x-samos-derived-properties:
+  d_cidr:
+    # This property is derived from the range's name and is used to fulfill the cidr property of the Network type.
+    type: array
+    x-samos-hidden: true
+    items:
+      type: string
+    syntax: jmespath
+    value: '[name]'
+    x-samos-fulfills:
+      type-name: Network
+      property-name: cidr
+    x-samos-correlation:
+      correlation-key: Network.cidr
+      correlation-type: Network
+      priority: 4
+
+  d_asset_type:
+    # This property is derived from the range's isContainer property and is used to fulfill the asset_type property of the core.managed.asset type.
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: "isContainer && 'Container Block' || 'Subnet'"
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  d_active:
+    # This property is derived from the range's locked property and is used to fulfill the active property of the core.component type.
+    type: boolean
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'locked == `false`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  ref:
+    title: Range Reference
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: CIDR / Range
+    type: string
+    description: The CIDR notation or from-to address range of this range.
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  from:
+    title: From Address
+    type: string
+    format: ip-addr
+    description: The starting IP address of the range.
+
+  to:
+    title: To Address
+    type: string
+    format: ip-addr
+    description: The ending IP address of the range.
+
+  parentRef:
+    title: Parent Range
+    type: string
+    x-samos-hidden: true
+    x-samos-ref-types:
+      - key-name: ref
+        type-name: BlueCatMicetroRange
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+  isContainer:
+    title: Block?
+    type: boolean
+    description: True if this range is a container block; false if it is a subnet.
+
+  subnet:
+    title: Subnet?
+    type: boolean
+    description: True if this range is defined as a subnet.
+
+  isLeaf:
+    title: Leaf?
+    type: boolean
+    description: True if this range has no child ranges.
+
+  numChildren:
+    title: Child Range Count
+    type: integer
+    description: Number of child ranges nested under this range.
+
+  utilizationPercentage:
+    title: Utilization Percentage
+    type: integer
+    description: Percentage of IP addresses in use within this range.
+
+  locked:
+    title: Locked?
+    type: boolean
+    description: True if this range is locked against accidental modification.
+
+  autoAssign:
+    title: Auto Assign?
+    type: boolean
+    description: True if addresses in this range may be auto-assigned.
+
+  hasSchedule:
+    title: Schedule?
+    type: boolean
+    description: True if a discovery schedule is configured for this range.
+
+  hasMonitor:
+    title: Monitor?
+    type: boolean
+    description: True if a monitor is configured for this range.
+
+  inheritAccess:
+    title: Inherit Access?
+    type: boolean
+    description: True if this range inherits access settings from its parent.
+
+  hasRogueAddresses:
+    title: Rogue Addresses?
+    type: boolean
+    description: True if rogue (discovered but unassigned) addresses exist in this range.
+
+  childRanges:
+    title: Child Ranges
+    type: array
+    description: References to child ranges nested under this range.
+    x-samos-hidden: true
+    items:
+      type: object
+      additionalProperties: true
+
+  dhcpScopes:
+    title: DHCP Scopes
+    type: array
+    description: DHCP scopes associated with this range.
+    x-samos-hidden: true
+    items:
+      type: object
+
+  authority:
+    title: Authority
+    type: object
+    description: DNS/DHCP server(s) authoritative for this range.
+    properties:
+      name:
+        title: Authority Name
+        type: string
+      type:
+        title: Authority Type
+        type: string
+      sources:
+        title: Authority Sources
+        type: array
+        items:
+          type: object
+      failoverName:
+        title: Authority Failover Name
+        type: string
+      separated:
+        title: Authority Separated?
+        type: boolean
+      totalNumberOfSources:
+        title: Authority Total Sources
+        type: integer
+  customProperties:
+    title: Custom Properties
+    type: object
+    properties:
+      Title:
+        title: Title
+        type: string
+        x-samos-fulfills:
+          type-name: core.named-object
+          property-name: description
+    description: User-defined custom properties set on this range.
+
+  created:
+    title: Created
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  lastModified:
+    title: Last Modified
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  adSiteRef:
+    title: Active Directory Site
+    type: string
+    description: Reference to the Active Directory site associated with this range.
+
+  folderRef:
+    title: Folder
+    type: string
+    description: Reference to the folder containing this range.
+
+  cloudNetworkRef:
+    title: Cloud Network
+    type: string
+    description: Reference to the cloud network associated with this range.
+
+  superscope:
+    title: Superscope
+    type: string
+    description: Reference to the superscope associated with this range.
+
+  discoveredProperties:
+    title: Discovered Properties
+    type: object
+    description: Properties discovered by BlueCat Micetro for this range.
+
+  clientClassAssociations:
+    title: Client Class Associations
+    type: object
+    description: Client class associations for this range.
+
+  adSiteDisplayName:
+    title: Active Directory Site Display Name
+    type: string
+    description: Display name of the Active Directory site associated with this range.

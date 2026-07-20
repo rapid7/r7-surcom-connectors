@@ -1,0 +1,109 @@
+x-samos-type-name: BlueCatMicetroAAAARecord
+x-samos-namespace: bluecat.micetro
+title: BlueCat Micetro AAAA Record
+description: A DNS AAAA resource record mapping a hostname to an IPv6 address in BlueCat Micetro.
+x-samos-detail-prefer-type-title: true
+
+# AAAA is a DNS record type that maps a domain name to an IPv6 address.
+# There can be multiple AAAA records for a single domain name, allowing for load balancing and redundancy.
+# These entities are in the global zone
+x-samos-global-zone: true
+
+x-samos-extends-types:
+  - type-name: IpAddress
+    subtype-priority: 2
+
+x-samos-keys:
+  - ref
+
+required:
+  - ref
+
+x-samos-table:
+  - name: name
+  - name: data
+  - name: ttl
+  - name: enabled
+
+x-samos-detail:
+  - name: name
+  - name: data
+  - name: ttl
+  - name: comment
+  - name: enabled
+  - name: aging
+  - name: x_zoneRef
+
+properties:
+  ref:
+    title: Record Reference
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Hostname
+    type: string
+    description: The hostname this AAAA record resolves.
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  type:
+    title: Record Type
+    type: string
+    description: Always 'AAAA' for this record type.
+
+  ttl:
+    title: TTL
+    type: string
+    description: Time-To-Live for the DNS record.
+
+  data:
+    title: IPv6 Address
+    type: string
+    format: ip-addr
+    description: The IPv6 address this record resolves to.
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: IpAddress
+      property-name: value
+    x-samos-correlation:
+      correlation-key: IpAddress.value
+      correlation-type: IpAddress
+      priority: 3
+
+  comment:
+    title: Comment
+    type: string
+    description: Optional comment string for the DNS record.
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  enabled:
+    title: Enabled?
+    type: boolean
+    description: True if the record is enabled.
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  aging:
+    title: Aging
+    type: integer
+    description: DNS aging/scavenging timestamp value for the record.
+
+  x_zoneRef:
+    title: Parent Zone
+    type: string
+    description: Reference to the DNS zone containing this record.
+    x-samos-ref-types:
+      - key-name: ref
+        type-name: BlueCatMicetroZone
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref

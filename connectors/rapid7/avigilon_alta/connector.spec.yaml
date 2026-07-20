@@ -1,0 +1,71 @@
+id: avigilon.alta
+name: Avigilon Alta
+author: Rapid7
+version: 1.0.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Added two different import feeds
+
+types:
+  - AvigilonAltaUser
+  - AvigilonAltaACU
+  - AvigilonAltaGroup
+  - AvigilonAltaReader
+  - AvigilonAltaSite
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Avigilon Alta Users, Access Groups and Sites
+    description: Import users, access groups, and sites from Avigilon Alta (Openpath) Access.
+    return_types:
+      - AvigilonAltaUser
+      - AvigilonAltaGroup
+      - AvigilonAltaSite
+
+  - id: import_acus
+    title: Avigilon Alta ACUs and Readers
+    description: Import ACUs and readers from Avigilon Alta (Openpath) Access.
+    return_types:
+      - AvigilonAltaACU
+      - AvigilonAltaReader
+
+settings:
+  url:
+    type: string
+    title: API URL
+    description: Base URL for the Avigilon Alta (Openpath) API.
+    example: https://api.openpath.com
+
+  email:
+    type: string
+    title: Email
+    description: Email address of the Avigilon Alta user used to authenticate against the API.
+
+  password:
+    type: string
+    title: Password
+    description: Password for the Avigilon Alta user used to authenticate against the API.
+    format: password
+
+  org_id:
+    type: integer
+    title: Organization ID
+    description: The numeric Avigilon Alta organization ID (orgId) whose users, groups, ACUs, readers, and sites will be imported.
+
+  totp_secret:
+    type: string
+    title: One-Time Password (OTP) Authentication Key or URL
+    description: The TOTP secret for the Avigilon Alta user used to authenticate against the API.
+    format: password
+    nullable: true
+
+python_dependencies:
+  - pyotp
+
+runtime: py311
+
+categories:
+  - iam

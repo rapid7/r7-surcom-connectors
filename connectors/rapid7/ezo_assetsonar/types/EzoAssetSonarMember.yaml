@@ -237,7 +237,8 @@ properties:
     type: string
   display_picture_file_size:
     title: Display Picture File Size
-    type: string
+    type: integer
+    nullable: true
   display_picture_updated_at:
     title: Display Picture Updated At
     type: string
@@ -268,7 +269,8 @@ properties:
     type: integer
   external_id:
     title: External ID
-    type: integer
+    type: string
+    nullable: true
   fax:
     title: Fax
     type: string
@@ -308,7 +310,8 @@ properties:
     type: boolean
   jira_account_id:
     title: Jira Account ID
-    type: integer
+    type: string
+    nullable: true
   last_name:
     title: Last Name
     type: string
@@ -374,11 +377,13 @@ properties:
     title: Salesforce ID
     type: integer
   sam_managed_user:
-    title: Sam Managed User
-    type: string
+    title: SAM Managed User?
+    type: boolean
+    nullable: true
   saml_session_index_id:
     title: SAML Session Index ID
-    type: integer
+    type: string
+    nullable: true
   saml_user:
     title: SAML User?
     type: boolean
@@ -453,7 +458,8 @@ properties:
     type: integer
   unsubscribed_by_id:
     title: Unsubscribed By ID
-    type: string
+    type: integer
+    nullable: true
   updated_at:
     format: date-time
     title: Updated At

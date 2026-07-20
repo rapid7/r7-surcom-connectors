@@ -1,0 +1,179 @@
+x-samos-type-name: QualysFinding
+x-samos-namespace: qualys
+title: Qualys Finding (Deprecated)
+description: Vulnerability finding on Qualys.
+
+# Hidden because deprecated
+x-samos-hidden: true
+deprecated: true
+
+x-samos-extends-types:
+  - type-name: Finding
+
+x-samos-keys:
+  - ID
+
+required:
+  - ID
+
+x-samos-table:
+  - name: ID
+  - name: Host_ID
+  - name: QID
+
+x-samos-detail:
+  - name: ID
+  - name: Host_ID
+  - name: QID
+  - name: TYPE
+  - name: VULN_STATUS
+
+properties:
+  ID:
+    title: Finding ID
+    description: Finding unique ID.
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+  Host_ID:
+    type: string
+    title: Host ID
+    description: Qualys assigned unique host ID.
+    x-samos-ref-types:
+      - type-name: QualysHost
+        key-name: HOST_ID
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to
+  QID:
+    title: Qualys Vulnerability ID (QID)
+    type: string
+    description: The Qualys ID (QID) assigned to the vulnerability.
+    x-samos-ref-types:
+      - type-name: QualysQidDetail
+        key-name: QID
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability
+  FIRST_FOUND:
+    title: First Found
+    type: string
+    format: date-time
+    description: The date/time when the vulnerability was first found.
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: first_seen
+  LAST_FOUND:
+    title: Last Found
+    type: string
+    format: date-time
+    description: The most recent date/time when the vulnerability was found.
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: last_seen
+  TYPE:
+    type: string
+    title: Type
+    description: The type of vulnerability check.
+    example: Vuln,Practice, Ig
+    # A valid value is “Vuln” for a confirmed vulnerability, “Practice” for a potential vulnerability, or “Ig” for an information gathered.
+  PORT:
+    type: string
+    title: Port
+    description: The port number that the vulnerability was detected on.
+  SERVICE:
+    type: string
+    title: Service
+    description: The service that the vulnerability was detected on.
+  FQDN:
+    type: string
+    description: The fully qualified domain name (FQDN) for the asset.
+    title: Domain Name
+  PROTOCOL:
+    type: string
+    title: Protocol
+    description: The protocol that the vulnerability was detected on.
+  SSL:
+    type: string
+    title: SSL Present
+    description: A flag indicating whether SSL was present on this host. If SSL was present, the SSL element appears with the value “true”.
+  INSTANCE:
+    type: string
+    title: Instance
+    description: The Oracle DB instance the vulnerability was detected on.
+  RESULT:
+    type: string
+    title: Vulnerability Scan Result
+    description: Specific scan test results for the vulnerability, from the host assessment data.
+  TIMES_FOUND:
+    type: string
+    title: Number of Times Vulnerability Detected
+    description: The total number of times the vulnerability was detected on the host.
+  VULN_STATUS:
+    type: string
+    title: Vulnerability Status
+    description: The vulnerability status.
+    example: New, Active, Re-Opened, Fixed
+    # New” for an active vulnerability that was detected one time
+    # Active for an active vulnerability that was detected at least two times
+    # “Re-Opened” for an active vulnerability that was fixed and then re-opened,
+    # “Fixed” for a vulnerability that was detected previously and is now fixed.
+  LAST_FIXED:
+    type: string
+    format: date-time
+    title: Last Time Vulnerability Fixed
+    description: The last fixed date/time for the vulnerability on the host.
+  FIRST_REOPENED:
+    type: string
+    format: date-time
+    title: First Time Vulnerability Reopened
+    description: The date and time when the vulnerability was first reopened on the host.
+  LAST_REOPENED:
+    type: string
+    format: date-time
+    title: Last Time Vulnerability Reopened
+    description: The date and time when the vulnerability was last reopened on the host.
+  TIMES_REOPENED:
+    type: string
+    title: Number Of Times Vulnerability Reopened
+    description: The number of times the vulnerability on the host has been reopened.
+  CVSS_FINAL:
+    type: string
+    title: Final CVSS Score
+    description: The final CVSS score calculated for the host.
+  CVSS3_FINAL:
+    type: string
+    title: Final CVSS3 Score
+    description: The final CVSS3 score calculated for the host.
+  CVSS3_VERSION:
+    type: string
+    title: Supported CVSS3 Version
+    description: The CVSS3 version that is currently supported.
+  TICKET_NUMBER:
+    type: string
+    title: Number Of Tickets on Vulnerability
+    description: The number of the ticket that applies to the vulnerability instance on the host.
+  TICKET_STATE:
+    type: string
+    title: Ticket Status
+    description: The state/status of the ticket that applies to the vulnerability instance on the host.
+  ASSET_CVE:
+    type: string
+    title: Asset CVE
+    description: Asset CVE.
+  QDS:
+    type: string
+    title: Qualys Detection Score
+    description: The qualys detection score (QDS) is assigned to vulnerabilities detected by Qualys.
+    #QDS is derived from
+    #multiple contributing factors, including vulnerability technical details (e.g.
+    #CVSS score), vulnerability temporal details (e.g. external threat intelligence
+    #like exploit code maturity), and remediation controls applied to mitigate
+    #the risk from the vulnerability. QDS has a range from 1 to 100 with these
+    #severity levels:
+    #- Critical (90-100)
+    #- High (70-89)
+    #- Medium (40-69)
+    #- Low (1-39)

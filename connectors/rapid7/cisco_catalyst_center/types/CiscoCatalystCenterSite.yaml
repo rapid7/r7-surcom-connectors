@@ -1,0 +1,159 @@
+x-samos-type-name: CiscoCatalystCenterSite
+x-samos-namespace: cisco.catalyst.center
+title: Cisco Catalyst Center Site
+description: A site (area, building, or floor) from Cisco Catalyst Center
+
+x-samos-extends-types:
+  - type-name: Location
+    subtype-priority: 3
+
+$ref: https://developer.cisco.com/docs/catalyst-center/api-reference#/components/schemas/getSiteV2Response/properties/response/items
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: groupNameHierarchy
+  - name: siteType
+  - name: country
+  - name: address
+
+x-samos-detail:
+  - name: name
+  - name: groupNameHierarchy
+  - name: siteType
+  - name: country
+  - name: address
+  - name: latitude
+  - name: longitude
+  - name: parentId
+  - name: addressInheritedFrom
+  - name: groupTypeList
+
+properties:
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Location
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  parentId:
+    title: Parent Location
+    type: string
+    x-samos-fulfills:
+      type-name: Location
+      property-name: is_part_of_ref
+    x-samos-ref-types:
+      - type-name: CiscoCatalystCenterSite
+        key-name: id
+
+  groupNameHierarchy:
+    title: Site Hierarchy
+    type: string
+
+  groupHierarchy:
+    title: Group Hierarchy
+    type: string
+    x-samos-hidden: true
+
+  groupTypeList:
+    title: Group Type List
+    type: array
+    items:
+      type: string
+
+  siteType:
+    title: Site Type
+    type: string
+
+  country:
+    title: Country
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: country
+    x-samos-ref-types:
+      - type-name: NoeticEnumCountry
+        key-name: country_name
+
+  address:
+    title: Address
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: address
+
+  latitude:
+    title: Latitude
+    type: number
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: latitude
+
+  longitude:
+    title: Longitude
+    type: number
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: longitude
+
+  addressInheritedFrom:
+    title: Address Inherited From
+    type: string
+    nullable: true
+    x-samos-ref-types:
+      - type-name: CiscoCatalystCenterSite
+        key-name: id
+
+  additionalInfo:
+    title: Additional Info
+    type: array
+    x-samos-hidden: true
+    items:
+      type: object
+      properties:
+        nameSpace:
+          title: Namespace
+          type: string
+        attributes:
+          title: Attributes
+          type: object
+          properties:
+            type:
+              title: Type
+              type: string
+            country:
+              title: Country
+              type: string
+            address:
+              title: Address
+              type: string
+            latitude:
+              title: Latitude
+              type: string
+            longitude:
+              title: Longitude
+              type: string
+            addressInheritedFrom:
+              title: Address Inherited From
+              type: string
+
+  instanceTenantId:
+    title: Instance Tenant ID
+    type: string
+    x-samos-hidden: true

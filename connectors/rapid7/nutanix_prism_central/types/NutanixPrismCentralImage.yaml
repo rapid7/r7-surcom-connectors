@@ -1,0 +1,147 @@
+x-samos-type-name: NutanixPrismCentralImage
+x-samos-namespace: nutanix.prism.central
+title: Nutanix Prism Central Image
+description: A virtual disk image (ISO or disk) stored in Nutanix Prism Central.
+
+$ref: https://developers.nutanix.com/api-reference?namespace=vmm&version=v4.1&modified=1#/components/schemas/vmm.v4.1.content.Image
+
+x-samos-extends-types:
+  - type-name: Template
+    subtype-priority: 3
+
+x-samos-keys:
+  - extId
+
+x-samos-table:
+  - name: name
+  - name: type
+  - name: clusterLocationExtIds
+  - name: createTime
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: type
+  - name: sizeBytes
+  - name: ownerExtId
+  - name: clusterLocationExtIds
+  - name: categoryExtIds
+  - name: checksum
+  - name: source
+  - name: placementPolicyStatus
+  - name: createTime
+  - name: lastUpdateTime
+
+properties:
+  extId:
+    title: External ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+    x-samos-correlation:
+      correlation-key: Template.id
+      correlation-type: Template
+      priority: 5
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  type:
+    title: Image Type
+    type: string
+
+  sizeBytes:
+    title: Size (Bytes)
+    type: integer
+
+  createTime:
+    title: Created
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  lastUpdateTime:
+    title: Last Updated
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  ownerExtId:
+    title: Owner ID
+    type: string
+
+  categoryExtIds:
+    title: Category IDs
+    type: array
+    items:
+      type: string
+
+  clusterLocationExtIds:
+    title: Clusters
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: NutanixPrismCentralCluster
+          key-name: extId
+
+  checksum:
+    title: Checksum
+    type: object
+    properties:
+      hexDigest:
+        title: Hex Digest
+        type: string
+
+  source:
+    title: Source
+    type: object
+    additionalProperties: true
+
+  placementPolicyStatus:
+    title: Placement Policy Status
+    type: array
+    items:
+      type: object
+      properties:
+        placementPolicyExtId:
+          title: Policy ID
+          type: string
+        complianceStatus:
+          title: Compliance Status
+          type: string
+        enforcementMode:
+          title: Enforcement Mode
+          type: string
+        policyClusterExtIds:
+          title: Policy Cluster IDs
+          type: array
+          items:
+            type: string
+        enforcedClusterExtIds:
+          title: Enforced Cluster IDs
+          type: array
+          items:
+            type: string
+        conflictingPolicyExtIds:
+          title: Conflicting Policy IDs
+          type: array
+          items:
+            type: string

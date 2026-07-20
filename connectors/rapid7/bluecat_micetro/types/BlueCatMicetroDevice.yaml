@@ -1,0 +1,193 @@
+x-samos-type-name: BlueCatMicetroDevice
+x-samos-namespace: bluecat.micetro
+title: BlueCat Micetro Discovered Device
+description: A network device discovered by BlueCat Micetro during IPAM network
+  discovery, including routers, switches, hosts, and other managed assets.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+$ref: https://examp1/mmws/api/swagger.json#/components/schemas/Device
+
+x-samos-keys:
+  - ref
+  - name
+
+required:
+  - ref
+
+x-samos-table:
+  - name: name
+  - name: created
+  - name: lastModified
+
+x-samos-detail:
+  - name: name
+  - name: interfaces
+  - name: customProperties
+  - name: created
+  - name: lastModified
+
+x-samos-derived-properties:
+  d_name:
+    # This property is derived from the device's name and is used to fulfill the name property of the Machine type.
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'name'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  d_hostnames:
+    # This property is derived from the device's name and is used to fulfill the hostnames property of the Machine type.
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'name'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_qualified_hostname:
+    # This property is derived from the device's name and is used to fulfill the qualified-hostname property of the Machine type.
+    title: Qualified Hostname
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'name && contains(name, `.`) && name || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_unqualified_hostname:
+    # This property is derived from the device's name and is used to fulfill the unqualified-hostname property of the Machine type.
+    title: Unqualified Hostname
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'name && !contains(name, `.`) && name || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_mac_address:
+    # This property is derived from the device's interface for referencing.
+    title: MAC Addresses
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    syntax: jmespath
+    value: 'interfaces[?clientIdentifier!=null].clientIdentifier | [0]'
+    format: mac-addr
+  d_mac_addresses:
+    # This property is derived from the device's interfaces and is used to fulfill the mac_addresses property of the Machine type.
+    title: MAC Addresses
+    type: array
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'interfaces[*].clientIdentifier'
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+  d_ips:
+    # This property is derived from the device's interfaces and is used to fulfill the ips property of the Machine type.
+    title: IP Addresses
+    type: array
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'interfaces[*].addresses[]'
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+properties:
+  ref:
+    title: Device Reference
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Hostname
+    type: string
+    description: The hostname or display name of the discovered device.
+    x-samos-immutable: true
+
+  interfaces:
+    title: Interfaces
+    type: array
+    description: Network interfaces associated with this device, each with IP addresses.
+    items:
+      type: object
+      properties:
+        ref:
+          title: Interface Reference
+          type: string
+        name:
+          title: Interface Name
+          type: string
+        clientIdentifier:
+          title: Client Identifier
+          type: string
+          format: mac-addr
+        addresses:
+          title: Addresses
+          type: array
+          items:
+            type: string
+            format: ip-addr
+        customProperties:
+          title: Custom Properties
+          type: object
+        deviceRef:
+          title: Device Reference
+          type: string
+
+  customProperties:
+    title: Custom Properties
+    type: object
+    properties:
+      DeviceType:
+        title: Device Type
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: asset_type
+      OS:
+        title: Operating System
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: operating_system
+  created:
+    title: Created
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  lastModified:
+    title: Last Modified
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen

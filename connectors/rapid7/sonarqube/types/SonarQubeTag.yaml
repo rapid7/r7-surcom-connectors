@@ -11,6 +11,9 @@ x-samos-keys:
   - id
   - d_tag_value
 
+required:
+  - key
+
 x-samos-table:
   - name: d_tag_name
   - name: key

@@ -1,0 +1,282 @@
+x-samos-type-name: SuseManagerAsset
+x-samos-namespace: suse.manager
+title: SUSE Manager Asset
+description: A managed Linux system in SUSE Manager
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: hostname
+  - name: d_ip_addresses
+  - name: d_mac_addresses
+  - name: release
+  - name: last_boot
+  - name: last_checkin
+
+x-samos-detail:
+  - name: hostname
+  - name: profile_name
+  - name: description
+  - name: release
+  - name: d_ip_addresses
+  - name: d_mac_addresses
+  - name: country
+  - name: building
+  - name: room
+  - name: rack
+  - name: payg
+  - name: address1
+  - name: address2
+  - name: city
+  - name: state
+  - name: virtualization
+  - name: osa_status
+  - name: base_entitlement
+  - name: auto_update
+  - name: contact_method
+  - name: last_checkin
+  - name: last_boot
+  - name: lock_status
+  - name: addon_entitlements
+  - name: network_devices
+
+x-samos-derived-properties:
+  d_mac_addresses:
+    # fulfills `Machine:mac_addresses` derived the property
+    title: MAC Addresses
+    value: 'network_devices[?starts_with(interface, `en`) || starts_with(interface, `eth`)].hardware_address | []'
+    syntax: jmespath
+    type: array
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 3
+
+  d_ip_addresses:
+    # fulfills `Machine:ips` derived the property
+    title: IP Addresses
+    value: 'network_devices[?starts_with(interface, `en`) || starts_with(interface, `eth`)].[ipv4[*].address, ipv6[*].address][] | []'
+    syntax: jmespath
+    type: array
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  d_hostname:
+    # fulfills `core.named-object:name` derived the property
+    x-samos-hidden: true
+    value: 'hostname'
+    syntax: jmespath
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_os:
+    # fulfills `Machine:operating_system` derived the property
+    x-samos-hidden: true
+    value: 'Linux {release}'
+    syntax: expression
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  d_vm_info:
+    # fulfills `core.component:virtual` derived the property
+    title: VM Instance?
+    type: boolean
+    syntax: jmespath
+    value: 'virtualization != null'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: virtual
+
+properties:
+  contact_method:
+    title: Contact Method
+    type: string
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  hostname:
+    title: Hostname
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  last_boot:
+    title: Last Boot
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_scanned
+  last_checkin:
+    title: Last Check-in
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+  lock_status:
+    title: Lock Status?
+    type: boolean
+  name:
+    title: System Name
+    type: string
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+  profile_name:
+    title: Profile Name
+    type: string
+  release:
+    title: OS Release
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+  country:
+    title: Country
+    type: string
+  rack:
+    title: Rack
+    type: string
+  virtualization:
+    title: Virtualization
+    type: string
+  address1:
+    title: Address 1
+    type: string
+  address2:
+    title: Address 2
+    type: string
+  city:
+    title: City
+    type: string
+  state:
+    title: State
+    type: string
+  machine_id:
+    title: Machine ID
+    type: string
+  payg:
+    title: Pay-as-you-go?
+    type: boolean
+  minion_id:
+    title: Minion ID
+    type: string
+  building:
+    title: Building
+    type: string
+  room:
+    title: Room
+    type: string
+  osa_status:
+    title: OSA Status
+    type: string
+  addon_entitlements:
+    title: Add-on Entitlements
+    type: array
+    items:
+      type: string
+  auto_update:
+    title: Auto Update?
+    type: boolean
+  base_entitlement:
+    title: Base Entitlement
+    type: string
+  network_devices:
+    title: Network Devices
+    type: array
+    items:
+      type: object
+      properties:
+        ip:
+          title: IP
+          type: string
+        hardware_address:
+          title: MAC Address
+          type: string
+        module:
+          title: Module
+          type: string
+        interface:
+          title: Interface
+          type: string
+        broadcast:
+          title: Broadcast
+          type: string
+        netmask:
+          title: Netmask
+          type: string
+        ipv4:
+          title: IPv4 Addresses
+          type: array
+          items:
+            type: object
+            properties:
+              address:
+                title: Address
+                type: string
+              netmask:
+                title: Netmask
+                type: string
+              broadcast:
+                title: Broadcast
+                type: string
+        ipv6:
+          title: IPv6 Addresses
+          type: array
+          items:
+            type: object
+            properties:
+              address:
+                title: Address
+                type: string
+              netmask:
+                title: Netmask
+                type: string
+              scope:
+                title: Scope
+                type: string
+x-samos-virtual:
+  exposures:
+    type-name: Exposure
+    cypher-pattern: >
+      <-[:`e:Finding:applies_to`]-(:SuseManagerFinding)-[:`e:Finding:vulnerability`]->(e:SuseManagerExposure)
+  vulnerabilities:
+    type-name: Vulnerability
+    cypher-pattern: >
+      <-[:`e:Finding:applies_to`]-(:SuseManagerFinding)-[:`e:Finding:vulnerability`]->(:SuseManagerExposure)-[:`e:Exposure:vulnerabilities`]->(:Vulnerability)

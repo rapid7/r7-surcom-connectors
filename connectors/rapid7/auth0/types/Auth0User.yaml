@@ -1,0 +1,234 @@
+x-samos-type-name: Auth0User
+x-samos-namespace: auth0
+title: Auth0 User
+description: A User from Auth0
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: email
+  - name: name
+  - name: roles
+  - name: organizations
+  - name: created_at
+  - name: updated_at
+
+x-samos-detail:
+  - name: email
+  - name: username
+  - name: name
+  - name: given_name
+  - name: family_name
+  - name: nickname
+  - name: email_verified
+  - name: phone_number
+  - name: phone_verified
+  - name: picture
+  - name: blocked
+  - name: last_login
+  - name: last_ip
+  - name: logins_count
+  - name: multifactor
+  - name: identities
+  - name: app_metadata
+  - name: user_metadata
+  - name: roles
+  - name: organizations
+  - name: created_at
+  - name: updated_at
+
+x-samos-derived-properties:
+  d_has_mfa:
+    title: Multi Factor?
+    type: boolean
+    syntax: jsonpath
+    value: '$.multifactor.`len`.`cast(boolean)`'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: has_mfa
+
+  d_active:
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: '!blocked'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+properties:
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  user_id:
+    title: User ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  given_name:
+    title: First Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+
+  family_name:
+    title: Last Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+
+  nickname:
+    title: Nickname
+    type: string
+
+  username:
+    title: Username
+    description: Login username. Only present when the user's database connection has "Requires Username" enabled.
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+
+  email:
+    title: Email
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+
+  email_verified:
+    title: Email Verified?
+    type: boolean
+
+  phone_number:
+    title: Phone Number
+    description: Phone number for users who signed up via SMS connection or have a phone factor enrolled.
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+
+  phone_verified:
+    title: Phone Verified?
+    type: boolean
+
+  picture:
+    title: Picture
+    type: string
+
+  blocked:
+    title: Blocked?
+    description: Whether the user is blocked from logging in.
+    type: boolean
+
+  last_login:
+    title: Last Login
+    description: Timestamp of the user's most recent successful login.
+    type: string
+    format: date-time
+
+  last_ip:
+    title: Last Login IP
+    description: IP address from which the user last logged in.
+    type: string
+
+  logins_count:
+    title: Logins Count
+    description: Total number of successful logins for this user.
+    type: integer
+
+  multifactor:
+    title: Enrolled MFA Providers
+    description: List of multi-factor authentication providers the user is enrolled with (e.g. "guardian", "google-authenticator", "duo").
+    type: array
+    items:
+      type: string
+
+  created_at:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date
+
+  updated_at:
+    title: Updated At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+
+  roles:
+    title: Roles
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Auth0Role
+          key-name: id
+
+  organizations:
+    title: Organizations
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Auth0Organization
+          key-name: id
+
+  identities:
+    title: Identities
+    description: Linked identity providers (database, social, enterprise) for this user.
+    type: array
+    items:
+      type: object
+
+  app_metadata:
+    title: App Metadata
+    description: Application-specific metadata managed by the tenant administrator.
+    type: object
+
+  user_metadata:
+    title: User Metadata
+    description: User-editable metadata stored against the profile.
+    type: object
+    properties:
+      department:
+        title: Department
+        type: string
+        x-samos-fulfills:
+          type-name: User
+          property-name: department
+      title:
+        title: Job Title
+        type: string
+        x-samos-fulfills:
+          type-name: User
+          property-name: title

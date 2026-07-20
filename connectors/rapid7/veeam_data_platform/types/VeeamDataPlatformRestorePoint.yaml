@@ -1,0 +1,125 @@
+x-samos-type-name: VeeamDataPlatformRestorePoint
+x-samos-namespace: veeam.data.platform
+title: Veeam Restore Point
+description: A restore point representing a specific backup snapshot in time for a protected VM or server, including malware scan status.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: core.component
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: type
+  - name: platformName
+  - name: malwareStatus
+  - name: creationTime
+
+x-samos-detail:
+  - name: name
+  - name: type
+  - name: platformName
+  - name: platformId
+  - name: malwareStatus
+  - name: creationTime
+  - name: backupId
+  - name: backupFileId
+  - name: allowedOperations
+
+x-samos-derived-properties:
+  d_vm_reference:
+    title: Virtual Machine
+    type: string
+    syntax: jmespath
+    value: 'platformId != `00000000-0000-0000-0000-000000000000` && platformId || null'
+    x-samos-hidden: true
+    x-samos-ref-types:
+      - type-name: VeeamDataPlatformInventory
+        key-name: objectId
+
+  d_mitigations:
+    title: Mitigations
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Mitigation
+          key-name: id
+    syntax: jmespath
+    # M1049 - Antivirus/Antimalware - Restore point passed malware scan
+    value: >-
+      [
+        (malwareStatus == `Clean`) && `M1049` || null
+      ] | [?@]
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  id:
+    title: Restore Point ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Restore Point Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  platformName:
+    title: Platform Name
+    type: string
+    description: Virtualization or backup platform name
+
+  type:
+    title: Restore Point Type
+    type: string
+    description: Type of restore point (Increment, Full, etc.)
+
+  malwareStatus:
+    title: Malware Scan Status
+    type: string
+    description: Result of malware scan (Clean, Infected, etc.)
+
+  platformId:
+    title: Platform ID
+    type: string
+    x-samos-hidden: true
+
+  creationTime:
+    title: Creation Time
+    type: string
+    format: date-time
+    description: When the restore point was created
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  backupId:
+    title: Backup Instance
+    type: string
+    description: Reference to the parent backup instance
+    x-samos-ref-types:
+      - type-name: VeeamDataPlatformBackupJob
+        key-name: id
+
+  backupFileId:
+    title: Backup File ID
+    type: string
+    x-samos-hidden: true
+    description: Internal backup file identifier
+
+  allowedOperations:
+    title: Allowed Operations
+    type: array
+    description: List of restore operations available for this restore point
+    items:
+      type: string

@@ -1,0 +1,101 @@
+x-samos-type-name: NcentralCustomer
+x-samos-namespace: nable.ncentral
+title: N-central Customer
+description: N-central Customer
+
+# see New Type  NableNcentralCustomer
+x-samos-hidden: true
+deprecated: true
+
+# Result of executing "customerList" in the SOAP API for N-central
+# Javadoc Reference:
+# https://mothership.n-able.com/dms/javadoc_ei2/com/nable/nobj/ei2/ServerEI2_PortType.html#customerList-java.lang.String-java.lang.String-java.util.List-
+#
+# WSDL available in refdocs folder.
+
+x-samos-extends-types:
+  - type-name: core.component
+
+x-samos-keys:
+  - customerid
+required:
+  - customerid
+
+x-samos-table:
+  - name: customerid
+  - name: customername
+
+x-samos-detail:
+  - name: customerid
+  - name: customername
+
+# x-samos-derived-properties:
+
+properties:
+  # "Fulfills" properties put here for convenience.
+  customerid:
+    title: Customer ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  customername:
+    title: Customer Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  # Additional properties
+  city:
+    type: string
+  contactdepartment:
+    type: string
+  contactemail:
+    type: string
+  contactext:
+    type: string
+  contactfirstname:
+    type: string
+  contactlastname:
+    type: string
+  contactphonenumber:
+    type: string
+  contacttitle:
+    type: string
+  county:
+    type: string
+  externalid:
+    type: string
+  isserviceorg:
+    type: string
+  issystem:
+    type: string
+  maintenancewindowduration:
+    type: string
+  maintenancewindowstart:
+    type: string
+  parentcustomername:
+    type: string
+  parentid:
+    type: string
+    x-samos-ref-types:
+      - type-name: NcentralCustomer
+        key-name: customerid
+  phone:
+    type: string
+  postalcode:
+    type: string
+  programlevelid:
+    type: string
+  registrationtoken:
+    type: string
+  registrationtokenexpirydate:
+    type: string
+  stateprov:
+    type: string
+  street1:
+    type: string
+  street2:
+    type: string

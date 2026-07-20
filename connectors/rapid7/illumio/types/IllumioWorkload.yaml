@@ -1,0 +1,666 @@
+x-samos-type-name: IllumioWorkload
+x-samos-namespace: illumio
+title: Illumio Workload
+description: A workload managed by the Illumio Policy Compute Engine (PCE), representing a server, VM, or container.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: hostname
+  - name: description
+  - name: os_id
+  - name: enforcement_mode
+  - name: online
+  - name: managed
+
+x-samos-detail:
+  - name: name
+  - name: hostname
+  - name: description
+  - name: os_id
+  - name: os_detail
+  - name: enforcement_mode
+  - name: visibility_level
+  - name: online
+  - name: managed
+  - name: deleted
+  - name: public_ip
+  - name: service_principal_name
+  - name: distinguished_name
+  - name: service_provider
+  - name: data_center
+  - name: data_center_zone
+  - name: firewall_coexistence
+  - name: blocked_connection_action
+  - name: containers_inherit_host_policy
+  - name: datacenter_nat_1to1
+  - name: external_data_set
+  - name: external_data_reference
+  - name: agent
+  - name: agent_to_pce_certificate_authentication_id
+  - name: caps
+  - name: container_cluster
+  - name: detected_vulnerabilities
+  - name: ignored_interface_names
+  - name: interfaces
+  - name: labels
+  - name: risk_summary
+  - name: selectively_enforced_services
+  - name: services
+  - name: ven
+  - name: vulnerabilities_summary
+  - name: created_at
+  - name: updated_at
+  - name: deleted_at
+
+x-samos-derived-properties:
+  # Map `online` boolean onto core.component / active
+  d_active:
+    x-samos-hidden: true
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: 'online == `true`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  # Merge `interfaces[].address` and top-level `public_ip` into one IP list
+  d_ips:
+    x-samos-hidden: true
+    title: IPs
+    type: array
+    syntax: jmespath
+    value: '[interfaces[].address, [public_ip]][] | [?@ != null]'
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  # Hostname containing a dot — used for qualified hostname correlation
+  d_qualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'hostname && contains(hostname, `.`) && hostname || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  # Hostname without a dot — used for unqualified hostname correlation
+  d_unqualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'hostname && !contains(hostname, `.`) && hostname || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  # Flatten `labels[]` to label hrefs referencing IllumioLabel records
+  d_source_tags:
+    x-samos-hidden: true
+    title: Source Tags
+    type: array
+    syntax: jmespath
+    value: 'labels[].href'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: IllumioLabel
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+
+  # Flatten MAC addresses from `interfaces[]` into a single list
+  d_mac_addresses:
+    x-samos-hidden: true
+    title: MAC Addresses
+    type: array
+    syntax: jmespath
+    value: 'interfaces[].mac_address'
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+
+properties:
+  id:
+    title: Object ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  href:
+    title: Href
+    type: string
+    x-samos-hidden: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  hostname:
+    title: Hostname
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  managed:
+    title: Managed?
+    type: boolean
+
+  online:
+    title: Online?
+    type: boolean
+
+  deleted:
+    title: Deleted?
+    type: boolean
+
+  enforcement_mode:
+    title: Enforcement Mode
+    type: string
+
+  visibility_level:
+    title: Visibility Level
+    type: string
+
+  os_id:
+    title: OS
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_product
+
+  os_detail:
+    title: OS Detail
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  public_ip:
+    title: Public IP
+    type: string
+    format: ip-addr
+
+  service_principal_name:
+    title: Service Principal Name
+    type: string
+
+  distinguished_name:
+    title: Distinguished Name
+    type: string
+
+  service_provider:
+    title: Service Provider
+    type: string
+
+  data_center:
+    title: Data Center
+    type: string
+
+  data_center_zone:
+    title: Data Center Zone
+    type: string
+
+  agent_to_pce_certificate_authentication_id:
+    title: Agent to PCE Certificate Authentication ID
+    type: string
+
+  external_data_set:
+    title: External Data Set
+    type: string
+
+  external_data_reference:
+    title: External Data Reference
+    type: string
+
+  blocked_connection_action:
+    title: Blocked Connection Action
+    type: string
+
+  containers_inherit_host_policy:
+    title: Containers Inherit Host Policy?
+    type: boolean
+
+  datacenter_nat_1to1:
+    title: Datacenter NAT 1:1?
+    type: boolean
+
+  firewall_coexistence:
+    title: Firewall Coexistence
+    type: string
+
+  labels:
+    title: Labels
+    type: array
+    items:
+      type: object
+      properties:
+        href:
+          title: Label Href
+          type: string
+          x-samos-ref-types:
+            - type-name: IllumioLabel
+              key-name: id
+        key:
+          title: Label Key
+          type: string
+        value:
+          title: Label Value
+          type: string
+
+  interfaces:
+    title: Interfaces
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          title: Interface Name
+          type: string
+        address:
+          title: IP Address
+          type: string
+          format: ip-addr
+        cidr_block:
+          title: CIDR Block
+          type: integer
+        link_state:
+          title: Link State
+          type: string
+        default_gateway_address:
+          title: Default Gateway
+          type: string
+          format: ip-addr
+        friendly_name:
+          title: Friendly Name
+          type: string
+        network_detection_mode:
+          title: Network Detection Mode
+          type: string
+        loopback:
+          title: Loopback?
+          type: boolean
+        public_ip:
+          title: Interface Public IP
+          type: string
+          format: ip-addr
+        href:
+          title: Interface Href
+          type: string
+        network:
+          title: Network
+          type: object
+          properties:
+            href:
+              title: Network Href
+              type: string
+            name:
+              title: Network Name
+              type: string
+
+  services:
+    title: Services
+    type: object
+    properties:
+      uptime_seconds:
+        title: Uptime Seconds
+        type: integer
+      created_at:
+        title: Services Created At
+        type: string
+        format: date-time
+      open_service_ports:
+        title: Open Service Ports
+        type: array
+        items:
+          type: object
+          properties:
+            protocol:
+              title: Protocol
+              type: integer
+            address:
+              title: Address
+              type: string
+            port:
+              title: Port
+              type: integer
+            process_name:
+              title: Process Name
+              type: string
+            user:
+              title: User
+              type: string
+            package:
+              title: Package
+              type: string
+            win_service_name:
+              title: Windows Service Name
+              type: string
+
+  vulnerabilities_summary:
+    title: Vulnerabilities Summary
+    type: object
+    properties:
+      num_vulnerabilities:
+        title: Number of Vulnerabilities
+        type: integer
+      vulnerability_score:
+        title: Vulnerability Score
+        type: integer
+      max_vulnerability_score:
+        title: Max Vulnerability Score
+        type: integer
+      vulnerability_exposure_score:
+        title: Vulnerability Exposure Score
+        type: integer
+      vulnerability_computation_state:
+        title: Vulnerability Computation State
+        type: string
+      last_updated_at:
+        title: Last Updated At
+        type: string
+        format: date-time
+
+  detected_vulnerabilities:
+    title: Detected Vulnerabilities
+    type: object
+    properties:
+      last_updated_at:
+        title: Last Updated At
+        type: string
+        format: date-time
+      workload_detected_vulnerabilities:
+        title: Workload Detected Vulnerabilities
+        type: array
+        items:
+          type: object
+          properties:
+            ip_address:
+              title: IP Address
+              type: string
+            port:
+              title: Port
+              type: integer
+            proto:
+              title: Protocol
+              type: integer
+            vulnerability:
+              title: Vulnerability
+              type: object
+              properties:
+                href:
+                  title: Vulnerability Href
+                  type: string
+                score:
+                  title: Score
+                  type: integer
+                name:
+                  title: Name
+                  type: string
+            vulnerability_report:
+              title: Vulnerability Report
+              type: object
+              properties:
+                href:
+                  title: Report Href
+                  type: string
+
+  risk_summary:
+    title: Risk Summary
+    type: object
+    properties:
+      ransomware:
+        title: Ransomware Risk
+        type: object
+
+  agent:
+    title: Agent
+    type: object
+    properties:
+      href:
+        title: Agent Href
+        type: string
+      config:
+        title: Agent Config
+        type: object
+        properties:
+          mode:
+            title: Mode
+            type: string
+          log_traffic:
+            title: Log Traffic?
+            type: boolean
+          security_policy_update_mode:
+            title: Security Policy Update Mode
+            type: string
+          visibility_level:
+            title: Visibility Level
+            type: string
+      secure_connect:
+        title: Secure Connect
+        type: object
+        properties:
+          matching_issuer_name:
+            title: Matching Issuer Name
+            type: string
+      status:
+        title: Agent Status
+        type: object
+        properties:
+          uid:
+            title: UID
+            type: string
+          last_heartbeat_on:
+            title: Last Heartbeat On
+            type: string
+            format: date-time
+            x-samos-fulfills:
+              type-name: core.managed.endpoint
+              property-name: endpoint_last_seen
+          uptime_seconds:
+            title: Uptime Seconds
+            type: integer
+          agent_version:
+            title: Agent Version
+            type: string
+            x-samos-fulfills:
+              type-name: core.managed.endpoint
+              property-name: agent_version
+          managed_since:
+            title: Managed Since
+            type: string
+            format: date-time
+            x-samos-fulfills:
+              type-name: core.managed.endpoint
+              property-name: endpoint_first_seen
+          fw_config_current:
+            title: Firewall Config Current?
+            type: boolean
+          firewall_rule_count:
+            title: Firewall Rule Count
+            type: integer
+          security_policy_refresh_at:
+            title: Security Policy Refresh At
+            type: string
+            format: date-time
+          security_policy_applied_at:
+            title: Security Policy Applied At
+            type: string
+            format: date-time
+          security_policy_received_at:
+            title: Security Policy Received At
+            type: string
+            format: date-time
+          security_policy_sync_state:
+            title: Security Policy Sync State
+            type: string
+          agent_health:
+            title: Agent Health
+            type: array
+            items:
+              type: object
+              properties:
+                type:
+                  title: Health Type
+                  type: string
+                severity:
+                  title: Severity
+                  type: string
+                audit_event:
+                  title: Audit Event
+                  type: string
+      active_pce_fqdn:
+        title: Active PCE FQDN
+        type: string
+      target_pce_fqdn:
+        title: Target PCE FQDN
+        type: string
+      type:
+        title: Agent Type
+        type: string
+
+  ven:
+    title: VEN
+    type: object
+    properties:
+      href:
+        title: VEN Href
+        type: string
+        x-samos-ref-types:
+          - type-name: IllumioVen
+            key-name: id
+      hostname:
+        title: VEN Hostname
+        type: string
+      name:
+        title: VEN Name
+        type: string
+      status:
+        title: VEN Status
+        type: string
+      ven_type:
+        title: VEN Type
+        type: string
+
+  selectively_enforced_services:
+    title: Selectively Enforced Services
+    type: array
+    items:
+      type: object
+      properties:
+        port:
+          title: Port
+          type: integer
+        to_port:
+          title: To Port
+          type: integer
+        proto:
+          title: Protocol
+          type: integer
+
+  container_cluster:
+    title: Container Cluster
+    type: object
+    properties:
+      href:
+        title: Cluster Href
+        type: string
+      name:
+        title: Cluster Name
+        type: string
+
+  ignored_interface_names:
+    title: Ignored Interface Names
+    type: array
+    items:
+      type: string
+
+  caps:
+    title: Capabilities
+    type: array
+    items:
+      type: string
+
+  created_at:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  updated_at:
+    title: Updated At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  deleted_at:
+    title: Deleted At
+    type: string
+    format: date-time
+
+  created_by:
+    title: Created By
+    type: object
+    x-samos-hidden: true
+    properties:
+      href:
+        title: Creator Href
+        type: string
+
+  updated_by:
+    title: Updated By
+    type: object
+    x-samos-hidden: true
+    properties:
+      href:
+        title: Updater Href
+        type: string
+
+  deleted_by:
+    title: Deleted By
+    type: object
+    x-samos-hidden: true
+    properties:
+      href:
+        title: Deleter Href
+        type: string

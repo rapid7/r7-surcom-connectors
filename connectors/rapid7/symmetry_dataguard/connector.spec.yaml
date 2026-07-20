@@ -1,0 +1,75 @@
+id: symmetry.dataguard
+name: Symmetry DataGuard DSPM
+author: Rapid7
+version: 0.2.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Fix a data duplication problem with classified object import
+
+restricted-licenses:
+  - DSPM
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - SymmetryDataGuardClassifiedObject
+  - SymmetryDataGuardStorage
+  - SymmetryDataGuardIdentity
+  - SymmetryDataGuardStoreXref
+  - SymmetryDataGuardObjectXref
+  - SymmetryDataGuardClassificationEnum
+  - SymmetryDataGuardCloudProviderEnum
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Symmetry DataGuard Data Objects and Classifications
+    description: Import all data objects and classification labels from Symmetry DataGuard.
+    return_types:
+      - SymmetryDataGuardClassifiedObject
+      - SymmetryDataGuardStorage
+      - SymmetryDataGuardIdentity
+      - SymmetryDataGuardStoreXref
+      - SymmetryDataGuardObjectXref
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    example: https://example.symmetry-systems.com
+    description: Base URL for the Symmetry DSPM API.
+
+  client_id:
+    type: string
+    title: Client ID
+    description: Client ID for authenticating with the Symmetry DSPM API.
+
+  client_secret:
+    type: string
+    title: Client Secret
+    description: Client Secret for authenticating with the Symmetry DSPM API.
+    format: password
+
+  import_classified_object:
+    type: boolean
+    title: Include Classified Object Details?
+    description: If selected, import details of all objects (files, etc.) in addition to storage-level classifications.
+    default: false
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - cloud_security
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: true

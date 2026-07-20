@@ -1,0 +1,77 @@
+x-samos-type-name: ZimperiumMTDTeam
+x-samos-namespace: zimperium.mtd
+title: Zimperium MTD Team
+description: A team grouping in Zimperium MTD used to organize devices and users.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: core.component-group
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: userCount
+  - name: created
+  - name: modified
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: created
+  - name: modified
+
+properties:
+  id:
+    title: Team
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  accountId:
+    title: Account ID
+    type: string
+    x-samos-hidden: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  created:
+    title: Created
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  modified:
+    title: Modified
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  userCount:
+    title: User Count
+    type: integer
+
+x-samos-virtual:
+  members:
+    type-name: ZimperiumMTDDevice
+    cypher-pattern: >
+      <-[:`e:ZimperiumMTDDevice:teamId`]-(:ZimperiumMTDDevice)

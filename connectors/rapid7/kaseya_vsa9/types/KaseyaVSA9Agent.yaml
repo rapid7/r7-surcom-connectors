@@ -72,6 +72,7 @@ x-samos-detail:
   - name: ToolTipNotes
   - name: AdminContact
   - name: Attributes
+  - name: x_LastPatchScan
 
 x-samos-derived-properties:
   d_ips:
@@ -89,6 +90,7 @@ x-samos-derived-properties:
 
   d_qualified_hostname:
     # Deriving  for qualified hostname
+    x-samos-hidden: true
     type: string
     syntax: jmespath
     value: 'AgentName && contains(AgentName, `.`) && AgentName || null'
@@ -128,6 +130,26 @@ x-samos-derived-properties:
     x-samos-fulfills:
       type-name: core.managed.endpoint
       property-name: agent_version
+
+  d_mitigations:
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    # M1051 (Update Software) - agent has had at least one patch scan recorded,
+    # confirming Kaseya patch management is active on this endpoint.
+    # Source: Enriched via GET /api/v1.0/assetmgmt/patch/{agentId}/status -> x_LastPatchScan
+    value: >-
+      [
+        x_LastPatchScan != null && `M1051` || null
+      ] | [?@]
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
 
 properties:
   AgentId:
@@ -275,8 +297,8 @@ properties:
     title: Tooltip Notes
     type: string
   ShowToolTip:
-    title: Show Tooltip?
-    type: boolean
+    title: Show Tooltip
+    type: integer
   DefaultGateway:
     title: Default Gateway
     type: string
@@ -350,6 +372,12 @@ properties:
   EndpointId:
     title: Endpoint ID
     type: string
+  x_LastPatchScan:
+    title: Last Patch Scan
+    type: string
+    format: date-time
+    nullable: true
+    description: Enriched from patch status API per agent; null if endpoint is unavailable
   Attributes:
     title: Attributes
     type: object

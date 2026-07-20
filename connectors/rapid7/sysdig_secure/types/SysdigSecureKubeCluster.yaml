@@ -1,0 +1,68 @@
+x-samos-type-name: SysdigSecureKubeCluster
+x-samos-namespace: sysdig.secure
+title: Sysdig Secure Kubernetes Cluster
+description: A Kubernetes cluster monitored by Sysdig Secure.
+x-samos-detail-prefer-type-title: true
+# Schema entity: KubeCluster. All fields confirmed from refdocs/sysdig_schema.yaml (*).
+x-samos-extends-types:
+  - type-name: System
+    subtype-priority: 3
+
+x-samos-keys:
+  - name
+
+x-samos-table:
+  - name: name
+  - name: platform
+  - name: type
+  - name: lastModified
+
+x-samos-detail:
+  - name: name
+  - name: platform
+  - name: type
+  - name: lastModified
+
+x-samos-derived-properties:
+  d_name:
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'name'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_cloud:
+    x-samos-hidden: true
+    type: boolean
+    syntax: expression
+    value: 'true'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: cloud
+
+properties:
+  name:
+    type: string
+    title: Cluster Name
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  platform:
+    type: string
+    title: Platform
+
+  type:
+    type: string
+    title: Cluster Type
+
+  lastModified:
+    type: string
+    title: Last Modified
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen

@@ -1,11 +1,11 @@
 id: proxmox.pve
 name: Proxmox Virtual Environment
 author: Rapid7
-version: 1.1.0
+version: 1.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Pin dependencies
+  - Fix hardcoded node name in VM endpoint to dynamically resolve from cluster resources
 
 types:
   - ProxmoxPVEVM

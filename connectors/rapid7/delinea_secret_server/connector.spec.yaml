@@ -1,11 +1,11 @@
 id: delinea.secret.server
 name: Delinea Secret Server
 author: Rapid7
-version: 1.0.0
+version: 1.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Remove Beta label
+  - Implemented on-prem and cloud authentication for Delinea Secret Server API
 
 types:
   - DelineaSecretServerUser
@@ -24,11 +24,21 @@ functions:
       - DelineaSecretServerSecretPermission
 
 settings:
+  auth_type:
+    type: string
+    title: Authentication Type
+    description: Delinea Secret Server Authentication Type (On-Premises or Cloud)
+    enum:
+      - On-Premises
+      - Cloud
+    default: On-Premises
+
   platform_url:
     type: string
-    title: Delinea Platform URL
+    title: Delinea Platform URL (for Cloud Authentication)
     description: The Delinea Platform URL for retrieving the access token to authenticate Delinea Secret Server API
     example: https://example.delinea.app
+    nullable: true
 
   url:
     type: string
@@ -47,9 +57,15 @@ settings:
     description: Service Account Password or Client Secret for a platform service user for Delinea Secret Server API authentication
     format: password
 
+  verify_tls:
+    type: boolean
+    title: Verify TLS? (On-Premises only)
+    description: If enabled, verify the server's identity
+    default: true
+
 runtime: py311
 
 categories:
   - credential_management
 
-show_orchestrator_ui: false
+show_orchestrator_ui: true

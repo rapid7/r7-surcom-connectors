@@ -1,13 +1,13 @@
 id: paessler
 name: Paessler PRTG Network Monitor
 author: Rapid7
-version: 1.1.0
+version: 1.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Pin dependencies
+  - Add verify_tls setting to allow users to disable TLS verification if needed
 
 # IDs of Surface Command types in this connector.
 # Type IDs must be unique across all connectors. Prefix each with a SnakeCaked
@@ -45,6 +45,12 @@ settings:
     description: Passhash for Paessler PRTG Network Monitor API authentication
     format: password
     example: 2107147710
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
 
 # Runtime platform for this connector.
 runtime: py311

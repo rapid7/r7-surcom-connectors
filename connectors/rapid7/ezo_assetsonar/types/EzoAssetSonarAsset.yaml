@@ -88,6 +88,10 @@ properties:
   average_cost_per_unit_original:
     title: Average Cost Per Unit Original
     type: string
+  bios_serial_number:
+    title: BIOS Serial Number
+    type: string
+    nullable: true
   bulk_import_id:
     title: Bulk Import ID
     type: integer
@@ -99,6 +103,14 @@ properties:
     title: Checkout On
     type: string
     format: date-time
+  children_count:
+    title: Children Count
+    type: integer
+    nullable: true
+  cisco_meraki_organization_id:
+    title: Cisco Meraki Organization ID
+    type: integer
+    nullable: true
   clone_from_asset_id:
     title: Clone From Asset ID
     type: integer
@@ -295,9 +307,17 @@ properties:
   last_history_id:
     title: Last History ID
     type: integer
+  last_sync_source:
+    title: Last Sync Source
+    type: string
+    nullable: true
   latest_contract_id:
     title: Latest Contract ID
     type: integer
+  left_limit:
+    title: Left Limit
+    type: integer
+    nullable: true
   location_based_threshold:
     title: Location Based Threshold
     type: integer
@@ -343,6 +363,10 @@ properties:
   package_id:
     title: Package ID
     type: integer
+  parent_id:
+    title: Parent ID
+    type: integer
+    nullable: true
   pending_verification:
     title: Pending Verification?
     type: boolean
@@ -370,6 +394,10 @@ properties:
     x-samos-fulfills:
       type-name: core.managed.asset
       property-name: model
+  provisioned_network_id:
+    title: Provisioned Network ID
+    type: integer
+    nullable: true
   purchase_order_id:
     title: Purchase Order ID
     type: integer
@@ -383,6 +411,10 @@ properties:
   quickbooks_item_id:
     title: QuickBooks Item ID
     type: integer
+  recommended_user_id:
+    title: Recommended User ID
+    type: integer
+    nullable: true
   rent_collected:
     title: Rent Collected
     type: string
@@ -407,6 +439,10 @@ properties:
   retired_on:
     title: Retired On
     type: string
+  right_limit:
+    title: Right Limit
+    type: integer
+    nullable: true
   sale_price:
     title: Sale Price
     type: string
@@ -453,6 +489,10 @@ properties:
   tax_free:
     title: Tax Free?
     type: boolean
+  tree_depth:
+    title: Tree Depth
+    type: integer
+    nullable: true
   update_counter:
     title: Update Counter
     type: integer

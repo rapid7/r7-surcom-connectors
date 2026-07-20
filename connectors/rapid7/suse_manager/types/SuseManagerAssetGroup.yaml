@@ -1,0 +1,82 @@
+x-samos-type-name: SuseManagerAssetGroup
+x-samos-namespace: suse.manager
+title: SUSE Manager Asset Group
+description: A group of managed Linux systems in SUSE Manager
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.component-group
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: d_org_id
+  - name: member_system_ids
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: d_org_id
+  - name: member_system_ids
+  - name: system_count
+
+x-samos-derived-properties:
+  d_org_id:
+    #  Derived property to reference the SuseManagerOrganization:id as it is a string and org_id is an integer in the source data
+    title: Organization
+    type: string
+    syntax: jmespath
+    value: 'org_id'
+    x-samos-ref-types:
+      - type-name: SuseManagerOrganization
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+
+properties:
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  name:
+    title: Group Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  org_id:
+    title: Organization ID
+    type: integer
+  system_count:
+    title: System Count
+    type: integer
+  member_system_ids:
+    title: Members
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: SuseManagerAsset
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component-group
+      property-name: members
+
+x-samos-virtual:
+  users:
+    cypher-pattern: >
+      -[:`e:SuseManagerAssetGroup:d_org_id`]->(:SuseManagerOrganization)<-[:`e:SuseManagerIdentity:d_org_id`]-(:SuseManagerIdentity)
+    type-name: SuseManagerIdentity

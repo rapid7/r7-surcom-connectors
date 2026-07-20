@@ -1,0 +1,210 @@
+x-samos-type-name: VeeamDataPlatformManagedServer
+x-samos-namespace: veeam.data.platform
+title: Veeam Managed Server
+description: A server added to the Veeam Backup & Replication of all servers that are added to the backup infrastructure.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: type
+  - name: status
+  - name: description
+  - name: maxTaskCount
+  - name: credentialsStorageType
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: type
+  - name: status
+  - name: credentialsStorageType
+  - name: credentialsId
+  - name: maxTaskCount
+  - name: isBackupServer
+  - name: isDefaultMountServer
+  - name: updatesState
+  - name: networkSettings
+
+x-samos-derived-properties:
+  d_active:
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: 'status == `Available`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_qualified_hostname:
+    type: string
+    value: name && contains(name, `.`) && name || null
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_unqualified_hostname:
+    type: string
+    value: name && !contains(name, `.`) && name || null
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_mitigations:
+    title: Mitigations
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Mitigation
+          key-name: id
+    syntax: jmespath
+    # M1053 - Data Backup -  Ensure Veeam Agent is Updated and Backing Up Successfully
+    value: >-
+      [
+        (status == `Available`) && `M1053` || null
+      ] | [?@]
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+  d_hostnames:
+    # core.named-object: name already fulfills the name property,
+    # so we can use that to derive hostnames
+    title: Hostnames
+    type: array
+    syntax: jmespath
+    value: '[name][?@]'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_ip:
+    # Sometimes the name can be an IP too
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      format: ip-addr
+    syntax: jsonpath
+    value: "$.name[?(@ =~ \"^\\d+\\.\\d+\\.\\d+\\.\\d+$\")]"
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+properties:
+  id:
+    title: Server ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  type:
+    title: Server Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  status:
+    title: Status
+    type: string
+
+  credentialsStorageType:
+    title: Credentials Storage Type
+    type: string
+
+  credentialsId:
+    title: Credentials ID
+    type: string
+    x-samos-hidden: true
+
+  port:
+    title: Port
+    type: integer
+
+  maxTaskCount:
+    title: Max Concurrent Tasks
+    type: integer
+
+  isBackupServer:
+    title: Backup Server?
+    type: boolean
+
+  isDefaultMountServer:
+    title: Default Mount Server?
+    type: boolean
+
+  updatesState:
+    title: Updates State
+    type: string
+
+  viHostType:
+    title: Host Type
+    type: string
+
+  sshSettings:
+    title: SSH Settings
+    type: object
+    properties:
+      sshTimeOutMs:
+        title: SSH Timeout (ms)
+        type: integer
+      portRangeStart:
+        title: Port Range Start
+        type: integer
+      portRangeEnd:
+        title: Port Range End
+        type: integer
+      serverSide:
+        title: Server Side
+        type: boolean
+
+  networkSettings:
+    title: Network Settings
+    type: object
+    properties:
+      components:
+        title: Components
+        type: array
+        items:
+          type: object
+      portRangeStart:
+        title: Port Range Start
+        type: integer
+      portRangeEnd:
+        title: Port Range End
+        type: integer
+      serverSide:
+        title: Server Side
+        type: boolean

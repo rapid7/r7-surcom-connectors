@@ -1,11 +1,11 @@
 id: igel.ums
 name: IGEL UMS
 author: Rapid7
-version: 1.0.0
+version: 1.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Remove Beta label
+  - Schema validation error fix for IgelUmsDevice type
 
 types:
   - IgelUmsDevice

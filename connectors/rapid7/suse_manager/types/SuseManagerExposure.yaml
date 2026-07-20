@@ -1,0 +1,92 @@
+x-samos-type-name: SuseManagerExposure
+x-samos-namespace: suse.manager
+title: SUSE Manager Exposure
+description: An exposure in a managed Linux system in SUSE Manager
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Exposure
+x-samos-global-zone: true
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: advisory_name
+  - name: advisory_type
+  - name: update_date
+
+x-samos-detail:
+  - name: advisory_name
+  - name: advisory_type
+  - name: advisory_status
+  - name: advisory_synopsis
+  - name: x_cve
+  - name: reboot_suggested
+  - name: restart_suggested
+  - name: update_date
+  - name: date
+
+x-samos-derived-properties:
+  d_exposure_type:
+    type: string
+    syntax: jmespath
+    value: >
+      (advisory_type == `Security Advisory` && `ExposureType: Vulnerability`) || (advisory_type == `Product Enhancement Advisory` && `ExposureType: Update`) || (advisory_type == `Bug Fix Advisory` && `ExposureType: Update`) || (length(x_cve || ``) > `0` && `ExposureType: Vulnerability`) || `ExposureType: Update`
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: exposure_type
+    x-samos-ref-types:
+      - key-name: id
+        type-name: NoeticEnumExposureType
+
+properties:
+  date:
+    type: string
+    title: Date
+    format: date-time
+  advisory_name:
+    type: string
+    title: Advisory Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  restart_suggested:
+    type: boolean
+    title: Restart Suggested?
+  advisory_type:
+    type: string
+    title: Advisory Type
+  advisory_status:
+    type: string
+    title: Advisory Status
+  id:
+    type: string
+    title: ID
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: id
+  advisory_synopsis:
+    type: string
+    title: Advisory Synopsis
+  update_date:
+    type: string
+    title: Update Date
+    format: date-time
+  reboot_suggested:
+    type: boolean
+    title: Reboot Suggested?
+  x_cve:
+    type: array
+    title: CVE
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Vulnerability
+          key-name: id
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: vulnerabilities

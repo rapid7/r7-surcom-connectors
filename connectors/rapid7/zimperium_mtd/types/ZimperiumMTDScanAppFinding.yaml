@@ -1,0 +1,63 @@
+x-samos-type-name: ZimperiumMTDScanAppFinding
+x-samos-namespace: zimperium.mtd
+title: Zimperium zScan App Finding
+description: A finding linking a zScan application to a security exposure from
+  Zimperium MTD analysis.
+x-samos-hidden: true # Hidden; zScan types are moving to a dedicated connector.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Finding
+    subtype-priority: 5
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: x_exposureId
+  - name: x_appId
+
+x-samos-detail:
+  - name: x_exposureId
+  - name: x_appId
+
+x-samos-derived-properties:
+  d_id:
+    title: Finding ID
+    type: string
+    syntax: expression
+    value: '{x_exposureId}:{x_appId}'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+
+properties:
+  x_exposureId:
+    title: Exposure
+    type: string
+    x-samos-ref-types:
+      - key-name: id
+        type-name: ZimperiumMTDScanAppExposure
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability
+
+  x_appId:
+    title: Application
+    type: string
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to
+    x-samos-ref-types:
+      - key-name: id
+        type-name: ZimperiumMTDScanApp
+  x_lastScanned:
+    title: Last Scanned
+    type: integer
+    format: epoch-millis
+    description: Timestamp of the most recent scan of the application that generated
+      this finding.
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: last_seen

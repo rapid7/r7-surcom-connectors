@@ -8,7 +8,6 @@ x-samos-extends-types:
 
 x-samos-keys:
   - id
-  - domain # To allow referencing by domain in MimecastInternalDomain
 
 x-samos-table:
   - name: emailAddress
@@ -67,7 +66,9 @@ properties:
   domain:
     title: Domain
     type: string
-    x-samos-immutable: true
+    x-samos-ref-types:
+      - key-name: domain
+        type-name: MimecastInternalDomain
   isAlias:
     title: Alias?
     type: boolean

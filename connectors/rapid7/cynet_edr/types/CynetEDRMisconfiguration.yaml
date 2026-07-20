@@ -1,0 +1,162 @@
+x-samos-type-name: CynetEDRMisconfiguration
+x-samos-namespace: cynet.edr
+title: Cynet EDR Misconfiguration
+description: A configuration weakness rule from Cynet ESPM
+x-samos-extends-types:
+  - type-name: Exposure
+x-samos-global-zone: true
+
+x-samos-keys:
+  - riskId
+
+required:
+  - riskId
+
+x-samos-table:
+  - name: riskId
+  - name: subject
+  - name: description
+  - name: severity
+  - name: category
+  - name: component
+
+x-samos-detail:
+  - name: riskId
+  - name: subject
+  - name: description
+  - name: severity
+  - name: category
+  - name: component
+  - name: products
+  - name: relatedEndpoints
+  - name: industryReferences
+  - name: MITRETactics
+  - name: MITRETechniques
+  - name: d_mitre_tactics
+  - name: d_mitre_techniques
+
+x-samos-derived-properties:
+  d_exposure_type:
+    # Cynet ESPM misconfigs are always configuration weaknesses (CVEs live on CynetEDRVulnerability).
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: 'ExposureType: Configuration'
+    x-samos-ref-types:
+      - type-name: NoeticEnumExposureType
+        key-name: id
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: exposure_type
+
+  d_mitre_tactics: # prefixes each linkName with 'enterprise-attack:' to form a valid MitreAttackTactic id
+    title: MITRE ATT&CK Tactics
+    type: array
+    syntax: jmespath
+    value: "MITRETactics[].linkName | [?@] | map(&join(':', [`enterprise-attack`, @]), @)"
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: MitreAttackTactic
+          key-name: d_name_key
+
+  d_mitre_techniques: # same prefix pattern as d_mitre_tactics but for technique IDs
+    title: MITRE ATT&CK Techniques
+    type: array
+    syntax: jmespath
+    value: "MITRETechniques[].linkName | [?@] | map(&join(':', [`enterprise-attack`, @]), @)"
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: MitreAttackTechnique
+          key-name: d_name_key
+
+# Fields sourced from the Cynet Unified API V3 OpenAPI export
+# (https://help.api.cynet.com/docs/API-V3),
+# Hosts area → POST /api/v2/hosts/{site_guid}/espm/misconfigurations response schema.
+properties:
+  riskId:
+    type: string
+    title: Rule ID
+    description: Cynet identifier for the misconfiguration rule.
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: id
+  severity:
+    type: string
+    title: Severity
+    x-samos-ref-types:
+      - type-name: CynetEDREnumSeverity
+        key-name: id
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: severity
+  category:
+    type: string
+    title: Category
+  subject:
+    type: string
+    title: Subject
+    description: Short, human-readable summary of the misconfiguration.
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  products:
+    type: array
+    title: Products
+    items:
+      type: string
+  component:
+    type: string
+    title: Component
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  relatedEndpoints:
+    type: object
+    title: Related Endpoints
+    properties:
+      protectedEndpoints:
+        type: integer
+        title: Protected Endpoints
+      unprotectedEndpoints:
+        type: integer
+        title: Unprotected Endpoints
+      ignoredEndpoints:
+        type: integer
+        title: Ignored Endpoints
+  industryReferences:
+    type: array
+    title: Industry References
+    items:
+      type: string
+  MITRETactics:
+    type: array
+    title: MITRE Tactics
+    items:
+      type: object
+      properties:
+        linkName:
+          type: string
+          title: Tactic Name
+        link:
+          type: string
+          format: url
+          title: Tactic URL
+  MITRETechniques:
+    type: array
+    title: MITRE Techniques
+    items:
+      type: object
+      properties:
+        linkName:
+          type: string
+          title: Technique Name
+        link:
+          type: string
+          format: url
+          title: Technique URL

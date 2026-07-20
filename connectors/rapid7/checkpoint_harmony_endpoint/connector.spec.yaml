@@ -1,11 +1,11 @@
 id: checkpoint.harmony.endpoint
 name: Check Point Harmony Endpoint
 author: Rapid7
-version: 0.1.0
+version: 0.4.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Initial release.
+  - Update schema validation for CheckPointHarmonyEndpointAsset
 
 types:
   - CheckPointHarmonyEndpointAsset
@@ -38,9 +38,6 @@ settings:
     title: Access Key
     description: Access Key from the Infinity Portal API key for the Endpoint service.
     format: password
-
-python_dependencies:
-  - chkp-harmony-endpoint-management-sdk
 
 runtime: py311
 

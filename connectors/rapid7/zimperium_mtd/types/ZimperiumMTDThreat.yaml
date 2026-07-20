@@ -1,0 +1,354 @@
+x-samos-type-name: ZimperiumMTDThreat
+x-samos-namespace: zimperium.mtd
+title: Zimperium MTD Threat
+description: A security threat detection event from Zimperium MTD, representing
+  a threat observed on a managed mobile device.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Event
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+  - zeventId
+
+x-samos-table:
+  - name: threatTypeName
+  - name: severityName
+  - name: vectorName
+  - name: classificationName
+  - name: teamName
+  - name: timestamp
+
+x-samos-detail:
+  - name: threatTypeName
+  - name: threatTypeId
+  - name: severityName
+  - name: severity
+  - name: vectorName
+  - name: classificationName
+  - name: state
+  - name: deviceId
+  - name: teamId
+  - name: teamName
+  - name: os
+  - name: generalInfo
+  - name: locationInfo
+  - name: mitreTactics
+  - name: triggeredActions
+  - name: zappInstance
+  - name: activationName
+  - name: timestamp
+  - name: eventReceivedTimestamp
+  - name: lastModified
+
+x-samos-derived-properties:
+  d_name:
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'join(` - `, [threatTypeName, severityName, vectorName][?@])'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  id:
+    title: Threat ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Event
+      property-name: id
+
+  accountId:
+    title: Account ID
+    type: string
+    x-samos-hidden: true
+
+  teamId:
+    title: Team
+    type: string
+    x-samos-ref-types:
+      - key-name: id
+        type-name: ZimperiumMTDTeam
+
+  teamName:
+    x-samos-hidden: true
+    title: Team Name
+    type: string
+
+  deviceId:
+    title: Device
+    type: string
+    x-samos-ref-types:
+      - key-name: id
+        type-name: ZimperiumMTDDevice
+
+  device:
+    # Hiding this record already has a reference to the device via deviceId.
+    x-samos-hidden: true
+    title: Device Info
+    type: object
+    properties:
+      id:
+        title: Device ID
+        type: string
+      model:
+        title: Model
+        type: string
+      os:
+        title: OS
+        type: object
+        properties:
+          id:
+            title: OS ID
+            type: integer
+          name:
+            title: OS Name
+            type: string
+          version:
+            title: OS Version
+            type: string
+      zdeviceId:
+        title: zDevice ID
+        type: string
+
+  os:
+    title: OS Platform
+    type: string
+
+  zappId:
+    title: zApp ID
+    type: string
+    x-samos-hidden: true
+
+  zappName:
+    title: zApp Name
+    type: string
+
+  groupId:
+    title: Group ID
+    type: string
+    x-samos-hidden: true
+
+  timestamp:
+    title: Event Time
+    type: integer
+    format: epoch-millis
+
+  eventReceivedTimestamp:
+    title: Event Received
+    type: integer
+    format: epoch-millis
+
+  eventProcessedTimestamp:
+    title: Event Processed
+    type: integer
+    format: epoch-millis
+
+  threatTypeId:
+    title: Threat Type ID
+    type: integer
+
+  threatTypeName:
+    title: Threat Type
+    type: string
+
+  severity:
+    x-samos-hidden: true
+    title: Severity Value
+    type: integer
+
+  severityName:
+    title: Severity
+    type: string
+
+  vector:
+    title: Vector ID
+    type: integer
+    x-samos-hidden: true
+
+  vectorName:
+    title: Vector
+    type: string
+
+  categoryId:
+    title: Category ID
+    type: integer
+    x-samos-hidden: true
+
+  classification:
+    title: Classification ID
+    type: integer
+    x-samos-hidden: true
+
+  classificationName:
+    title: Classification
+    type: string
+
+  state:
+    title: State
+    type: integer
+
+  responses:
+    x-samos-hidden: true
+    title: Responses
+    type: array
+    items:
+      type: object
+      properties:
+        responseId:
+          title: Response ID
+          type: integer
+        eventId:
+          title: Event ID
+          type: string
+        timestamp:
+          title: Timestamp
+          type: integer
+          format: epoch-millis
+
+  mitigationEvents:
+    title: Mitigation Events
+    type: array
+    items:
+      type: object
+
+  generalInfo:
+    x-samos-hidden: true
+    title: General Info
+    type: object
+    properties:
+      timeInterval:
+        title: Time Interval
+        type: integer
+      deviceIp:
+        title: Device IP
+        type: string
+        format: ip-addr
+      deviceMac:
+        title: Device MAC
+        type: string
+        format: mac-addr
+      ssid:
+        title: SSID
+        type: string
+      bssid:
+        title: BSSID
+        type: string
+      actionTriggered:
+        title: Action Triggered
+        type: string
+      deviceTimestamp:
+        title: Device Timestamp
+        type: integer
+        format: epoch-millis
+      jailbreakReasons:
+        title: Jailbreak Reasons
+        type: string
+
+  locationInfo:
+    title: Location Info
+    type: object
+    properties:
+      geoPoint:
+        title: Geo Point
+        type: object
+        properties:
+          lat:
+            title: Latitude
+            type: number
+          lon:
+            title: Longitude
+            type: number
+      source:
+        title: Source
+        type: string
+
+  sideLoadedAppInfo:
+    title: Sideloaded App Info
+    type: object
+    properties:
+      developer:
+        title: Developer
+        type: string
+      appName:
+        title: App Name
+        type: string
+      bundleId:
+        title: Bundle ID
+        type: string
+      fileHash:
+        title: File Hash
+        type: string
+
+  simulated:
+    title: Simulated?
+    type: boolean
+
+  lastModified:
+    title: Last Modified
+    type: integer
+    format: epoch-millis
+
+  activationName:
+    x-samos-hidden: true
+    title: Activation Name
+    type: string
+
+  agentType:
+    title: Agent Type
+    type: integer
+    x-samos-hidden: true
+
+  triggeredActions:
+    title: Triggered Actions
+    type: array
+    items:
+      type: object
+      properties:
+        actionType:
+          title: Action Type ID
+          type: integer
+        actionTypeName:
+          title: Action Type
+          type: string
+
+  mitreTactics:
+    title: MITRE Tactics
+    type: array
+    items:
+      type: string
+
+  zeventId:
+    title: zEvent ID
+    type: string
+    x-samos-immutable: true
+
+  zappInstance:
+    title: zApp Instance
+    type: object
+    properties:
+      id:
+        title: Instance ID
+        type: string
+      name:
+        title: Name
+        type: string
+      bundleId:
+        title: Bundle ID
+        type: string
+      version:
+        title: Version
+        type: string
+      buildNumber:
+        title: Build Number
+        type: string
+      zversion:
+        title: zVersion
+        type: string
+      zbuildNumber:
+        title: zBuild Number
+        type: string

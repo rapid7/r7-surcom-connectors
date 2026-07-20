@@ -13,4 +13,5 @@ Settings = TypedDict('Settings', {
     'url': str,
     'username': str,
     'pass_hash': str,
+    'verify_tls': bool,
 })

@@ -1,0 +1,73 @@
+x-samos-type-name: VeeamDataPlatformInventory
+x-samos-namespace: veeam.data.platform
+title: Veeam Infrastructure Inventory Object
+description: An infrastructure inventory object in Veeam Backup & Replication representing virtualization platforms such as vCenter servers, Cloud Director servers, and other managed infrastructure components.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: core.component
+    subtype-priority: 3
+
+x-samos-keys:
+  - urn
+  - objectId
+
+x-samos-table:
+  - name: name
+  - name: type
+  - name: platform
+  - name: hostName
+  - name: size
+
+x-samos-detail:
+  - name: name
+  - name: type
+  - name: platform
+  - name: hostName
+  - name: urn
+  - name: size
+
+x-samos-derived-properties:
+  d_active:
+    title: Active
+    type: boolean
+    syntax: jmespath
+    value: '`true`' # Always true for discovered inventory
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  urn:
+    title: URN
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+
+  type:
+    title: Object Type
+    type: string
+
+  hostName:
+    title: Host Name
+    type: string
+
+  objectId:
+    title: Object ID
+    type: string
+    nullable: true
+    x-samos-immutable: true
+
+  platform:
+    title: Platform
+    type: string
+
+  size:
+    title: Size
+    type: string

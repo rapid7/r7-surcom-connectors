@@ -1,0 +1,325 @@
+x-samos-type-name: CynetEDRUser
+x-samos-namespace: cynet.edr
+title: Cynet EDR User
+description: A user observed by Cynet EDR
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id # derived from ClientDbId; unique integer user id, also fulfills User.id
+
+required:
+  - ClientDbId
+
+x-samos-table:
+  - name: username
+  - name: d_active
+  - name: Email
+  - name: Department
+  - name: Role
+  - name: last_login
+
+x-samos-detail:
+  - name: username
+  - name: d_active
+  - name: Email
+  - name: Mobile
+  - name: OfficePhone
+  - name: Department
+  - name: Role
+  - name: ClientDbId
+  - name: DateIn
+  - name: first_seen
+  - name: last_seen
+  - name: last_login
+  - name: BadLogins
+  - name: GoodLogins
+  - name: RunningFiles
+  - name: risk_level
+  - name: IsDisabled
+  - name: IsLocked
+  - name: IsBlankPassword
+  - name: IsVpnUser
+  - name: PasswordAge
+  - name: logged_to_machines_last_month
+  - name: logged_to_machines_last_3_months
+  - name: logged_to_machines_total
+  - name: rdp_to_machines_last_month
+  - name: rdp_to_machines_last_3_month
+  - name: rdp_to_machines_total
+
+x-samos-derived-properties:
+  d_id: # ClientDbId is integer; derived as string to satisfy User.id
+    title: ID
+    type: string
+    syntax: jmespath
+    value: ClientDbId
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  d_name: # no display-name field; username doubles as core.named-object:name
+    type: string
+    syntax: jmespath
+    value: username
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_active: # active = not disabled AND not locked (both are integer flags, 0 = false)
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: 'IsDisabled == `0` && IsLocked == `0`'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+  d_is_administrator: # Role guard: contains() errors on null; && short-circuits before calling it
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: "Role && (contains(Role, 'Administrator') || contains(Role, 'Admin'))"
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_administrator
+
+  d_telephones: # combines Mobile + OfficePhone into one array, filtering nulls with [?@]
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: '[Mobile, OfficePhone] | [?@]'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+
+# Fields sourced from the Cynet Unified API V3 OpenAPI export
+# (https://help.api.cynet.com/docs/API-V3),
+# Users area → GET /api/full/user response schema.
+properties:
+  username:
+    type: string
+    title: Username
+    description: Cynet login name
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+    x-samos-correlation:
+      correlation-key: User.nickname
+      correlation-type: User
+      priority: 4
+  risk_level:
+    type: integer
+    title: Risk Level
+    description: Cynet-assigned numeric risk score for the user.
+  first_seen:
+    type: string
+    format: date-time
+    title: First Seen
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+  last_seen:
+    type: string
+    format: date-time
+    title: Last Seen
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+  last_login:
+    type: string
+    format: date-time
+    title: Last Login
+  logged_to_machines_last_month:
+    type: integer
+    title: Logged To Machines (Last Month)
+  logged_to_machines_last_3_months:
+    type: integer
+    title: Logged To Machines (Last 3 Months)
+  logged_to_machines_total:
+    type: integer
+    title: Logged To Machines (Total)
+  rdp_to_machines_last_month:
+    type: integer
+    title: RDP To Machines (Last Month)
+  rdp_to_machines_last_3_month:
+    type: integer
+    title: RDP To Machines (Last 3 Months)
+  rdp_to_machines_total:
+    type: integer
+    title: RDP To Machines (Total)
+  domains:
+    type: array
+    title: Domains
+    description: Domains observed in connection with this user.
+    items:
+      type: object
+      properties:
+        domain_name:
+          type: string
+          title: Domain Name
+        remote_ips:
+          type: array
+          title: Remote IPs
+          items:
+            type: string
+            format: ip-addr
+        first_seen:
+          type: string
+          format: date-time
+          title: First Seen
+        last_seen:
+          type: string
+          format: date-time
+          title: Last Seen
+        av_detections:
+          type: integer
+          title: AV Detections
+        classification:
+          type: string
+          title: Classification
+  hosts:
+    type: array
+    title: Hosts
+    description: Hosts on which this user has been observed.
+    items:
+      type: object
+      properties:
+        hostname:
+          type: string
+          title: Hostname
+          description: Hostname of the machine this user was observed on.
+          x-samos-ref-types:
+            - type-name: CynetEDRHost
+              key-name: d_id
+        risk_level:
+          type: integer
+          title: Risk Level
+        operating_system:
+          type: string
+          title: Operating System
+        last_ms_update:
+          type: string
+          format: date-time
+          title: Last OS Update
+        hd_serial:
+          type: integer
+          title: Disk Serial Number
+        last_scan:
+          type: string
+          format: date-time
+          title: Last Scan
+        last_ip:
+          type: string
+          format: ip-addr
+          title: Last IP
+        last_mask:
+          type: string
+          title: Last Subnet Mask
+        number_of_processes:
+          type: integer
+          title: Process Count
+        number_of_logged_users:
+          type: integer
+          title: Logged-in User Count
+        total_cpu_percentage:
+          type: integer
+          title: CPU Usage (%)
+        system_partition_size:
+          type: integer
+          title: System Partition Size (bytes)
+        system_partition_free_space:
+          type: integer
+          title: System Partition Free Space (bytes)
+        total_memory:
+          type: integer
+          title: Total Memory (bytes)
+        total_free_memory:
+          type: integer
+          title: Free Memory (bytes)
+        memory_percentage:
+          type: integer
+          title: Memory Usage (%)
+        scanGroup:
+          type: object
+          title: Scan Group
+          properties:
+            ScanGroupName:
+              type: string
+              title: Scan Group Name
+            DistributionType:
+              type: string
+              title: Distribution Type
+            PlatformType:
+              type: string
+              title: Platform Type
+  ClientDbId:
+    type: integer
+    title: Client DB ID
+    description: Internal Cynet user database identifier (from UserDTO2).
+  DateIn:
+    type: string
+    format: date-time
+    title: Date First Recorded
+    description: When Cynet first recorded this user (from UserDTO2).
+  RunningFiles:
+    type: integer
+    title: Running Files
+  BadLogins:
+    type: integer
+    title: Failed Logins
+  GoodLogins:
+    type: integer
+    title: Successful Logins
+  IsDisabled:
+    type: integer
+    title: Disabled
+    description: Non-zero when the user account is currently disabled.
+  IsLocked:
+    type: integer
+    title: Locked
+    description: Non-zero when the user account is currently locked.
+  IsBlankPassword:
+    type: integer
+    title: Blank Password
+    description: Non-zero when the user account has a blank password.
+  IsVpnUser:
+    type: boolean
+    title: VPN User?
+  Department:
+    type: string
+    title: Department
+    x-samos-fulfills:
+      type-name: User
+      property-name: department
+  Email:
+    type: string
+    title: Email
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+  Mobile:
+    type: string
+    title: Mobile Phone
+  OfficePhone:
+    type: string
+    title: Office Phone
+  Role:
+    type: string
+    title: Role
+    x-samos-fulfills:
+      type-name: User
+      property-name: title
+  PasswordAge:
+    type: integer
+    title: Password Age (days)

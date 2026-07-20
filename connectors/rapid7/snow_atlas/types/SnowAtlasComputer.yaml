@@ -7,7 +7,7 @@ x-samos-detail-prefer-type-title: true
 x-samos-extends-types:
   - type-name: Machine
 
-$ref: https://example.githubusercontent.com/SnowSoftware/snowatlas-integrations#/components/schemas/FilteredResponseWithLinksOfComputer/allOf/properties/items#/components/schemas/Computer/allOf/properties
+$ref: https://example.githubusercontent.com/SnowSoftware/snowatlas-integrations#/components/schemas/Computer/allOf/1/properties
 
 x-samos-keys:
   - id
@@ -40,6 +40,17 @@ x-samos-detail:
   - name: isVDI
   - name: coreCount
   - name: processorCount
+  - name: processorType
+  - name: processorSpeed
+  - name: logicalProcessorCount
+  - name: coresPerProcessor
+  - name: architecture
+  - name: physicalMemory
+  - name: biosVersion
+  - name: hypervisorName
+  - name: lastLoggedOnUser
+  - name: dccName
+  - name: hostComputerName
   - name: clientConfigurationName
   - name: clientVersion
   - name: scannerVersion
@@ -69,6 +80,18 @@ x-samos-derived-properties:
     x-samos-fulfills:
       type-name: Machine
       property-name: hostnames
+
+  d_lastseen:
+    # fulfills the 'Last Seen' datetime property to core.managed.endpoint.endpoint_last_seen
+    x-samos-hidden: true
+    title: Last Seen
+    type: string
+    format: date-time
+    syntax: jmespath
+    value: lastScanDate
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
 
 properties:
   id:
@@ -113,6 +136,9 @@ properties:
   clientVersion:
     title: Client Version
     type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
 
   coreCount:
     title: Core Count
@@ -212,6 +238,66 @@ properties:
   processorCount:
     title: Processor Count
     type: integer
+
+  processorType:
+    title: Processor Type
+    type: string
+
+  processorSpeed:
+    title: Processor Speed
+    type: integer
+
+  logicalProcessorCount:
+    title: Logical Processor Count
+    type: integer
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: cpus
+
+  coresPerProcessor:
+    title: Cores Per Processor
+    type: integer
+
+  architecture:
+    title: Architecture
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_architecture
+
+  physicalMemory:
+    title: Physical Memory
+    type: integer
+
+  biosVersion:
+    title: BIOS Version
+    type: string
+
+  hypervisorName:
+    title: Hypervisor Name
+    type: string
+
+  lastLoggedOnUser:
+    title: Last Logged On User
+    type: string
+
+  dccName:
+    title: DCC Name
+    type: string
+
+  hostComputerName:
+    title: Host Computer Name
+    type: string
+
+  hostComputerId:
+    title: Host Computer ID
+    type: string
+    x-samos-ref-types:
+      - type-name: SnowAtlasComputer
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
 
   scannerVersion:
     title: Scanner Version

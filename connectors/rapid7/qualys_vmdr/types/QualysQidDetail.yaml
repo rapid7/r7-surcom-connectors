@@ -1,0 +1,369 @@
+x-samos-type-name: QualysQidDetail
+x-samos-namespace: qualys
+title: Qualys QID Detail (Deprecated)
+description: Qualys Vulnerability details.
+
+# Hidden because deprecated
+x-samos-hidden: true
+deprecated: true
+
+x-samos-extends-types:
+  - type-name: Exposure
+    subtype-priority: 4
+
+x-samos-global-zone: true
+
+x-samos-keys:
+  - QID
+
+required:
+  - QID
+
+x-samos-table:
+  - name: QID
+  - name: TITLE
+  - name: cvssScore
+  - name: PCI_FLAG
+
+x-samos-detail:
+  - name: QID
+  - name: TITLE
+  - name: cvssScore
+  - name: PCI_FLAG
+  - name: SEVERITY
+  - name: CATEGORY
+  - name: THREAT
+  - name: IMPACT
+  - name: IMPACT_COMMENT
+  - name: SOLUTION
+  - name: SOLUTION_COMMENT
+  - name: LAST_UPDATE
+  - name: d_cves
+  - name: CVE_ID_LIST
+  - name: BUGTRAQ_ID_LIST
+  - name: VENDOR_REFERENCE_LIST
+  - name: CORRELATION
+
+x-samos-derived-properties:
+  cvssScore:
+    title: CVSS Score
+    type: number
+    syntax: jmespath
+    value: to_number(not_null(CVSS3_SCORE.CVSS3_TEMPORAL, CVSS3_SCORE.CVSS3_BASE, CVSS_SCORE.CVSS_TEMPORAL, CVSS3_SCORE.CVSS_BASE, sum([to_number(SEVERITY), to_number(SEVERITY)])))
+
+  d_exposure_type:
+    # NOTE: findings have "type" (Vuln/Practice/Ig) - that is not currently available on the QID
+    # So: mark as "Vulnerability" if there are any CVEs, otherwise "Misconfiguration"
+    x-samos-hidden: true
+    syntax: jmespath
+    value: >-
+      CVE_ID_LIST.CVE_ID[*].ID && `ExposureType: Vulnerability` || `ExposureType: Configuration`
+    type: string
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: exposure_type
+    x-samos-ref-types:
+      - type-name: NoeticEnumExposureType
+        key-name: id
+
+  d_cves:
+    title: CVEs
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Vulnerability
+          key-name: id
+    syntax: jmespath
+    value: 'CVE_ID_LIST.CVE_ID[*].ID'
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: vulnerabilities
+
+properties:
+  QID:
+    type: string
+    description: The Qualys ID (QID) assigned to the vulnerability.
+    title: Qualys Vulnerability ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: id
+  TITLE:
+    type: string
+    title: Vulnerability Title
+    description: The title of the vulnerability.
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  SEVERITY:
+    type: string
+    title: Vulnerability Severity
+    description: The severity level assigned to the vulnerability.
+    x-samos-ref-types:
+      - type-name: QualysEnumSeverity
+        key-name: id
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: severity
+  CATEGORY:
+    # https://qualysguard.qualys.com/qwebhelp/fo_portal/knowledgebase/vulnerability_categories.htm
+    type: string
+    title: Vulnerability Category
+    description: The category of the vulnerability.
+  CUSTOMIZED:
+    type: object
+    title: Customized
+    description: Customization done by Manager users.
+    properties:
+      DISABLED:
+        type: string
+        title: Vulnerability Disabled
+        description: Identifies whether the vulnerability was disabled by a Manager users. If disabled, the vulnerabilities is filtered from reports.
+      CUSTOM_SEVERITY:
+        type: string
+        title: Custom Severity
+        description: Identifies whether the severity level was changed. Managers can change the severity level by editing the vulnerability in the Qualys KnowledgeBase.
+  THREAT:
+    type: string
+    title: Threat Description
+    description: The Qualys provided description of the threat.
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  THREAT_COMMENT:
+    type: string
+    title: Threat Comment
+    description: User-defined description of the threat.
+  IMPACT:
+    type: string
+    title: Impact Description
+    description: The Qualys provided description of the impact.
+  IMPACT_COMMENT:
+    type: string
+    title: Impact Comment
+    description: User-defined description of the impact.
+  SOLUTION:
+    type: string
+    title: Solution Description
+    description: The Qualys provided description of the solution.
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: solution
+  SOLUTION_COMMENT:
+    type: string
+    title: Solution Comment
+    description: User-defined description of the solution.
+  COMPLIANCE:
+    title: Compliance
+    description: Compliance policy or regulation.
+    type: object
+    properties:
+      COMPLIANCE_INFO:
+        type: array
+        title: Compliance Info List
+        description: Compliance info list.
+        items:
+          properties:
+            COMPLIANCE_TYPE:
+              type: string
+              title: Compliance Type
+              description: The type of a compliance policy or regulation that is associated with the vulnerability.
+              example: HIPAA, GLBA, CobIT , SOX
+            COMPLIANCE_SECTION:
+              type: string
+              title: Compliance Section
+              description: The section of a compliance policy or regulation associated with the vulnerability.
+            COMPLIANCE_DESCRIPTION:
+              type: string
+              title: Compliance Description
+              description: The description of a compliance policy or regulation associated with the vulnerability.
+  CORRELATION:
+    type: object
+    title: Correlation
+    properties:
+      EXPLOITABILITY:
+        type: object
+        description: Exploitability information for the vulnerability from third party vendors and/or publicly available sources.
+        properties:
+          EXPLT_SRC:
+            type: array
+            title: Vulnerability Source Info
+            description: vulnerability source info.
+            items:
+              properties:
+                SRC_NAME:
+                  type: string
+                  title: Vulnerability Source Name
+                  description: The name of a third party vendor or publicly available source of the vulnerability information.
+                EXPLT_LIST:
+                  type: object
+                  title: Exploitability List
+                  description: List of Exploitability.
+                  properties:
+                    EXPLT:
+                      type: array
+                      title: Exploitability
+                      description: Exploitability.
+                      items:
+                        properties:
+                          REF:
+                            type: string
+                            title: Exploitability CVE Reference
+                            description: The CVE reference for the exploitability information.
+                          DESC:
+                            type: string
+                            title: Description
+                            description: The description provided by the source of the exploitability information.
+                          LINK:
+                            type: string
+                            title: Link to Exploit
+                            description: A link to the exploit, when available.
+      MALWARE:
+        type: object
+        title: Malware Information
+        description: Malware information for the vulnerability from Trend Micro.
+        properties:
+          MW_SRC:
+            title: Malware Source List
+            description: List of malware sources.
+            type: array
+            items:
+              properties:
+                SRC_NAME:
+                  type: string
+                  title: Source of Malware Info
+                  description: The name of the source of the malware information,Trend Micro.
+                MW_LIST:
+                  type: object
+                  title: List of Malware Info
+                  description: List of malware info
+                  properties:
+                    MW_INFO:
+                      type: array
+                      title: Malware Info
+                      description: List of malware info.
+                      items:
+                        properties:
+                          MW_ID:
+                            type: string
+                            title: Malware ID
+                            description: The malware name/ID assigned by Trend Micro.
+                          MW_TYPE:
+                            type: string
+                            title: Malware Type
+                            description: The type of malware.
+                            example: Backdoor, Virus, Worm , Trojan
+                          MW_PLATFORM:
+                            type: string
+                            title: Malware Affected Platforms
+                            description: A list of the platforms that may be affected by the malware.
+                          MW_ALIAS:
+                            type: string
+                            title: Malware ALIAS
+                            description: A list of other names used by different vendors and/or publicly available sources to refer to the same threat.
+                          MW_RATING:
+                            type: string
+                            title: Malware Rating
+                            description: The overall risk rating as determined by Trend Micro.
+                            example: Low, Medium,High
+                          MW_LINK:
+                            type: string
+                            title: Malware Link
+                            description: A link to malware details.
+  PCI_FLAG:
+    type: string
+    title: PCI Flag
+    description: A flag that indicates whether the vulnerability must be fixed to pass a PCI compliance scan.
+  LAST_UPDATE:
+    type: string
+    format: date-time
+    title: Vulnerability Last Update
+    description: The date and time when the vulnerability was last updated in the Qualys KnowledgeBase.
+  CVSS_SCORE:
+    type: object
+    title: CVSS Score
+    description: Common vulnerability scoring system score.
+    properties:
+      CVSS_BASE:
+        type: string
+        title: CVSS2 Score
+        description: CVSS2 base score defined for the vulnerability.
+      CVSS_TEMPORAL:
+        type: string
+        title: CVSS2 Temporal Score
+        description: CVSS2 temporal score defined for the vulnerability.
+  CVSS3_SCORE:
+    type: object
+    title: CVSS3 Score
+    description: CVSS3 Score.
+    properties:
+      CVSS3_BASE:
+        type: string
+        title: CVSS3 Base Score
+        description: CVSS3 base score defined for the vulnerability.
+      CVSS3_TEMPORAL:
+        type: string
+        title: CVSS3 Temporal Score
+        description: CVSS3 temporal score defined for the vulnerability.s
+      CVSS3_VERSION:
+        type: string
+        title: CVSS3 Supported version
+        description: CVSS3 version that is currently supported.
+  VENDOR_REFERENCE_LIST:
+    type: object
+    title: Vendor Reference List
+    description: List of vendor reference info's.
+    properties:
+      VENDOR_REFERENCE:
+        type: array
+        title: Vendor Reference Info
+        description: The name of a vendor reference, and the URL to this vendor reference
+        items:
+          properties:
+            ID:
+              type: string
+              title: Vendor Reference Name
+              description: The name of a vendor reference, CVE name, or Bugtraq ID.
+            URL:
+              type: string
+              title: Vendor Reference URL
+              description: The URL to the vendor reference, CVE name, or Bugtraq ID.
+  CVE_ID_LIST:
+    type: object
+    title: CVE Info List
+    description: List of CVE info.
+    properties:
+      CVE_ID:
+        type: array
+        title: CVE Info
+        description: List of CVE info.
+        items:
+          properties:
+            ID:
+              type: string
+              title: CVE Name
+              description: A CVE name assigned to the vulnerability.
+            URL:
+              type: string
+              title: CVE URL
+              description: the URL to this CVE name assigned to the vulnerability.
+  BUGTRAQ_ID_LIST:
+    type: object
+    title: Bugtraq ID List
+    description: List of Bugtraq ID info.
+    properties:
+      BUGTRAQ_ID:
+        type: array
+        title: Bugtraq ID Info
+        description: Bugtraq ID info.
+        items:
+          properties:
+            ID:
+              type: string
+              title: Bugtraq ID
+              description: A Bugtraq ID assigned to the vulnerability.
+            URL:
+              type: string
+              title: Bugtraq URL
+              description: the URL to this Bugtraq ID assigned to the vulnerability.

@@ -1,0 +1,142 @@
+x-samos-type-name: SysdigSecureImage
+x-samos-namespace: sysdig.secure
+title: Sysdig Secure Image
+description: An ImageManifest represents the manifest of a container image,
+  monitored by Sysdig Secure.
+x-samos-detail-prefer-type-title: true
+# Schema entity: Image. Fields confirmed from refdocs/sysdig_schema.yaml.
+# Extends the unified Software type (a container image is a software artifact).
+x-samos-extends-types:
+  - type-name: Template
+  - type-name: core.cloud-component
+  - type-name: core.managed.asset
+
+x-samos-keys:
+  - imageId
+
+x-samos-table:
+  - name: imageReference
+  - name: repository
+  - name: tag
+  - name: platform
+  - name: architecture
+  - name: endOfLifeDate
+  - name: firstSeen
+
+x-samos-detail:
+  - name: imageReference
+  - name: manifestDigest
+  - name: registry
+  - name: registryVendor
+  - name: repository
+  - name: tag
+  - name: architecture
+  - name: platform
+  - name: baseOS
+  - name: operatingSystem
+  - name: scanStatus
+  - name: endOfLifeDate
+  - name: endOfLifeSource
+  - name: createdAt
+  - name: firstSeen
+
+x-samos-derived-properties:
+  d_cloud:
+    x-samos-hidden: true
+    type: boolean
+    syntax: expression
+    value: 'true'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: cloud
+
+properties:
+  imageId:
+    type: string
+    title: Image ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+    x-samos-correlation:
+      correlation-key: Template.id
+      correlation-type: Template
+      priority: 3
+
+  manifestDigest:
+    type: string
+    title: Manifest Digest
+
+  architecture:
+    type: string
+    title: Architecture
+
+  imageReference:
+    type: string
+    title: Image Reference
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  repository:
+    type: string
+    title: Repository
+
+  tag:
+    type: string
+    title: Tag
+
+  registry:
+    type: string
+    title: Registry
+
+  platform:
+    type: string
+    title: Cloud Provider
+    x-samos-ref-types:
+      - type-name: SysdigSecureCloudProvider
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.cloud-component
+      property-name: provider
+
+  registryVendor:
+    type: string
+    title: Registry Vendor
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  baseOS:
+    type: string
+    title: Base OS
+
+  operatingSystem:
+    type: string
+    title: Operating System
+
+  scanStatus:
+    type: string
+    title: Scan Status
+
+  endOfLifeDate:
+    type: string
+    title: End of Life Date
+    format: date-time
+
+  endOfLifeSource:
+    type: string
+    title: End of Life Source
+
+  createdAt:
+    type: string
+    title: Created At
+    format: date-time
+
+  firstSeen:
+    type: string
+    title: First Seen
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen

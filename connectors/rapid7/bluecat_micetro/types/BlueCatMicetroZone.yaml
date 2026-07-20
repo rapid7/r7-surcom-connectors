@@ -1,0 +1,222 @@
+x-samos-type-name: BlueCatMicetroZone
+x-samos-namespace: bluecat.micetro
+title: BlueCat Micetro DNS Zone
+description: A DNS zone managed by BlueCat Micetro, representing an authoritative
+  domain namespace for DNS resource record storage and resolution.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Domain
+
+x-samos-global-zone: true
+
+$ref: https://examp1/mmws/api/swagger.json#/components/schemas/DNSZone
+
+x-samos-keys:
+  - ref
+
+required:
+  - ref
+
+x-samos-table:
+  - name: name
+  - name: type
+  - name: authority
+  - name: enabled
+  - name: dynamic
+  - name: adIntegrated
+  - name: lastModified
+
+x-samos-detail:
+  - name: name
+  - name: type
+  - name: authority
+  - name: enabled
+  - name: dynamic
+  - name: adIntegrated
+  - name: dnssecSigned
+  - name: rpz
+  - name: dnsScopeName
+  - name: adReplicationType
+  - name: customProperties
+  - name: displayName
+  - name: created
+  - name: lastModified
+
+x-samos-derived-properties:
+  d_value:
+    # This property is derived from the zone's name and is used to fulfill the value property of the Domain type.
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    syntax: jmespath
+    value: 'name'
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: value
+
+properties:
+  ref:
+    title: Zone Reference
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Zone Name
+    type: string
+    description: The DNS zone name (e.g. example.com).
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Domain.value
+      correlation-type: Domain
+      priority: 4
+
+  type:
+    title: Zone Type
+    type: string
+    description: The zone type (Master, Primary, Secondary, Slave, etc.).
+
+  authority:
+    title: Authority
+    type: string
+    description: The DNS server authoritative for this zone.
+
+  dynamic:
+    title: Dynamic?
+    type: boolean
+    description: True if the zone accepts dynamic DNS updates.
+
+  adIntegrated:
+    title: AD Integrated?
+    type: boolean
+    description: True if the zone is Active Directory integrated.
+
+  dnssecSigned:
+    title: DNSSEC Signed?
+    type: boolean
+    description: True if the zone is signed with DNSSEC.
+
+  displayName:
+    title: Display Name
+    type: string
+    description: A name distinguishing this zone from other zone instances with the same name.
+
+  enabled:
+    title: Enabled?
+    type: boolean
+    description: True if the zone is enabled for DNS resolution.
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  rpz:
+    title: RPZ?
+    type: boolean
+    description: True if this zone is a Response Policy Zone.
+
+  dnsScopeName:
+    title: DNS Scope Name
+    type: string
+    description: The DNS scope name associated with this zone.
+
+  adReplicationType:
+    title: AD Replication Type
+    type: string
+    description: Active Directory replication type for AD-integrated zones.
+
+  adPartition:
+    title: AD Partition
+    type: string
+    description: Active Directory partition for AD-integrated zones.
+    x-samos-hidden: true
+
+  dnsViewRef:
+    title: DNS View
+    type: string
+    description: Reference to the DNS view containing this zone.
+    x-samos-hidden: true
+
+  dnsViewRefs:
+    title: DNS View References
+    type: array
+    description: All DNS view references associated with this zone.
+    x-samos-hidden: true
+    items:
+      type: string
+
+  sourceZoneRef:
+    title: Source Zone
+    type: string
+    description: Reference to the source zone for secondary/slave zones.
+    x-samos-ref-types:
+      - key-name: ref
+        type-name: BlueCatMicetroZone
+
+  genericType:
+    title: Generic Type
+    type: string
+    description: Provider-specific zone type string.
+    x-samos-hidden: true
+
+  kskIDs:
+    title: KSK IDs
+    type: string
+    description: Key Signing Key IDs for DNSSEC-signed zones.
+    x-samos-hidden: true
+
+  zskIDs:
+    title: ZSK IDs
+    type: string
+    description: Zone Signing Key IDs for DNSSEC-signed zones.
+    x-samos-hidden: true
+
+  providerProperties:
+    title: Provider Properties
+    type: object
+    description: Cloud DNS provider-specific properties.
+    x-samos-hidden: true
+
+  folderRef:
+    title: Folder
+    type: string
+    description: Reference to the folder containing this zone.
+    x-samos-hidden: true
+
+  xdnsProfileRef:
+    title: XDNS Profile
+    type: string
+    description: Reference to the xDNS profile for cross-server zone delegation.
+    x-samos-hidden: true
+
+  customProperties:
+    title: Custom Properties
+    type: object
+    description: User-defined custom properties set on this zone.
+    properties:
+      Description:
+        title: Description
+        type: string
+        x-samos-fulfills:
+          type-name: core.named-object
+          property-name: description
+
+  created:
+    title: Created
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  lastModified:
+    title: Last Modified
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen

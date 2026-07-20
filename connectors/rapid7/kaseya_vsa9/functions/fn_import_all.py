@@ -2,6 +2,7 @@
 Function to import all assets, agents, machine groups, organizations and users from Kaseya VSA 9
 """
 from logging import Logger
+from requests.exceptions import HTTPError
 from . import helpers
 from .sc_settings import Settings
 from .sc_types import (
@@ -15,6 +16,41 @@ from .sc_types import (
 
 MAX_PAGE_SIZE = 1000
 DATA_KEY = 'Result'
+ASSET_BOOL_FIELDS = ['IsMonitoring', 'IsPatching', 'IsAuditing', 'IsBackingUp', 'IsSecurity']
+
+
+def _convert_asset_bool_fields(item: dict):
+    """Convert integer boolean fields (1/0) to actual booleans for asset items."""
+    for field in ASSET_BOOL_FIELDS:
+        if field in item and item[field] is not None:
+            item[field] = bool(item[field])
+
+
+def _enrich_agent_patch_status(client: helpers.KaseyaVSA9Client, item: dict, user_log: Logger):
+    """Fetch and merge LastPatchScan into an agent dict from the patch status API.
+
+    Calls GET /assetmgmt/patch/{agentId}/status per agent.
+    If the patch status endpoint returns an HTTP error or a malformed response,
+    logs a warning and continues without setting x_LastPatchScan (best-effort enrichment).
+
+    Args:
+        client (helpers.KaseyaVSA9Client): Authenticated API client.
+        item (dict): The agent dict to enrich in-place.
+        user_log (Logger): Logger for warning messages.
+    """
+    agent_id = item.get("AgentId")
+    if not agent_id:
+        return
+    try:
+        patch_status = client.get_patch_status(agent_id=agent_id)
+        item["x_LastPatchScan"] = patch_status.get("LastPatchScan")
+    except (HTTPError, ValueError) as e:
+        user_log.warning(
+            "Could not fetch patch status for agent %s: %s. M1051 mitigation will not be populated for this agent.",
+            agent_id,
+            str(e),
+        )
+
 
 # Mapping of resource types to their corresponding classes
 TYPE_CLASS_MAP = {
@@ -89,6 +125,10 @@ def get_items_by_type(
             break
 
         for item in items:
+            if resource_type == 'assets':
+                _convert_asset_bool_fields(item)
+            elif resource_type == 'agents':
+                _enrich_agent_patch_status(client, item, user_log)
             yield type_class(item)
         item_count += len(items)
         user_log.info("Collecting %d %s records", item_count, display_name)

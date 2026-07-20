@@ -1,0 +1,176 @@
+x-samos-type-name: JFrogArtifactoryUser
+x-samos-namespace: jfrog.artifactory
+title: JFrog Artifactory User
+description: A user account in JFrog Artifactory
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: username
+  - name: email
+  - name: realm
+  - name: status
+  - name: admin
+  - name: last_logged_in
+
+x-samos-detail:
+  - name: username
+  - name: email
+  - name: realm
+  - name: status
+  - name: admin
+  - name: effective_admin
+  - name: profile_updatable
+  - name: disable_ui_access
+  - name: internal_password_disabled
+  - name: password_expired
+  - name: password_last_modified
+  - name: groups
+  - name: policy_viewer
+  - name: watch_manager
+  - name: reports_manager
+  - name: policy_manager
+  - name: resources_manager
+  - name: manage_webhook
+  - name: platform_auditor
+  - name: last_logged_in
+
+x-samos-derived-properties:
+  d_username:
+    type: string
+    syntax: jmespath
+    value: 'username'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+
+  d_active:
+    type: boolean
+    syntax: jmespath
+    value: "status == 'enabled'"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+properties:
+  id:
+    title: Object ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  username:
+    title: Username
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  email:
+    title: Email
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+
+  admin:
+    title: Admin?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_administrator
+
+  effective_admin:
+    title: Effective Admin?
+    type: boolean
+
+  profile_updatable:
+    title: Profile Updatable?
+    type: boolean
+
+  disable_ui_access:
+    title: Disable UI Access?
+    type: boolean
+
+  internal_password_disabled:
+    title: Internal Password Disabled?
+    type: boolean
+
+  last_logged_in:
+    title: Last Logged In
+    type: string
+    format: date-time
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+
+  password_expired:
+    title: Password Expired?
+    type: boolean
+
+  password_last_modified:
+    title: Password Last Modified
+    type: string
+    format: date-time
+    nullable: true
+
+  realm:
+    title: Realm
+    type: string
+
+  groups:
+    title: Groups
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: JFrogArtifactoryUserGroup
+          key-name: id
+
+  status:
+    title: Status
+    type: string
+
+  policy_viewer:
+    title: Policy Viewer?
+    type: boolean
+
+  watch_manager:
+    title: Watch Manager?
+    type: boolean
+
+  reports_manager:
+    title: Reports Manager?
+    type: boolean
+
+  policy_manager:
+    title: Policy Manager?
+    type: boolean
+
+  resources_manager:
+    title: Resources Manager?
+    type: boolean
+
+  manage_webhook:
+    title: Manage Webhook?
+    type: boolean
+
+  platform_auditor:
+    title: Platform Auditor?
+    type: boolean

@@ -10,7 +10,7 @@ x-samos-extends-types:
   - type-name: Machine
     subtype-priority: 3
 
-$ref: https://api.samanage.com#/components/schemas/Mobile
+$ref: https://example.samanage.com#/components/schemas/Mobile
 
 # Key: d_id (string conversion of integer id). Used as the unique identifier for this device.
 x-samos-keys:
@@ -240,6 +240,7 @@ properties:
         nullable: true
       default_assignee_id:
         title: Default Assignee ID
+        nullable: true
         type: integer
 
   latitude:

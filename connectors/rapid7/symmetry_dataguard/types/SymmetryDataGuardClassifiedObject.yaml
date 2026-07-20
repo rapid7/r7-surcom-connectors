@@ -1,0 +1,189 @@
+x-samos-type-name: SymmetryDataGuardClassifiedObject
+x-samos-namespace: symmetry.dataguard
+title: Symmetry DataGuard Classified Object
+description: A data object scanned and classified by Symmetry DataGuard.
+type: object
+x-samos-detail-prefer-type-title: false
+
+x-samos-extends-types:
+  - type-name: Storage
+    subtype-priority: 2
+
+x-samos-keys:
+  - x_object_id
+
+required:
+  - x_object_id
+
+x-samos-table:
+  - name: object
+  - name: backendType
+  - name: metadata.storageId
+  - name: classifications
+  - name: objectSize
+  - name: creationTimestamp
+  - name: classificationTimestamp
+  - name: lastScanTimestamp
+
+x-samos-detail:
+  - name: metadata.storageId
+  - name: backendType
+  - name: classifications
+  - name: instance
+  - name: metadata
+  - name: x_url
+  - name: objectSize
+  - name: creationTimestamp
+  - name: lastScanTimestamp
+  - name: classificationTimestamp
+
+x-samos-derived-properties:
+  d_uri:
+    # URI is derived from backendType, store,
+    # and object path to create a unique identifier for the storage location.
+    title: URI
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: '{backendType}://{store}/{object}'
+    x-samos-correlation:
+      correlation-key: Storage.CloudResourceId
+      correlation-type: Storage
+      priority: 1
+
+properties:
+  x_object_id:
+    title: ID
+    x-samos-hidden: true
+    type: string
+    description: Unique identifier for the classified object as reported by
+      Symmetry DataGuard (from metadata.id).
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  backendType:
+    title: Backend Type
+    type: string
+    description: The type of storage backend (e.g., s3, gdrive, onedrive, postgresql).
+  classifications:
+    title: Classifications
+    type: array
+    description: List of data classification labels found in this object.
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: SymmetryDataGuardClassificationEnum
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: information_type
+  objectId:
+    title: Data Object ID
+    x-samos-hidden: true
+    type: string
+    description: >-
+      The object identifier as reported by Symmetry DataGuard.  This could be a
+      file path, table name, or other identifier depending on the backend type.
+  object:
+    title: Data Object
+    type: string
+    description: Path or name of the object within the store (e.g., file path, table name).
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  store:
+    # store is already referencing metadata.storageId, so hiding it
+    x-samos-hidden: true
+    title: Data Store
+    type: string
+    description: The store or container identifier (e.g., bucket name, drive name,
+      database name).
+  storeId:
+    # store is already referencing metadata.storageId.
+    x-samos-hidden: true
+    title: Data Store
+    type: string
+    description: The store identifier as reported by Symmetry DataGuard, used to
+      link to the SymmetryDataGuardStorage record.
+  instance:
+    title: Instance
+    type: object
+    description: The instance information where the object is located, if applicable.
+    properties:
+      service:
+        title: Service
+        type: string
+        description: The specific service or application associated with the object, if
+          applicable (e.g., "Salesforce", "SharePoint").
+      serviceType:
+        title: Service Type
+        type: string
+        description: The type of service (e.g., "SaaS", "IaaS", "PaaS") associated with
+          the object, if applicable.
+  objectSize:
+    title: Size
+    type: integer
+    description: Size of the object in bytes.
+  creationTimestamp:
+    title: Creation Timestamp
+    type: string
+    format: date-time
+    description: Timestamp when the object was created.
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  lastScanTimestamp:
+    title: Last Scan Timestamp
+    type: string
+    format: date-time
+    description: Timestamp of the most recent scan of this object.
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  classificationTimestamp:
+    title: Classification Timestamp
+    type: string
+    format: date-time
+    description: Timestamp when the object was last classified.
+  metadata:
+    title: Metadata
+    type: object
+    description: Additional metadata about the object as reported by Symmetry DataGuard.
+    properties:
+      accountId:
+        title: Account
+        type: string
+        description: The account identifier associated with the object, if applicable.
+      id:
+        title: Metadata
+        type: string
+        description: The metadata identifier as reported by Symmetry DataGuard, if
+          applicable.
+      storageId:
+        title: Data Store
+        type: string
+        description: The storage identifier as reported by Symmetry DataGuard, used to
+          link to the SymmetryDataGuardStorage record when store-level
+          information is needed.
+        x-samos-ref-types:
+          - key-name: x_storage_id
+            type-name: SymmetryDataGuardStorage
+  x_url:
+    title: Open In Source
+    type: string
+    format: url
+    x-samos-hidden: true
+    description: URL to view this data object in the Symmetry DataGuard dashboard.
+    x-samos-fulfills:
+      type-name: Storage
+      property-name: uri
+    x-samos-external-url:
+      primary-source-url: true
+      external-source-title: 'DataGuard' # the product label shown in "View in <…>"
+
+x-samos-virtual:
+  users:
+    type-name: SymmetryDataGuardIdentity
+    cypher-pattern: >
+      <-[:`e:SymmetryDataGuardObjectXref:objectUniqueId`]-(:SymmetryDataGuardObjectXref)-[:`e:SymmetryDataGuardObjectXref:identityUniqueId`]->(:SymmetryDataGuardIdentity)

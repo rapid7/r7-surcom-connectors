@@ -1,0 +1,712 @@
+x-samos-type-name: VeeamDataPlatformJob
+x-samos-namespace: veeam.data.platform
+title: Veeam Backup Job Configuration
+description: A backup job configuration in Veeam Backup & Replication defining backup policies, schedules, storage, and guest processing settings.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: core.component
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: type
+  - name: description
+  - name: isDisabled
+  - name: isHighPriority
+
+x-samos-detail:
+  - name: name
+  - name: type
+  - name: description
+  - name: isDisabled
+  - name: isHighPriority
+  - name: storage
+  - name: schedule
+  - name: guestProcessing
+  - name: virtualMachines
+
+x-samos-derived-properties:
+  d_active:
+    title: Active
+    type: boolean
+    syntax: jmespath
+    value: 'isDisabled == `false`'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  id:
+    title: Job
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Job Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  type:
+    title: Job Type
+    type: string
+
+  isDisabled:
+    title: Job Disabled?
+    type: boolean
+
+  isHighPriority:
+    title: High Priority?
+    type: boolean
+
+  virtualMachines:
+    title: Virtual Machines Configuration
+    type: object
+    properties:
+      includes:
+        title: Included VMs
+        type: array
+        items:
+          type: object
+          properties:
+            type:
+              title: Object Type
+              type: string
+            name:
+              title: VM Name
+              type: string
+            hostName:
+              title: Host Name
+              type: string
+            platform:
+              title: Platform
+              type: string
+            size:
+              title: Size
+              type: string
+      excludes:
+        title: Excluded Items
+        type: object
+        properties:
+          vms:
+            title: Excluded VMs
+            type: array
+            items:
+              type: object
+          disks:
+            title: Excluded Disks
+            type: array
+            items:
+              type: object
+              properties:
+                disksToProcess:
+                  title: Disks to Process
+                  type: string
+                vmObject:
+                  title: VM Object
+                  type: object
+                  properties:
+                    type:
+                      title: Type
+                      type: string
+                    hostName:
+                      title: Host Name
+                      type: string
+                    name:
+                      title: Name
+                      type: string
+                    objectId:
+                      title: Object ID
+                      type: string
+                    platform:
+                      title: Platform
+                      type: string
+                disks:
+                  title: Disks
+                  type: array
+                  items:
+                    type: object
+                removeFromVMConfiguration:
+                  title: Remove from VM Configuration?
+                  type: boolean
+          templates:
+            title: Templates Configuration
+            type: object
+            properties:
+              isEnabled:
+                title: Enabled?
+                type: boolean
+              excludeFromIncremental:
+                title: Exclude from Incremental?
+                type: boolean
+
+  storage:
+    title: Storage Configuration
+    type: object
+    properties:
+      backupRepositoryId:
+        title: Backup Repository
+        type: string
+        x-samos-ref-types:
+          - type-name: VeeamDataPlatformRepository
+            key-name: id
+      backupProxies:
+        title: Backup Proxies
+        type: object
+        properties:
+          autoSelectEnabled:
+            title: Auto-Select Enabled?
+            type: boolean
+          proxyIds:
+            title: Proxy IDs
+            type: array
+            items:
+              type: string
+      retentionPolicy:
+        title: Retention Policy
+        type: object
+        properties:
+          type:
+            title: Retention Type
+            type: string
+          quantity:
+            title: Retention Quantity
+            type: integer
+      gfsPolicy:
+        title: GFS Policy
+        type: object
+        properties:
+          isEnabled:
+            title: Enabled?
+            type: boolean
+          weekly:
+            title: Weekly Retention
+            type: object
+            properties:
+              desiredTime:
+                title: Desired Time
+                type: string
+              isEnabled:
+                title: Enabled?
+                type: boolean
+              keepForNumberOfWeeks:
+                title: Keep for Weeks
+                type: integer
+          monthly:
+            title: Monthly Retention
+            type: object
+            properties:
+              desiredTime:
+                title: Desired Time
+                type: string
+              isEnabled:
+                title: Enabled?
+                type: boolean
+              keepForNumberOfMonths:
+                title: Keep for Months
+                type: integer
+          yearly:
+            title: Yearly Retention
+            type: object
+            properties:
+              desiredTime:
+                title: Desired Time
+                type: string
+              isEnabled:
+                title: Enabled?
+                type: boolean
+              keepForNumberOfYears:
+                title: Keep for Years
+                type: integer
+      advancedSettings:
+        title: Advanced Storage Settings
+        type: object
+        properties:
+          backupModeType:
+            title: Backup Mode Type
+            type: string
+          synthenticFulls:
+            title: Synthetic Fulls
+            type: object
+            properties:
+              isEnabled:
+                title: Enabled?
+                type: boolean
+          activeFulls:
+            title: Active Fulls
+            type: object
+            properties:
+              isEnabled:
+                title: Enabled?
+                type: boolean
+              weekly:
+                title: Weekly Configuration
+                type: object
+                properties:
+                  isEnabled:
+                    title: Enabled?
+                    type: boolean
+                  days:
+                    title: Days
+                    type: array
+                    items:
+                      type: string
+              monthly:
+                title: Monthly Configuration
+                type: object
+                properties:
+                  isEnabled:
+                    title: Enabled?
+                    type: boolean
+                  dayOfWeek:
+                    title: Day of Week
+                    type: string
+                  dayNumberInMonth:
+                    title: Day Number in Month
+                    type: string
+                  dayOfMonth:
+                    title: Day of Month
+                    type: integer
+                  months:
+                    title: Months
+                    type: array
+                    items:
+                      type: string
+          backupHealth:
+            title: Backup Health Check
+            type: object
+            properties:
+              isEnabled:
+                title: Enabled?
+                type: boolean
+              weekly:
+                title: Weekly Configuration
+                type: object
+              monthly:
+                title: Monthly Configuration
+                type: object
+          fullBackupMaintenance:
+            title: Full Backup Maintenance
+            type: object
+            properties:
+              RemoveData:
+                title: Remove Data Settings
+                type: object
+                properties:
+                  isEnabled:
+                    title: Enabled?
+                    type: boolean
+                  afterDays:
+                    title: After Days
+                    type: integer
+              defragmentAndCompact:
+                title: Defragment and Compact
+                type: object
+                properties:
+                  isEnabled:
+                    title: Enabled?
+                    type: boolean
+                  weekly:
+                    title: Weekly Configuration
+                    type: object
+                  monthly:
+                    title: Monthly Configuration
+                    type: object
+          storageData:
+            title: Storage Data Settings
+            type: object
+            properties:
+              compressionLevel:
+                title: Compression Level
+                type: string
+              storageOptimization:
+                title: Storage Optimization
+                type: string
+              inlineDataDedupEnabled:
+                title: Inline Data Dedup Enabled?
+                type: boolean
+              excludeSwapFileBlocks:
+                title: Exclude Swap File Blocks?
+                type: boolean
+              excludeDeletedFileBlocks:
+                title: Exclude Deleted File Blocks?
+                type: boolean
+              encryption:
+                title: Encryption Settings
+                type: object
+                properties:
+                  isEnabled:
+                    title: Enabled?
+                    type: boolean
+                    x-samos-fulfills:
+                      type-name: core.component
+                      property-name: is_encrypted
+                  encryptionPasswordId:
+                    title: Encryption Password ID
+                    type: string
+                  encryptionPasswordUniqueId:
+                    title: Encryption Password Unique ID
+                    type: string
+                    nullable: true
+          notifications:
+            title: Notifications
+            type: object
+            properties:
+              sendSNMPNotifications:
+                title: Send SNMP Notifications?
+                type: boolean
+              emailNotifications:
+                title: Email Notifications
+                type: object
+                properties:
+                  notificationType:
+                    title: Notification Type
+                    type: string
+                    nullable: true
+                  isEnabled:
+                    title: Enabled?
+                    type: boolean
+                  recipients:
+                    title: Recipients
+                    type: array
+                    items:
+                      type: string
+                  customNotificationSettings:
+                    title: Custom Notification Settings
+                    type: string
+                    nullable: true
+              vmAttribute:
+                title: VM Attribute Settings
+                type: object
+                properties:
+                  isEnabled:
+                    title: Enabled?
+                    type: boolean
+                  notes:
+                    title: Notes
+                    type: string
+                  appendToExistingValue:
+                    title: Append to Existing Value?
+                    type: boolean
+          vSphere:
+            title: vSphere Settings
+            type: object
+            properties:
+              enableVMWareToolsQuiescence:
+                title: Enable VMware Tools Quiescence?
+                type: boolean
+              changedBlockTracking:
+                title: Changed Block Tracking
+                type: object
+                properties:
+                  isEnabled:
+                    title: Enabled?
+                    type: boolean
+                  enableCBTautomatically:
+                    title: Enable CBT Automatically?
+                    type: boolean
+                  resetCBTonActiveFull:
+                    title: Reset CBT on Active Full?
+                    type: boolean
+          storageIntegration:
+            title: Storage Integration
+            type: object
+            properties:
+              isEnabled:
+                title: Enabled?
+                type: boolean
+              processedVmsLimitEnabled:
+                title: Processed VMs Limit Enabled?
+                type: boolean
+              processedVmsCount:
+                title: Processed VMs Count
+                type: integer
+              failoverToStandardBackup:
+                title: Failover to Standard Backup?
+                type: boolean
+          scripts:
+            title: Scripts Configuration
+            type: object
+            properties:
+              periodicityType:
+                title: Periodicity Type
+                type: string
+              preCommand:
+                title: Pre-Command
+                type: object
+                properties:
+                  isEnabled:
+                    title: Enabled?
+                    type: boolean
+                  command:
+                    title: Command
+                    type: string
+              postCommand:
+                title: Post-Command
+                type: object
+                properties:
+                  isEnabled:
+                    title: Enabled?
+                    type: boolean
+                  command:
+                    title: Command
+                    type: string
+              runScriptEvery:
+                title: Run Script Every
+                type: integer
+              dayOfWeek:
+                title: Day of Week
+                type: array
+                items:
+                  type: string
+
+  guestProcessing:
+    title: Guest Processing Configuration
+    type: object
+    properties:
+      appAwareProcessing:
+        title: Application-Aware Processing
+        type: object
+        properties:
+          isEnabled:
+            title: Enabled?
+            type: boolean
+          appSettings:
+            title: Application Settings
+            type: array
+            items:
+              type: object
+      guestFSIndexing:
+        title: Guest File System Indexing
+        type: object
+        properties:
+          isEnabled:
+            title: Enabled?
+            type: boolean
+          indexingSettings:
+            title: Indexing Settings
+            type: array
+            items:
+              type: object
+              properties:
+                vmObject:
+                  title: VM Object
+                  type: object
+                  properties:
+                    type:
+                      title: Type
+                      type: string
+                    hostName:
+                      title: Host Name
+                      type: string
+                    name:
+                      title: Name
+                      type: string
+                    objectId:
+                      title: Object ID
+                      type: string
+                    platform:
+                      title: Platform
+                      type: string
+                WindowsIndexing:
+                  title: Windows Indexing
+                  type: object
+                  properties:
+                    guestFSIndexingMode:
+                      title: Guest FS Indexing Mode
+                      type: string
+                    indexingList:
+                      title: Indexing List
+                      type: array
+                      items:
+                        type: string
+                LinuxIndexing:
+                  title: Linux Indexing
+                  type: object
+                  properties:
+                    guestFSIndexingMode:
+                      title: Guest FS Indexing Mode
+                      type: string
+                    indexingList:
+                      title: Indexing List
+                      type: array
+                      items:
+                        type: string
+      guestInteractionProxies:
+        title: Guest Interaction Proxies
+        type: object
+        properties:
+          autoSelectEnabled:
+            title: Auto-Select Enabled?
+            type: boolean
+          proxyIds:
+            title: Proxy IDs
+            type: array
+            items:
+              type: string
+      guestCredentials:
+        title: Guest Credentials
+        type: object
+        properties:
+          credentialsPerMachine:
+            title: Credentials Per Machine
+            type: array
+            items:
+              type: object
+          useAgentManagementCredentials:
+            title: Use Agent Management Credentials?
+            type: boolean
+
+  schedule:
+    title: Job Schedule Configuration
+    type: object
+    properties:
+      runAutomatically:
+        title: Run Automatically?
+        type: boolean
+      daily:
+        title: Daily Schedule
+        type: object
+        properties:
+          dailyKind:
+            title: Daily Kind
+            type: string
+          isEnabled:
+            title: Enabled?
+            type: boolean
+          localTime:
+            title: Local Time
+            type: string
+          days:
+            title: Days
+            type: array
+            items:
+              type: string
+      monthly:
+        title: Monthly Schedule
+        type: object
+        properties:
+          dayOfWeek:
+            title: Day of Week
+            type: string
+          dayNumberInMonth:
+            title: Day Number in Month
+            type: string
+          isEnabled:
+            title: Enabled?
+            type: boolean
+          localTime:
+            title: Local Time
+            type: string
+          dayOfMonth:
+            title: Day of Month
+            type: integer
+          months:
+            title: Months
+            type: array
+            items:
+              type: string
+      periodically:
+        title: Periodic Schedule
+        type: object
+        properties:
+          periodicallyKind:
+            title: Periodically Kind
+            type: string
+          isEnabled:
+            title: Enabled?
+            type: boolean
+          frequency:
+            title: Frequency
+            type: integer
+          backupWindow:
+            title: Backup Window
+            type: object
+            properties:
+              days:
+                title: Days
+                type: array
+                items:
+                  type: object
+                  properties:
+                    day:
+                      title: Day
+                      type: string
+                    hours:
+                      title: Hours
+                      type: string
+          startTimeWithinAnHour:
+            title: Start Time Within an Hour
+            type: integer
+      continuously:
+        title: Continuous Schedule
+        type: object
+        properties:
+          isEnabled:
+            title: Enabled?
+            type: boolean
+          backupWindow:
+            title: Backup Window
+            type: object
+      afterThisJob:
+        title: After This Job
+        type: object
+        properties:
+          isEnabled:
+            title: Enabled?
+            type: boolean
+          jobName:
+            title: Job Name
+            type: string
+            nullable: true
+      retry:
+        title: Retry Settings
+        type: object
+        properties:
+          isEnabled:
+            title: Enabled?
+            type: boolean
+          retryCount:
+            title: Retry Count
+            type: integer
+          awaitMinutes:
+            title: Await Minutes
+            type: integer
+      backupWindow:
+        title: Backup Window
+        type: object
+        properties:
+          isEnabled:
+            title: Enabled?
+            type: boolean
+          backupWindow:
+            title: Backup Window Details
+            type: object
+            properties:
+              days:
+                title: Days
+                type: array
+                items:
+                  type: object
+                  properties:
+                    day:
+                      title: Day
+                      type: string
+                    hours:
+                      title: Hours
+                      type: string

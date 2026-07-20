@@ -1,0 +1,80 @@
+x-samos-type-name: GophishPlatformGroup
+x-samos-namespace: gophish.platform
+title: Gophish Group
+description: A group of users targeted in a phishing simulation campaign.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: UserGroup
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: modified_date
+
+x-samos-detail:
+  - name: name
+  - name: d_email
+  - name: targets
+  - name: modified_date
+
+x-samos-derived-properties:
+  d_email:
+    title: Emails
+    syntax: jmespath
+    value: 'targets[*].email'
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: GophishPlatformUser
+          key-name: email
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups
+
+properties:
+  id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: UserGroup.name
+      correlation-type: UserGroup
+      priority: 5
+  targets:
+    type: array
+    items:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+
+        first_name:
+          type: string
+          title: First Name
+
+        last_name:
+          type: string
+          title: Last Name
+
+        position:
+          type: string
+          title: Position
+  modified_date:
+    type: string
+    format: date-time
+    title: Modified Date

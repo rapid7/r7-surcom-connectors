@@ -14,6 +14,7 @@ x-samos-table:
   - name: publicPrimaryWorkEmailAddress
   - name: firstName
   - name: lastName
+  - name: employeeID
   - name: businessTitle
   - name: currentlyActive
   - name: timeInJobProfileStartDate
@@ -24,6 +25,7 @@ x-samos-detail:
   - name: publicPrimaryWorkEmailAddress
   - name: firstName
   - name: lastName
+  - name: employeeID
   - name: publicPrimaryWorkPhoneNumber
   - name: businessTitle
   - name: currentlyActive
@@ -60,6 +62,14 @@ properties:
     x-samos-fulfills:
       type-name: core.principal
       property-name: active
+  employeeID:
+    title: Employee ID
+    type: string
+    description: The worker's Employee ID. Populated only when the
+      integration system user has read access to the Employee ID security domain.
+    x-samos-fulfills:
+      type-name: User
+      property-name: employee_id
   firstName:
     title: First Name
     type: string

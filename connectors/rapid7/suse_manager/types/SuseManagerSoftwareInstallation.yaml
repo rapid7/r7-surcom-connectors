@@ -1,0 +1,59 @@
+x-samos-type-name: SuseManagerSoftwareInstallation
+x-samos-namespace: suse.manager
+title: SUSE Manager Software Installation
+description: A software installation in a managed Linux system in SUSE Manager
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: SoftwareInstallation
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: system_id
+  - name: software_id
+  - name: installtime
+
+x-samos-detail:
+  - name: system_id
+  - name: software_id
+  - name: installtime
+
+x-samos-derived-properties:
+  d_id:
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: expression
+    value: '{software_id}_{system_id}'
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: id
+
+properties:
+  software_id:
+    type: string
+    title: Software
+    x-samos-ref-types:
+      - type-name: SuseManagerSoftware
+        key-name: id
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: software_ref
+  system_id:
+    type: string
+    title: System
+    x-samos-ref-types:
+      - type-name: SuseManagerAsset
+        key-name: id
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: asset_ref
+  installtime:
+    type: string
+    title: Install Time
+    format: date-time
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: first_seen

@@ -1,0 +1,659 @@
+x-samos-type-name: JFrogArtifactoryRepository
+x-samos-namespace: jfrog.artifactory
+title: JFrog Artifactory Repository
+description: An artifact repository in JFrog Artifactory
+
+x-samos-extends-types:
+  - type-name: Repository
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: key
+  - name: packageType
+  - name: rclass
+  - name: projectKey
+  - name: xrayIndex
+  - name: blackedOut
+
+x-samos-detail:
+  - name: key
+  - name: packageType
+  - name: description
+  - name: rclass
+  - name: projectKey
+  - name: environments
+  - name: url
+  - name: blackedOut
+  - name: xrayIndex
+  - name: repositories
+  - name: defaultDeploymentRepo
+
+x-samos-derived-properties:
+  d_active:
+    type: boolean
+    syntax: jmespath
+    value: '!blackedOut'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_environment:
+    type: string
+    syntax: jmespath
+    value: 'environments[0]'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: environment
+    x-samos-ref-types:
+      - type-name: JFrogArtifactoryEnumEnvironment
+        key-name: id
+
+properties:
+  id:
+    title: Object ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  key:
+    title: Key
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Repository.id
+      correlation-type: Repository
+      priority: 3
+
+  packageType:
+    title: Package Type
+    type: string
+
+  description:
+    title: Description
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  notes:
+    title: Notes
+    type: string
+    nullable: true
+
+  includesPattern:
+    title: Includes Pattern
+    type: string
+    nullable: true
+
+  excludesPattern:
+    title: Excludes Pattern
+    type: string
+    nullable: true
+
+  repoLayoutRef:
+    title: Repository Layout Reference
+    type: string
+    nullable: true
+
+  signedUrlTtl:
+    title: Signed URL TTL
+    type: integer
+
+  enableComposerSupport:
+    title: Enable Composer Support?
+    type: boolean
+
+  enableNuGetSupport:
+    title: Enable NuGet Support?
+    type: boolean
+
+  enableGemsSupport:
+    title: Enable Gems Support?
+    type: boolean
+
+  enableNpmSupport:
+    title: Enable npm Support?
+    type: boolean
+
+  enableBowerSupport:
+    title: Enable Bower Support?
+    type: boolean
+
+  enableChefSupport:
+    title: Enable Chef Support?
+    type: boolean
+
+  enableCocoaPodsSupport:
+    title: Enable CocoaPods Support?
+    type: boolean
+
+  enableConanSupport:
+    title: Enable Conan Support?
+    type: boolean
+
+  enableDebianSupport:
+    title: Enable Debian Support?
+    type: boolean
+
+  debianTrivialLayout:
+    title: Debian Trivial Layout?
+    type: boolean
+
+  ddebSupported:
+    title: Ddeb Supported?
+    type: boolean
+
+  enablePypiSupport:
+    title: Enable PyPI Support?
+    type: boolean
+
+  enablePuppetSupport:
+    title: Enable Puppet Support?
+    type: boolean
+
+  enableDockerSupport:
+    title: Enable Docker Support?
+    type: boolean
+
+  dockerApiVersion:
+    title: Docker API Version
+    type: string
+    nullable: true
+
+  blockPushingSchema1:
+    title: Block Pushing Schema 1?
+    type: boolean
+
+  forceNugetAuthentication:
+    title: Force NuGet Authentication?
+    type: boolean
+
+  enableNormalizedVersion:
+    title: Enable Normalized Version?
+    type: boolean
+
+  forceP2Authentication:
+    title: Force P2 Authentication?
+    type: boolean
+
+  forceConanAuthentication:
+    title: Force Conan Authentication?
+    type: boolean
+
+  enableVagrantSupport:
+    title: Enable Vagrant Support?
+    type: boolean
+
+  enableGitLfsSupport:
+    title: Enable Git LFS Support?
+    type: boolean
+
+  enableDistRepoSupport:
+    title: Enable Distribution Repository Support?
+    type: boolean
+
+  priorityResolution:
+    title: Priority Resolution?
+    type: boolean
+
+  projectKey:
+    title: Project
+    type: string
+    nullable: true
+    x-samos-ref-types:
+      - type-name: JFrogArtifactoryProject
+        key-name: id
+
+  environments:
+    title: Environments
+    type: array
+    nullable: true
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: JFrogArtifactoryEnumEnvironment
+          key-name: id
+
+  forceNonDuplicateChart:
+    title: Force Non-Duplicate Chart?
+    type: boolean
+
+  forceMetadataNameVersion:
+    title: Force Metadata Name Version?
+    type: boolean
+
+  mlRepoLayout:
+    title: ML Repository Layout?
+    type: boolean
+
+  checksumPolicyType:
+    title: Checksum Policy Type
+    type: string
+    nullable: true
+
+  handleReleases:
+    title: Handle Releases?
+    type: boolean
+
+  handleSnapshots:
+    title: Handle Snapshots?
+    type: boolean
+
+  maxUniqueSnapshots:
+    title: Max Unique Snapshots
+    type: integer
+
+  maxUniqueTags:
+    title: Max Unique Tags
+    type: integer
+
+  snapshotVersionBehavior:
+    title: Snapshot Version Behavior
+    type: string
+    nullable: true
+
+  suppressPomConsistencyChecks:
+    title: Suppress POM Consistency Checks?
+    type: boolean
+
+  blackedOut:
+    title: Blacked Out?
+    type: boolean
+
+  propertySets:
+    title: Property Sets
+    type: array
+    items:
+      type: string
+
+  archiveBrowsingEnabled:
+    title: Archive Browsing Enabled?
+    type: boolean
+
+  calculateYumMetadata:
+    title: Calculate Yum Metadata?
+    type: boolean
+
+  enableFileListsIndexing:
+    title: Enable File Lists Indexing?
+    type: boolean
+
+  yumRootDepth:
+    title: Yum Root Depth
+    type: integer
+
+  dockerTagRetention:
+    title: Docker Tag Retention
+    type: integer
+
+  enableComposerV1Indexing:
+    title: Enable Composer V1 Indexing?
+    type: boolean
+
+  terraformType:
+    title: Terraform Type
+    type: string
+    nullable: true
+
+  encryptStates:
+    title: Encrypt States?
+    type: boolean
+
+  downloadRedirect:
+    title: Download Redirect?
+    type: boolean
+
+  cdnRedirect:
+    title: CDN Redirect?
+    type: boolean
+
+  cargoAnonymousAccess:
+    title: Cargo Anonymous Access?
+    type: boolean
+
+  cargoInternalIndex:
+    title: Cargo Internal Index?
+    type: boolean
+
+  xrayIndex:
+    title: Xray Index?
+    type: boolean
+
+  xrayDataTtl:
+    title: Xray Data TTL
+    type: integer
+
+  rclass:
+    title: Repository Class
+    type: string
+
+  dockerProjectId:
+    title: Docker Project ID
+    type: string
+    nullable: true
+
+  url:
+    title: URL
+    type: string
+    format: url
+    nullable: true
+    x-samos-fulfills:
+      type-name: Repository
+      property-name: url
+
+  username:
+    title: Username
+    type: string
+    x-samos-hidden: true
+    nullable: true
+
+  password:
+    title: Password
+    type: string
+    x-samos-hidden: true
+    nullable: true
+
+  disableProxy:
+    title: Disable Proxy?
+    type: boolean
+
+  remoteRepoChecksumPolicyType:
+    title: Remote Repository Checksum Policy Type
+    type: string
+    nullable: true
+
+  hardFail:
+    title: Hard Fail?
+    type: boolean
+
+  offline:
+    title: Offline?
+    type: boolean
+
+  storeArtifactsLocally:
+    title: Store Artifacts Locally?
+    type: boolean
+
+  socketTimeoutMillis:
+    title: Socket Timeout Milliseconds
+    type: integer
+
+  localAddress:
+    title: Local Address
+    type: string
+    nullable: true
+
+  retrievalCachePeriodSecs:
+    title: Retrieval Cache Period Seconds
+    type: integer
+
+  assumedOfflinePeriodSecs:
+    title: Assumed Offline Period Seconds
+    type: integer
+
+  missedRetrievalCachePeriodSecs:
+    title: Missed Retrieval Cache Period Seconds
+    type: integer
+
+  metadataRetrievalTimeoutSecs:
+    title: Metadata Retrieval Timeout Seconds
+    type: integer
+
+  unusedArtifactsCleanupPeriodHours:
+    title: Unused Artifacts Cleanup Period Hours
+    type: integer
+
+  fetchJarsEagerly:
+    title: Fetch JARs Eagerly?
+    type: boolean
+
+  fetchSourcesEagerly:
+    title: Fetch Sources Eagerly?
+    type: boolean
+
+  shareConfiguration:
+    title: Share Configuration?
+    type: boolean
+
+  synchronizeProperties:
+    title: Synchronize Properties?
+    type: boolean
+
+  listRemoteFolderItems:
+    title: List Remote Folder Items?
+    type: boolean
+
+  rejectInvalidJars:
+    title: Reject Invalid JARs?
+    type: boolean
+
+  allowAnyHostAuth:
+    title: Allow Any Host Auth?
+    type: boolean
+
+  enableCookieManagement:
+    title: Enable Cookie Management?
+    type: boolean
+
+  enableTokenAuthentication:
+    title: Enable Token Authentication?
+    type: boolean
+
+  propagateQueryParams:
+    title: Propagate Query Params?
+    type: boolean
+
+  blockMismatchingMimeTypes:
+    title: Block Mismatching MIME Types?
+    type: boolean
+
+  bypassHeadRequests:
+    title: Bypass Head Requests?
+    type: boolean
+
+  disableUrlNormalization:
+    title: Disable URL Normalization?
+    type: boolean
+
+  contentSynchronisation:
+    title: Content Synchronisation
+    type: object
+    nullable: true
+    properties:
+      enabled:
+        title: Enabled?
+        type: boolean
+      statistics:
+        title: Statistics
+        type: object
+        properties:
+          enabled:
+            title: Enabled?
+            type: boolean
+      properties:
+        title: Properties
+        type: object
+        properties:
+          enabled:
+            title: Enabled?
+            type: boolean
+      source:
+        title: Source
+        type: object
+        properties:
+          originAbsenceDetection:
+            title: Origin Absence Detection?
+            type: boolean
+
+  externalDependenciesEnabled:
+    title: External Dependencies Enabled?
+    type: boolean
+
+  sendContext:
+    title: Send Context?
+    type: boolean
+
+  passThrough:
+    title: Pass Through?
+    type: boolean
+
+  curated:
+    title: Curated?
+    type: boolean
+
+  retrieveSha256FromServer:
+    title: Retrieve SHA256 From Server?
+    type: boolean
+
+  customHttpHeaders:
+    title: Custom HTTP Headers
+    type: array
+    nullable: true
+    items:
+      type: object
+
+  vcsType:
+    title: VCS Type
+    type: string
+    nullable: true
+
+  authUrl:
+    title: Auth URL
+    type: string
+    nullable: true
+
+  bowerRegistryUrl:
+    title: Bower Registry URL
+    type: string
+    format: url
+    nullable: true
+
+  pyPIRegistryUrl:
+    title: PyPI Registry URL
+    type: string
+    format: url
+    nullable: true
+
+  terraformRegistryUrl:
+    title: Terraform Registry URL
+    type: string
+    format: url
+    nullable: true
+
+  terraformProvidersUrl:
+    title: Terraform Providers URL
+    type: string
+    format: url
+    nullable: true
+
+  gitRegistryUrl:
+    title: Git Registry URL
+    type: string
+    format: url
+    nullable: true
+
+  hexPublicKey:
+    title: Hex Public Key
+    type: string
+    nullable: true
+
+  podsCdnUrl:
+    title: Pods CDN URL
+    type: string
+    format: url
+    nullable: true
+
+  composerRegistryUrl:
+    title: Composer Registry URL
+    type: string
+    format: url
+    nullable: true
+
+  gitLabResolveSubgroups:
+    title: GitLab Resolve Subgroups?
+    type: boolean
+
+  podsSpecsRepoUrl:
+    title: Pods Specs Repository URL
+    type: string
+    format: url
+    nullable: true
+
+  podsForceModifyIndex:
+    title: Pods Force Modify Index?
+    type: boolean
+
+  pyPIRepositorySuffix:
+    title: PyPI Repository Suffix
+    type: string
+    nullable: true
+
+  vcsGitProvider:
+    title: VCS Git Provider
+    type: string
+    nullable: true
+
+  repositories:
+    title: Repositories
+    type: array
+    nullable: true
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: JFrogArtifactoryRepository
+          key-name: id
+
+  hideUnauthorizedResources:
+    title: Hide Unauthorized Resources?
+    type: boolean
+
+  artifactoryRequestsCanRetrieveRemoteArtifacts:
+    title: Artifactory Requests Can Retrieve Remote Artifacts?
+    type: boolean
+
+  resolveDockerTagsByTimestamp:
+    title: Resolve Docker Tags By Timestamp?
+    type: boolean
+
+  keyPair:
+    title: Key Pair
+    type: string
+    nullable: true
+
+  pomRepositoryReferencesCleanupPolicy:
+    title: POM Repository References Cleanup Policy
+    type: string
+    nullable: true
+
+  defaultDeploymentRepo:
+    title: Default Deployment Repository
+    type: string
+    nullable: true
+    x-samos-ref-types:
+      - type-name: JFrogArtifactoryRepository
+        key-name: id
+
+  cachingLocalForeignLayersEnabled:
+    title: Caching Local Foreign Layers Enabled?
+    type: boolean
+
+  virtualRetrievalCachePeriodSecs:
+    title: Virtual Retrieval Cache Period Seconds
+    type: integer
+
+  forceMavenAuthentication:
+    title: Force Maven Authentication?
+    type: boolean
+
+  useNamespaces:
+    title: Use Namespaces?
+    type: boolean

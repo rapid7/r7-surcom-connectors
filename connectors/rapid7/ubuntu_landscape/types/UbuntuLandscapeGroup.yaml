@@ -1,0 +1,68 @@
+x-samos-type-name: UbuntuLandscapeGroup
+x-samos-namespace: ubuntu.landscape
+title: Ubuntu Landscape System Group
+description: A local system (POSIX) group on a computer managed by Ubuntu Landscape
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: core.component-group
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: name
+  - name: d_computer_id
+
+x-samos-detail:
+  - name: name
+  - name: d_computer_id
+
+x-samos-derived-properties:
+  d_id:
+    # id is a integer, but core.component expects string, so we convert it here
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'to_string(id)'
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_computer_id:
+    # Property 'computer_id' is integer, cannot fulfill 'members' which is string
+    # so derived property fulfill 'members'
+    title: Computer
+    type: string
+    syntax: expression
+    value: '{computer_id}'
+    x-samos-ref-types:
+      - type-name: UbuntuLandscapeComputer
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: core.component-group
+      property-name: members
+
+properties:
+  id:
+    title: Group ID
+    type: integer
+    x-samos-immutable: true
+    x-samos-hidden: true
+
+  name:
+    title: Group Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  gid:
+    x-samos-hidden: true
+    title: Group GID
+    type: integer
+
+  computer_id:
+    x-samos-hidden: true
+    title: Computer
+    type: integer

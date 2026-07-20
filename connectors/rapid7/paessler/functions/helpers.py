@@ -28,6 +28,7 @@ class PaesslerClient():
         self.settings = settings
         self.base_url = settings.get("url")
         self.session = HttpSession()
+        self.session.verify = settings.get("verify_tls", True)
         self.username = settings.get("username")
         self.passhash = settings.get("pass_hash")
 

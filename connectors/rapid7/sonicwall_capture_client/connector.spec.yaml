@@ -1,0 +1,72 @@
+id: sonicwall.capture.client
+name: SonicWall Capture Client
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - SonicWallCaptureClientDevice
+  - SonicWallCaptureClientEndpointUser
+  - SonicWallCaptureClientAgent
+  - SonicWallCaptureClientApplication
+  - SonicWallCaptureClientSoftwareInstallation
+  - SonicWallCaptureClientUserGroup
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: SonicWall Capture Client Assets and Security Data
+    description: Import Devices, Agents, Users, Groups, Applications, and Installed Software from SonicWall Capture Client
+    return_types:
+      - SonicWallCaptureClientDevice
+      - SonicWallCaptureClientEndpointUser
+      - SonicWallCaptureClientAgent
+      - SonicWallCaptureClientApplication
+      - SonicWallCaptureClientSoftwareInstallation
+      - SonicWallCaptureClientUserGroup
+
+settings:
+  msw_api_key:
+    type: string
+    title: MySonicWall API Key
+    description: MySonicWall API Key
+    format: password
+
+  cc_region:
+    type: string
+    title: Capture Client Region
+    description: Region of the SonicWall Capture Client instance
+    enum:
+      - US
+      - EU
+    default: US
+
+  tenant_id:
+    type: string
+    title: Tenant ID
+    description: MySonicWall tenant ID
+    example: 12345678-abcd-1234-efgh-123456789012
+
+runtime: py311
+
+# List any Python dependencies available on PyPI that are required by this connector.
+# `codegen` will generate a `requirements.txt` file with pinned versions of these dependencies.
+# python_dependencies:
+#  - another_dependency
+
+# Categories for this connector in the Extension Library.
+categories:
+  - endpoint_detection_response
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

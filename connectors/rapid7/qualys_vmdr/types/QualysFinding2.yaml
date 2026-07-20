@@ -1,0 +1,152 @@
+x-samos-type-name: QualysFinding2
+x-samos-namespace: qualys
+title: Qualys Finding
+description: A vulnerability finding detected by Qualys VMDR on a host.
+
+x-samos-extends-types:
+  - type-name: Finding
+
+x-samos-keys:
+  - UNIQUE_VULN_ID
+
+required:
+  - UNIQUE_VULN_ID
+
+x-samos-table:
+  - name: QID
+  - name: x_host_id
+  - name: STATUS
+  - name: SEVERITY
+  - name: FIRST_FOUND_DATETIME
+  - name: LAST_FOUND_DATETIME
+
+x-samos-detail:
+  - name: QID
+  - name: x_host_id
+  - name: TYPE
+  - name: SEVERITY
+  - name: STATUS
+  - name: RESULTS
+  - name: FIRST_FOUND_DATETIME
+  - name: LAST_FOUND_DATETIME
+  - name: TIMES_FOUND
+  - name: LAST_TEST_DATETIME
+  - name: LAST_UPDATE_DATETIME
+  - name: LAST_FIXED_DATETIME
+  - name: LAST_PROCESSED_DATETIME
+  - name: PORT
+  - name: PROTOCOL
+  - name: SSL
+  - name: IS_IGNORED
+  - name: IS_DISABLED
+
+properties:
+  UNIQUE_VULN_ID:
+    title: Unique Vulnerability ID
+    description: Qualys unique vulnerability instance identifier.
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+  QID:
+    title: QID
+    description: The Qualys ID (QID) of the detected vulnerability.
+    type: string
+    x-samos-ref-types:
+      - type-name: QualysQidDetail2
+        key-name: QID
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability
+  TYPE:
+    title: Detection Type
+    description: The type of vulnerability detection.
+    type: string
+  SEVERITY:
+    title: Severity
+    description: The severity level of the finding.
+    type: string
+    x-samos-ref-types:
+      - type-name: QualysEnumSeverity
+        key-name: id
+  SSL:
+    title: SSL?
+    description: Whether SSL was present during detection.
+    type: boolean
+  RESULTS:
+    title: Scan Results
+    description: Specific scan test results for the vulnerability detection.
+    type: string
+    x-samos-exclude: true # The RESULTS field can be very large (multi-line scan output)
+  PORT:
+    title: Port
+    description: The port number the vulnerability was detected on.
+    type: string
+  PROTOCOL:
+    title: Protocol
+    description: The protocol the vulnerability was detected on.
+    type: string
+  STATUS:
+    title: Status
+    description: The current status of the finding.
+    type: string
+  FIRST_FOUND_DATETIME:
+    title: First Found
+    description: Date and time when the vulnerability was first detected on the host.
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: first_seen
+  LAST_FOUND_DATETIME:
+    title: Last Found
+    description: Date and time when the vulnerability was most recently detected on the host.
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: last_seen
+  TIMES_FOUND:
+    title: Times Found
+    description: Total number of times the vulnerability was detected on the host.
+    type: string
+  LAST_TEST_DATETIME:
+    title: Last Tested
+    description: Date and time of the last vulnerability test.
+    type: string
+    format: date-time
+  LAST_UPDATE_DATETIME:
+    title: Last Updated
+    description: Date and time of the last update to this finding.
+    type: string
+    format: date-time
+  LAST_FIXED_DATETIME:
+    title: Last Fixed
+    description: Date and time when the vulnerability was last fixed on the host.
+    type: string
+    format: date-time
+  IS_IGNORED:
+    title: Ignored?
+    description: Whether this finding is ignored in Qualys.
+    type: boolean
+  IS_DISABLED:
+    title: Disabled?
+    description: Whether this finding is disabled in Qualys.
+    type: boolean
+  LAST_PROCESSED_DATETIME:
+    title: Last Processed
+    description: Date and time when this finding was last processed.
+    type: string
+    format: date-time
+
+  x_host_id:
+    title: Host
+    description: The Qualys host associated with this finding.
+    type: string
+    x-samos-ref-types:
+      - type-name: QualysHost2
+        key-name: ID
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to

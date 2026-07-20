@@ -1,0 +1,146 @@
+x-samos-type-name: SymmetryDataGuardIdentity
+x-samos-namespace: symmetry.dataguard
+title: Symmetry DataGuard Identity
+description: An identity observed by Symmetry DataGuard with optional associated
+  datastore exposure details.
+type: object
+x-samos-detail-prefer-type-title: false
+
+x-samos-extends-types:
+  - type-name: User
+  - type-name: core.cloud-component
+    subtype-priority: 3
+
+x-samos-keys:
+  - x_identity_id
+
+x-samos-table:
+  - name: identity
+  - name: identityId
+  - name: identityType
+  - name: providerType
+  - name: creationTimestamp
+
+x-samos-detail:
+  - name: identity
+  - name: identityId
+  - name: identityType
+  - name: providerType
+  - name: instance
+  - name: metadata
+  - name: x_url
+  - name: creationTimestamp
+
+x-samos-derived-properties:
+  d_is_service_account:
+    title: Service Account?
+    type: boolean
+    syntax: jmespath
+    x-samos-hidden: true
+    value: 'identityType != `user`'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_service_account
+
+  d_email:
+    title: Email
+    type: string
+    syntax: jmespath
+    value: 'contains(identity, `@`) && identity || `null`'
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 3
+
+properties:
+  x_identity_id:
+    title: Identity ID
+    type: string
+    description: Provider-specific identity identifier, used as a key for enrichment
+      and association with other records.
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  identity:
+    title: Identity
+    type: string
+    description: Identity value, such as a username or email address.
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  identityId:
+    title: Identity ID
+    type: string
+    description: Provider-specific identity identifier.
+    # identityId is a human-readable value (e.g. email address, IAM username)
+    # rather than an opaque internal ID, so it is appropriate to fulfill username.
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+
+  identityType:
+    title: Identity Type
+    type: string
+    description: Identity kind reported by Symmetry DataGuard (for example, user).
+
+  providerType:
+    title: Provider Type
+    type: string
+    description: Cloud or platform provider associated with the identity.
+    x-samos-ref-types:
+      - type-name: SymmetryDataGuardCloudProviderEnum
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.cloud-component
+      property-name: provider
+
+  creationTimestamp:
+    title: Creation Timestamp
+    type: string
+    format: date-time
+    description: Timestamp when this identity record was created in Symmetry DataGuard.
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+
+  instance:
+    title: Instance
+    type: object
+    description: Instance identifier associated with the identity when present.
+
+  metadata:
+    title: Metadata
+    type: object
+    description: Additional metadata about the identity.
+    properties:
+      id:
+        title: Metadata ID
+        type: string
+        description: Identity metadata identifier.
+      subscriptionId:
+        title: Subscription
+        type: string
+        description: Cloud subscription or account identifier associated with the identity.
+      organizationId:
+        title: Organization
+        type: string
+        description: Organization identifier associated with the identity when present.
+      accountId:
+        title: Account
+        type: string
+        description: Account identifier associated with the identity when present.
+  x_url:
+    title: Open In Source
+    type: string
+    format: url
+    x-samos-hidden: true
+    description: URL to view this identity in the Symmetry DataGuard dashboard.
+    x-samos-external-url:
+      primary-source-url: true
+      external-source-title: 'DataGuard' # the product label shown in "View in <…>"

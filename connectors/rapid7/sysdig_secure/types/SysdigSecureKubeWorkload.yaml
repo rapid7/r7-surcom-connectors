@@ -1,0 +1,112 @@
+x-samos-type-name: SysdigSecureKubeWorkload
+x-samos-namespace: sysdig.secure
+title: Sysdig Secure Kubernetes Workload
+description: A Kubernetes workload (Deployment, DaemonSet, etc.) monitored by Sysdig Secure.
+x-samos-detail-prefer-type-title: true
+# Schema entity: KubeWorkload. All fields confirmed from refdocs/sysdig_schema.yaml (*).
+# Extends the unified System type (a workload is a logical service/application unit).
+x-samos-extends-types:
+  - type-name: System
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: name
+  - name: namespaceName
+  - name: type
+  - name: clusterName
+  - name: isExposed
+  - name: firstSeen
+  - name: lastSeen
+
+x-samos-detail:
+  - name: name
+  - name: category
+  - name: namespaceName
+  - name: type
+  - name: clusterName
+  - name: platform
+  - name: version
+  - name: isExposed
+  - name: createdAt
+  - name: firstSeen
+  - name: lastSeen
+
+x-samos-derived-properties:
+  d_id:
+    title: ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    syntax: expression
+    value: '{clusterName}::{namespaceName}::{name}'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+properties:
+  name:
+    type: string
+    title: Workload Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  namespaceName:
+    type: string
+    title: Namespace
+
+  category:
+    type: string
+    title: Category
+
+  type:
+    type: string
+    title: Workload Type
+
+  platform:
+    type: string
+    title: Platform
+
+  version:
+    type: string
+    title: Version
+
+  clusterName:
+    type: string
+    title: Cluster Name
+    x-samos-ref-types:
+      - key-name: name
+        type-name: SysdigSecureKubeCluster
+
+  isExposed:
+    type: boolean
+    title: Exposed?
+
+  createdAt:
+    type: string
+    title: Created At
+    format: date-time
+
+  lastSeen:
+    type: string
+    title: Last Seen
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  firstSeen:
+    type: string
+    title: First Seen
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  lastModified:
+    type: string
+    title: Last Modified
+    format: date-time

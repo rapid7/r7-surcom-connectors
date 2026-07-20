@@ -220,6 +220,7 @@ properties:
       macAddress:
         title: MAC Address
         type: string
+        format: mac-addr
         x-samos-fulfills:
           type-name: Machine
           property-name: mac_addresses

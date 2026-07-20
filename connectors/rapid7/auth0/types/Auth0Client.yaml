@@ -1,0 +1,260 @@
+x-samos-type-name: Auth0Client
+x-samos-namespace: auth0
+title: Auth0 Client
+description: An Application (Client) registered with Auth0
+
+x-samos-extends-types:
+  - type-name: System
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: app_type
+  - name: is_first_party
+  - name: organizations
+  - name: tenant
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: app_type
+  - name: tenant
+  - name: is_first_party
+  - name: oidc_conformant
+  - name: sso
+  - name: token_endpoint_auth_method
+  - name: sso_disabled
+  - name: cross_origin_authentication
+  - name: custom_login_page_on
+  - name: is_token_endpoint_ip_header_trusted
+  - name: callback_url_template
+  - name: global
+  - name: grant_types
+  - name: callbacks
+  - name: allowed_logout_urls
+  - name: allowed_origins
+  - name: web_origins
+  - name: client_aliases
+  - name: allowed_clients
+  - name: client_metadata
+  - name: mobile
+  - name: oidc_logout
+  - name: default_organization
+  - name: organization_usage
+  - name: organization_require_behavior
+  - name: organizations
+  - name: refresh_token
+  - name: jwt_configuration
+
+properties:
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  client_id:
+    title: Client ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  tenant:
+    title: Tenant
+    type: string
+
+  app_type:
+    title: Application Type
+    type: string
+
+  logo_uri:
+    title: Logo URI
+    description: URL of the logo displayed for this client.
+    type: string
+
+  is_first_party:
+    title: First Party?
+    type: boolean
+
+  oidc_conformant:
+    title: OIDC Conformant?
+    type: boolean
+
+  sso:
+    title: SSO?
+    description: Whether Auth0 handles SSO for this client (true) or the IdP does (false).
+    type: boolean
+
+  grant_types:
+    title: Grant Types
+    type: array
+    items:
+      type: string
+
+  callbacks:
+    title: Callback URLs
+    type: array
+    items:
+      type: string
+
+  allowed_logout_urls:
+    title: Allowed Logout URLs
+    type: array
+    items:
+      type: string
+
+  allowed_origins:
+    title: Allowed Origins
+    description: Origins permitted to make requests to the Auth0 API (CORS).
+    type: array
+    items:
+      type: string
+
+  web_origins:
+    title: Web Origins
+    description: Allowed origins for cross-origin authentication and web message response mode.
+    type: array
+    items:
+      type: string
+
+  client_aliases:
+    title: Client Aliases
+    description: List of audiences/realms for the SAML protocol (used by the wsfed addon).
+    type: array
+    items:
+      type: string
+
+  allowed_clients:
+    title: Allowed Clients
+    description: Clients allowed to make delegation requests to this client.
+    type: array
+    items:
+      type: string
+
+  client_metadata:
+    title: Client Metadata
+    description: Tenant-defined custom metadata for the client.
+    type: object
+
+  mobile:
+    title: Mobile App Configuration
+    description: Native mobile application configuration (Android / iOS).
+    type: object
+    properties:
+      android:
+        title: Android
+        type: object
+        properties:
+          app_package_name:
+            title: App Package Name
+            type: string
+          sha256_cert_fingerprints:
+            title: SHA256 Cert Fingerprints
+            type: array
+            items:
+              type: string
+      ios:
+        title: iOS
+        type: object
+        properties:
+          team_id:
+            title: Team ID
+            type: string
+          app_bundle_identifier:
+            title: App Bundle Identifier
+            type: string
+
+  oidc_logout:
+    title: OIDC Logout
+    description: OIDC backchannel logout configuration.
+    type: object
+
+  default_organization:
+    title: Default Organization
+    description: Default Organization ID and flows for this client.
+    type: object
+    properties:
+      organization_id:
+        title: Organization ID
+        type: string
+      flows:
+        title: Flows
+        type: array
+        items:
+          type: string
+
+  organization_usage:
+    title: Organization Usage
+    description: How the client behaves with regards to organizations during authentication. One of "deny" (default), "allow", "require".
+    type: string
+
+  organization_require_behavior:
+    title: Organization Require Behavior
+    description: Behavior when organization_usage is "require". One of "no_prompt" (default), "pre_login_prompt", "post_login_prompt".
+    type: string
+
+  organizations:
+    title: Organizations
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Auth0Organization
+          key-name: id
+
+  token_endpoint_auth_method:
+    title: Token Endpoint Auth Method
+    type: string
+
+  sso_disabled:
+    title: SSO Disabled?
+    type: boolean
+
+  cross_origin_authentication:
+    title: Cross Origin Authentication?
+    type: boolean
+
+  custom_login_page_on:
+    title: Custom Login Page Enabled?
+    type: boolean
+
+  is_token_endpoint_ip_header_trusted:
+    title: Trust Token Endpoint IP Header?
+    type: boolean
+
+  callback_url_template:
+    title: Callback URL Template?
+    type: boolean
+
+  global:
+    title: Global?
+    description: True for the special tenant-wide "All Applications" client.
+    type: boolean
+
+  refresh_token:
+    title: Refresh Token Settings
+    type: object
+
+  jwt_configuration:
+    title: JWT Configuration
+    type: object

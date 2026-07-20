@@ -1,0 +1,151 @@
+x-samos-type-name: SonicWallCaptureClientEndpointUser
+x-samos-namespace: sonicwall.capture.client
+title: SonicWall Capture Client Endpoint User
+description: A user associated with an endpoint device managed by SonicWall Capture Client.
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - userId
+
+x-samos-table:
+  - name: username
+  - name: fullName
+  - name: device.deviceId
+  - name: tenant
+
+x-samos-detail:
+  - name: username
+  - name: fullName
+  - name: device.deviceId
+  - name: device.s1AgentId
+  - name: tenant
+  - name: d_groups
+
+x-samos-derived-properties:
+  # Extracts user group IDs from nested objects to create group membership edges
+  d_groups:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: SonicWallCaptureClientUserGroup
+          key-name: groupId
+    syntax: jmespath
+    value: 'userGroups[].groupId'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups
+
+properties:
+  username:
+    title: Username
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+
+  fullName:
+    title: Full Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  userId:
+    title: User ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  tenant:
+    title: Tenant
+    type: object
+    x-samos-hidden: true
+    properties:
+      tenantName:
+        title: Tenant Name
+        type: string
+      tenantId:
+        title: Tenant ID
+        type: string
+
+  userGroups:
+    title: User Groups
+    type: array
+    items:
+      type: object
+      properties:
+        groupId:
+          title: Group
+          type: string
+          x-samos-ref-types:
+            - type-name: SonicWallCaptureClientUserGroup
+              key-name: groupId
+        groupName:
+          title: Group Name
+          type: string
+        type:
+          title: Type
+          type: string
+
+  policies:
+    title: Policies
+    type: array
+    x-samos-hidden: true
+    items:
+      type: object
+
+  device:
+    title: Device
+    type: object
+    properties:
+      deviceId:
+        title: Device
+        type: string
+        x-samos-ref-types:
+          - type-name: SonicWallCaptureClientDevice
+            key-name: deviceId
+      installToken:
+        title: Install Token
+        type: string
+      name:
+        title: Device Name
+        type: string
+      os:
+        title: Operating System
+        type: string
+      clientVersion:
+        title: Client Version
+        type: string
+      agentVersion:
+        title: Agent Version
+        type: string
+      deviceType:
+        title: Device Type
+        type: string
+      alerts:
+        title: Alerts
+        type: array
+        items:
+          type: object
+      onlineStatus:
+        title: Online?
+        type: boolean
+      s1AgentId:
+        title: SentinelOne Agent
+        type: string
+        x-samos-ref-types:
+          - type-name: SonicWallCaptureClientAgent
+            key-name: uuid
+      licenses:
+        title: Licenses
+        type: array
+        items:
+          type: object

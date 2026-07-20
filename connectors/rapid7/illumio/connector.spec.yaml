@@ -1,0 +1,61 @@
+id: illumio
+name: Illumio
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - initial release
+
+types:
+  - IllumioWorkload
+  - IllumioLabel
+  - IllumioVen
+  - IllumioNetworkDevice
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Illumio Workloads, Labels, VENs, and Network Devices
+    description: Import Workloads, Labels, VENs, and Network Devices from Illumio PCE
+    return_types:
+      - IllumioWorkload
+      - IllumioLabel
+      - IllumioVen
+      - IllumioNetworkDevice
+
+settings:
+  url:
+    type: string
+    title: PCE URL
+    description: Base URL for the Illumio Policy Compute Engine (PCE).
+    example: https://pce.example.com:8443
+
+  org_id:
+    type: string
+    title: Organization ID
+    description: The Illumio PCE organization ID.
+    example: '1'
+
+  api_key:
+    type: string
+    title: API Key
+    description: API key username (auth_username) for PCE authentication. Generated from the PCE under My API Keys.
+    format: password
+
+  api_secret:
+    type: string
+    title: API Key Secret
+    description: API key secret for PCE authentication. Generated from the PCE under My API Keys.
+    format: password
+
+runtime: py311
+
+python_dependencies:
+  - certifi
+
+categories:
+  - network_firewall
+
+show_orchestrator_ui: false

@@ -1,0 +1,118 @@
+x-samos-type-name: ZimperiumMTDScanAppExposure
+x-samos-namespace: zimperium.mtd
+title: Zimperium zScan App Exposure
+description: A security exposure from Zimperium zScan application analysis.
+x-samos-hidden: true # Hidden; zScan types are moving to a dedicated connector.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Exposure
+    subtype-priority: 5
+x-samos-global-zone: true
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: category
+  - name: subcategory
+  - name: severity
+  - name: security
+  - name: privacy
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: category
+  - name: subcategory
+  - name: severity
+  - name: recommendation
+  - name: cvss20Score
+  - name: cvss31Score
+  - name: compliance
+  - name: security
+  - name: privacy
+
+x-samos-derived-properties:
+  d_exposure_type:
+    type: string
+    syntax: jmespath
+    value: 'length(compliance || `[]`) > `0` && `ExposureType: Vulnerability` ||
+      `ExposureType: Weakness`'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: exposure_type
+    x-samos-ref-types:
+      - key-name: id
+        type-name: NoeticEnumExposureType
+
+properties:
+  id:
+    title: Exposure ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  category:
+    title: Category
+    type: string
+
+  subcategory:
+    title: Subcategory
+    type: string
+
+  severity:
+    title: Severity
+    type: string
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: severity
+    x-samos-ref-types:
+      - key-name: id
+        type-name: ZimperiumMTDExposureSeverityEnum
+  recommendation:
+    title: Recommendation
+    type: string
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: solution
+  privacy:
+    title: Privacy?
+    type: boolean
+  security:
+    title: Security?
+    type: boolean
+  cvss20Score:
+    title: CVSS 2.0 Score
+    type: string
+  cvss31Score:
+    title: CVSS 3.1 Score
+    type: string
+  compliance:
+    title: CVEs
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Vulnerability
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: vulnerabilities

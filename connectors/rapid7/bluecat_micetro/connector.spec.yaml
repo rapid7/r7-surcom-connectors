@@ -1,0 +1,69 @@
+id: bluecat.micetro
+name: BlueCat Micetro
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+reference-schemas:
+  - url: https://examp1/mmws/api/swagger.json
+    file: refdocs/openapi.json
+
+types:
+  - BlueCatMicetroRange
+  - BlueCatMicetroIPAMRecord
+  - BlueCatMicetroStateEnum
+  - BlueCatMicetroZone
+  - BlueCatMicetroARecord
+  - BlueCatMicetroAAAARecord
+  - BlueCatMicetroCNAMERecord
+  - BlueCatMicetroDevice
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: BlueCat Micetro Network and DNS Resources
+    description: Import IP ranges, IPAM records, DNS zones, and DNS resource
+      records from BlueCat Micetro DDI.
+    return_types:
+      - BlueCatMicetroRange
+      - BlueCatMicetroIPAMRecord
+      - BlueCatMicetroZone
+      - BlueCatMicetroARecord
+      - BlueCatMicetroAAAARecord
+      - BlueCatMicetroCNAMERecord
+      - BlueCatMicetroDevice
+
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: Base URL for the BlueCat Micetro instance.
+    example: https://micetro.example.com
+
+  username:
+    type: string
+    title: Username
+    description: Login name used to authenticate with the Micetro API.
+
+  password:
+    type: string
+    title: Password
+    description: Password used to authenticate with the Micetro API.
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+runtime: py311
+
+categories:
+  - network_firewall
+
+show_orchestrator_ui: false

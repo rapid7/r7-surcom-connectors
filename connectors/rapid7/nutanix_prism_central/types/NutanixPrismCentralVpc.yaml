@@ -1,0 +1,201 @@
+x-samos-type-name: NutanixPrismCentralVpc
+x-samos-namespace: nutanix.prism.central
+title: Nutanix Prism Central VPC
+description: A Virtual Private Cloud (VPC) managed by Nutanix Prism Central.
+
+$ref: https://developers.nutanix.com/api-reference?namespace=networking&version=v4.1&modified=1#/components/schemas/networking.v4.1.config.Vpc
+
+x-samos-extends-types:
+  - type-name: Network
+    subtype-priority: 3
+
+x-samos-keys:
+  - extId
+
+x-samos-table:
+  - name: name
+  - name: vpcType
+  - name: d_external_subnet_ids
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: vpcType
+  - name: d_external_subnet_ids
+  - name: externalRoutingDomainReference
+  - name: externalSubnets
+  - name: externallyRoutablePrefixes
+  - name: snatIps
+  - name: commonDhcpOptions
+
+x-samos-derived-properties:
+  d_external_subnet_ids:
+    title: External Subnets
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: NutanixPrismCentralSubnet
+          key-name: extId
+    value: 'externalSubnets[].subnetReference'
+    syntax: jmespath
+
+properties:
+  extId:
+    title: External ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  vpcType:
+    title: VPC Type
+    type: string
+
+  externalRoutingDomainReference:
+    title: External Routing Domain
+    type: string
+
+  commonDhcpOptions:
+    title: Common DHCP Options
+    type: object
+    properties:
+      domainNameServers:
+        title: DNS Servers
+        type: array
+        items:
+          type: object
+          properties:
+            ipv4:
+              title: IPv4
+              type: object
+              properties:
+                value:
+                  title: IP Address
+                  type: string
+                  format: ip-addr
+                prefixLength:
+                  title: Prefix Length
+                  type: integer
+
+  snatIps:
+    title: SNAT IPs
+    type: array
+    items:
+      type: object
+      properties:
+        ipv4:
+          title: IPv4
+          type: object
+          properties:
+            value:
+              title: IP Address
+              type: string
+              format: ip-addr
+            prefixLength:
+              title: Prefix Length
+              type: integer
+
+  externalSubnets:
+    title: External Subnets
+    type: array
+    items:
+      type: object
+      properties:
+        subnetReference:
+          title: Subnet Reference
+          type: string
+        externalIps:
+          title: External IPs
+          type: array
+          items:
+            type: object
+            properties:
+              ipv4:
+                title: IPv4
+                type: object
+                properties:
+                  value:
+                    title: IP Address
+                    type: string
+                    format: ip-addr
+                  prefixLength:
+                    title: Prefix Length
+                    type: integer
+        gatewayNodes:
+          title: Gateway Nodes
+          type: array
+          items:
+            type: string
+        activeGatewayNodes:
+          title: Active Gateway Nodes
+          type: array
+          items:
+            type: object
+            properties:
+              nodeId:
+                title: Node ID
+                type: string
+              nodeIpAddress:
+                title: Node IP Address
+                type: object
+                properties:
+                  ipv4:
+                    title: IPv4
+                    type: object
+                    properties:
+                      value:
+                        title: IP Address
+                        type: string
+                        format: ip-addr
+                      prefixLength:
+                        title: Prefix Length
+                        type: integer
+        activeGatewayCount:
+          title: Active Gateway Count
+          type: integer
+
+  externallyRoutablePrefixes:
+    title: Externally Routable Prefixes
+    type: array
+    items:
+      type: object
+      properties:
+        ipv4:
+          title: IPv4
+          type: object
+          properties:
+            ip:
+              title: IP
+              type: object
+              properties:
+                value:
+                  title: Network Address
+                  type: string
+                  format: ip-addr
+                prefixLength:
+                  title: Prefix Length
+                  type: integer
+            prefixLength:
+              title: Prefix Length
+              type: integer
+
+  metadata:
+    title: Metadata
+    type: object
+    additionalProperties: true

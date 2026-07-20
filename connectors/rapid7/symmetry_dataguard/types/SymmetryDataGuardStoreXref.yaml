@@ -1,0 +1,45 @@
+x-samos-type-name: SymmetryDataGuardStoreXref
+x-samos-namespace: symmetry.dataguard
+title: Symmetry DataGuard Store Xref
+description: Cross-reference linking an identity to a storage location.
+type: object
+x-samos-detail-prefer-type-title: true
+x-samos-hidden: true
+x-samos-default-hide-from-graph: true
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: identityUniqueId
+  - name: storeUniqueId
+
+x-samos-detail:
+  - name: identityUniqueId
+  - name: storeUniqueId
+
+x-samos-derived-properties:
+  d_id:
+    type: string
+    x-samos-hidden: true
+    title: ID
+    description: Composite key of identityUniqueId and storeUniqueId.
+    syntax: jmespath
+    value: 'join(`_`, [identityUniqueId, storeUniqueId])'
+    x-samos-immutable: true
+
+properties:
+  identityUniqueId:
+    title: Identity
+    type: string
+    x-samos-ref-types:
+      - type-name: SymmetryDataGuardIdentity
+        key-name: x_identity_id
+
+  storeUniqueId:
+    title: Data Store
+    type: string
+    description: DataGuard internal ID of the destination data store (docId).
+    example: 'aws.123456789012.s3.my-bucket'
+    x-samos-ref-types:
+      - type-name: SymmetryDataGuardStorage
+        key-name: x_storage_id

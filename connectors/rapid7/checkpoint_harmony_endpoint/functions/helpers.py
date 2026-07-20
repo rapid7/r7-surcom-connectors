@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from logging import Logger
 from typing import Any
 
-from chkp_harmony_endpoint_management_sdk import HarmonyEndpoint, InfinityPortalAuth
+from ._harmony_sdk import HarmonyEndpoint, InfinityPortalAuth
 
 from .sc_settings import Settings
 
@@ -187,6 +187,9 @@ class CheckPointHarmonyEndpointClient:
         normalized["group_ids"] = [str(g.get("id") or "") for g in groups]
         normalized["group_names"] = [g.get("name") or "" for g in groups]
 
+        # Convert epoch-millisecond timestamps to ISO 8601 strings.
+        # Unparseable / near-zero values become None (serialized as JSON null)
+        # so the schema validator does not reject an invalid date-time string.
         for field in (
             "computerDeployTime", "computerLastConnection", "computerSyncedon",
             "computerAmDatDate", "computerAmLicExpirationDate", "computerFdePrebootStatusUpdatedOn",
@@ -194,8 +197,29 @@ class CheckPointHarmonyEndpointClient:
         ):
             normalized[field] = _epoch_millis_to_iso(record.get(field))
 
+        # Normalise datetime strings (or datetime objects) to ISO 8601.
+        # Unparseable values become None (JSON null) instead of being passed
+        # through as a non-ISO string that would fail schema validation.
         for field in ("enforcedModifiedOn", "deployedModifiedOn"):
             normalized[field] = _normalize_datetime_str(record.get(field))
+
+        # Normalise nested timestamp fields that the API may return in
+        # non-standard formats (epoch-millis or proprietary date strings).
+        # Each tuple is (top-level key, nested field).
+        nested_epoch_fields = [
+            ("browserExtension", "lastIocTokenArrivedTime"),
+            ("threatEmulation", "saLastUpdate"),
+            ("threatEmulation", "teLastTokenArrivalTime"),
+            ("efr", "bgLastUpdate"),
+            ("antiBot", "abLastUpdate"),
+            ("antiBot", "antibotLastTokenArrivalTime"),
+        ]
+        for parent, field in nested_epoch_fields:
+            parent_obj = normalized.get(parent)
+            if isinstance(parent_obj, dict) and field in parent_obj:
+                raw = parent_obj[field]
+                converted = _epoch_millis_to_iso(raw) or _normalize_datetime_str(raw)
+                normalized[parent] = {**parent_obj, field: converted}
 
         return normalized
 
@@ -241,26 +265,50 @@ def _epoch_millis_to_iso(value: Any) -> str | None:
 
 
 def _normalize_datetime_str(value: Any) -> str | None:
-    """Convert a datetime string to ISO 8601 format.
+    """Convert a datetime value to an ISO 8601 string.
 
-    Supports ``YYYY-MM-DD HH:MM:SS.fff`` and ``YYYY-MM-DD HH:MM:SS``
-    input formats. Assumes UTC when no timezone is present.
+    Accepts ``datetime`` objects and strings in common forms including
+    ISO 8601 (``YYYY-MM-DDTHH:MM:SS[.ffffff][+HH:MM|Z]``) and the
+    space-separated ``YYYY-MM-DD HH:MM:SS[.fff][+HH:MM]`` produced by
+    ``str(datetime)``. Naive datetimes are assumed to be UTC.
 
     Args:
-        value: Datetime string to normalise, or ``None``.
+        value: Datetime string, ``datetime`` object, or ``None``.
 
     Returns:
-        ISO 8601 formatted UTC datetime string, the original string if
-        parsing fails, or ``None`` if the input is falsy.
+        ISO 8601 formatted datetime string, or ``None`` if the input is
+        missing or unparseable (so it cannot fail downstream schema
+        validation by passing through a non-ISO value).
     """
-    if not value or not isinstance(value, str):
+    if value is None or value == "":
         return None
+
+    if isinstance(value, datetime):
+        dt = value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+        return dt.isoformat()
+
+    if not isinstance(value, str):
+        return None
+
+    text = value.strip()
+    if not text:
+        return None
+
+    # Normalise trailing 'Z' to '+00:00' so fromisoformat can parse it.
+    iso_candidate = text[:-1] + "+00:00" if text.endswith("Z") else text
     try:
-        dt = datetime.strptime(value.strip(), "%Y-%m-%d %H:%M:%S.%f")
-        return dt.replace(tzinfo=timezone.utc).isoformat()
+        dt = datetime.fromisoformat(iso_candidate)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.isoformat()
     except ValueError:
+        pass
+
+    for fmt in ("%Y-%m-%d %H:%M:%S.%f", "%Y-%m-%d %H:%M:%S"):
         try:
-            dt = datetime.strptime(value.strip(), "%Y-%m-%d %H:%M:%S")
+            dt = datetime.strptime(text, fmt)
             return dt.replace(tzinfo=timezone.utc).isoformat()
         except ValueError:
-            return value
+            continue
+
+    return None

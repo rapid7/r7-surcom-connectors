@@ -8,7 +8,7 @@ description: A user group from SolarWinds IT Asset Management.
 x-samos-extends-types:
   - type-name: UserGroup
 
-$ref: https://api.samanage.com#/components/schemas/Group
+$ref: https://example.samanage.com#/components/schemas/Group
 
 # Key: d_id (string conversion of integer id). Used by SolarWindsITAMUser.group_ids for cross-reference.
 x-samos-keys:

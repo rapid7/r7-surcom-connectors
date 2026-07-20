@@ -283,7 +283,7 @@ properties:
 
   monitorSize1:
     title: Monitor 1 Size (inches)
-    type: integer
+    type: number
 
   monitorNativeResolution1:
     title: Monitor 1 Native Resolution
@@ -311,7 +311,7 @@ properties:
 
   monitorSize2:
     title: Monitor 2 Size (inches)
-    type: integer
+    type: number
 
   monitorNativeResolution2:
     title: Monitor 2 Native Resolution

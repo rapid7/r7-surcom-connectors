@@ -11,4 +11,5 @@ from typing import Any, Optional, TypedDict  # noqa: F401
 
 Settings = TypedDict('Settings', {
     'admin_api_key': str,
+    'lookback_days': int,
 })

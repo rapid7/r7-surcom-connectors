@@ -4,7 +4,7 @@ Connector for OpenAI
 
 # __Overview__
 
-OpenAI provides advanced AI models and services including ChatGPT. This connector synchronizes organization users from OpenAI into the Rapid7 Platform, enabling security administrators to track user access to Generative and LLM AI Models.
+OpenAI provides advanced AI models and services including ChatGPT. This connector synchronizes organization users and API usage data from OpenAI into the Rapid7 Platform, enabling security administrators to track user access to Generative and LLM AI Models and monitor API consumption.
 
 # __Documentation__
 

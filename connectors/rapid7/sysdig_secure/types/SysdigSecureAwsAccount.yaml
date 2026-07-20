@@ -1,0 +1,69 @@
+x-samos-type-name: SysdigSecureAwsAccount
+x-samos-namespace: sysdig.secure
+title: Sysdig Secure AWS Account
+description: An AWS account monitored by Sysdig Secure.
+x-samos-detail-prefer-type-title: true
+# Schema entity: AWSAccount. Fields confirmed from refdocs/sysdig_schema.yaml.
+# Extends the unified CloudAccount type.
+x-samos-extends-types:
+  - type-name: CloudAccount
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: lastModified
+
+x-samos-detail:
+  - name: name
+  - name: lastModified
+
+x-samos-derived-properties:
+  d_account_id:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'id'
+    x-samos-fulfills:
+      type-name: CloudAccount
+      property-name: account_id
+
+  d_provider:
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: 'AWS'
+    x-samos-ref-types:
+      - type-name: SysdigSecureCloudProvider
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.cloud-component
+      property-name: provider
+
+properties:
+  name:
+    type: string
+    title: Account Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  id:
+    type: string
+    title: Account ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+    x-samos-correlation:
+      correlation-key: CloudAccount.id
+      correlation-type: CloudAccount
+      priority: 5
+  lastModified:
+    type: string
+    title: Last Modified
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen

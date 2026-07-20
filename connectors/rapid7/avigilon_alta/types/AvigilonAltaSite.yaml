@@ -1,0 +1,192 @@
+x-samos-type-name: AvigilonAltaSite
+x-samos-namespace: avigilon.alta
+title: Avigilon Alta Site
+description: A physical site (building/location) managed by Avigilon Alta (Openpath) Access.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Location
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_site_id
+  - id
+required:
+  - id
+x-samos-table:
+  - name: name
+  - name: city
+  - name: state
+  - name: country
+  - name: userCount
+  - name: zoneCount
+
+x-samos-detail:
+  - name: name
+  - name: opal
+  - name: address
+  - name: address2
+  - name: city
+  - name: state
+  - name: zip
+  - name: country
+  - name: phone
+  - name: zoneCount
+  - name: language
+  - name: userCount
+  - name: contactName
+  - name: contactPhone
+  - name: boundary
+  - name: createdAt
+  - name: updatedAt
+
+x-samos-derived-properties:
+  d_site_id:
+    # API returns integer id; unified Location.id is string.
+    title: Site ID
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Location
+      property-name: id
+
+  d_address:
+    title: Address Lines
+    type: array
+    syntax: jmespath
+    value: '[address, address2][?@]'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: address
+
+properties:
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+  opal:
+    title: Opal ID
+    type: string
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Location.name
+      correlation-type: Location
+      priority: 5
+  address:
+    title: Address
+    type: string
+  address2:
+    title: Address Line 2
+    type: string
+  city:
+    title: City
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: city
+  state:
+    title: State
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: state
+  zip:
+    title: Zip Code
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: postal_code
+  country:
+    title: Country
+    type: string
+    x-samos-ref-types:
+      - type-name: NoeticEnumCountry
+        key-name: alpha_3_id # Changed from alpha_2_id
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: country
+  phone:
+    title: Phone
+    type: string
+  zoneCount:
+    title: Zone Count
+    type: integer
+  language:
+    title: Language
+    type: string
+  userCount:
+    title: User Count
+    type: integer
+  contactName:
+    title: Contact Name
+    type: string
+  contactPhone:
+    title: Contact Phone
+    type: string
+  boundary:
+    title: Boundary
+    type: string
+  resources:
+    title: Resources
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: Resource ID
+          type: integer
+        name:
+          title: Resource Name
+          type: string
+        contentType:
+          title: Resource Content Type
+          type: string
+        fileName:
+          title: Resource File Name
+          type: string
+        s3Data:
+          title: Resource S3 Data
+          type: object
+          properties:
+            bucket:
+              title: S3 Bucket
+              type: string
+            key:
+              title: S3 Key
+              type: string
+        s3Bucket:
+          title: S3 Bucket
+          type: string
+        url:
+          title: Resource URL
+          type: string
+        createdAt:
+          title: Resource Created At
+          type: string
+          format: date-time
+        updatedAt:
+          title: Resource Updated At
+          type: string
+          format: date-time
+  sosFacilityCampus:
+    title: SOS Facility Campus
+    type: object
+  createdAt:
+    title: Created At
+    type: string
+    format: date-time
+  updatedAt:
+    title: Updated At
+    type: string
+    format: date-time

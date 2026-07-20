@@ -23,7 +23,7 @@
   "paths": {
     "/api/sam/estate/v1/computers/bulk-update": {
       "patch": {
-        "tags": ["Computers"],
+        "tags": ["Computer bulk status update"],
         "summary": "Bulk update status of computers",
         "description": "Allows updating the status of multiple computers in bulk.",
         "operationId": "BulkUpdateComputerStatus",
@@ -505,7 +505,7 @@
         ]
       }
     },
-    "/api/sam/estate/v1/computers-application-usage/summaries": {
+    "/api/sam/estate/v1/computers-application-usage/summary": {
       "get": {
         "tags": ["Computer applications"],
         "summary": "Get application usage summaries",
@@ -1778,7 +1778,7 @@
         "tags": ["Computers"],
         "summary": "Update computer attributes",
         "description": "Modifies a computer by adding or updating the specified attributes.",
-        "operationId": "updateComputer",
+        "operationId": "replaceComputer",
         "parameters": [
           {
             "name": "id",
@@ -1929,7 +1929,7 @@
         "tags": ["Computers"],
         "summary": "Update Disable auto editing settings for a computer",
         "description": "Modifies Disable auto editing settings for the given computer.",
-        "operationId": "updateComputer",
+        "operationId": "updateComputerAutoEditing",
         "parameters": [
           {
             "name": "id",
@@ -1979,7 +1979,7 @@
         "tags": ["Computers"],
         "summary": "Update Organization for a computer",
         "description": "Modifies Organization for the given computer.",
-        "operationId": "updateComputer",
+        "operationId": "updateComputerOrganization",
         "parameters": [
           {
             "name": "id",
@@ -2276,7 +2276,7 @@
             "description": "Target status value for the bulk update."
           }
         },
-        "required": ["Status"]
+        "required": ["status"]
       },
       "BulkUpdateComputerStatusResponse": {
         "type": "object",
@@ -2295,7 +2295,7 @@
       "ComputerStatusUpdateError": {
         "type": "object",
         "properties": {
-          "Message": { "type": "string" }
+          "message": { "type": "string" }
         }
       },
       "PaginationResponse": {
@@ -4212,12 +4212,6 @@
                 "nullable": true,
                 "example": true
               },
-              "hypervisorName": {
-                "type": "string",
-                "description": "The hypervisor name of the computer.",
-                "nullable": true,
-                "example": "VMware Virtual Platform"
-              },
               "isVdi": {
                 "type": "boolean",
                 "description": "```true``` if the computer uses virtual desktop infrastructure; otherwise, ```false```.",
@@ -4353,6 +4347,64 @@
                 "format": "int32",
                 "nullable": true,
                 "example": 8
+              },
+              "physicalMemory": {
+                "type": "integer",
+                "description": "The physical memory (RAM) of the computer in megabytes.",
+                "format": "int32",
+                "nullable": true,
+                "example": 16384
+              },
+              "processorType": {
+                "type": "string",
+                "description": "The type of processor installed in the computer.",
+                "nullable": true,
+                "example": "11th Gen Intel Core i7-1185G7 @ 3.00GHz"
+              },
+              "coresPerProcessor": {
+                "type": "integer",
+                "description": "The number of cores per processor in the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 4
+              },
+              "logicalProcessorCount": {
+                "type": "integer",
+                "description": "The number of logical processors in the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 16
+              },
+              "processorSpeed": {
+                "type": "integer",
+                "description": "The speed of the processor in the computer in MHz.",
+                "format": "int32",
+                "nullable": true,
+                "example": 3000
+              },
+              "hypervisorName": {
+                "type": "string",
+                "description": "The name of the hypervisor running on the computer.",
+                "nullable": true,
+                "example": "VMware Virtual Platform"
+              },
+              "hostComputerName": {
+                "type": "string",
+                "description": "The host name of the host computer for a virtual machine.",
+                "nullable": true,
+                "example": "ESX-HOST-01"
+              },
+              "dccName": {
+                "type": "string",
+                "description": "The name of the data collection center (DCC) for the computer.",
+                "nullable": true,
+                "example": "DataCenter-EU"
+              },
+              "lastLoggedOnUser": {
+                "type": "string",
+                "description": "The username of the last logged on user of the computer.",
+                "nullable": true,
+                "example": "jsmith"
               }
             }
           }
@@ -4496,6 +4548,76 @@
                 "format": "int32",
                 "nullable": true,
                 "example": 8
+              },
+              "architecture": {
+                "type": "string",
+                "description": "The architecture of the computer.",
+                "nullable": true,
+                "example": "64-bit"
+              },
+              "physicalMemory": {
+                "type": "integer",
+                "description": "The physical memory (RAM) of the computer in megabytes.",
+                "format": "int32",
+                "nullable": true,
+                "example": 16384
+              },
+              "processorType": {
+                "type": "string",
+                "description": "The type of processor installed in the computer.",
+                "nullable": true,
+                "example": "11th Gen Intel Core i7-1185G7 @ 3.00GHz"
+              },
+              "coresPerProcessor": {
+                "type": "integer",
+                "description": "The number of cores per processor in the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 4
+              },
+              "logicalProcessorCount": {
+                "type": "integer",
+                "description": "The number of logical processors in the computer.",
+                "format": "int32",
+                "nullable": true,
+                "example": 16
+              },
+              "processorSpeed": {
+                "type": "integer",
+                "description": "The speed of the processor in the computer in MHz.",
+                "format": "int32",
+                "nullable": true,
+                "example": 3000
+              },
+              "hypervisorName": {
+                "type": "string",
+                "description": "The name of the hypervisor running on the computer.",
+                "nullable": true,
+                "example": "VMware Virtual Platform"
+              },
+              "hostComputerName": {
+                "type": "string",
+                "description": "The host name of the host computer for a virtual machine.",
+                "nullable": true,
+                "example": "ESX-HOST-01"
+              },
+              "dccName": {
+                "type": "string",
+                "description": "The name of the data collection center (DCC) for the computer.",
+                "nullable": true,
+                "example": "DataCenter-EU"
+              },
+              "biosVersion": {
+                "type": "string",
+                "description": "The BIOS version of the computer.",
+                "nullable": true,
+                "example": "1.26.0"
+              },
+              "lastLoggedOnUser": {
+                "type": "string",
+                "description": "The username of the last logged on user of the computer.",
+                "nullable": true,
+                "example": "jsmith"
               }
             }
           }
@@ -4536,7 +4658,7 @@
             "nullable": true,
             "example": "2024/03/63729P"
           },
-          "statusCode": {
+          "status": {
             "type": "string",
             "description": "The status of the computer.",
             "nullable": true,
@@ -4728,11 +4850,11 @@
       "ComputerUpdate": {
         "description": "The update to be applied to all IDs.",
         "type": "object",
-        "required": ["status"],
         "properties": {
           "status": {
             "description": "Status of the computer.",
             "type": "string",
+            "nullable": true,
             "example": "Active"
           }
         }

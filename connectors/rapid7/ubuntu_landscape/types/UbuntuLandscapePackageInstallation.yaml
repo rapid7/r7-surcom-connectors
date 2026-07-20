@@ -1,0 +1,52 @@
+x-samos-type-name: UbuntuLandscapePackageInstallation
+x-samos-namespace: ubuntu.landscape
+title: Ubuntu Landscape Package Installation
+description: >-
+  A cross-reference linking a managed computer to an installed software package
+  in Ubuntu Landscape.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: SoftwareInstallation
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: x_computer_id
+  - name: x_package_id
+
+x-samos-detail:
+  - name: x_computer_id
+  - name: x_package_id
+
+x-samos-derived-properties:
+  d_id:
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: expression
+    value: '{x_computer_id}_{x_package_id}'
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: id
+
+properties:
+  x_computer_id:
+    title: Computer
+    type: string
+    x-samos-ref-types:
+      - type-name: UbuntuLandscapeComputer
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: asset_ref
+
+  x_package_id:
+    title: Software Package
+    type: string
+    x-samos-ref-types:
+      - type-name: UbuntuLandscapePackage
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: software_ref

@@ -634,7 +634,7 @@
       },
       "UserAccount": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "properties": {
           "id": {
             "type": "string",

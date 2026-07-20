@@ -1,0 +1,266 @@
+x-samos-type-name: BlueCatMicetroIPAMRecord
+x-samos-namespace: bluecat.micetro
+title: BlueCat Micetro Record IPAM
+description: An individual IP address allocation tracked by BlueCat Micetro
+  IPAM, including its assignment state, associated DNS hosts, and discovery data.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: IpAddress
+x-samos-global-zone: true
+
+$ref: https://examp1/mmws/api/swagger.json#/components/schemas/IPAMRecord
+
+x-samos-keys:
+  - addrRef
+
+required:
+  - addrRef
+
+x-samos-table:
+  - name: address
+  - name: state
+  - name: claimed
+  - name: device
+  - name: interface
+  - name: lastSeenDate
+
+x-samos-detail:
+  - name: address
+  - name: state
+  - name: claimed
+  - name: device
+  - name: interface
+  - name: x_rangeRef
+  - name: discoveryType
+  - name: ptrStatus
+  - name: lastKnownClientIdentifier
+  - name: usage
+  - name: cloudDeviceInfo
+  - name: customProperties
+  - name: dnsHosts
+  - name: extraneousPTR
+  - name: lastSeenDate
+  - name: lastDiscoveryDate
+
+x-samos-derived-properties:
+  d_version:
+    # This property is derived from the address and is used to fulfill the version property of the IpAddress type.
+    title: IP Version
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: "contains(address, ':') && 'v6' || 'v4'"
+    x-samos-fulfills:
+      type-name: IpAddress
+      property-name: version
+
+  d_active:
+    # This property is derived from the state and is used to fulfill the active property of the core.component type.
+    type: boolean
+    x-samos-hidden: true
+    syntax: jmespath
+    value: "state == 'Assigned' || state == 'Claimed'"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_name:
+    # This property is derived from the address and is used to fulfill the name property of the core.named-object type.
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'address'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_description:
+    # This property is derived from the device and is used to fulfill the description property of the core.named-object type.
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'device'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+properties:
+  addrRef:
+    title: Address Reference
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  x_rangeRef:
+    title: Parent Range
+    type: string
+    x-samos-ref-types:
+      - key-name: ref
+        type-name: BlueCatMicetroRange
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+  address:
+    title: IP Address
+    type: string
+    format: ip-addr
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: IpAddress
+      property-name: value
+    x-samos-correlation:
+      correlation-key: IpAddress.value
+      correlation-type: IpAddress
+      priority: 4
+
+  state:
+    title: State
+    type: string
+    description: Current allocation state of the IP address.
+    x-samos-ref-types:
+      - key-name: id
+        type-name: BlueCatMicetroStateEnum
+
+  claimed:
+    title: Claimed?
+    type: boolean
+    description: True if this address has the Claimed flag set.
+
+  device:
+    title: Device
+    type: string
+    description: The device associated with this IP address record.
+    x-samos-ref-types:
+      - key-name: name
+        type-name: BlueCatMicetroDevice
+    x-samos-immutable: true
+
+  interface:
+    title: Interface
+    type: string
+    description: The interface associated with this IP address record.
+
+  discoveryType:
+    title: Discovery Type
+    type: string
+    description: How this IP address was discovered.
+
+  lastSeenDate:
+    title: Last Seen
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  lastDiscoveryDate:
+    title: Last Discovery
+    type: string
+    format: date-time
+
+  lastKnownClientIdentifier:
+    title: MAC Address
+    type: string
+    description: MAC address from the most recent IP address discovery.
+  customProperties:
+    title: Custom Properties
+    type: object
+    description: User-defined custom properties set on this IPAM record.
+
+  dnsHosts:
+    title: DNS Hosts
+    type: array
+    description: DNS host records associated with this IP address.
+    items:
+      type: object
+      properties:
+        dnsRecord:
+          title: DNS Record
+          type: object
+          properties:
+            ref:
+              title: DNS Record Reference
+              type: string
+              x-samos-ref-types:
+                - key-name: ref
+                  type-name: BlueCatMicetroARecord
+                - key-name: ref
+                  type-name: BlueCatMicetroAAAARecord
+                - key-name: ref
+                  type-name: BlueCatMicetroCNAMERecord
+        ptrStatus:
+          title: PTR Status
+          type: string
+        relatedRecords:
+          title: Related Records
+          type: array
+          items:
+            type: object
+
+  dhcpReservations:
+    title: DHCP Reservations
+    type: array
+    description: DHCP reservations associated with this IP address.
+    x-samos-hidden: true
+    items:
+      type: object
+
+  dhcpLeases:
+    title: DHCP Leases
+    type: array
+    description: Active DHCP leases for this IP address.
+    x-samos-hidden: true
+    items:
+      type: object
+
+  ptrStatus:
+    title: PTR Status
+    type: string
+    description: Status of the PTR (reverse DNS) record for this address.
+
+  extraneousPTR:
+    title: Extraneous PTR?
+    type: boolean
+    description: True if there is an extraneous PTR record for this address.
+
+  holdInfo:
+    title: Hold Info
+    type: object
+    description: Hold expiry and user details when the address is in Hold state.
+    x-samos-hidden: true
+    properties:
+      expiryTime:
+        title: Expiry Time
+        type: string
+        format: date-time
+      username:
+        title: Username
+        type: string
+
+  usage:
+    title: Usage
+    type: integer
+    description: Usage indicator for this IP address.
+
+  cloudDeviceInfo:
+    title: Cloud Device Info
+    type: object
+    description: Cloud platform details for this IP address, if applicable.
+    properties:
+      state:
+        title: Cloud State
+        type: string
+      platform:
+        title: Platform
+        type: string
+      privateDNSName:
+        title: Private DNS Name
+        type: string
+      publicIPAddress:
+        title: Public IP Address
+        type: string

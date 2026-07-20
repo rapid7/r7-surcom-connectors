@@ -224,6 +224,7 @@ properties:
               macaddress:
                 title: MAC Addresses
                 type: string
+                format: mac-addr
                 x-samos-fulfills:
                   type-name: Machine
                   property-name: mac_addresses
@@ -257,10 +258,11 @@ properties:
           type: string
 
       macV:
+        # Note: macOS version can sometimes include array of strings and nested arrays,
+        # so we use json type to accommodate all formats
         title: macOS Version
-        type: array
-        items:
-          type: string
+        example: ['10.15.7', ['', '']]
+        type: json
 
       timezones:
         title: Timezones

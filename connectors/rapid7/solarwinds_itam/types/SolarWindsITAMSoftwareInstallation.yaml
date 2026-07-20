@@ -4,11 +4,8 @@ title: SolarWinds ITAM Software Installation
 description: >-
   A cross-reference linking a hardware device to an installed software package in SolarWinds IT Asset Management.
 
-# x-samos-extends-types:
-#   - type-name: SoftwareInstall  # this still in development phase, once the base type is ready we can extend and test
-
-# Hidden junction type — used to bridge Hardware ↔ Software with metadata.
-x-samos-hidden: true
+x-samos-extends-types:
+  - type-name: SoftwareInstallation
 
 x-samos-keys:
   - d_id
@@ -39,23 +36,30 @@ x-samos-derived-properties:
     type: string
     syntax: jmespath
     value: "join('_', [x_software_id, x_hardware_id])"
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: id
 
 properties:
   x_hardware_id:
     title: Hardware
     type: string
-    x-samos-immutable: true
     x-samos-ref-types:
       - type-name: SolarWindsITAMHardware
         key-name: d_id
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: asset_ref
 
   x_software_id:
     title: Software
     type: string
-    x-samos-immutable: true
     x-samos-ref-types:
       - type-name: SolarWindsITAMSoftware
         key-name: d_id
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: software_ref
 
   software_name:
     title: Software Name
@@ -83,9 +87,15 @@ properties:
     type: string
     format: date-time
     nullable: true
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: last_seen
 
   first_detected:
     title: First Detected
     type: string
     format: date-time
     nullable: true
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: first_seen

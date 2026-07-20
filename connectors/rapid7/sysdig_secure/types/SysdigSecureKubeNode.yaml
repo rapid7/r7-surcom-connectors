@@ -1,0 +1,161 @@
+x-samos-type-name: SysdigSecureKubeNode
+x-samos-namespace: sysdig.secure
+title: Sysdig Secure Kubernetes Node
+description: >-
+  A Kubernetes node monitored by Sysdig Secure. All fields confirmed from
+  refdocs/sysdig_schema.yaml.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - name
+
+x-samos-table:
+  - name: name
+  - name: clusterName
+  - name: operatingSystem
+  - name: version
+  - name: isMaster
+  - name: platform
+  - name: lastModified
+
+x-samos-detail:
+  - name: name
+  - name: category
+  - name: clusterName
+  - name: distribution
+  - name: externalDNS
+  - name: isMaster
+  - name: operatingSystem
+  - name: osImage
+  - name: platform
+  - name: type
+  - name: version
+  - name: lastModified
+
+x-samos-derived-properties:
+  d_qualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'name && contains(name, `.`) && name || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_unqualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'name && !contains(name, `.`) && name || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_name:
+    # The "name" is immutable in properties,
+    # we want to fulfill core.named-object:name which is not immutable,
+    # so we derive a property to fulfill it.
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'name'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_hostnames:
+    # The "name" property in this type actually contains the hostname of the node,
+    # so we derive a property with the same value to fulfill Machine:hostnames.
+    # because the "name" property already fulfills core.component:id.
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+    syntax: jmespath
+    value: '[name][?@]'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+properties:
+  name:
+    type: string
+    title: Node Name
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  category:
+    type: string
+    title: Category
+
+  clusterName:
+    type: string
+    title: Cluster Name
+    x-samos-ref-types:
+      - key-name: name
+        type-name: SysdigSecureKubeCluster
+
+  distribution:
+    type: string
+    title: Distribution
+
+  externalDNS:
+    type: string
+    title: External DNS
+
+  isMaster:
+    type: boolean
+    title: Master?
+
+  operatingSystem:
+    type: string
+    title: Operating System
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  osImage:
+    type: string
+    title: OS Image
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_product
+
+  platform:
+    type: string
+    title: Platform
+
+  type:
+    type: string
+    title: Node Type
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  version:
+    type: string
+    title: Kubernetes Version
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+
+  lastModified:
+    type: string
+    title: Last Modified
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+x-samos-virtual:
+  exposures:
+    type-name: Exposure
+    cypher-pattern: >
+      <-[:`e:Finding:applies_to`]-(:SysdigSecureFinding)-[:`e:Finding:vulnerability`]->(e:SysdigSecureVulnerability)

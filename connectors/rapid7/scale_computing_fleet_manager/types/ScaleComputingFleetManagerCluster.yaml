@@ -1,0 +1,283 @@
+x-samos-type-name: ScaleComputingFleetManagerCluster
+x-samos-namespace: scale.computing.fleet.manager
+title: Scale Computing Fleet Manager Cluster
+description: A Scale Computing HyperCore cluster managed by SC//Fleet Manager
+
+x-samos-extends-types:
+  - type-name: core.cluster
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+$ref: https://api.scalecomputing.com/api/v2/openapi.json#/components/schemas/ClusterDto
+
+x-samos-table:
+  - name: name
+  - name: healthState
+  - name: onlineStatus
+  - name: nodeCount
+  - name: vmRunning
+  - name: vmTotal
+  - name: x_tags
+  - name: storagePercent
+  - name: memoryPercent
+  - name: cpuPercent
+  - name: version
+  - name: updatesAvailable
+  - name: lastCheckin
+
+x-samos-detail:
+  - name: name
+  - name: healthState
+  - name: healthScore
+  - name: onlineStatus
+  - name: nodeCount
+  - name: leaderNodeLanIp
+  - name: vmRunning
+  - name: vmTotal
+  - name: x_tags
+  - name: storagePercent
+  - name: memoryPercent
+  - name: cpuPercent
+  - name: version
+  - name: updatesAvailable
+  - name: updatesAvailableOptions
+  - name: updatesStatus
+  - name: lastCheckin
+  - name: createdAt
+  - name: updatedAt
+
+x-samos-derived-properties:
+  # deletedAt is null for active clusters; non-null means soft-deleted
+  d_active:
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: 'deletedAt == null'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  # M1051 Update Software: cluster is online and has no pending firmware updates
+  d_mitigations:
+    title: Mitigations
+    type: array
+    syntax: jmespath
+    value: >-
+      [
+        onlineStatus == `online` && updatesAvailable == `false` && `M1051`
+      ] | [?@]
+    x-samos-hidden: true
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Mitigation
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  id:
+    type: string
+    format: uuid
+    title: ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  version:
+    type: string
+    nullable: true
+    title: HyperCore Version
+    description: SC//HyperCore firmware version string, e.g. "9.5.10.221215".
+
+  healthState:
+    type: string
+    nullable: true
+    title: Health
+    description: Cluster health summary, e.g. "healthy" or "warning".
+
+  healthScore:
+    type: number
+    nullable: true
+    title: Health Score
+
+  onlineStatus:
+    type: string
+    nullable: true
+    title: Online Status
+    description: Whether the cluster is currently reachable by Fleet Manager.
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: operational_status
+    x-samos-ref-types:
+      - type-name: ScaleComputingFleetManagerEnumOnlineStatus
+        key-name: id
+
+  nodeCount:
+    type: number
+    nullable: true
+    title: Nodes
+    description: Number of physical server nodes in this cluster.
+
+  vmRunning:
+    type: number
+    nullable: true
+    title: VMs Running
+
+  vmTotal:
+    type: number
+    nullable: true
+    title: VMs Total
+
+  leaderNodeLanIp:
+    type: string
+    nullable: true
+    title: Leader Node LAN IP
+    description: LAN IP of the currently elected leader node. Not a cluster-level IP — for display only.
+
+  storagePercent:
+    type: number
+    nullable: true
+    title: Storage Usage (%)
+
+  memoryPercent:
+    type: number
+    nullable: true
+    title: Memory Usage (%)
+
+  cpuPercent:
+    type: number
+    nullable: true
+    title: CPU Usage (%)
+
+  updatesAvailable:
+    type: boolean
+    nullable: true
+    title: Updates Available?
+
+  updatesAvailableOptions:
+    type: array
+    nullable: true
+    title: Available Updates
+    items:
+      type: object
+      properties:
+        uuid:
+          type: string
+          title: Version UUID
+        description:
+          type: string
+          title: Description
+        buildID:
+          type: number
+          title: Build ID
+        majorVersion:
+          type: number
+          title: Major Version
+        minorVersion:
+          type: number
+          title: Minor Version
+        revision:
+          type: number
+          title: Revision
+        changeLog:
+          type: string
+          title: Change Log
+        timestamp:
+          type: number
+          title: Timestamp
+
+  updatesStatus:
+    type: object
+    nullable: true
+    title: Update Status
+    properties:
+      isUpdating:
+        type: boolean
+        title: Is Updating?
+      state:
+        type: string
+        title: State
+      message:
+        type: string
+        title: Message
+      percent:
+        type: number
+        title: Percent Complete
+
+  tags:
+    type: string
+    nullable: true
+    x-samos-hidden: true
+    title: Tags
+    description: Comma-separated tags assigned to this cluster in Fleet Manager.
+
+  x_tags:
+    type: array
+    title: Tags
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: ScaleComputingFleetManagerSourceTag
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+
+  organizationId:
+    type: string
+    nullable: true
+    title: Organization ID
+    x-samos-hidden: true
+
+  lastCheckin:
+    type: string
+    format: date-time
+    nullable: true
+    title: Last Check-in
+    description: Last time this cluster reported to Fleet Manager.
+
+  deletedAt:
+    type: string
+    format: date-time
+    nullable: true
+    title: Deleted At
+    description: Soft-delete timestamp. Null when the cluster is active.
+    x-samos-hidden: true
+
+  createdAt:
+    type: string
+    format: date-time
+    title: Created At
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  updatedAt:
+    type: string
+    format: date-time
+    title: Updated At
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+x-samos-virtual:
+  members:
+    type-name: ScaleComputingFleetManagerVM
+    cypher-pattern: >
+      <-[:`e:ScaleComputingFleetManagerVM:clusterId`]-(:ScaleComputingFleetManagerVM)

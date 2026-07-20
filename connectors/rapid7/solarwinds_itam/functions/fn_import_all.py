@@ -120,10 +120,6 @@ def _import_endpoint(
                     inst for inst in installations
                     if inst["x_software_id"] in global_software_ids
                 ]
-                # Keep the ref-array on hardware for backward compatibility.
-                record["x_installed_software_ids"] = [
-                    inst["x_software_id"] for inst in valid_installations
-                ]
                 # Yield InstalledSoftware junction records.
                 for inst in valid_installations:
                     yield SolarWindsITAMSoftwareInstallation(inst)
@@ -142,7 +138,8 @@ def _import_endpoint(
         if total and record_count >= total:
             break
 
-        # Use the effective page size reported by the API (X-Per-Page header) to detect the last page.
+        # Use the effective page size reported by the
+        # API (X-Per-Page header) to detect the last page.
         effective_page_size = int(response.headers.get("X-Per-Page", DEFAULT_PAGE_SIZE))
         if len(records) < effective_page_size:
             break

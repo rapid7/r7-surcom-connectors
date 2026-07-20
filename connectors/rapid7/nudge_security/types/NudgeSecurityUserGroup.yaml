@@ -1,0 +1,120 @@
+x-samos-type-name: NudgeSecurityUserGroup
+x-samos-namespace: nudge.security
+title: Nudge Security User Group
+description: A user group discovered by Nudge Security.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: UserGroup
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id # used for references in other types
+  - id
+  - primary_email
+
+x-samos-table:
+  - name: name
+  - name: external_id
+  - name: risk_level
+  - name: creation_date
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: external_id
+  - name: risk_level
+  - name: risk_level_value
+  - name: user_group_metadata
+  - name: primary_email
+  - name: deleted_at
+  - name: creation_date
+
+x-samos-derived-properties:
+  d_id:
+    # The "id" property is an integer; derive a string to fulfill UserGroup.id.
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+
+  d_email:
+    # Promote the "name" property into the standard email for references as it doesnt fullfill when immutable.
+    type: string
+    title: Email
+    syntax: jmespath
+    value: name
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: UserGroup.name
+      correlation-type: UserGroup
+      priority: 3
+
+properties:
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+  name:
+    title: Name
+    type: string
+  primary_email:
+    title: Primary Email
+    type: string
+    x-samos-immutable: true
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  external_id:
+    title: External ID
+    type: string
+  risk_level:
+    title: Risk Level
+    type: string
+  risk_level_value:
+    title: Risk Level Value
+    type: integer
+  creation_date:
+    title: Creation Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date
+  deleted_at:
+    title: Deleted At
+    type: string
+    format: date-time
+  user_group_metadata:
+    title: Group Metadata
+    type: object
+    properties:
+      admin_created:
+        title: Admin Created
+        type: boolean
+      group_type:
+        title: Group Type
+        type: string
+      visibility:
+        title: Visibility
+        type: string
+      who_can_join:
+        title: Who Can Join
+        type: string
+      who_can_manage_members:
+        title: Who Can Manage Members
+        type: string
+      who_can_view_messages:
+        title: Who Can View Messages
+        type: string

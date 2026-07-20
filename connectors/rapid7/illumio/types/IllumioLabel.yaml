@@ -1,0 +1,115 @@
+x-samos-type-name: IllumioLabel
+x-samos-namespace: illumio
+title: Illumio Label
+description: A label used in the Illumio PCE to classify workloads by role, application, environment, or location.
+x-samos-detail-prefer-type-title: true
+x-samos-global-zone: true
+x-samos-extends-types:
+  - type-name: SourceTag
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: d_name
+  - name: key
+  - name: value
+  - name: created_at
+  - name: updated_at
+
+x-samos-detail:
+  - name: key
+  - name: value
+  - name: deleted
+  - name: external_data_set
+  - name: external_data_reference
+  - name: caps
+  - name: created_at
+  - name: updated_at
+
+x-samos-derived-properties:
+  # Compose `key: value` into a display name for core.named-object / name
+  d_name:
+    title: Name
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: '{key}: {value}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  id:
+    title: ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    type: string
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: id
+
+  href:
+    title: Href
+    type: string
+    x-samos-hidden: true
+
+  key:
+    title: Key
+    type: string
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: key
+
+  value:
+    title: Value
+    type: string
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: value
+
+  deleted:
+    title: Deleted?
+    type: boolean
+
+  external_data_set:
+    title: External Data Set
+    type: string
+
+  external_data_reference:
+    title: External Data Reference
+    type: string
+
+  caps:
+    title: Capabilities
+    type: array
+    items:
+      type: string
+
+  created_at:
+    title: Created At
+    type: string
+    format: date-time
+
+  updated_at:
+    title: Updated At
+    type: string
+    format: date-time
+
+  created_by:
+    title: Created By
+    type: object
+    x-samos-hidden: true
+    properties:
+      href:
+        title: Creator Href
+        type: string
+
+  updated_by:
+    title: Updated By
+    type: object
+    x-samos-hidden: true
+    properties:
+      href:
+        title: Updater Href
+        type: string

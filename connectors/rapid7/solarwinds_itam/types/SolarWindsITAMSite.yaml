@@ -6,7 +6,7 @@ description: An organizational site or location from SolarWinds IT Asset Managem
 x-samos-extends-types:
   - type-name: Location
 
-$ref: https://api.samanage.com#/components/schemas/Site
+$ref: https://example.samanage.com#/components/schemas/Site
 
 x-samos-keys:
   - d_id

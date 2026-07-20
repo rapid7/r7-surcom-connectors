@@ -1,0 +1,74 @@
+x-samos-type-name: SuseManagerOrganization
+x-samos-namespace: suse.manager
+title: SUSE Manager Organization
+description: An organization in a managed Linux system in SUSE Manager
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Organization
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: active_users
+  - name: systems
+  - name: system_groups
+  - name: trusts
+
+x-samos-detail:
+  - name: name
+  - name: active_users
+  - name: systems
+  - name: system_groups
+  - name: trusts
+  - name: configuration_channels
+  - name: kickstart_profiles
+  - name: activation_keys
+  - name: staging_content_enabled
+
+properties:
+  system_groups:
+    type: integer
+    title: System Groups
+  active_users:
+    type: integer
+    title: Active Users
+  trusts:
+    type: integer
+    title: Trusts
+  systems:
+    type: integer
+    title: Systems
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+  configuration_channels:
+    type: integer
+    title: Configuration Channels
+  kickstart_profiles:
+    type: integer
+    title: Kickstart Profiles
+  activation_keys:
+    type: integer
+    title: Activation Keys
+  staging_content_enabled:
+    type: boolean
+    title: Staging Content Enabled?
+x-samos-virtual:
+  users:
+    cypher-pattern: >
+      <-[:`e:SuseManagerIdentity:org_id`]-(:SuseManagerIdentity)
+    type-name: SuseManagerIdentity

@@ -10,8 +10,10 @@ This file is generated from the connector.spec.yaml file, using codegen:
 from typing import Any, Optional, TypedDict  # noqa: F401
 
 Settings = TypedDict('Settings', {
-    'platform_url': str,
+    'auth_type': str,
+    'platform_url': Optional[str],
     'url': str,
     'client_id': str,
     'client_secret': str,
+    'verify_tls': bool,
 })

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "android",
+    "value": "Android",
+    "map_to": "OSFamily: Android"
+  },
+  {
+    "id": "ios",
+    "value": "Apple iOS",
+    "map_to": "OSFamily: Apple iOS"
+  },
+  {
+    "id": "chromeos",
+    "value": "ChromeOS",
+    "map_to": "OSFamily: ChromeOS"
+  }
+]

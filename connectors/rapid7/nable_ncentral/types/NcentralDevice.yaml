@@ -1,0 +1,920 @@
+x-samos-type-name: NcentralDevice
+x-samos-namespace: nable.ncentral
+title: N-central Device
+description: N-central Device
+
+# see New Type  NableNcentralDevice
+x-samos-hidden: true
+deprecated: true
+
+# Result of executing the following methods in the N-central SOAP API:
+# - deviceAssetInfoExportDevice
+# - deviceList
+# - deviceGet
+# - deviceGetStatus
+# - devicePropertyList
+#
+# Javadoc Reference:
+# https://mothership.n-able.com/dms/javadoc_ei2/com/nable/nobj/ei2/ServerEI2_PortType.html
+#
+# WSDL available in refdocs folder or from the below url:
+# https://mothership.n-able.com/dms2/services2/ServerEI2?wsdl
+# (note that the wsdl imports another wsdl at this url):
+# https://mothership.n-able.com/dms2/services2/ServerEI2?wsdl=ServerEI2.wsdl
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 4
+
+x-samos-keys:
+  - device_deviceid
+required:
+  - device_deviceid
+
+x-samos-table:
+  - name: device_longname
+  - name: device_deviceid
+  - name: operating_system
+
+x-samos-detail:
+  - name: device_deviceid
+  - name: device_longname
+  - name: device_uri
+  - name: d_mac_addresses
+
+x-samos-derived-properties:
+  d_endpoint_last_scanned:
+    x-samos-hidden: true
+    type: string
+    format: date-time
+    syntax: jmespath
+    value: 'device_status && max(device_status[].lastscantime) || null'
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_scanned
+  d_endpoint_last_seen:
+    x-samos-hidden: true
+    type: string
+    format: date-time
+    syntax: jmespath
+    value: 'device_status && max(device_status[].lastscantime) || null'
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+
+  d_hostnames:
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: '[device_longname, device_uri, device_get.discoveredfqdns]|[]|[?@]'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  x_ipAddressV4:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+    value: "asset_networkadapter[?ipaddress!=null && contains(ipaddress,'.')].ipaddress"
+    syntax: jmespath
+
+  x_ipAddressV6:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+    value: "asset_networkadapter[?ipaddress!=null && contains(ipaddress,':')].ipaddress"
+    syntax: jmespath
+  # x_operating_system:
+  #   x-samos-hidden: true
+  #   type: string
+  #   x-samos-fulfills:
+  #     type-name: Machine
+  #     property-name: operating_system
+  #   # device_osid can be "winnt" for "windows" or "macosx" for "MacOS"
+  #   # or "NOAGENT"(?), but we don't care about those
+  #   value: >-
+  #     (device_osid==`winnt` && `Windows`)
+  #     || (device_osid==`macosx` && `MacOS`)
+  #     || device_osid
+  #   syntax: jmespath
+  # x_asset_device_deviceclass:
+  #   x-samos-hidden: true
+  #   type: string
+  #   # Values can be:
+  #   #   Laptop - Windows
+  #   #   Printer
+  #   #   Servers - Windows
+  #   #   Workstations - Mac
+  #   #   Workstations - Windows
+  #   value: >-
+  #     (contains(asset_device_deviceclass,`Laptop`) && `Laptop`)
+  #     || (contains(asset_device_deviceclass,`Workstation`) && `Workstation`)
+  #     || (contains(asset_device_deviceclass,`Printer`) && `Printer`)
+  #     || (contains(asset_device_deviceclass,`Server`) && `Server`)
+  #     || asset_device_deviceclass
+  #   syntax: jmespath
+  #   x-samos-fulfills:
+  #     type-name: core.managed.asset
+  #     property-name: asset_type
+  x_cpu_count:
+    x-samos-hidden: true
+    type: integer
+    syntax: jmespath
+    value: 'asset_processor_numberofcpus.to_number(@)'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: cpus
+
+  d_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jsonpath
+    value: $.device_longname.`split(., 0, 1)`
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 4
+
+  d_mac_addr:
+    type: array
+    value: 'asset_networkadapter[].macaddress'
+    syntax: jmespath
+    items:
+      type: string
+      format: mac-addr
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+    x-samos-hidden: true
+
+  d_mac_addresses:
+    title: MAC Addresses
+    type: array
+    syntax: jmespath
+    value: 'asset_networkadapter[*].macaddress | [?@]'
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+
+  d_ips:
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: 'asset_networkadapter[*].ipaddress | [?@]'
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  d_mitigations:
+    title: Mitigations
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Mitigation
+          key-name: id
+    syntax: jmespath
+    # M1051 (patch management) if any "installed" patches
+    # (note, in future we could get the most-recent-patch timestamp)
+    value: >-
+      [
+        asset_patch[?@.installationresult==`Installed`] | [?length(@) > `0`] && `M1051` || null
+      ] | [?@]
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  # Properties that are globally activated by default
+
+  ###########################################
+  # Fields from deviceAssetInfoExportDevice
+  asset_device_deviceid:
+    title: Asset Device ID
+    type: string
+  asset_device_longname:
+    title: Asset Device Long Name
+    type: string
+  asset_device_deleted:
+    title: Asset Device Deleted
+    type: string
+  asset_device_deviceclass:
+    title: Asset Device Class
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  asset_device_createdon:
+    title: Asset Device Created On
+    type: string
+    format: date-time
+
+  asset_device_customerid:
+    title: Asset Device Customer ID
+    type: string
+    x-samos-ref-types:
+      - type-name: NcentralCustomer
+        key-name: customerid
+  asset_device_ncentralassettag:
+    title: N-central Asset Tag
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_tag
+  asset_device_uri:
+    title: Asset Device URI
+    type: string
+  asset_device_warrantyexpirydate:
+    title: Asset Device Warranty Expiry Date
+    type: string
+    # format: date-time
+  # OS fields
+  asset_os_reportedos:
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+  asset_os_version:
+    type: string
+  asset_os_osarchitecture:
+    type: string
+  asset_os_licensetype:
+    type: string
+  asset_os_lastbootuptime:
+    type: string
+  asset_os_publisher:
+    type: string
+  asset_os_csdversion:
+    type: string
+  asset_os_serialnumber:
+    type: string
+  asset_os_licensekey:
+    type: string
+  asset_os_supportedos:
+    type: string
+  asset_os_installdate:
+    type: string
+    format: date-time
+  # Computer System Fields
+  asset_computersystem_manufacturer:
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+  asset_computersystem_serialnumber:
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 2
+  asset_computersystem_populatedmemory_slots:
+    type: string
+  asset_computersystem_uuid:
+    type: string
+  asset_computersystem_systemtype:
+    type: string
+  asset_computersystem_model:
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+  asset_computersystem_totalphysicalmemory:
+    type: string
+  asset_computersystem_totalmemory_slots:
+    type: string
+  asset_computersystem_netbiosname:
+    type: string
+
+  # Processor
+  asset_processor_architecture:
+    type: string
+  asset_processor_description:
+    type: string
+  asset_processor_cpuid:
+    type: string
+  asset_processor_numberofcpus:
+    type: string
+  asset_processor_name:
+    type: string
+  asset_processor_maxclockspeed:
+    type: string
+  asset_processor_vendor:
+    type: string
+  asset_processor_numberofcores:
+    type: string
+
+  # Motherboard
+  asset_motherboard_manufacturer:
+    type: string
+  asset_motherboard_version:
+    type: string
+  asset_motherboard_product:
+    type: string
+  asset_motherboard_serialnumber:
+    type: string
+  asset_motherboard_biosversion:
+    type: string
+
+  #Raid Controller*
+  asset_raidcontroller:
+    type: array
+    items:
+      type: object
+      properties:
+        controllername:
+          type: string
+        enabledstate:
+          type: string
+        numberofblocks:
+          type: string
+        serialnumber:
+          type: string
+        dataredundancy:
+          type: string
+        controllerid:
+          type: string
+
+  # Memory*
+  asset_memory:
+    type: array
+    items:
+      type: object
+      properties:
+        location:
+          type: string
+        serialnumber:
+          type: string
+        manufacturer:
+          type: string
+        capacity:
+          type: string
+        partnumber:
+          type: string
+        type:
+          type: string
+        speed:
+          type: string
+
+  # Video Controller*
+  asset_videocontroller:
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+        adapterram:
+          type: string
+        description:
+          type: string
+        videocontrollerid:
+          type: string
+
+  # Logical Device*
+  asset_logicaldevice:
+    type: array
+    items:
+      type: object
+      properties:
+        maxcapacity:
+          type: string
+        volumename:
+          type: string
+
+  # Physical Drive*
+  asset_physicaldrive:
+    type: array
+    items:
+      type: object
+      properties:
+        serialnumber:
+          type: string
+        capacity:
+          type: string
+        modelnumber:
+          type: string
+
+  # Mapped Drive*
+  asset_mappeddrive:
+    type: array
+    items:
+      type: object
+      properties:
+        drivename:
+          type: string
+        remotepath:
+          type: string
+  # Media Access Device*
+  asset_mediaaccessdevice:
+    type: array
+    items:
+      type: object
+      properties:
+        uniqueid:
+          type: string
+        mediatype:
+          type: string
+  # Network Adapter*
+  asset_networkadapter:
+    type: array
+    items:
+      type: object
+      properties:
+        description:
+          type: string
+        macaddress:
+          type: string
+          format: mac-addr
+        dnsserver:
+          type: string
+        ipaddress:
+          type: string
+        gateway:
+          type: string
+        dhcpserver:
+          type: string
+
+  # USB Device*
+  asset_usbdevice:
+    type: array
+    items:
+      type: object
+      properties:
+        caption:
+          type: string
+        status:
+          type: string
+        manufacturer:
+          type: string
+  # Printer*
+  asset_printer:
+    type: array
+    items:
+      type: object
+      properties:
+        port:
+          type: string
+        systemdefault:
+          type: string
+        name:
+          type: string
+        path:
+          type: string
+
+  # Port*
+  asset_port:
+    type: array
+    items:
+      type: object
+      properties:
+        port:
+          type: string
+        servicename:
+          type: string
+  # Too big
+  # TODO: Move into tear-off, or other reference type
+  # # Service*
+  # asset_service:
+  #   type: array
+  #   items:
+  #     type: object
+  #     properties:
+  #       executablename:
+  #         type: string
+  #       useraccount:
+  #         type: string
+  #       startuptype:
+  #         type: string
+  #       caption:
+  #         type: string
+  #       servicename:
+  #         type: string
+
+  # Folder for Share*
+  asset_folderforshare:
+    type: array
+    items:
+      type: object
+      properties:
+        sharename:
+          type: string
+        path:
+          type: string
+  # Too big
+  # TODO: Move into tear-off, or other reference type
+  # # Application*
+  # asset_application:
+  #   type: array
+  #   items:
+  #     type: object
+  #     properties:
+  #       displayname:
+  #         type: string
+  #       installationdate:
+  #         type: string
+  #         format: date-time
+  #       licensekey:
+  #         type: string
+  #       publisher:
+  #         type: string
+  #       version:
+  #         type: string
+  #       licensetype:
+  #         type: string
+
+  # Patch*
+  asset_patch:
+    type: array
+    items:
+      type: object
+      properties:
+        title:
+          type: string
+        installeddate:
+          type: string
+          format: date-time
+        installationresult:
+          type: string
+        category:
+          type: string
+
+  # Site
+  asset_site_customerid:
+    type: string
+    x-samos-ref-types:
+      - type-name: NcentralCustomer
+        key-name: customerid
+  asset_site_customername:
+    type: string
+  # Customer
+  asset_customer_customerid:
+    type: string
+    x-samos-ref-types:
+      - type-name: NcentralCustomer
+        key-name: customerid
+  asset_customer_customername:
+    type: string
+  # Service Organization
+  asset_socustomer_customerid:
+    type: string
+    x-samos-ref-types:
+      - type-name: NcentralCustomer
+        key-name: customerid
+  asset_socustomer_customername:
+    type: string
+
+  ####################################
+  # deviceList fields
+  device_agentversion:
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+  device_customername:
+    type: string
+  device_description:
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  device_deviceclass:
+    type: string
+  device_deviceclasslabel:
+    type: string
+  device_deviceid:
+    title: Device ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  device_discoveredname:
+    type: string
+  device_interfaceversion:
+    type: string
+  device_isprobe:
+    type: string
+  device_lastloggedinuser:
+    type: string
+  device_licensemode:
+    type: string
+  device_longname:
+    title: Long Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  device_networkversion:
+    type: string
+  device_osid:
+    type: string
+    # x-samos-fulfills:
+    #   type-name: Machine
+    #   property-name: operating_system
+  device_remotecontroluri:
+    type: string
+  device_sitename:
+    type: string
+  device_soname:
+    type: string
+  device_sourceuri:
+    type: string
+  device_statestatus:
+    type: string
+  device_stillloggedin:
+    type: string
+  device_supportedos:
+    type: string
+  device_supportedoslabel:
+    type: string
+  device_uri:
+    # appears to be an FQDN
+    # Example: mydevice.noeticcyber.com
+    # but seems to fall back to "localhost" or an IP sometimes
+    title: URI
+    type: string
+    # x-samos-correlation:
+    #   correlation-key: Machine.qualified-hostname
+    #   correlation-type: Machine
+    #   priority: 4
+    #   exclude:
+    #     - localhost
+
+  ####################################
+  # deviceGet fields
+  # NOTE: this method puts everything into arrays, even for single-value fields.
+  ####################################
+  device_get:
+    type: object
+    properties:
+      deviceid:
+        type: array
+        items:
+          type: string
+      customerid:
+        type: array
+        items:
+          type: string
+          x-samos-ref-types:
+            - type-name: NcentralCustomer
+              key-name: customerid
+      customername:
+        type: array
+        items:
+          type: string
+      soname:
+        type: array
+        items:
+          type: string
+      uri:
+        type: array
+        items:
+          type: string
+      remotecontroluri:
+        type: array
+        items:
+          type: string
+      sourceuri:
+        type: array
+        items:
+          type: string
+      dynamicuri:
+        type: array
+        items:
+          type: string
+      description:
+        type: array
+        items:
+          type: string
+      osid:
+        type: array
+        items:
+          type: string
+      supportedos:
+        type: array
+        items:
+          type: string
+      longname:
+        type: array
+        items:
+          type: string
+      deviceclass:
+        type: array
+        items:
+          type: string
+      licensemode:
+        type: array
+        items:
+          type: string
+      createdon:
+        type: array
+        items:
+          type: string
+      isdisconnectable:
+        type: array
+        items:
+          type: string
+      ismanagedasset:
+        type: array
+        items:
+          type: string
+      isdiscoveredasset:
+        type: array
+        items:
+          type: string
+      snmpenabled:
+        type: array
+        items:
+          type: string
+      veritasenabled:
+        type: array
+        items:
+          type: string
+      edfenabled:
+        type: array
+        items:
+          type: string
+      remotemanagementenabled:
+        type: array
+        items:
+          type: string
+      remotemanagementpreferredapplianceid:
+        type: array
+        items:
+          type: string
+      remotemanagementinstalled:
+        type: array
+        items:
+          type: string
+      remotemanagementversion:
+        type: array
+        items:
+          type: string
+      warrantyexpirydate:
+        type: array
+        items:
+          type: string
+      leaseexpirydate:
+        type: array
+        items:
+          type: string
+      purchaseDate:
+        type: array
+        items:
+          type: string
+      cost:
+        type: array
+        items:
+          type: string
+      location:
+        type: array
+        items:
+          type: string
+      assettag:
+        type: array
+        items:
+          type: string
+      expectedreplacementdate:
+        type: array
+        items:
+          type: string
+      isprobe:
+        type: array
+        items:
+          type: string
+      isconnected:
+        type: array
+        items:
+          type: string
+      isconnecting:
+        type: array
+        items:
+          type: string
+      discoveredname:
+        type: array
+        items:
+          type: string
+      macs:
+        type: array
+        items:
+          type: string
+      discovereduris:
+        type: array
+        items:
+          type: string
+      remotemanagementinstalldate:
+        type: array
+        items:
+          type: string
+      deviceclasslabel:
+        type: array
+        items:
+          type: string
+      supportedoslabel:
+        type: array
+        items:
+          type: string
+      defaultaddresstype:
+        type: array
+        items:
+          type: string
+      discoveredfqdns:
+        type: array
+        items:
+          type: string
+      xabackupenabled:
+        type: array
+        items:
+          type: string
+      virtualizationenabled:
+        type: array
+        items:
+          type: string
+      selfdiscoveryid:
+        type: array
+        items:
+          type: string
+
+  ###############################
+  # deviceGetStatus fields
+  device_status:
+    type: array
+    items:
+      type: object
+      properties:
+        applianceid:
+          type: string
+        appliancename:
+          type: string
+        createdon:
+          type: string
+        deviceid:
+          type: string
+        devicename:
+          type: string
+        deviceuri:
+          type: string
+        ismanagedtask:
+          type: string
+        lastdataid:
+          type: string
+        lastscantime:
+          type: string
+          format: date-time
+        lastupdate:
+          type: string
+        modulename:
+          type: string
+        serviceid:
+          type: string
+        serviceitemid:
+          type: string
+        statestatus:
+          type: string
+        taskid:
+          type: string
+        taskident:
+          type: string
+        tasknote:
+          type: string
+        timetostale:
+          type: string
+        transitiontime:
+          type: string
+          format: date-time
+
+  #################################
+  # devicePropertyList
+  device_property_list:
+    type: array
+    items:
+      type: object
+      properties:
+        defaultValue:
+          type: string
+        devicePropertyID:
+          type: integer
+        dropdownValues:
+          type: array
+          items:
+            type: string
+        label:
+          type: string
+        type:
+          type: integer
+        value:
+          type: string

@@ -1,0 +1,85 @@
+x-samos-type-name: GophishPlatformTemplate
+x-samos-namespace: gophish.platform
+title: Gophish Template
+description: An email template used by Gophish phishing simulation campaigns.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Exposure
+
+x-samos-global-zone: true
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: subject
+  - name: envelope_sender
+  - name: modified_date
+
+x-samos-detail:
+  - name: name
+  - name: subject
+  - name: envelope_sender
+  - name: text
+  - name: html
+  - name: attachments
+  - name: modified_date
+
+x-samos-derived-properties:
+  d_exposure_type:
+    # Fulfills the 'ExposureType' property to a static value of 'Configuration' as these are configuration exposures
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: 'ExposureType: Configuration'
+    x-samos-ref-types:
+      - type-name: NoeticEnumExposureType
+        key-name: id
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: exposure_type
+
+properties:
+  id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: id
+
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  subject:
+    type: string
+    title: Subject
+
+  envelope_sender:
+    type: string
+    title: Envelope Sender
+
+  text:
+    type: string
+    title: Text Body
+
+  html:
+    type: string
+    title: HTML Body
+
+  modified_date:
+    type: string
+    format: date-time
+    title: Modified Date
+
+  attachments:
+    type: array
+    title: Attachments
+    items:
+      type: object

@@ -1,12 +1,12 @@
 id: threatlocker
 name: ThreatLocker
 author: Rapid7
-version: 1.2.0
+version: 1.4.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Fixed invalid data ingestion when the ThreatLocker API returns an error response
+  - Documentation improvements to clarify the API key access permission requirements
 
 # version of the connector ID.
 types:

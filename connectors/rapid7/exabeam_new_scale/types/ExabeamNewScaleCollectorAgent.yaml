@@ -1,0 +1,180 @@
+x-samos-type-name: ExabeamNewScaleCollectorAgent
+x-samos-namespace: exabeam.new.scale
+title: Exabeam New-Scale Collector Agent
+description: A Site Collector agent from Exabeam New-Scale that collects log data from endpoints.
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: type
+  - name: status
+  - name: version
+  - name: coreName
+  - name: settings.hostIp
+
+x-samos-detail:
+  - name: name
+  - name: type
+  - name: status
+  - name: version
+  - name: settings.hostIp
+  - name: settings.fetchStartDate
+  - name: coreName
+  - name: templates
+
+x-samos-derived-properties:
+  d_hostnames:
+    # The full name field value is used as the hostname
+    title: Hostnames
+    type: string
+    syntax: jmespath
+    value: '[name][?@]'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_qualified_hostname:
+    # Only populate if the name contains a dot (FQDN)
+    x-samos-hidden: true
+    title: Qualified Hostname
+    type: string
+    syntax: jmespath
+    value: 'name && contains(name, `.`) && name || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_unqualified_hostname:
+    # Only populate if the name does not contain a dot (short name)
+    x-samos-hidden: true
+    title: Unqualified Hostname
+    type: string
+    syntax: jmespath
+    value: 'name && !contains(name, `.`) && name || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_active:
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: "status == 'RUNNING'"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  id:
+    title: Collector ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  type:
+    title: Collector Type
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  status:
+    title: Status
+    type: string
+
+  version:
+    title: Agent Version
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+
+  coreId:
+    title: Core ID
+    type: string
+
+  coreName:
+    title: Core Name
+    type: string
+
+  settings:
+    title: Settings
+    type: object
+    properties:
+      fetchStartDate:
+        title: Fetch Start Date
+        type: string
+        format: date-time
+        x-samos-fulfills:
+          type-name: core.component
+          property-name: first_seen
+      hostIp:
+        title: Host IP
+        type: string
+        format: ip-addr
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: ips
+
+  heartbeat:
+    title: Heartbeat
+    type: object
+    properties:
+      timestamp:
+        title: Heartbeat Timestamp
+        type: string
+        format: date-time
+        x-samos-fulfills:
+          type-name: core.component
+          property-name: last_seen
+
+  templates:
+    title: Templates
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: Template ID
+          type: string
+          x-samos-hidden: true
+        name:
+          title: Template Name
+          type: string
+        type:
+          title: Template Type
+          type: string
+        settings:
+          title: Template Settings
+          type: object
+          additionalProperties: true
+        collectorsCount:
+          title: Collectors Count
+          type: integer
+        createdDate:
+          title: Created Date
+          type: string
+          format: date-time
+        modifiedDate:
+          title: Modified Date
+          type: string
+          format: date-time

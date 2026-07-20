@@ -1,0 +1,238 @@
+x-samos-type-name: AvigilonAltaReader
+x-samos-namespace: avigilon.alta
+title: Avigilon Alta Reader
+description: A card/credential reader connected to an Avigilon Alta ACU and protecting one or more entries.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_reader_id
+  - id
+required:
+  - id
+x-samos-table:
+  - name: name
+  - name: serialNumber
+  - name: firmwareVersion
+  - name: isExit
+  - name: nfcEnabled
+  - name: acuPort.acu.id
+  - name: org.name
+
+x-samos-detail:
+  - name: name
+  - name: serialNumber
+  - name: serialNumberBrief
+  - name: firmwareVersion
+  - name: softwareVersionNumber
+  - name: isExit
+  - name: advTxPower
+  - name: beaconTxPower
+  - name: capTouchEnabled
+  - name: capTouchRssi
+  - name: capTouchThreshold
+  - name: nfcEnabled
+  - name: autoUnlockEnabled
+  - name: autoUnlockRssi
+  - name: acuPort.acu.id
+  - name: acuPort.label
+  - name: entries
+  - name: org.name
+  - name: ownedByOrg.name
+  - name: effectiveLocationRestriction
+  - name: notes
+  - name: isAudibleFeedbackEnabled
+  - name: isLedFeedbackEnabled
+  - name: pinTimeoutSeconds
+  - name: isAppleWalletTraEnabled
+  - name: createdAt
+  - name: updatedAt
+
+x-samos-derived-properties:
+  d_reader_id:
+    # API returns integer id; Machine.id is string in the unified model.
+    title: Reader ID
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_mitigations:
+    # Update Software : If firmware version is M1051, mitigation is to update firmware.
+    title: Mitigations
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: >-
+      [
+        firmwareVersion != null &&  `M1051` || null
+      ][?@]
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Mitigation
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+  serialNumber:
+    title: Serial Number
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+  serialNumberBrief:
+    title: Serial Number (Brief)
+    type: string
+  firmwareVersion:
+    title: Firmware Version
+    type: string
+  softwareVersionNumber:
+    title: Software Version
+    type: string
+  isExit:
+    title: Exit?
+    type: boolean
+  advTxPower:
+    title: Adv TX Power
+    type: integer
+  beaconTxPower:
+    title: Beacon TX Power
+    type: integer
+  capTouchEnabled:
+    title: Cap Touch?
+    type: boolean
+  capTouchRssi:
+    title: Cap Touch RSSI
+    type: integer
+  capTouchThreshold:
+    title: Cap Touch Threshold
+    type: integer
+  nfcEnabled:
+    title: NFC?
+    type: boolean
+  autoUnlockEnabled:
+    title: Auto Unlock?
+    type: boolean
+  autoUnlockRssi:
+    title: Auto Unlock RSSI
+    type: integer
+  acuPort:
+    title: ACU Port
+    type: object
+    properties:
+      id:
+        title: Port ID
+        type: integer
+        x-samos-hidden: true
+      acuPortTypePortNumber:
+        title: Port Type Number
+        type: integer
+      virtualPortNumber:
+        title: Virtual Port Number
+        type: integer
+      portNumber:
+        title: Port Number
+        type: integer
+      label:
+        title: Label
+        type: string
+      acu:
+        title: ACU
+        type: object
+        properties:
+          id:
+            title: ACU
+            type: integer
+            x-samos-ref-types:
+              - type-name: AvigilonAltaACU
+                key-name: id
+          name:
+            title: ACU Name
+            type: string
+      expansionBoard:
+        title: Expansion Board
+        type: object
+      eol:
+        title: EOL
+        type: object
+  entries:
+    title: Entries
+    type: array
+    items:
+      type: object
+  org:
+    title: Organization
+    type: object
+    properties:
+      id:
+        title: Org
+        type: integer
+      name:
+        title: Org Name
+        type: string
+  ownedByOrg:
+    title: Owned By Org
+    type: object
+    properties:
+      id:
+        title: Owned By Org ID
+        type: integer
+        x-samos-hidden: true
+      name:
+        title: Owned By Org Name
+        type: string
+  effectiveLocationRestriction:
+    title: Location Restriction
+    type: object
+  createdAt:
+    title: Created At
+    type: string
+    format: date-time
+  updatedAt:
+    title: Updated At
+    type: string
+    format: date-time
+  notes:
+    title: Notes
+    type: string
+  isAudibleFeedbackEnabled:
+    title: Audible Feedback?
+    type: boolean
+  isLedFeedbackEnabled:
+    title: LED Feedback?
+    type: boolean
+  pinTimeoutSeconds:
+    title: PIN Timeout (seconds)
+    type: integer
+  isAppleWalletTraEnabled:
+    title: Apple Wallet TRA?
+    type: boolean

@@ -1,0 +1,700 @@
+x-samos-type-name: QualysHost2
+x-samos-namespace: qualys
+title: Qualys Host
+description: Qualys Host details.
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 4
+
+x-samos-keys:
+  - ID
+
+required:
+  - ID
+
+x-samos-table:
+  - name: DNS_DATA.HOSTNAME
+  - name: DNS_DATA.FQDN
+  - name: IP
+  - name: OS
+  - name: LAST_VULN_SCAN_DATETIME
+
+x-samos-detail:
+  - name: ID
+  - name: TRACKING_METHOD
+  - name: DNS_DATA.HOSTNAME
+  - name: DNS_DATA.DOMAIN
+  - name: DNS_DATA.FQDN
+  - name: IP
+  - name: COMMENTS
+  - name: OS
+  - name: LAST_VULN_SCAN_DATETIME
+  - name: LAST_VM_SCANNED_DATE
+  - name: LAST_VM_AUTH_SCANNED_DATE
+  - name: ARS
+  - name: ACS
+  - name: VULN_COUNT
+  - name: OWNER
+  - name: ASSET_GROUPS
+
+x-samos-derived-properties:
+  d_hostname:
+    deprecated: true
+    x-samos-hidden: true
+    type: string
+    syntax: jsonpath
+    value: '$.DNS_DATA.HOSTNAME'
+
+  d_endpoint_first_seen:
+    # NOTE - To fulfill legacy endpoint_first_seen
+    x-samos-hidden: true
+    type: string
+    format: date-time
+    syntax: jsonpath
+    value: '$.FIRST_FOUND_DATE'
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_first_seen
+
+  d_endpoint_last_seen:
+    x-samos-hidden: true
+    type: string
+    format: date-time
+    syntax: jmespath
+    value: '[LAST_VULN_SCAN_DATETIME, LAST_COMPLIANCE_SCAN_DATETIME, LAST_ACTIVITY][?@] | @ && max(@) || null'
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+
+  # This machine record is evidence of mitigations: M1016 "Vulnerability Scanning"
+  d_mitigations:
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    syntax: jmespath
+    value: '[`M1016`]'
+
+  d_dns_names:
+    deprecated: true
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    # If DNS and DNS is qualified, we use DNS and DNS_DATA.FQDN else we use just DNS_DATA.FQDN
+    value: "(DNS && contains(DNS, '.') && [DNS,  DNS_DATA.FQDN][]) || [DNS_DATA.FQDN][]"
+    items:
+      type: string
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_name:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'not_null(DNS_DATA.FQDN, DNS_DATA.HOSTNAME, NETBIOS)'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_hostnames:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+    syntax: jmespath
+    value: '[DNS,DNS_DATA.FQDN,DNS_DATA.HOSTNAME][?@]'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_mac_addresses:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'CLOUD_RESOURCE_METADATA.MAC_ADDRESS'
+    format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+
+  d_ips:
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: '[IP, IPV6, IP_INTERFACES.IP]|[]|[?@]'
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+properties:
+  IP:
+    type: string
+    title: IPv4
+    description: IPv4 address for the asset.
+    format: ip-addr
+  IPV6:
+    type: string
+    title: IPv6
+    description: IPv6 address for the asset.
+    format: ip-addr
+  TRACKING_METHOD:
+    type: string
+    title: Tracking Method
+    description: The tracking method assigned to the asset.
+    example: IP, DNS, NETBIOS, EC2
+  COMMENTS:
+    type: string
+    title: Comments
+
+  DNS:
+    type: string
+    title: DNS
+    description: DNS Name for the Asset
+
+  DNS_DATA:
+    type: object
+    title: DNS Data
+    properties:
+      HOSTNAME:
+        type: string
+        title: Host Name
+        x-samos-correlation:
+          correlation-key: Machine.unqualified-hostname
+          correlation-type: Machine
+          priority: 3
+      DOMAIN:
+        type: string
+        title: Domain Name
+      FQDN:
+        type: string
+        title: FQDN
+
+  OPERATING_SYSTEM:
+    type: string
+    title: Operating System
+    description: The operating system detected on the asset.
+  ASSET_TAGS:
+    type: array
+    title: Asset Tags
+    description: Tags assigned to assets.
+    items:
+      ASSET_TAG:
+        type: string
+        title: Asset Tag
+        description: The name of the Tag assigned to asset.
+  OWNER:
+    type: string
+    title: Owner
+    description: The Qualys user who owns the asset
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: owners
+    x-samos-ref-types:
+      - type-name: User
+  USER_DEF:
+    type: object
+    title: User Defined
+    properties:
+      LABEL_1:
+        type: string
+        title: User Defined Label 1
+      LABEL_2:
+        type: string
+        title: User Defined Label 2
+      LABEL_3:
+        type: string
+        title: User Defined Label 3
+      VALUE_1:
+        type: object
+        title: User Defined Value 1
+        properties:
+          ud_attr:
+            type: string
+            title: User Defined Value 1 Attribute
+          text:
+            type: string
+            title: User Defined Value 1 Text
+      VALUE_2:
+        type: object
+        title: User Defined Value 2
+        properties:
+          ud_attr:
+            type: string
+            title: User Defined Value 2 Attribute
+          text:
+            type: string
+            title: User Defined Value 2 Text
+      VALUE_3:
+        type: object
+        title: User Defined Value 3
+        properties:
+          ud_attr:
+            type: string
+            title: User Defined Value 3 Attribute
+          text:
+            type: string
+            title: User Defined Value 3 Text
+  ASSET_GROUP_IDS:
+    type: string
+    title: Asset Group IDs
+    description: Comma-separated list of asset group IDs that the host belongs to.
+  ASSET_ID:
+    type: string
+    title: Asset ID
+    description: Asset ID of the host.
+  NETBIOS:
+    type: string
+    title: NetBIOS Name
+    description: NetBIOS name for the asset.
+  QG_HOSTID:
+    type: string
+    title: QG HOST ID
+    description: The Qualys host ID assigned to the asset when agentless tracking is used or when a cloud agent is installed.
+  LAST_VM_AUTH_SCANNED_DATE:
+    type: string
+    format: date-time
+    title: Last VM Authenticated Scan Date
+  LAST_VM_AUTH_SCANNED_DURATION:
+    type: string
+    title: Last VM Authenticated Scan Duration
+  LAST_VM_SCANNED_DATE:
+    type: string
+    format: date-time
+    title: Last VM Scan Date
+  LAST_VM_SCANNED_DURATION:
+    type: string
+    title: Last VM Scan Duration
+  LAST_VULN_SCAN_DATETIME:
+    # This timestamps seems to be the latter of the above two.
+    type: string
+    format: date-time
+    title: Last Vuln Scan Date
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_scanned
+  CLOUD_PROVIDER:
+    type: string
+    description: Cloud provider of the asset.
+    title: Cloud Provider
+  CLOUD_PROVIDER_SERVICE:
+    type: string
+    title: Cloud Provider Services
+    description: Cloud provider services of the asset. For example, compute engine.
+  CLOUD_SERVICE:
+    type: string
+    title: Cloud Service
+    description: Cloud service of the asset.
+  CLOUD_RESOURCE_TYPE:
+    type: string
+    title: Cloud Resource Type
+    description: Cloud resource type of the asset. For example, virtual machine.
+  CLOUD_RESOURCE_ID:
+    type: string
+    title: Cloud Resource ID
+    description: Cloud resource ID of the asset.
+    x-samos-correlation:
+      correlation-key: CloudInstanceId
+      correlation-type: Machine
+      priority: 3
+  CLOUD_ACCOUNT:
+    type: string
+    title: Cloud Account
+    description: Cloud account of the asset.
+    x-samos-ref-types:
+      - type-name: CloudAccount
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.cloud-component
+      property-name: cloud_account
+  EC2_INSTANCE_ID:
+    # As of 2025-08, this property is showing in the API response as being
+    # deprecated and is replaced by CLOUD_RESOURCE_ID.
+    type: string
+    title: EC2 Instance ID
+    description: EC2 instance ID for the asset.
+    x-samos-correlation:
+      correlation-key: CloudInstanceId
+      correlation-type: Machine
+      priority: 3
+  CLOUD_IMAGE_ID:
+    type: string
+    title: Cloud Image ID
+    description: Cloud image ID.
+  IP_INTERFACES:
+    type: object
+    title: IP Interfaces
+    properties:
+      IP:
+        type: array
+        items:
+          type: string
+  EC2_INFO:
+    type: object
+    title: EC2 Info
+    description: EC2 Info.
+    properties:
+      PUBLIC_DNS_NAME:
+        type: string
+        title: EC2 Public DNS Name
+        description: EC2 instance public DNS name.
+      IMAGE_ID:
+        type: string
+        title: EC2 Instance Image ID
+        description: EC2 instance image ID.
+      VPC_ID:
+        type: string
+        title: EC2 VPC ID
+        description: EC2 VPC ID.
+      INSTANCE_STATE:
+        type: string
+        title: EC2 Instance State
+        description: EC2 instance state.
+      PRIVATE_DNS_NAME:
+        type: string
+        title: EC2 Private DNS Name
+        description: EC2 instance private DNS name.
+      INSTANCE_TYPE:
+        type: string
+        title: EC2 instance type
+        description: Instance type of the EC2 instance.
+      ACCOUNT_ID:
+        type: string
+        title: Account ID of the EC2
+        description: Account ID of the EC2 instance.
+      REGION_CODE:
+        type: string
+        title: EC2 Region Code
+        description: Region code of the EC2 instance.
+      SUBNET_ID:
+        type: string
+        title: EC2 Subnet ID
+        description: Subnet ID of the EC2 instance.
+  CLOUD_RESOURCE_METADATA:
+    type: object
+    title: Cloud Resource Metadata
+    description: cloud provider metadata for each host when cloud metadata is included in the patch report.
+    properties:
+      INSTANCE_ID:
+        type: string
+        title: Instance ID
+        description: Instance ID.
+        x-samos-correlation:
+          correlation-key: CloudInstanceId
+          correlation-type: Machine
+          priority: 3
+      PUBLIC_DNS_NAME:
+        type: string
+        title: Public DNS Name
+        description: Public DNS name.
+      VM_ID:
+        type: string
+        title: Virtual Machine ID
+        description: Virtual machine ID.
+      VM_NAME:
+        type: string
+        title: Virtual Machine Name
+        description: Virtual machine name.
+      PLATFORM:
+        type: string
+        title: Cloud Platform
+        description: Cloud platform.
+      HOST_NAME:
+        type: string
+        title: Host Name
+        description: Host name.
+      MACHINE_TYPE:
+        type: string
+        title: Machine Type
+        description: Machine type.
+      MACHINE_STATE:
+        type: string
+        title: Machine State
+        description: Machine state.
+      PROJECT_ID:
+        type: string
+        title: Project ID
+        description: Project ID.
+      PUBLIC_IP_ADDRESS:
+        type: string
+        title: Public IP Address
+        description: Public IP Address.
+      VPC_NETWORK:
+        type: string
+        title: VPC Network
+        description: VPC network.
+      ZONE:
+        type: string
+        title: Cloud Provider Zone
+        description: Cloud provider zone.
+      IMAGE_OFFER:
+        type: string
+        title: Image Offer from Publisher
+        description: Image offering from the publisher.
+      IMAGE_PUBLISHER:
+        type: string
+        title: Image Publisher
+        description: Image publisher.
+      IMAGE_VERSION:
+        type: string
+        title: Cloud Provider Image Version
+        description: Cloud provider image version.
+      SUBNET:
+        type: string
+        title: Cloud Provider Subnet
+        description: Subnet of your cloud provider.
+      VM_STATE:
+        type: string
+        title: Cloud Provider Virtual Machine State.
+        description: Cloud provider virtual machine state.
+      PRIVATE_IP_ADDRESS:
+        type: string
+        title: Cloud Provider Private IP
+        description: Private IP of cloud provider asset.
+      IMAGE_ID:
+        type: string
+        title: Cloud Provider Image ID
+        description: Cloud provider image ID.
+      SPOT_INSTANCE:
+        type: string
+        title: Spot Instance
+        description: Spot instance.
+      AVAILABILITY_ZONE:
+        type: string
+        title: Instance Availability Zone
+        description: Instance availability zone.
+      VPC_ID:
+        type: string
+        title: Instance VPC ID
+        description: Instance VPC ID.
+      GROUP_ID:
+        type: string
+        title: Instance Group ID
+        description: Instance group ID.
+      GROUP_NAME:
+        type: string
+        title: Instance Group Name
+        description: Instance group name.
+      LOCAL_HOSTNAME:
+        type: string
+        title: Local Host Name
+        description: Local host name.
+      INSTANCE_STATE:
+        type: string
+        title: Instance State
+        description: Instance state.
+      PRIVATE_DNS_NAME:
+        type: string
+        title: Private DNS Name
+        description: Private DNS name.
+      INSTANCE_TYPE:
+        type: string
+        title: Instance Type
+        description: Instance type.
+      ACCOUNT_ID:
+        type: string
+        title: Instance Account ID
+        description: Instance account ID.
+      REGION_CODE:
+        type: string
+        title: Instance Region Code
+        description: Region code of the instance.
+      SUBNET_ID:
+        type: string
+        title: Instance Subnet ID
+        description: Instance subnet ID.
+      RESERVATION_ID:
+        type: string
+        title: Reservation ID
+        description: Reservation ID.
+      SIZE:
+        type: string
+        title: VM Asset Size
+        description: Size of the VM asset.
+      SUBSCRIPTION_ID:
+        type: string
+        title: ID of subscription
+        description: ID of subscription.
+      LOCATION:
+        type: string
+        title: Instance Location
+        description: Location of instance.
+      RESOURCE_GROUP_NAME:
+        type: string
+        title: Resource Group Name
+        description: Resource group name of the instance.
+
+      MAC_ADDRESS:
+        type: string
+        title: Instance Mac Address
+        description: Mac address of the instance.
+        format: mac-addr
+        x-samos-correlation:
+          correlation-key: MacAddr.value
+          correlation-type: Machine
+          priority: 3
+
+  AZURE_VM_INFO:
+    type: object
+    title: Azure VM Info
+    description: Azure VM info.
+    properties:
+      PUBLIC_IP_ADDRESS:
+        type: string
+        title: Azure Host IP Address
+        description: The IP address of the host.
+      IMAGE_OFFER:
+        type: string
+        title: Image Offer from Publisher
+        description: Image offering form the publisher
+      IMAGE_VERSION:
+        type: string
+        title: Azure VM Image Version
+        description: Azure VM image version.
+      SUBNET:
+        type: string
+        title: Azure VM Subnet
+        description: Subnet of the Azure VM asset.
+      VM_STATE:
+        type: string
+        title: Azure Virtual Machine State
+        description: Azure virtual machine state.
+        example: STARTING, RUNNING,STOPPING, STOPPED, DEALLOCATING, DEALLOCATED, UNKNOWN.
+      PRIVATE_IP_ADDRESS:
+        type: string
+        title: Azure VM Asset Private IP address
+        description: Private IP address of the Azure VM asset.
+      SIZE:
+        type: string
+        title: Azure VM Asset Size
+        description: Size of the Azure VM asset.
+      SUBSCRIPTION_ID:
+        type: string
+        title: Azure VM Asset Subscription ID
+        description: Subscription ID of the Azure VM asset.
+      LOCATION:
+        type: string
+        title: Azure VM Asset Location
+        description: Location of the Azure VM asset.
+      RESOURCE_GROUP_NAME:
+        type: string
+        title: Azure VM Asset Group Name
+        description: Resource group name of the Azure VM asset.
+  OS_CPE:
+    type: string
+    description: The OS CPE name assigned to the operating system detected on the asset.
+    title: OS_CPE
+  ARS:
+    type: string
+    title: Asset Risk Score
+    description: The Asset Risk Score (ARS) is the overall risk score assigned to the asset based on multiple contributing factors. ARS has a range from 0 to 1000.
+  ACS:
+    type: string
+    title: Asset Criticality Score
+    description: The Asset Criticality Score (ACS).
+  ASSET_GROUPS:
+    type: object
+    title: Asset Groups
+    properties:
+      ASSET_GROUP_TITLE:
+        type: array
+        title: Asset Group Title
+        description: The title of an asset group that the host belongs to. This list includes all asset groups that the host belongs to in the user’s account.
+        items:
+          type: string
+  VULN_COUNT:
+    title: All Vulnerabilities Count
+    type: number
+    description: Number of All Vulnerabilities found in this host.
+
+  # Properties associated with cloud agents on hosts.
+  # See https://docs.qualys.com/en/ca/api/agents/list_agents.htm for an option
+  # to import cloud agents as a type if a suitable use cases arises.
+  NETWORK_ID:
+    type: integer
+    title: Network ID
+  LAST_ACTIVITY:
+    # See https://docs.qualys.com/en/ca/portal/latest/agents/agent_status.htm
+    type: string
+    title: Last Activity On
+    format: date-time
+  SERIAL_NUMBER:
+    type: string
+    title: Serial Number
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+  LAST_COMPLIANCE_SCAN_DATETIME:
+    type: string
+    title: Last Compliance Scanned On
+    format: date-time
+  FIRST_FOUND_DATE:
+    type: string
+    title: First Found On
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  ID:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  OS:
+    type: string
+    title: Operating System
+    description: The operating system detected on the asset.
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+  LAST_BOOT:
+    type: string
+    title: Last Boot On
+    format: date-time
+  AGENT_STATUS:
+    # See https://docs.qualys.com/en/ca/portal/latest/agents/agent_status.htm
+    type: string
+    title: Agent Status
+  HARDWARE_UUID:
+    # Often the same as SERIAL_NUMBER, but not guaranteed?
+    type: string
+    title: Hardware UUID
+    format: uuid
+    x-samos-correlation:
+      correlation-key: Machine.hardware-id
+      correlation-type: Machine
+      priority: 3
+  CLOUD_AGENT_RUNNING_ON:
+    type: string
+    title: Cloud Agent Running On
+  TRURISK_SCORE:
+    # This property seems redundant with ARS
+    type: integer
+    title: TruRisk Score
+
+x-samos-virtual:
+  exposures:
+    cypher-pattern: >
+      <-[:`e:Finding:applies_to`]-(:QualysFinding2)-[:`e:Finding:vulnerability`]->(:QualysQidDetail2)
+    type-name: Exposure
+  vulnerabilities:
+    cypher-pattern: >
+      <-[:`e:Finding:applies_to`]-(:QualysFinding2)-[:`e:Finding:vulnerability`]->(:QualysQidDetail2)-[:`e:Exposure:vulnerabilities`]->(:Vulnerability)
+    type-name: Vulnerability

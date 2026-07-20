@@ -1,0 +1,180 @@
+id: qualys.vmdr
+name: Qualys VMDR
+author: Rapid7
+version: 3.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Fix SchemaValidationErrors with new QualysQidDetail2 type
+  - Increase timeout for Qualys API calls to 10 minutes
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - QualysHost2
+  - QualysHost # deprecated, replaced by QualysHost2
+  - QualysQID # deprecated, we have to keep this for backward compatibility
+  - QualysQidDetail # deprecated, replaced by QualysQidDetail2
+  - QualysQidDetail2
+  - QualysFinding # deprecated, replaced by QualysFinding2
+  - QualysFinding2
+  - QualysEnumSeverity
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+    # We set this for legacy reasons. It must be the same as the original function id
+    legacy_id: qualys.test
+
+  - id: import_all
+    # We set this for legacy reasons. When migrating a connector to this framework, the function id
+    # must match the old import workflow id
+    legacy_id: qualys.vmdr.import
+    title: Qualys VMDR Assets and Findings
+    description: Qualys VMDR assets and findings imported via the Host List, Host Detection, and Knowledge Base APIs
+    return_types:
+      - QualysHost2
+      - QualysQidDetail2
+      - QualysFinding2
+      - QualysEnumSeverity
+
+# Configuration settings for this connector.
+settings:
+  api_url:
+    title: Server URL
+    type: string
+    description: >-
+      The base URL for your Qualys instance. This is the same URL you would use
+      to log in to the Qualys web interface.
+    example: https://qualysguard.qualys.eu
+    nullable: false
+    secret_reference: 'qualys.api_url'
+
+  username:
+    title: Username
+    description: >-
+      The User ID of the user that has permission to access the Qualys API
+    type: string
+    nullable: false
+    secret_reference: 'qualys.username'
+
+  password:
+    title: Password
+    description: >-
+      The password for the user specified in the Username setting
+    type: string
+    format: password
+    nullable: false
+    secret_reference: 'qualys.password'
+
+  min_severity:
+    type: integer
+    title: Minimum Qualys Severity
+    description: >-
+      Import all Findings that have at least this severity.
+      Qualys Severity ranges from 1 to 5, with 5 being most severe. Defaults to 4
+    enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+    nullable: true
+    secret_reference: 'qualys.min_severity'
+
+  asset_groups:
+    type: string
+    title: Asset Groups
+    description: >-
+      CSV list of group names or IDs to include in the import
+    example: group1,group2
+    secret_reference: 'qualys.asset_groups'
+    nullable: true
+
+  asset_group_batch_size:
+    type: integer
+    title: Asset Group Batch Size
+    description: >-
+      Max number of asset groups to include in a single batch when gathering Hosts.
+      Defaults to 10
+    default: 10
+    nullable: false
+    secret_reference: 'qualys.asset_group_batch_size'
+
+  asset_tag:
+    type: string
+    title: Asset Tags
+    description: >-
+      CSV list of asset tags to include in the import
+    example: tagA,tagB
+    secret_reference: 'qualys.asset_tag'
+    nullable: true
+
+  vuln_states:
+    title: Vulnerability States
+    description: >-
+      Vulnerabilities with these states will be imported from Qualys
+    type: array
+    items:
+      type: string
+      enum:
+        - NEW
+        - ACTIVE
+        - REOPENED
+        - FIXED
+    default:
+      - NEW
+      - ACTIVE
+      - REOPENED
+    secret_reference: 'qualys.vuln_states'
+    nullable: true
+
+  cancel_running_reports:
+    type: boolean
+    title: Cancel Running Reports? (Deprecated)
+    description: >-
+      See our documentation for details
+    default: false
+    nullable: false
+    secret_reference: 'qualys.cancel_running_reports'
+
+  del_reports:
+    type: boolean
+    title: Delete Old Reports? (Deprecated)
+    description: >-
+      See our documentation for details
+    default: true
+    nullable: false
+    secret_reference: 'qualys.del_reports'
+
+  use_default_template:
+    type: boolean
+    title: Use Default Template? (Deprecated)
+    description: >-
+      See our documentation for details
+    default: false
+    nullable: false
+    secret_reference: 'qualys.use_default_template'
+
+# Runtime platform for this connector.
+runtime: py311
+
+# List any Python dependencies available on PyPI that are required by this connector.
+# `codegen` will generate a `requirements.txt` file with pinned versions of these dependencies.
+python_dependencies:
+  - xmltodict
+  - jmespath
+  - netaddr
+  - Jinja2
+
+# Categories for this connector in the Extension Library.
+categories:
+  - vulnerability_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false
