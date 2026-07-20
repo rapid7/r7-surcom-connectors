@@ -1,0 +1,513 @@
+x-samos-type-name: SonicWallCaptureClientDevice
+x-samos-namespace: sonicwall.capture.client
+title: SonicWall Capture Client Device
+description: An endpoint device managed by SonicWall Capture Client, representing a physical or virtual machine with security agent installed.
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - deviceId
+
+x-samos-table:
+  - name: name
+  - name: deviceType
+  - name: os
+  - name: osVersion
+  - name: ip
+  - name: onlineStatus
+  - name: clientVersion
+  - name: clientState
+  - name: updatedAt
+
+x-samos-detail:
+  - name: name
+  - name: deviceType
+  - name: d_users
+  - name: serverType
+  - name: onlineStatus
+  - name: networkStatus
+  - name: os
+  - name: osVersion
+  - name: hwModel
+  - name: processorType
+  - name: x_all_ips
+  - name: x_mac_addresses
+  - name: s1Agent
+  - name: clientVersion
+  - name: clientState
+  - name: currentUser
+  - name: firewallProtectionMode
+  - name: d_endpoint_protection_active
+  - name: scanStatus
+  - name: serialNumber
+  - name: createdAt
+  - name: updatedAt
+
+x-samos-derived-properties:
+  # Commissioned state indicates active endpoint protection
+  d_endpoint_protection_active:
+    title: Endpoint Protection Active?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_protection_active
+    syntax: expression
+    value: 'clientState == `commissioned`'
+
+  # Extracts FQDN from device name for machine correlation
+  d_qualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: "name && contains(name, '.') && name || null"
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  # Extracts short hostname from device name for machine correlation
+  d_unqualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: "name && !contains(name, '.') && name || null"
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  # Provides hostname array for unified Machine type fulfillment
+  d_hostnames:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+    syntax: jmespath
+    value: '[name]|[?@]'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  # Maps MITRE mitigations based on scan capability and firewall protection mode
+  d_mitigations:
+    title: Mitigations
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Mitigation
+          key-name: id
+    syntax: jmespath
+    # M1049 - Antivirus/Antimalware (applied when device has scan capability enabled)
+    # M1040 - Behavior Prevention on Endpoint (applied when firewall protection mode is active)
+    value: >-
+      [
+        (clientState == `commissioned` && scanStatus != null && scanStatus != ``) && `M1049` || null,
+        (clientState == `commissioned` && firewallProtectionMode != null && firewallProtectionMode != ``) && `M1040` || null
+      ] | [?@]
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+  # Extracts associated user IDs for the owned-entity relationship
+  d_users:
+    title: Endpoint Users
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: SonicWallCaptureClientEndpointUser
+          key-name: userId
+    syntax: jmespath
+    value: 'users[].userId | [?@]'
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: users
+
+properties:
+  geoLocation:
+    title: Geolocation
+    type: object
+    x-samos-hidden: true
+    properties:
+      type:
+        title: Type
+        type: string
+      coordinates:
+        title: Coordinates
+        type: array
+        items:
+          type: number
+
+  location:
+    title: Location
+    type: object
+    properties:
+      city:
+        title: City
+        type: string
+      country:
+        title: Country
+        type: string
+      countryCode:
+        title: Country Code
+        type: string
+      continent:
+        title: Continent
+        type: string
+      source:
+        title: Source
+        type: string
+
+  activeDirectory:
+    title: Active Directory
+    type: object
+    additionalProperties: true
+
+  deviceId:
+    title: Device ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  installToken:
+    title: Install Token
+    type: string
+    x-samos-hidden: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  telemetryTs:
+    title: Telemetry Timestamp
+    type: integer
+    x-samos-hidden: true
+
+  licenses:
+    title: Licenses
+    type: array
+    items:
+      type: object
+
+  onlineStatus:
+    title: Online?
+    type: boolean
+
+  networkStatus:
+    title: Network Connected?
+    type: boolean
+
+  os:
+    title: Operating System
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  osVersion:
+    title: OS Version
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+
+  hwModel:
+    title: Hardware Model
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+
+  ip:
+    title: IP Address
+    type: string
+    format: ip-addr
+
+  clientVersion:
+    title: Client Version
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+
+  processorType:
+    title: Processor Type
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_architecture
+
+  currentUser:
+    title: Current User
+    type: string
+
+  users:
+    title: Users
+    type: array
+    items:
+      type: object
+      properties:
+        _id:
+          x-samos-hidden: true
+          title: Internal ID
+          type: string
+        username:
+          title: Username
+          type: string
+        fullName:
+          title: Full Name
+          type: string
+        userId:
+          title: User
+          type: string
+          x-samos-ref-types:
+            - type-name: SonicWallCaptureClientEndpointUser
+              key-name: userId
+        tenant:
+          x-samos-hidden: true
+          title: Tenant ID
+          type: string
+        userGroups:
+          x-samos-hidden: true
+          title: User Groups
+          type: array
+          items:
+            type: string
+        policies:
+          title: Policies
+          type: array
+          items:
+            type: object
+        device:
+          x-samos-hidden: true
+          title: Device ID
+          type: string
+
+  groups:
+    title: Groups
+    type: array
+    x-samos-hidden: true
+    items:
+      type: string
+
+  isMobile:
+    title: Mobile?
+    type: boolean
+
+  deviceType:
+    title: Device Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  serverType:
+    title: Server Type
+    type: string
+
+  timezoneName:
+    title: Timezone
+    type: string
+
+  timezoneOffset:
+    title: Timezone Offset
+    type: string
+    x-samos-hidden: true
+
+  tenant:
+    x-samos-hidden: true
+    title: Tenant
+    type: object
+
+  clientState:
+    title: Client State
+    type: string
+
+  clientStateTs:
+    title: Client State Timestamp
+    type: integer
+    x-samos-hidden: true
+
+  uninstallPwd:
+    title: Uninstall Password
+    type: string
+    x-samos-hidden: true
+    x-samos-exclude: true
+
+  serialNumber:
+    title: Serial Number
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+
+  s1PackageType:
+    title: Agent Package Type
+    type: string
+    x-samos-hidden: true
+
+  currentFirewallSn:
+    title: Current Firewall Serial Number
+    type: string
+
+  firewallProtectionMode:
+    title: Firewall Protection Mode
+    type: string
+
+  scanStatus:
+    title: Scan Status
+    type: string
+
+  scanStatusTs:
+    title: Scan Status Timestamp
+    type: integer
+    x-samos-hidden: true
+
+  deviceSettingsTs:
+    title: Device Settings Timestamp
+    type: integer
+    x-samos-hidden: true
+
+  updateRequested:
+    title: Update Requested?
+    type: boolean
+
+  enforcedPolicy:
+    title: Enforced Policies
+    type: array
+    items:
+      type: object
+    x-samos-hidden: true
+
+  releaseGuids:
+    title: Release GUIDs
+    type: array
+    items:
+      type: string
+    x-samos-hidden: true
+
+  registerTs:
+    title: Registration Timestamp
+    type: integer
+    x-samos-hidden: true
+
+  locationTs:
+    title: Location Timestamp
+    type: integer
+    x-samos-hidden: true
+
+  s1Agent:
+    title: SentinelOne Agent
+    type: string
+    x-samos-ref-types:
+      - type-name: SonicWallCaptureClientAgent
+        key-name: uuid
+    x-samos-correlation:
+      correlation-key: Machine.sentinelone-agentuuid
+      correlation-type: Machine
+      priority: 3
+
+  s1Passphrase:
+    title: SentinelOne Passphrase
+    type: string
+    x-samos-hidden: true
+    x-samos-exclude: true
+
+  s1PassphraseTs:
+    title: SentinelOne Passphrase Timestamp
+    type: integer
+    x-samos-hidden: true
+
+  createdAt:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  updatedAt:
+    title: Updated At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  localIp:
+    title: Local IP
+    type: string
+
+  macAddress:
+    title: MAC Address
+    type: string
+
+  network:
+    title: Network
+    type: object
+    x-samos-hidden: true
+
+  externalIp:
+    title: External IP Address
+    type: string
+    format: ip-addr
+
+  lastPolicyId:
+    title: Last Policy ID
+    type: string
+
+  lastPolicyUpdateTs:
+    title: Last Policy Update Timestamp
+    type: integer
+
+  s1GroupId:
+    title: SentinelOne Group ID
+    type: string
+    x-samos-hidden: true
+
+  alerts:
+    title: Alerts
+    type: array
+    items:
+      type: object
+    x-samos-hidden: true
+
+  userActionsNeeded:
+    title: User Actions Needed
+    type: array
+    items:
+      type: string
+
+  x_all_ips:
+    title: All IP Addresses
+    type: array
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  x_mac_addresses:
+    title: MAC Addresses
+    type: array
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4

@@ -1,0 +1,175 @@
+x-samos-type-name: AirlockDigitalAgent
+x-samos-namespace: airlock.digital
+title: Airlock Digital Agent
+description: An endpoint agent managed by Airlock Digital.
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - agentid
+
+x-samos-table:
+  - name: hostname
+  - name: ip
+  - name: os
+  - name: clientversion
+  - name: policyversion
+  - name: d_active
+  - name: lastcheckin
+
+x-samos-detail:
+  - name: hostname
+  - name: domain
+  - name: ip
+  - name: username
+  - name: localip
+  - name: os
+  - name: clientversion
+  - name: policyversion
+  - name: freespace
+  - name: d_active
+  - name: groupid
+  - name: agentid
+  - name: status
+  - name: lastcheckin
+
+x-samos-derived-properties:
+  d_active:
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: status == `1`
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_qualified_hostname:
+    type: string
+    value: hostname && contains(hostname, `.`) && hostname || null
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_unqualified_hostname:
+    type: string
+    value: hostname && !contains(hostname, `.`) && hostname || null
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_hostnames:
+    type: array
+    items:
+      type: string
+    value: '[hostname][?@]'
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_mitigations:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+    syntax: jmespath
+    # M1038 - Execution Prevention (Deny by Default allowlisting)
+    # M1033 - Limit Software Installation (only allowlisted apps can run)
+    value: >-
+      [
+        status == `1` && `M1038` || null,
+        status == `1` && `M1033` || null
+      ] | [?@]
+
+properties:
+  agentid:
+    title: Agent ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  hostname:
+    title: Hostname
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  domain:
+    title: Domain
+    type: string
+
+  ip:
+    title: IP Address
+    type: string
+    format: ip-addr
+
+  localip:
+    title: Local IP Address
+    type: string
+    format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  os:
+    title: Operating System
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  clientversion:
+    title: Client Version
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+
+  policyversion:
+    title: Policy Version
+    type: string
+
+  freespace:
+    title: Free Space (GB)
+    type: string
+
+  username:
+    title: Username
+    type: string
+
+  lastcheckin:
+    title: Last Check-In
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+
+  status:
+    title: Status
+    type: integer
+
+  groupid:
+    title: Group
+    type: string
+    x-samos-ref-types:
+      - type-name: AirlockDigitalGroup
+        key-name: groupid

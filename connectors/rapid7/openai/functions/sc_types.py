@@ -8,6 +8,11 @@ This file is generated from the connector.spec.yaml file, using codegen:
 """
 
 
+class OpenAIUsage(dict):
+    def __init__(self, content: dict):
+        super().__init__(type=self.__class__.__name__, content=content)
+
+
 class OpenAIUser(dict):
     def __init__(self, content: dict):
         super().__init__(type=self.__class__.__name__, content=content)

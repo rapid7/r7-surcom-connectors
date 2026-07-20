@@ -1,11 +1,11 @@
 id: datadog.platform
 name: Datadog
 author: Rapid7
-version: 0.1.0
+version: 0.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Initial release
+  - Fix DatadogPlatformHost schema error macV example value to be valid JSON type instead of array.
 
 types:
   - DatadogPlatformHost

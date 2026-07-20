@@ -11,7 +11,7 @@
 
 certifi==2026.2.25
     # via requests
-charset-normalizer==3.4.4
+charset-normalizer==3.4.7
     # via
     #   httpie
     #   requests
@@ -33,12 +33,12 @@ multidict==6.7.1
     # via httpie
 orderedmultidict==1.0.2
     # via furl
-# NOTE: we do not want to pin pip
+# NOTE: we are ignoring this as we should not pin build dependencies
 # pip==26.0.1
     # via
     #   httpie
     #   veracode-api-signing
-pygments==2.19.2
+pygments==2.20.0
     # via
     #   httpie
     #   rich
@@ -46,9 +46,9 @@ pysocks==1.7.1
     # via requests
 pyyaml==6.0.3
     # via r7_surcom_api
-r7_surcom_api==0.8.10
+r7_surcom_api==0.9.11
     # via -r requirements.in
-requests==2.32.5
+requests==2.33.1
     # via
     #   httpie
     #   r7_surcom_api
@@ -56,10 +56,10 @@ requests==2.32.5
     #   veracode-api-signing
 requests-toolbelt==1.0.0
     # via httpie
-rich==14.3.3
+rich==15.0.0
     # via httpie
-# NOTE: we do not want to pin setuptools
-# setuptools==82.0.0
+# NOTE: we are ignoring this as we should not pin build dependencies
+# setuptools==82.0.1
     # via
     #   httpie
     #   veracode-api-signing
@@ -73,5 +73,5 @@ urllib3==2.6.3
     # via
     #   r7_surcom_api
     #   requests
-veracode-api-signing==26.1.0
+veracode-api-signing==26.4.0
     # via -r requirements.in

@@ -34,7 +34,7 @@ RuntimeOSDistro, RuntimeOSVersion, RuntimeOSLabel, OSLabel,
 NetFrameworkRelease"""
 
 # SWQL query to retrieve node details.
-NODE_QUERY = """SELECT TOP 250 NodeID, ObjectSubType,IPAddress,IPAddressType,
+NODE_QUERY = """SELECT TOP 100 NodeID, ObjectSubType,IPAddress,IPAddressType,
 NodeDescription,Description,DNS,SysName,Vendor,SysObjectID,Location,Contact,
 VendorIcon,Icon,Status,PolledStatus,StatusLED,DynamicIP,Caption,
 StatusDescription,NodeStatusRootCause,NodeStatusRootCauseWithLinks,
@@ -132,14 +132,14 @@ class SolarWindsOrionClient:
         SWIS_DEFAULT_PORT = 17774
         self.port = f_url.port if f_url.port not in (None, 80, 443) else SWIS_DEFAULT_PORT
         # SWIS queries against large Orion installations can take several minutes
-        # to respond. Use a generous read timeout (10 min) to avoid aborting
+        # to respond. Use a generous read timeout (15 min) to avoid aborting
         # queries that are still processing server-side.
         self.swis = orionsdk.SwisClient(
             self.base_url,
             self.settings.get("username"),
             self.settings.get("password"),
             verify=self.settings.get("verify_tls"),
-            session=HttpSession(timeout=(30, 600)),
+            session=HttpSession(timeout=(30, 1500)),
             port=self.port,
         )
 

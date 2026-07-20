@@ -1,0 +1,142 @@
+x-samos-type-name: SuseManagerIdentity
+x-samos-namespace: suse.manager
+title: SUSE Manager Identity
+description: An identity in a managed Linux system in SUSE Manager
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: login
+  - name: first_name
+  - name: last_name
+  - name: email
+  - name: enabled
+
+x-samos-detail:
+  - name: login
+  - name: first_name
+  - name: last_name
+  - name: email
+  - name: enabled
+  - name: d_org_id
+  - name: prefix
+  - name: use_pam
+  - name: errata_notification
+  - name: login_uc
+  - name: read_only
+  - name: org_name
+  - name: last_login_date
+  - name: created_date
+  - name: roles
+
+x-samos-derived-properties:
+  d_active:
+    # Derived property to convert enabled to active unified property name.
+    # active core.component takes whether the device is active, so using the enabled value.
+    title: Active?
+    x-samos-hidden: true
+    type: boolean
+    syntax: expression
+    value: 'enabled == `true`'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+  d_org_id:
+    #  Derived property to reference the SuseManagerOrganization:id as it is a string and org_id is an integer in the source data
+    title: Organization
+    type: string
+    syntax: jmespath
+    value: 'org_id'
+    x-samos-ref-types:
+      - type-name: SuseManagerOrganization
+        key-name: id
+
+properties:
+  login_uc:
+    type: string
+    title: Login Uc
+  id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  login:
+    type: string
+    title: Login
+  enabled:
+    type: boolean
+    title: Enabled?
+  prefix:
+    type: string
+    title: Prefix
+  last_name:
+    type: string
+    title: Last Name
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+  errata_notification:
+    type: boolean
+    title: Errata Notification?
+  last_login_date:
+    type: string
+    title: Last Login Date
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+  first_names:
+    type: string
+    title: First Names
+    x-samos-hidden: true
+  read_only:
+    type: boolean
+    title: Read Only?
+  org_id:
+    type: integer
+    title: Org ID
+  use_pam:
+    type: boolean
+    title: Use Pam?
+  created_date:
+    type: string
+    title: Created Date
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date
+  org_name:
+    type: string
+    title: Org Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  first_name:
+    type: string
+    title: First Name
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+  email:
+    type: string
+    title: Email
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+  roles:
+    type: array
+    title: Roles
+    items:
+      type: string

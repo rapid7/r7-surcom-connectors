@@ -1,0 +1,39 @@
+x-samos-type-name: Auth0Role
+x-samos-namespace: auth0
+title: Auth0 Role
+description: A Role from Auth0
+
+x-samos-extends-types:
+  - type-name: core.named-object
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+
+x-samos-detail:
+  - name: name
+  - name: description
+
+properties:
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description

@@ -1,0 +1,278 @@
+x-samos-type-name: ScaleComputingFleetManagerVM
+x-samos-namespace: scale.computing.fleet.manager
+title: Scale Computing Fleet Manager Virtual Machine
+description: A virtual machine running on a Scale Computing HyperCore cluster, managed by SC//Fleet Manager
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+$ref: https://api.scalecomputing.com/api/v2/openapi.json#/components/schemas/VmDto
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: d_active
+  - name: x_tags
+  - name: ips
+  - name: drivePercent
+  - name: driveAllocation
+  - name: snapSize
+  - name: cores
+  - name: memory
+  - name: nodeIp
+  - name: clusterId
+  - name: updatedAt
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: d_active
+  - name: ips
+  - name: clusterId
+  - name: nodeId
+  - name: nodeIp
+  - name: cores
+  - name: memory
+  - name: driveCapacity
+  - name: driveAllocation
+  - name: drivePercent
+  - name: snapSize
+  - name: x_tags
+  - name: state
+  - name: createdAt
+  - name: updatedAt
+
+x-samos-derived-properties:
+  # state: 0=off, 1=on (spec); 4=archived/decommissioned (observed, undocumented)
+  d_active:
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: 'state == `1`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  # VMs on HyperCore are always virtualized
+  d_virtual:
+    title: Virtualized?
+    type: boolean
+    syntax: jmespath
+    value: '`true`'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: virtual
+
+  # ips is a scalar string; wrap in array only when non-empty (state=0/4 VMs have ips: "")
+  d_ips:
+    title: IP Addresses
+    type: array
+    syntax: jmespath
+    value: 'ips != `` && [ips] || `[]`'
+    items:
+      type: string
+      format: ip-addr
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  # VM name as unqualified hostname for cross-connector Machine correlation
+  d_hostname:
+    title: Hostname
+    type: array
+    syntax: jmespath
+    value: '[name]'
+    items:
+      type: string
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  # Asset type is always "Virtual Machine" for this type
+  d_asset_type:
+    title: Asset Type
+    type: string
+    syntax: expression
+    value: 'Virtual Machine'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  # M1053 Data Backup: VM has an active snapshot (snapSize > 0)
+  d_mitigations:
+    title: Mitigations
+    type: array
+    syntax: jmespath
+    value: >-
+      [
+        snapSize != null && snapSize > `0` && `M1053`
+      ] | [?@]
+    x-samos-hidden: true
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Mitigation
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  id:
+    type: string
+    format: uuid
+    title: ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  state:
+    type: integer
+    title: State
+    description: Power state of the VM. 0 = off, 1 = on (from VmDto.map in API spec). 4 = archived/decommissioned (observed in real data, undocumented in spec).
+
+  ips:
+    type: string
+    title: IP Address
+    description: Single IP address string assigned to the VM.
+
+  clusterId:
+    type: string
+    format: uuid
+    title: Cluster
+    x-samos-ref-types:
+      - type-name: ScaleComputingFleetManagerCluster
+        key-name: id
+
+  cluster:
+    type: object
+    nullable: true
+    title: Cluster
+    properties:
+      id:
+        type: string
+        format: uuid
+        title: Cluster ID
+      name:
+        type: string
+        title: Cluster Name
+      organizationId:
+        type: string
+        title: Organization ID
+      onlineStatus:
+        type: string
+        title: Online Status
+      lastCheckin:
+        type: string
+        format: date-time
+        title: Last Check-in
+
+  nodeId:
+    type: string
+    nullable: true
+    title: Node ID
+    description: UUID of the physical host node this VM is currently running on. Display only — no node endpoint exists in Fleet Manager API.
+
+  nodeIp:
+    type: string
+    nullable: true
+    title: Node IP
+    description: LAN IP of the physical host node this VM is currently running on. Display only — not the VM's own IP.
+
+  cores:
+    type: integer
+    nullable: true
+    title: CPU Cores
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: cpus
+
+  memory:
+    type: integer
+    nullable: true
+    title: RAM
+    description: Total memory allocated to the VM in bytes.
+
+  driveCapacity:
+    type: integer
+    title: Drive Capacity (bytes)
+
+  driveAllocation:
+    type: integer
+    title: Allocation
+    description: Storage space currently allocated to the VM, in bytes.
+
+  drivePercent:
+    type: string
+    title: Storage
+    description: Drive usage percentage returned as a string by the API, e.g. "29.00".
+
+  snapSize:
+    type: integer
+    nullable: true
+    title: Snap Size
+
+  tags:
+    type: string
+    nullable: true
+    x-samos-hidden: true
+    title: Tags
+    description: Tags assigned to this VM in Fleet Manager.
+
+  x_tags:
+    type: array
+    title: Tags
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: ScaleComputingFleetManagerSourceTag
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+
+  createdAt:
+    type: string
+    format: date-time
+    title: Created At
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  updatedAt:
+    type: string
+    format: date-time
+    title: Updated At
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen

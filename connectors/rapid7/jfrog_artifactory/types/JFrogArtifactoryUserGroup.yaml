@@ -1,0 +1,105 @@
+x-samos-type-name: JFrogArtifactoryUserGroup
+x-samos-namespace: jfrog.artifactory
+title: JFrog Artifactory Group
+description: A user group in JFrog Artifactory
+
+x-samos-extends-types:
+  - type-name: UserGroup
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: realm
+  - name: auto_join
+  - name: admin_privileges
+  - name: members
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: realm
+  - name: auto_join
+  - name: admin_privileges
+  - name: members
+  - name: reports_manager
+  - name: watch_manager
+  - name: policy_manager
+  - name: policy_viewer
+  - name: manage_resources
+  - name: manage_webhook
+
+properties:
+  id:
+    title: Object ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  auto_join:
+    title: Auto Join?
+    type: boolean
+
+  admin_privileges:
+    title: Admin Privileges?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_administrator
+
+  realm:
+    title: Realm
+    type: string
+
+  members:
+    title: Members
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: JFrogArtifactoryUser
+          key-name: id
+
+  reports_manager:
+    title: Reports Manager?
+    type: boolean
+
+  watch_manager:
+    title: Watch Manager?
+    type: boolean
+
+  policy_manager:
+    title: Policy Manager?
+    type: boolean
+
+  policy_viewer:
+    title: Policy Viewer?
+    type: boolean
+
+  manage_resources:
+    title: Manage Resources?
+    type: boolean
+
+  manage_webhook:
+    title: Manage Webhook?
+    type: boolean

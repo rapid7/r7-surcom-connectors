@@ -1,0 +1,611 @@
+x-samos-type-name: SonicWallCaptureClientAgent
+x-samos-namespace: sonicwall.capture.client
+title: SonicWall Capture Client Agent
+description: A SentinelOne-powered endpoint protection agent managed through SonicWall Capture Client.
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+  - uuid
+
+x-samos-table:
+  - name: computerName
+  - name: osName
+  - name: machineType
+  - name: agentVersion
+  - name: isActive
+  - name: infected
+  - name: networkStatus
+  - name: lastActiveDate
+
+x-samos-detail:
+  - name: computerName
+  - name: accountName
+  - name: domain
+  - name: machineType
+  - name: osName
+  - name: osType
+  - name: osArch
+  - name: osRevision
+  - name: osUsername
+  - name: modelName
+  - name: cpuId
+  - name: cpuCount
+  - name: coreCount
+  - name: totalMemory
+  - name: serialNumber
+  - name: externalIp
+  - name: lastIpToMgmt
+  - name: agentVersion
+  - name: isActive
+  - name: isUpToDate
+  - name: createdAt
+  - name: updatedAt
+  - name: groupName
+  - name: isDecommissioned
+  - name: isUninstalled
+  - name: isPendingUninstall
+  - name: infected
+  - name: activeThreats
+  - name: activeProtection
+  - name: detectionState
+  - name: mitigationMode
+  - name: mitigationModeSuspicious
+  - name: appsVulnerabilityStatus
+  - name: networkStatus
+  - name: networkQuarantineEnabled
+  - name: firewallEnabled
+  - name: scanStatus
+  - name: scanStartedAt
+  - name: scanFinishedAt
+  - name: lastSuccessfulScanDate
+  - name: fullDiskScanLastUpdatedAt
+  - name: rangerStatus
+  - name: rangerVersion
+  - name: installerType
+  - name: lastLoggedInUserName
+  - name: lastActiveDate
+  - name: registeredAt
+  - name: threatRebootRequired
+
+x-samos-derived-properties:
+  # Active when agent is running and not decommissioned
+  d_endpoint_protection_active:
+    title: Endpoint Protection Active?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_protection_active
+    syntax: expression
+    value: 'isActive == `true` && isDecommissioned != `true`'
+
+  # Maps MITRE mitigations based on active scanning and threat prevention capabilities
+  d_mitigations:
+    title: Mitigations
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Mitigation
+          key-name: id
+    syntax: jmespath
+    # M1049 - Antivirus/Antimalware (applied when agent has successful scan dates, indicating active threat scanning)
+    # M1040 - Behavior Prevention on Endpoint (applied when agent is active with mitigation mode enabled for threat prevention)
+    value: >-
+      [
+        (isActive == `true` && isDecommissioned != `true` && lastSuccessfulScanDate != null) && `M1049` || null,
+        (isActive == `true` && isDecommissioned != `true` && mitigationMode != null && mitigationMode != ``) && `M1040` || null
+      ] | [?@]
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+  # Extracts FQDN from computerName for machine correlation
+  d_qualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: "computerName && contains(computerName, '.') && computerName || null"
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  # Extracts short hostname from computerName for machine correlation
+  d_unqualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: "computerName && !contains(computerName, '.') && computerName || null"
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  # Provides hostname array for unified Machine type fulfillment
+  d_hostnames:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+    syntax: jmespath
+    value: '[computerName]|[?@]'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+properties:
+  accountId:
+    title: Account ID
+    type: string
+    x-samos-hidden: true
+
+  accountName:
+    title: Account Name
+    type: string
+
+  activeDirectory:
+    title: Active Directory
+    type: object
+    additionalProperties: true
+
+  activeProtection:
+    title: Active Protection
+    type: array
+    items:
+      type: string
+
+  activeThreats:
+    title: Active Threats
+    type: integer
+
+  agentVersion:
+    title: Agent Version
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+
+  allowRemoteShell:
+    title: Allow Remote Shell?
+    type: boolean
+
+  appsVulnerabilityStatus:
+    title: Apps Vulnerability Status
+    type: string
+
+  cloudProviders:
+    title: Cloud Providers
+    type: object
+    additionalProperties: true
+
+  computerName:
+    title: Computer Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  consoleMigrationStatus:
+    title: Console Migration Status
+    type: string
+
+  containerizedWorkloadCounts:
+    title: Containerized Workload Counts
+    type: object
+    additionalProperties: true
+
+  coreCount:
+    title: Core Count
+    type: integer
+
+  cpuCount:
+    title: CPU Count
+    type: integer
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: cpus
+
+  cpuId:
+    title: CPU
+    type: string
+
+  createdAt:
+    title: Created At
+    type: string
+    format: date-time
+
+  detectionState:
+    title: Detection State
+    type: string
+
+  domain:
+    title: Domain
+    type: string
+
+  encryptedApplications:
+    title: Encrypted Applications?
+    type: boolean
+
+  externalId:
+    title: External ID
+    type: string
+    x-samos-hidden: true
+
+  externalIp:
+    title: External IP
+    type: string
+    format: ip-addr
+
+  firewallEnabled:
+    title: Firewall Enabled?
+    type: boolean
+
+  firstFullModeTime:
+    title: First Full Mode Time
+    type: string
+    format: date-time
+
+  fullDiskScanLastUpdatedAt:
+    title: Full Disk Scan Last Updated
+    type: string
+    format: date-time
+
+  groupId:
+    title: Group ID
+    type: string
+    x-samos-hidden: true
+
+  groupIp:
+    title: Group IP
+    type: string
+
+  groupName:
+    title: Group Name
+    type: string
+
+  hasContainerizedWorkload:
+    title: Containerized Workload?
+    type: boolean
+    x-samos-hidden: true
+
+  id:
+    title: Agent ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  inRemoteShellSession:
+    title: In Remote Shell Session?
+    type: boolean
+
+  infected:
+    title: Infected?
+    type: boolean
+
+  installerType:
+    title: Installer Type
+    type: string
+
+  isActive:
+    title: Active?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  isAdConnector:
+    title: AD Connector?
+    type: boolean
+    x-samos-hidden: true
+
+  isDecommissioned:
+    title: Decommissioned?
+    type: boolean
+
+  isHyperAutomate:
+    title: Hyper Automate?
+    type: boolean
+    x-samos-hidden: true
+
+  isPendingUninstall:
+    title: Pending Uninstall?
+    type: boolean
+
+  isUninstalled:
+    title: Uninstalled?
+    type: boolean
+
+  isUpToDate:
+    title: Up to Date?
+    type: boolean
+
+  lastActiveDate:
+    title: Last Active
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  lastIpToMgmt:
+    title: Last IP to Management
+    type: string
+    format: ip-addr
+
+  lastLoggedInUserName:
+    title: Last Logged In User
+    type: string
+
+  lastSuccessfulScanDate:
+    title: Last Successful Scan
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_scanned
+
+  licenseKey:
+    title: License Key
+    type: string
+    x-samos-hidden: true
+
+  locationEnabled:
+    title: Location Enabled?
+    type: boolean
+
+  locationType:
+    title: Location Type
+    type: string
+    x-samos-hidden: true
+
+  locations:
+    title: Locations
+    type: array
+    additionalProperties: true
+    items:
+      type: object
+
+  machineSid:
+    title: Machine SID
+    type: string
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.SID
+      correlation-type: Machine
+      priority: 3
+
+  machineType:
+    title: Machine Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  missingPermissions:
+    title: Missing Permissions
+    type: array
+    items:
+      type: string
+
+  mitigationMode:
+    title: Mitigation Mode
+    type: string
+
+  mitigationModeSuspicious:
+    title: Mitigation Mode (Suspicious)
+    type: string
+
+  modelName:
+    title: Model
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+
+  networkInterfaces:
+    title: Network Interfaces
+    type: array
+    items:
+      type: object
+
+  networkQuarantineEnabled:
+    title: Network Quarantine Enabled?
+    type: boolean
+
+  networkStatus:
+    title: Network Status
+    type: string
+
+  operationalState:
+    title: Operational State
+    type: string
+
+  operationalStateExpiration:
+    title: Operational State Expiration
+    type: string
+    format: date-time
+    x-samos-hidden: true
+
+  osArch:
+    title: OS Architecture
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_architecture
+
+  osName:
+    title: OS Name
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  osRevision:
+    title: OS Revision
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+
+  osStartTime:
+    title: OS Start Time
+    type: string
+    format: date-time
+
+  osType:
+    title: OS Type
+    type: string
+
+  osUsername:
+    title: OS Username
+    type: string
+
+  proxyStates:
+    title: Proxy States
+    type: object
+    x-samos-hidden: true
+
+  rangerStatus:
+    title: Ranger Status
+    type: string
+    x-samos-hidden: true
+
+  rangerVersion:
+    title: Ranger Version
+    type: string
+    x-samos-hidden: true
+
+  registeredAt:
+    title: Registered At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  remoteProfilingState:
+    title: Remote Profiling State
+    type: string
+
+  remoteProfilingStateExpiration:
+    title: Remote Profiling State Expiration
+    type: string
+    format: date-time
+
+  scanAbortedAt:
+    title: Scan Aborted At
+    type: string
+    format: date-time
+
+  scanFinishedAt:
+    title: Scan Finished At
+    type: string
+    format: date-time
+
+  scanStartedAt:
+    title: Scan Started At
+    type: string
+    format: date-time
+
+  scanStatus:
+    title: Scan Status
+    type: string
+
+  serialNumber:
+    title: Serial Number
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+
+  showAlertIcon:
+    title: Show Alert Icon?
+    type: boolean
+    x-samos-hidden: true
+
+  siteId:
+    title: Site ID
+    type: string
+    x-samos-hidden: true
+
+  siteName:
+    title: Site Name
+    type: string
+
+  storageName:
+    title: Storage Name
+    type: string
+
+  storageType:
+    title: Storage Type
+    type: string
+
+  tags:
+    title: Tags
+    type: object
+
+  threatRebootRequired:
+    title: Threat Reboot Required?
+    type: boolean
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: pending_reboot
+
+  totalMemory:
+    title: Total Memory (MB)
+    type: integer
+    x-samos-hidden: true
+
+  updatedAt:
+    title: Updated At
+    type: string
+    format: date-time
+
+  userActionsNeeded:
+    title: User Actions Needed
+    type: array
+    x-samos-hidden: true
+    items:
+      type: string
+
+  uuid:
+    title: Agent UUID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-correlation:
+      correlation-key: Machine.sentinelone-agentuuid
+      correlation-type: Machine
+      priority: 3
+
+  x_all_ips:
+    title: IP Addresses
+    type: array
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  x_mac_addresses:
+    title: MAC Addresses
+    type: array
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4

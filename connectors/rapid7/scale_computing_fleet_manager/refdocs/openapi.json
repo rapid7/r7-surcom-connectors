@@ -1,0 +1,399 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SC//Fleet Manager API",
+    "description": "The [OpenAPI Specification JSON Schema](https://api.scalecomputing.com/api/v2/openapi.json) can be imported into the API tool of your choice, such as Postman or Insomnia.\n\nThis REST API allows programmatic role-based access to your SC//Fleet Manager data. Use the \"Authorize\" button to input API Keys [created in Fleet Manager](https://fleet.scalecomputing.com/organization/settings) and try out the API directly from your browser. Note: Each endpoint is role restricted in alignment with the UI access levels, which are detailed in the Fleet Manager [User Guide](https://scalecomputing.my.salesforce.com/sfc/p/#700000008AKW/a/4u0000019yBV/BT9qsos01XIXnbP85uBMLHE5AbtdRBhhxxjxGl3OCIU).",
+    "version": "2.0",
+    "contact": {}
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "BadRequestException": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "default": 400
+          },
+          "message": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": ["statusCode", "message", "error"]
+      },
+      "PageMetaDto": {
+        "type": "object",
+        "properties": {
+          "offset": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          }
+        },
+        "required": ["offset", "limit", "total"]
+      },
+      "PageDto": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/PageMetaDto"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["meta", "items"]
+      },
+      "UpdatesAvailableOptionDto": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "description": "The unique identifier of the update option",
+            "example": "9.4.23.216736"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the update",
+            "example": "release 9.4.23.216736"
+          },
+          "changeLog": {
+            "type": "string",
+            "description": "Change log for the update",
+            "example": "release 9.4.23.216736 - <a href=\"https://example.com\">link</a>"
+          },
+          "buildID": {
+            "type": "number",
+            "description": "Build ID of the update",
+            "example": 216736
+          },
+          "majorVersion": {
+            "type": "number",
+            "description": "Major version number",
+            "example": 9
+          },
+          "minorVersion": {
+            "type": "number",
+            "description": "Minor version number",
+            "example": 4
+          },
+          "revision": {
+            "type": "number",
+            "description": "Revision number",
+            "example": 23
+          },
+          "timestamp": {
+            "type": "number",
+            "description": "Timestamp of the update",
+            "example": 1734552304
+          }
+        },
+        "required": [
+          "uuid",
+          "description",
+          "changeLog",
+          "buildID",
+          "majorVersion",
+          "minorVersion",
+          "revision",
+          "timestamp"
+        ]
+      },
+      "UpdateStatusDto": {
+        "type": "object",
+        "properties": {
+          "isUpdating": {
+            "type": "boolean",
+            "description": "Whether the system is updating",
+            "example": false
+          },
+          "state": {
+            "type": "string",
+            "description": "The current state of the update process",
+            "example": "COMPLETE"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message related to the update process",
+            "example": ""
+          },
+          "percent": {
+            "type": "number",
+            "description": "Percentage of completion",
+            "example": 0
+          }
+        },
+        "required": ["isUpdating", "state", "message", "percent"]
+      },
+      "ClusterDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "exclude": true
+          },
+          "name": {
+            "type": "string",
+            "example": "Scale01 Single Node"
+          },
+          "organizationId": {
+            "type": "string",
+            "nullable": true,
+            "example": "61ab80248069550014d7c775",
+            "exclude": true
+          },
+          "nodeCount": {
+            "type": "number",
+            "nullable": true,
+            "example": "3"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true,
+            "example": "1.2.3"
+          },
+          "storagePercent": {
+            "type": "number",
+            "nullable": true,
+            "example": "52"
+          },
+          "memoryPercent": {
+            "type": "number",
+            "nullable": true,
+            "example": "43"
+          },
+          "cpuPercent": {
+            "type": "number",
+            "nullable": true,
+            "example": "77"
+          },
+          "healthScore": {
+            "type": "number",
+            "nullable": true,
+            "example": "7"
+          },
+          "healthState": {
+            "type": "string",
+            "nullable": true,
+            "example": "healthy"
+          },
+          "vmRunning": {
+            "type": "number",
+            "nullable": true,
+            "example": "3"
+          },
+          "vmTotal": {
+            "type": "number",
+            "nullable": true,
+            "example": "4"
+          },
+          "tags": {
+            "type": "string",
+            "nullable": true,
+            "example": "foo, bar, baz"
+          },
+          "lastCheckin": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "default": null,
+            "example": "2026-06-24T03:02:56.963Z",
+            "exclude": true
+          },
+          "leaderNodeLanIp": {
+            "type": "string",
+            "nullable": true,
+            "example": "127.0.0.1"
+          },
+          "leaderNode": {
+            "type": "string",
+            "nullable": true,
+            "exclude": true
+          },
+          "onlineStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "updatesAvailable": {
+            "type": "boolean",
+            "nullable": true,
+            "exclude": true
+          },
+          "updatesAvailableOptions": {
+            "nullable": true,
+            "exclude": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UpdatesAvailableOptionDto"
+            }
+          },
+          "updatesStatus": {
+            "nullable": true,
+            "exclude": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UpdateStatusDto"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-06-24T03:02:56.964Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-06-24T03:02:56.964Z"
+          },
+          "cluster": {
+            "type": "object",
+            "nullable": true
+          }
+        },
+        "required": ["id", "name", "createdAt", "updatedAt"]
+      },
+      "VmDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "exclude": true
+          },
+          "name": {
+            "type": "string",
+            "example": "store37-foo-vm"
+          },
+          "clusterId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cluster": {
+            "type": "object",
+            "nullable": true,
+            "filter": {
+              "property": "name"
+            },
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string",
+                "example": "Scale01 Single Node"
+              },
+              "organizationId": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "example": "61ab80248069550014d7c775"
+              }
+            }
+          },
+          "nodeIp": {
+            "type": "string",
+            "nullable": true,
+            "example": "173.30.0.100"
+          },
+          "nodeId": {
+            "type": "string",
+            "nullable": true,
+            "example": "07793300-aaaa-4444-12ab-0a812cfdf8df"
+          },
+          "description": {
+            "type": "string",
+            "example": "Payment processing for store #37"
+          },
+          "state": {
+            "type": "number",
+            "example": "0",
+            "map": {
+              "on": 1,
+              "off": 0
+            }
+          },
+          "ips": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "string"
+          },
+          "driveCapacity": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "driveAllocation": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "drivePercent": {
+            "type": "number"
+          },
+          "memory": {
+            "type": "integer",
+            "nullable": true,
+            "format": "int64"
+          },
+          "cores": {
+            "type": "number",
+            "nullable": true
+          },
+          "snapSize": {
+            "type": "integer",
+            "nullable": true,
+            "format": "int64"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-06-24T03:02:57.577Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-06-24T03:02:57.577Z"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "clusterId",
+          "cluster",
+          "nodeIp",
+          "nodeId",
+          "description",
+          "state",
+          "ips",
+          "tags",
+          "driveCapacity",
+          "driveAllocation",
+          "drivePercent",
+          "memory",
+          "cores",
+          "snapSize",
+          "createdAt",
+          "updatedAt"
+        ]
+      }
+    }
+  }
+}

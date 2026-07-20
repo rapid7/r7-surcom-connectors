@@ -1,0 +1,64 @@
+x-samos-type-name: GophishPlatformFinding
+x-samos-namespace: gophish.platform
+title: Gophish Finding
+description: A finding representing a user who clicked a link or opened a phishing email in a campaign.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Finding
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: x_email
+  - name: x_exposure_id
+
+x-samos-detail:
+  - name: x_email
+  - name: x_exposure_id
+
+x-samos-derived-properties:
+  d_id:
+    # A unique ID for the finding, combining campaign ID and user email to ensure uniqueness across campaigns and users
+    title: Finding ID
+    type: string
+    syntax: expression
+    value: '{x_exposure_id}_{x_email}'
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+
+properties:
+  x_exposure_id:
+    type: string
+    title: Campaign
+    x-samos-ref-types:
+      - type-name: GophishPlatformCampaign
+        key-name: id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: part_of
+
+  x_email:
+    type: string
+    format: email
+    title: Target Email
+    x-samos-ref-types:
+      - type-name: GophishPlatformUser
+        key-name: email
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to
+
+  x_template_id:
+    type: string
+    title: Template ID
+    x-samos-ref-types:
+      - type-name: GophishPlatformTemplate
+        key-name: id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability

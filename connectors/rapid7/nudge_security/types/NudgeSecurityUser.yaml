@@ -1,0 +1,204 @@
+x-samos-type-name: NudgeSecurityUser
+x-samos-namespace: nudge.security
+title: Nudge Security User
+description: A user identity discovered by Nudge Security.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id # used for references in other types
+  - id
+
+x-samos-table:
+  - name: name
+  - name: primary_email
+  - name: status
+  - name: has_2fa
+  - name: is_admin
+  - name: creation_time
+
+x-samos-detail:
+  - name: name
+  - name: given_name
+  - name: family_name
+  - name: primary_email
+  - name: status
+  - name: has_2fa
+  - name: is_admin
+  - name: is_delegated_admin
+  - name: is_guest_user
+  - name: is_mailbox_setup
+  - name: in_high_risk_country
+  - name: latest_high_risk_country_code
+  - name: latest_high_risk_country_time
+  - name: last_password_change
+  - name: mailbox_type
+  - name: org_unit
+  - name: recovery_email
+  - name: recovery_phone
+  - name: contact_emails
+  - name: email_aliases
+  - name: external_user_id
+  - name: picture
+  - name: creation_time
+
+x-samos-derived-properties:
+  d_id:
+    # The "id" property is an integer; derive a string to fulfill User.id.
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  d_active:
+    # status is a string ("ACTIVE", "SUSPENDED", ...); fulfill core.principal:active.
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: status == 'ACTIVE'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+  d_email:
+    # primary_email is a reference; derive a separate property to fulfill User.email.
+    type: string
+    syntax: jmespath
+    value: primary_email
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+
+properties:
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  given_name:
+    title: First Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+  family_name:
+    title: Last Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+  primary_email:
+    title: Group
+    type: string
+    format: email
+    x-samos-ref-types:
+      - type-name: NudgeSecurityUserGroup
+        key-name: primary_email
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups
+  status:
+    title: Status
+    type: string
+  has_2fa:
+    title: 2FA Enabled?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: has_mfa
+  is_admin:
+    title: Admin?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_administrator
+  is_delegated_admin:
+    title: Delegated Admin?
+    type: boolean
+  is_guest_user:
+    title: Guest User?
+    type: boolean
+  is_mailbox_setup:
+    title: Mailbox Setup?
+    type: boolean
+  in_high_risk_country:
+    title: High Risk Country?
+    type: boolean
+  latest_high_risk_country_code:
+    title: Latest High Risk Country
+    type: string
+  latest_high_risk_country_time:
+    title: Latest High Risk Country Time
+    type: string
+    format: date-time
+  last_password_change:
+    title: Last Password Change
+    type: string
+    format: date-time
+  mailbox_type:
+    title: Mailbox Type
+    type: string
+  org_unit:
+    title: Org Unit
+    type: object
+    properties:
+      name:
+        title: Name
+        type: string
+      description:
+        title: Description
+        type: string
+      path:
+        title: Path
+        type: string
+  recovery_email:
+    title: Recovery Email
+    type: string
+    format: email
+  recovery_phone:
+    title: Recovery Phone
+    type: string
+  contact_emails:
+    title: Contact Emails
+    type: array
+    items:
+      type: string
+      format: email
+  email_aliases:
+    title: Email Aliases
+    type: array
+    items:
+      type: string
+      format: email
+  external_user_id:
+    title: External User ID
+    type: string
+  picture:
+    title: Picture URL
+    type: string
+  creation_time:
+    title: Creation Time
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen

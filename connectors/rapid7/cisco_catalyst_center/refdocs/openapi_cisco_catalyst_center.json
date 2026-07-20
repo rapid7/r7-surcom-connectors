@@ -1,0 +1,891 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Intent API",
+    "description": "Cisco Catalyst Center Platform v. 3.1.3",
+    "version": "3.1.3"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "getDeviceListResponse": {
+        "type": "object",
+        "properties": {
+          "response": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "reachabilityFailureReason": {
+                  "type": "string",
+                  "description": "Failure reason for unreachable devices"
+                },
+                "reachabilityStatus": {
+                  "type": "string",
+                  "description": "Device reachability status as Reachable / Unreachable"
+                },
+                "series": {
+                  "type": "string",
+                  "description": "Device series"
+                },
+                "snmpContact": {
+                  "type": "string",
+                  "description": "SNMP contact on device"
+                },
+                "snmpLocation": {
+                  "type": "string",
+                  "description": "SNMP location on device"
+                },
+                "tagCount": {
+                  "type": "string",
+                  "description": "Number of tags associated with the device"
+                },
+                "tunnelUdpPort": {
+                  "type": "string",
+                  "description": "Mobility protocol port is stored as tunneludpport for WLC"
+                },
+                "uptimeSeconds": {
+                  "type": "number",
+                  "description": "Uptime in Seconds"
+                },
+                "waasDeviceMode": {
+                  "type": "string",
+                  "description": "WAAS device mode"
+                },
+                "serialNumber": {
+                  "type": "string",
+                  "description": "Serial number of device"
+                },
+                "lastUpdateTime": {
+                  "type": "number",
+                  "description": "Time in epoch when the network device info last got updated"
+                },
+                "macAddress": {
+                  "type": "string",
+                  "description": "MAC address of device"
+                },
+                "upTime": {
+                  "type": "string",
+                  "description": "Time that shows for how long the device has been up"
+                },
+                "deviceSupportLevel": {
+                  "type": "string",
+                  "description": "Support level of the device"
+                },
+                "hostname": {
+                  "type": "string",
+                  "description": "Device name"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Type of device as switch, router, wireless lan controller, accesspoints"
+                },
+                "memorySize": {
+                  "type": "string",
+                  "description": "Processor memory size"
+                },
+                "family": {
+                  "type": "string",
+                  "description": "Family of device as switch, router, wireless lan controller, accesspoints"
+                },
+                "errorCode": {
+                  "type": "string",
+                  "description": "Inventory status error code"
+                },
+                "softwareType": {
+                  "type": "string",
+                  "description": "Software type on the device"
+                },
+                "softwareVersion": {
+                  "type": "string",
+                  "description": "Software version on the device"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "System description"
+                },
+                "roleSource": {
+                  "type": "string",
+                  "description": "Role source as manual / auto"
+                },
+                "location": {
+                  "type": "string",
+                  "description": "[Deprecated] Location ID that is associated with the device"
+                },
+                "role": {
+                  "type": "string",
+                  "description": "Role of device as access, distribution, border router, core"
+                },
+                "collectionInterval": {
+                  "type": "string",
+                  "description": "Re sync Interval of the device"
+                },
+                "inventoryStatusDetail": {
+                  "type": "string",
+                  "description": "Status detail of inventory sync"
+                },
+                "apEthernetMacAddress": {
+                  "type": "string",
+                  "description": "AccessPoint Ethernet MacAddress of AP device"
+                },
+                "apManagerInterfaceIp": {
+                  "type": "string",
+                  "description": "IP address of WLC on AP manager interface"
+                },
+                "associatedWlcIp": {
+                  "type": "string",
+                  "description": "Associated Wlc Ip address of the AP device"
+                },
+                "bootDateTime": {
+                  "type": "string",
+                  "description": "Device boot time"
+                },
+                "collectionStatus": {
+                  "type": "string",
+                  "description": "Collection status as Synchronizing, Could not synchronize, Not manageable, Managed, Partial Collection Failure, Incomplete, Unreachable, Wrong credential, Reachable, In Progress"
+                },
+                "errorDescription": {
+                  "type": "string",
+                  "description": "Inventory status description"
+                },
+                "interfaceCount": {
+                  "type": "string",
+                  "description": "Number of interfaces on the device"
+                },
+                "lastUpdated": {
+                  "type": "string",
+                  "description": "Time when the network device info last got updated"
+                },
+                "lineCardCount": {
+                  "type": "string",
+                  "description": "Number of linecards on the device"
+                },
+                "lineCardId": {
+                  "type": "string",
+                  "description": "IDs of linecards of the device"
+                },
+                "locationName": {
+                  "type": "string",
+                  "description": "[Deprecated] Name of the associated location"
+                },
+                "managedAtleastOnce": {
+                  "type": "boolean",
+                  "description": "Indicates if device went into Managed state atleast once"
+                },
+                "managementIpAddress": {
+                  "type": "string",
+                  "description": "IP address of the device"
+                },
+                "platformId": {
+                  "type": "string",
+                  "description": "Platform ID of device"
+                },
+                "managementState": {
+                  "type": "string",
+                  "description": "Represents the current management state of the network element: managed, unmanaged, under maintenance, and so on."
+                },
+                "pendingSyncRequestsCount": {
+                  "type": "string",
+                  "description": "Count of pending sync requests , if any"
+                },
+                "reasonsForDeviceResync": {
+                  "type": "string",
+                  "description": "Reason for last/ongoing sync"
+                },
+                "reasonsForPendingSyncRequests": {
+                  "type": "string",
+                  "description": "Reasons for pending sync requests , if any"
+                },
+                "syncRequestedByApp": {
+                  "type": "string",
+                  "description": "Applications which requested for the resync of network device"
+                },
+                "lastManagedResyncReasons": {
+                  "type": "string",
+                  "description": "Reasons for last successful sync"
+                },
+                "dnsResolvedManagementAddress": {
+                  "type": "string",
+                  "description": "Specifies the resolved ip address of dns name"
+                },
+                "lastDeviceResyncStartTime": {
+                  "type": "string",
+                  "description": "Start time for last/ongoing sync"
+                },
+                "instanceTenantId": {
+                  "type": "string",
+                  "description": "Instance Tenant Id of the device"
+                },
+                "instanceUuid": {
+                  "type": "string",
+                  "description": "Instance Uuid of the device"
+                },
+                "id": {
+                  "type": "string",
+                  "description": "Instance Uuid of the device"
+                }
+              },
+              "required": [
+                "reachabilityStatus",
+                "series",
+                "tagCount",
+                "uptimeSeconds",
+                "waasDeviceMode",
+                "serialNumber",
+                "lastUpdateTime",
+                "macAddress",
+                "upTime",
+                "hostname",
+                "type",
+                "memorySize",
+                "family",
+                "softwareType",
+                "softwareVersion",
+                "role",
+                "inventoryStatusDetail",
+                "apEthernetMacAddress",
+                "collectionStatus",
+                "interfaceCount",
+                "lastUpdated",
+                "lineCardCount",
+                "lineCardId",
+                "managementIpAddress",
+                "platformId",
+                "managementState",
+                "reasonsForDeviceResync",
+                "lastManagedResyncReasons",
+                "dnsResolvedManagementAddress",
+                "lastDeviceResyncStartTime",
+                "instanceTenantId",
+                "instanceUuid",
+                "id"
+              ]
+            },
+            "description": ""
+          },
+          "version": {
+            "type": "string",
+            "description": ""
+          }
+        },
+        "description": ""
+      },
+      "getSiteV2Response": {
+        "type": "object",
+        "properties": {
+          "response": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "parentId": {
+                  "type": "string",
+                  "description": "Parent site Instance UUID (e.g. b27181bb-211b-40ec-ba5d-2603867c3f2c)"
+                },
+                "groupTypeList": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "There are different group types like 'RBAC', 'POLICY', 'SITE', 'TAG', 'PORT', 'DEVICE_TYPE'. This API is for site, so list contains 'SITE' only"
+                },
+                "groupHierarchy": {
+                  "type": "string",
+                  "description": "Site hierarchy by instance UUID (e.g. b27181bb-211b-40ec-ba5d-2603867c3f2c/576c7859-e485-4073-a46f-305f475de4c5)"
+                },
+                "additionalInfo": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "nameSpace": {
+                        "type": "string",
+                        "description": "Site name space. Default value is 'Location'"
+                      },
+                      "attributes": {
+                        "type": "object",
+                        "properties": {
+                          "addressInheritedFrom": {
+                            "type": "string",
+                            "description": "Site instance UUID from where address inherited (e.g. 576c7859-e485-4073-a46f-305f475de4c5)"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": ["area", "building", "floor"],
+                            "description": "Site type"
+                          },
+                          "country": {
+                            "type": "string",
+                            "description": "Site Country (e.g. United States)"
+                          },
+                          "address": {
+                            "type": "string",
+                            "description": "Site address (e.g. 269 East Tasman Drive, San Jose, California 95134, United States)"
+                          },
+                          "latitude": {
+                            "type": "string",
+                            "description": "Site latitude (e.g. 37.413082)"
+                          },
+                          "longitude": {
+                            "type": "string",
+                            "description": "Site longitude (e.g. -121.933886)"
+                          }
+                        },
+                        "description": ""
+                      }
+                    }
+                  },
+                  "description": "Site additional info"
+                },
+                "groupNameHierarchy": {
+                  "type": "string",
+                  "description": "Site hierarchy by name (e.g. Global/USA/CA/San Jose/Building4)"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Site name (e.g. Building4)"
+                },
+                "instanceTenantId": {
+                  "type": "string",
+                  "description": "Tenant instance Id where site created (e.g. 63bf047b64ec9c1c45f9019c)"
+                },
+                "id": {
+                  "type": "string",
+                  "description": "Site instance UUID (e.g. bb5122ce-4527-4af5-8718-44b746a3a3d8)"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "required": ["response"],
+        "description": ""
+      },
+      "retrievesTheListOfClientsWhileAlsoOfferingBasicFilteringAndSortingCapabilitiesResponse": {
+        "type": "object",
+        "properties": {
+          "response": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": ""
+                },
+                "macAddress": {
+                  "type": "string",
+                  "description": ""
+                },
+                "type": {
+                  "type": "string",
+                  "description": ""
+                },
+                "name": {
+                  "type": "string",
+                  "description": ""
+                },
+                "userId": {
+                  "type": "string",
+                  "description": ""
+                },
+                "username": {
+                  "type": "string",
+                  "description": ""
+                },
+                "ipv4Address": {
+                  "type": "string",
+                  "description": ""
+                },
+                "ipv6Addresses": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": ""
+                },
+                "vendor": {
+                  "type": "string",
+                  "description": ""
+                },
+                "osType": {
+                  "type": "string",
+                  "description": ""
+                },
+                "osVersion": {
+                  "type": "string",
+                  "description": ""
+                },
+                "formFactor": {
+                  "type": "string",
+                  "description": ""
+                },
+                "siteHierarchy": {
+                  "type": "string",
+                  "description": ""
+                },
+                "siteHierarchyId": {
+                  "type": "string",
+                  "description": ""
+                },
+                "siteId": {
+                  "type": "string",
+                  "description": ""
+                },
+                "lastUpdatedTime": {
+                  "type": "integer",
+                  "description": ""
+                },
+                "connectionStatus": {
+                  "type": "string",
+                  "description": ""
+                },
+                "tracked": {
+                  "type": "string",
+                  "description": ""
+                },
+                "isPrivateMacAddress": {
+                  "type": "boolean",
+                  "description": ""
+                },
+                "health": {
+                  "type": "object",
+                  "properties": {
+                    "overallScore": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "onboardingScore": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "connectedScore": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "linkErrorPercentageThreshold": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "isLinkErrorIncluded": {
+                      "type": "boolean",
+                      "description": ""
+                    },
+                    "rssiThreshold": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "snrThreshold": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "isRssiIncluded": {
+                      "type": "boolean",
+                      "description": ""
+                    },
+                    "isSnrIncluded": {
+                      "type": "boolean",
+                      "description": ""
+                    }
+                  },
+                  "description": ""
+                },
+                "traffic": {
+                  "type": "object",
+                  "properties": {
+                    "txBytes": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "rxBytes": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "usage": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "rxPackets": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "txPackets": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "rxRate": {
+                      "type": "number",
+                      "description": ""
+                    },
+                    "txRate": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "rxLinkErrorPercentage": {
+                      "type": "number",
+                      "description": ""
+                    },
+                    "txLinkErrorPercentage": {
+                      "type": "number",
+                      "description": ""
+                    },
+                    "rxRetries": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "rxRetryPercentage": {
+                      "type": "number",
+                      "description": ""
+                    },
+                    "txDrops": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "txDropPercentage": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "dnsRequestCount": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "dnsResponseCount": {
+                      "type": "integer",
+                      "description": ""
+                    }
+                  },
+                  "description": ""
+                },
+                "connectedNetworkDevice": {
+                  "type": "object",
+                  "properties": {
+                    "connectedNetworkDeviceId": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "connectedNetworkDeviceName": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "connectedNetworkDeviceManagementIp": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "connectedNetworkDeviceMac": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "connectedNetworkDeviceType": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "interfaceName": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "interfaceSpeed": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "duplexMode": {
+                      "type": "string",
+                      "description": ""
+                    }
+                  },
+                  "description": ""
+                },
+                "connection": {
+                  "type": "object",
+                  "properties": {
+                    "vlanId": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "sessionDuration": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "vnId": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "l2Vn": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "l3Vn": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "securityGroupTag": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "linkSpeed": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "bridgeVMMode": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "band": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "ssid": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "authType": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "wlcName": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "wlcId": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "apMac": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "apEthernetMac": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "apMode": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "radioId": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "channel": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "channelWidth": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "protocol": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "protocolCapability": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "upnId": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "upnName": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "upnOwner": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "upnDuid": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "rssi": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "snr": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "dataRate": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "isIosAnalyticsCapable": {
+                      "type": "boolean",
+                      "description": ""
+                    }
+                  },
+                  "description": ""
+                },
+                "onboarding": {
+                  "type": "object",
+                  "properties": {
+                    "avgRunDuration": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "maxRunDuration": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "avgAssocDuration": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "maxAssocDuration": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "avgAuthDuration": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "maxAuthDuration": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "avgDhcpDuration": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "maxDhcpDuration": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "maxRoamingDuration": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "aaaServerIp": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "dhcpServerIp": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "onboardingTime": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "authDoneTime": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "assocDoneTime": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "dhcpDoneTime": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "roamingTime": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "failedRoamingCount": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "successfulRoamingCount": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "totalRoamingAttempts": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "assocFailureReason": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "aaaFailureReason": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "dhcpFailureReason": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "otherFailureReason": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "latestFailureReason": {
+                      "type": "string",
+                      "description": ""
+                    }
+                  },
+                  "description": ""
+                },
+                "latency": {
+                  "type": "object",
+                  "properties": {
+                    "video": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "voice": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "bestEffort": {
+                      "type": "integer",
+                      "description": ""
+                    },
+                    "background": {
+                      "type": "integer",
+                      "description": ""
+                    }
+                  },
+                  "description": ""
+                }
+              }
+            },
+            "description": ""
+          },
+          "page": {
+            "type": "object",
+            "properties": {
+              "limit": {
+                "type": "integer",
+                "description": ""
+              },
+              "offset": {
+                "type": "integer",
+                "description": ""
+              },
+              "count": {
+                "type": "integer",
+                "description": ""
+              },
+              "sortBy": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": ""
+                    },
+                    "order": {
+                      "type": "string",
+                      "description": ""
+                    }
+                  }
+                },
+                "description": ""
+              }
+            },
+            "description": ""
+          },
+          "version": {
+            "type": "string",
+            "description": ""
+          }
+        },
+        "description": ""
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+id: nutanix.prism.central
+name: Nutanix Prism Central
+author: Rapid7
+version: 1.0.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Adding into Extension Library
+
+reference-schemas:
+  - url: https://developers.nutanix.com/api-reference?namespace=clustermgmt&version=v4.1&modified=1
+    file: refdocs/swagger-clustermgmt-v4.1-all.json
+  - url: https://developers.nutanix.com/api-reference?namespace=networking&version=v4.1&modified=1
+    file: refdocs/swagger-networking-v4.1-all.json
+  - url: https://developers.nutanix.com/api-reference?namespace=vmm&version=v4.1&modified=1
+    file: refdocs/swagger-vmm-v4.1-all.json
+
+types:
+  - NutanixPrismCentralEnumOperationalStatus
+  - NutanixPrismCentralVirtualMachine
+  - NutanixPrismCentralHost
+  - NutanixPrismCentralCluster
+  - NutanixPrismCentralImage
+  - NutanixPrismCentralSubnet
+  - NutanixPrismCentralVpc
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Nutanix Infrastructure
+    description: Import all Virtual Machines, Hosts, Clusters, Images, Subnets, and VPCs from Nutanix Prism Central
+    return_types:
+      - NutanixPrismCentralVirtualMachine
+      - NutanixPrismCentralHost
+      - NutanixPrismCentralCluster
+      - NutanixPrismCentralImage
+      - NutanixPrismCentralSubnet
+      - NutanixPrismCentralVpc
+
+settings:
+  url:
+    type: string
+    title: Prism Central URL
+    example: https://prism-central.example.com:9440
+    description: URL of the Nutanix Prism Central instance (include port 9440)
+
+  username:
+    type: string
+    title: Username
+    description: Prism Central username for basic authentication
+
+  password:
+    type: string
+    title: Password
+    format: password
+    description: Prism Central password for basic authentication
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+runtime: py311
+
+categories:
+  - cloud_service_provider
+
+show_orchestrator_ui: false

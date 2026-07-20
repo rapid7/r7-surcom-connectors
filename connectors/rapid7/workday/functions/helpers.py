@@ -26,7 +26,7 @@ WORKER_QUERY = (
     "timeInJobProfileStartDate,isHierarchy,"
     "supervisoryOrganization_OrganizationTop_GtOrganization,"
     "supervisoryOrganization_Hierarchy,locationAddress_Country,location,"
-    "workAddress_StateProvince,publicWorkAddress_FullWithCountry"
+    "workAddress_StateProvince,publicWorkAddress_FullWithCountry,employeeID"
     "{field_name} FROM allWorkers"
 )
 

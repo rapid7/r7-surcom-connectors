@@ -1,0 +1,72 @@
+id: exabeam.new.scale
+name: Exabeam New-Scale (Beta)
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - ExabeamNewScaleCollectorAgent
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Exabeam New-Scale Collector Agents
+    description: Import Exabeam New-Scale Collector Agents
+    return_types:
+      - ExabeamNewScaleCollectorAgent
+
+# Configuration settings for this connector.
+settings:
+  region:
+    type: string
+    title: Region
+    description: The region your Exabeam New-Scale instance is hosted in.
+    enum:
+      - US West
+      - US East
+      - Canada
+      - Europe
+      - Saudi Arabia
+      - Singapore
+      - Switzerland
+      - Japan
+      - Australia
+    default: US West
+
+  client_id:
+    type: string
+    title: API Key
+    description: API Key generated from the platform
+
+  client_secret:
+    type: string
+    title: API Secret
+    format: password
+    description: API Secret generated from the platform
+
+# Runtime platform for this connector.
+runtime: py311
+
+# List any Python dependencies available on PyPI that are required by this connector.
+# `codegen` will generate a `requirements.txt` file with pinned versions of these dependencies.
+# python_dependencies:
+#  - another_dependency
+
+# Categories for this connector in the Extension Library.
+categories:
+  - asset_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

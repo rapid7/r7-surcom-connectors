@@ -1,0 +1,528 @@
+x-samos-type-name: CiscoCatalystCenterClient
+x-samos-namespace: cisco.catalyst.center
+title: Cisco Catalyst Center Client
+description: A wireless or wired client device from Cisco Catalyst Center
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 4
+
+$ref: https://developer.cisco.com/docs/catalyst-center/api-reference#/components/schemas/retrievesTheListOfClientsWhileAlsoOfferingBasicFilteringAndSortingCapabilitiesResponse/properties/response/items
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: d_name
+  - name: macAddress
+  - name: type
+  - name: ipv4Address
+  - name: osType
+  - name: connectionStatus
+  - name: lastUpdatedTime
+
+x-samos-detail:
+  - name: d_name
+  - name: macAddress
+  - name: type
+  - name: d_ips
+  - name: siteId
+  - name: connectedNetworkDevice.connectedNetworkDeviceId
+  - name: vendor
+  - name: osType
+  - name: osVersion
+  - name: formFactor
+  - name: username
+  - name: siteHierarchy
+  - name: connectionStatus
+  - name: tracked
+  - name: isPrivateMacAddress
+  - name: latency
+  - name: lastUpdatedTime
+
+x-samos-derived-properties:
+  d_name:
+    type: string
+    syntax: jmespath
+    value: 'name || macAddress'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_ips:
+    # Combine ipv4Address and ipv6Addresses into unified ips array
+    title: IP Addresses
+    type: array
+    syntax: jmespath
+    value: '[ipv4Address, ipv6Addresses[]][]'
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  d_qualified_hostname:
+    type: string
+    syntax: jmespath
+    value: 'name && contains(name, `.`) && name || null'
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 4
+
+  d_unqualified_hostname:
+    type: string
+    syntax: jmespath
+    value: 'name && !contains(name, `.`) && name || null'
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 4
+
+properties:
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  macAddress:
+    title: MAC Address
+    type: string
+    format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+
+  type:
+    title: Connection Type
+    type: string
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  userId:
+    title: User ID
+    type: string
+    x-samos-hidden: true
+    nullable: true
+
+  username:
+    title: Username
+    type: string
+
+  ipv4Address:
+    title: IPv4 Address
+    type: string
+    format: ip-addr
+
+  ipv6Addresses:
+    title: IPv6 Addresses
+    type: array
+    items:
+      type: string
+      format: ip-addr
+
+  vendor:
+    title: Vendor
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+
+  osType:
+    title: OS Type
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  osVersion:
+    title: OS Version
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+
+  formFactor:
+    title: Form Factor
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+
+  siteHierarchy:
+    title: Site Hierarchy
+    type: string
+
+  siteHierarchyId:
+    title: Site Hierarchy ID
+    type: string
+    x-samos-hidden: true
+
+  siteId:
+    title: Site
+    type: string
+    x-samos-ref-types:
+      - type-name: CiscoCatalystCenterSite
+        key-name: id
+
+  lastUpdatedTime:
+    title: Last Updated Time
+    type: integer
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+
+  connectionStatus:
+    title: Connection Status
+    type: string
+
+  tracked:
+    title: Tracked
+    type: string
+
+  isPrivateMacAddress:
+    title: Private MAC Address
+    type: boolean
+
+  health:
+    title: Health
+    type: object
+    x-samos-hidden: true
+    properties:
+      overallScore:
+        title: Overall Score
+        type: integer
+      onboardingScore:
+        title: Onboarding Score
+        type: integer
+      connectedScore:
+        title: Connected Score
+        type: integer
+      linkErrorPercentageThreshold:
+        title: Link Error Percentage Threshold
+        type: integer
+      isLinkErrorIncluded:
+        title: Link Error Included
+        type: boolean
+      rssiThreshold:
+        title: RSSI Threshold
+        type: integer
+      snrThreshold:
+        title: SNR Threshold
+        type: integer
+      isRssiIncluded:
+        title: RSSI Included
+        type: boolean
+      isSnrIncluded:
+        title: SNR Included
+        type: boolean
+
+  traffic:
+    title: Traffic
+    type: object
+    properties:
+      txBytes:
+        title: TX Bytes
+        type: integer
+      rxBytes:
+        title: RX Bytes
+        type: integer
+      usage:
+        title: Usage
+        type: integer
+      rxPackets:
+        title: RX Packets
+        type: integer
+      txPackets:
+        title: TX Packets
+        type: integer
+      rxRate:
+        title: RX Rate
+        type: number
+      txRate:
+        title: TX Rate
+        type: integer
+      rxLinkErrorPercentage:
+        title: RX Link Error Percentage
+        type: number
+      txLinkErrorPercentage:
+        title: TX Link Error Percentage
+        type: number
+      rxRetries:
+        title: RX Retries
+        type: integer
+      rxRetryPercentage:
+        title: RX Retry Percentage
+        type: number
+      txDrops:
+        title: TX Drops
+        type: integer
+      txDropPercentage:
+        title: TX Drop Percentage
+        type: integer
+      dnsRequestCount:
+        title: DNS Request Count
+        type: integer
+      dnsResponseCount:
+        title: DNS Response Count
+        type: integer
+
+  connectedNetworkDevice:
+    title: Connected Network Device
+    type: object
+    properties:
+      connectedNetworkDeviceId:
+        title: connectedNetworkDevice
+        type: string
+        x-samos-ref-types:
+          - type-name: CiscoCatalystCenterNetworkDevice
+            key-name: id
+      connectedNetworkDeviceName:
+        title: Device Name
+        type: string
+      connectedNetworkDeviceManagementIp:
+        title: Device Management IP
+        type: string
+        format: ip-addr
+      connectedNetworkDeviceMac:
+        title: Device MAC
+        type: string
+        format: mac-addr
+      connectedNetworkDeviceType:
+        title: Device Type
+        type: string
+      interfaceName:
+        title: Interface Name
+        type: string
+      interfaceSpeed:
+        title: Interface Speed
+        type: integer
+      duplexMode:
+        title: Duplex Mode
+        type: string
+
+  connection:
+    title: Connection
+    type: object
+    properties:
+      vlanId:
+        title: VLAN ID
+        type: string
+      sessionDuration:
+        title: Session Duration
+        type: integer
+      vnId:
+        title: VN ID
+        type: string
+      l2Vn:
+        title: L2 VN
+        type: string
+      l3Vn:
+        title: L3 VN
+        type: string
+      securityGroupTag:
+        title: Security Group Tag
+        type: string
+      linkSpeed:
+        title: Link Speed
+        type: integer
+      bridgeVMMode:
+        title: Bridge VM Mode
+        type: string
+      band:
+        title: Band
+        type: string
+        nullable: true
+      ssid:
+        title: SSID
+        type: string
+        nullable: true
+      authType:
+        title: Auth Type
+        type: string
+      wlcName:
+        title: WLC Name
+        type: string
+        nullable: true
+      wlcId:
+        title: WLC ID
+        type: string
+        nullable: true
+      apMac:
+        title: AP MAC
+        type: string
+        nullable: true
+        format: mac-addr
+      apEthernetMac:
+        title: AP Ethernet MAC
+        type: string
+        nullable: true
+        format: mac-addr
+      apMode:
+        title: AP Mode
+        type: string
+        nullable: true
+      radioId:
+        title: Radio ID
+        type: integer
+        nullable: true
+      channel:
+        title: Channel
+        type: integer
+        nullable: true
+      channelWidth:
+        title: Channel Width
+        type: string
+        nullable: true
+      protocol:
+        title: Protocol
+        type: string
+        nullable: true
+      protocolCapability:
+        title: Protocol Capability
+        type: string
+        nullable: true
+      upnId:
+        title: UPN ID
+        type: string
+      upnName:
+        title: UPN Name
+        type: string
+      upnOwner:
+        title: UPN Owner
+        type: string
+      upnDuid:
+        title: UPN DUID
+        type: string
+      rssi:
+        title: RSSI
+        type: integer
+        nullable: true
+      snr:
+        title: SNR
+        type: integer
+        nullable: true
+      dataRate:
+        title: Data Rate
+        type: number
+        nullable: true
+      isIosAnalyticsCapable:
+        title: iOS Analytics Capable
+        type: boolean
+
+  onboarding:
+    title: Onboarding
+    type: object
+    properties:
+      avgRunDuration:
+        title: Avg Run Duration
+        type: integer
+      maxRunDuration:
+        title: Max Run Duration
+        type: integer
+      avgAssocDuration:
+        title: Avg Assoc Duration
+        type: integer
+      maxAssocDuration:
+        title: Max Assoc Duration
+        type: integer
+      avgAuthDuration:
+        title: Avg Auth Duration
+        type: integer
+      maxAuthDuration:
+        title: Max Auth Duration
+        type: integer
+      avgDhcpDuration:
+        title: Avg DHCP Duration
+        type: integer
+      maxDhcpDuration:
+        title: Max DHCP Duration
+        type: integer
+      maxRoamingDuration:
+        title: Max Roaming Duration
+        type: integer
+      aaaServerIp:
+        title: AAA Server IP
+        type: string
+        format: ip-addr
+      dhcpServerIp:
+        title: DHCP Server IP
+        type: string
+        format: ip-addr
+      onboardingTime:
+        title: Onboarding Time
+        type: integer
+        format: epoch-millis
+      authDoneTime:
+        title: Auth Done Time
+        type: integer
+        format: epoch-millis
+      assocDoneTime:
+        title: Assoc Done Time
+        type: integer
+        format: epoch-millis
+      dhcpDoneTime:
+        title: DHCP Done Time
+        type: integer
+        format: epoch-millis
+      roamingTime:
+        title: Roaming Time
+        type: integer
+      failedRoamingCount:
+        title: Failed Roaming Count
+        type: integer
+      successfulRoamingCount:
+        title: Successful Roaming Count
+        type: integer
+      totalRoamingAttempts:
+        title: Total Roaming Attempts
+        type: integer
+      assocFailureReason:
+        title: Assoc Failure Reason
+        type: string
+      aaaFailureReason:
+        title: AAA Failure Reason
+        type: string
+      dhcpFailureReason:
+        title: DHCP Failure Reason
+        type: string
+      otherFailureReason:
+        title: Other Failure Reason
+        type: string
+      latestFailureReason:
+        title: Latest Failure Reason
+        type: string
+
+  latency:
+    title: Latency
+    type: object
+    properties:
+      video:
+        title: Video
+        type: integer
+      voice:
+        title: Voice
+        type: integer
+      bestEffort:
+        title: Best Effort
+        type: integer
+      background:
+        title: Background
+        type: integer

@@ -1,0 +1,442 @@
+x-samos-type-name: NableNcentralDevice
+x-samos-namespace: nable.ncentral
+title: N-able N-central Device
+description: Managed device from N-able N-central with asset details.
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_deviceId
+
+x-samos-table:
+  - name: longName
+  - name: deviceClass
+  - name: supportedOs
+  - name: customerName
+  - name: siteName
+  - name: lastApplianceCheckinTime
+
+x-samos-detail:
+  - name: longName
+  - name: deviceClass
+  - name: description
+  - name: uri
+  - name: remoteControlUri
+  - name: sourceUri
+  - name: isProbe
+  - name: osId
+  - name: supportedOs
+  - name: discoveredName
+  - name: d_customerId
+  - name: deviceClassLabel
+  - name: supportedOsLabel
+  - name: lastLoggedInUser
+  - name: stillLoggedIn
+  - name: licenseMode
+  - name: orgUnitId
+  - name: soId
+  - name: soName
+  - name: customerName
+  - name: siteId
+  - name: siteName
+  - name: os
+  - name: computersystem
+  - name: networkadapter
+  - name: processor
+  - name: device
+  - name: application
+  - name: _extra
+  - name: lastApplianceCheckinTime
+
+x-samos-derived-properties:
+  d_deviceId:
+    title: Device ID
+    type: string
+    syntax: jmespath
+    value: to_string(deviceId)
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_hostnames:
+    title: Hostnames
+    type: array
+    items:
+      type: string
+    syntax: jmespath
+    value: '[longName, discoveredName, computersystem.netbiosname] | [?@]'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_ips:
+    title: IP Addresses
+    type: array
+    items:
+      type: string
+      format: ip-addr
+    syntax: jmespath
+    value: 'networkadapter.list[].ipaddress | [?@]'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  d_mac_addresses:
+    title: MAC Addresses
+    type: array
+    items:
+      type: string
+      format: mac-addr
+    syntax: jmespath
+    value: 'networkadapter.list[].macaddress | [?@]'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+
+  d_os:
+    title: Operating System
+    type: string
+    syntax: jmespath
+    value: os.reportedos || supportedOs
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  d_cpus:
+    title: CPUs
+    type: integer
+    syntax: jmespath
+    value: to_number(processor.numberofcpus)
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: cpus
+
+  d_customerId:
+    title: Customer
+    type: string
+    syntax: jmespath
+    value: to_string(customerId)
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+    x-samos-ref-types:
+      - type-name: NableNcentralCustomer
+        key-name: d_customerId
+
+properties:
+  deviceId:
+    title: Device ID
+    type: integer
+    x-samos-immutable: true
+    x-samos-hidden: true
+
+  uri:
+    title: URI
+    type: string
+
+  remoteControlUri:
+    title: Remote Control URI
+    type: string
+
+  sourceUri:
+    title: Source URI
+    type: string
+
+  longName:
+    title: Long Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  deviceClass:
+    title: Device Class
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  isProbe:
+    title: Probe?
+    type: boolean
+
+  osId:
+    title: OS ID
+    type: string
+
+  supportedOs:
+    title: Supported OS
+    type: string
+
+  discoveredName:
+    title: Discovered Name
+    type: string
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 4
+
+  deviceClassLabel:
+    title: Device Class Label
+    type: string
+
+  supportedOsLabel:
+    title: Supported OS Label
+    type: string
+
+  lastLoggedInUser:
+    title: Last Logged In User
+    type: string
+
+  stillLoggedIn:
+    title: Still Logged In
+    type: string
+
+  licenseMode:
+    title: License Mode
+    type: string
+
+  orgUnitId:
+    title: Org Unit ID
+    type: integer
+
+  soId:
+    title: Service Organization ID
+    type: integer
+
+  soName:
+    title: Service Organization Name
+    type: string
+
+  customerId:
+    title: Customer ID
+    type: integer
+    x-samos-hidden: true
+
+  customerName:
+    title: Customer Name
+    type: string
+
+  siteId:
+    title: Site ID
+    type: integer
+
+  siteName:
+    title: Site Name
+    type: string
+
+  lastApplianceCheckinTime:
+    title: Last Appliance Checkin Time
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  os:
+    title: OS Details
+    type: object
+    properties:
+      reportedos:
+        title: Reported OS
+        type: string
+      osarchitecture:
+        title: OS Architecture
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_architecture
+      version:
+        title: Version
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_version
+
+  application:
+    title: Applications
+    type: object
+    properties:
+      list:
+        title: Application List
+        type: array
+        items:
+          type: object
+          properties:
+            _index:
+              title: Index
+              type: integer
+            displayname:
+              title: Display Name
+              type: string
+
+  computersystem:
+    title: Computer System
+    type: object
+    properties:
+      serialnumber:
+        title: Serial Number
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: serial_number
+        x-samos-correlation:
+          correlation-key: core.managed.asset.serial_number
+          correlation-type: Machine
+          priority: 3
+      netbiosname:
+        title: NetBIOS Name
+        type: string
+      model:
+        title: Model
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: model
+      totalphysicalmemory:
+        title: Total Physical Memory
+        type: string
+      manufacturer:
+        title: Manufacturer
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: make
+
+  networkadapter:
+    title: Network Adapters
+    type: object
+    properties:
+      list:
+        title: Network Adapter List
+        type: array
+        items:
+          type: object
+          properties:
+            ipaddress:
+              title: IP Address
+              type: string
+              format: ip-addr
+            _index:
+              title: Index
+              type: integer
+            dnsserver:
+              title: DNS Server
+              type: string
+            description:
+              title: Description
+              type: string
+            dhcpserver:
+              title: DHCP Server
+              type: string
+            macaddress:
+              title: MAC Address
+              type: string
+              format: mac-addr
+              x-samos-correlation:
+                correlation-key: MacAddr.value
+                correlation-type: Machine
+                priority: 4
+            gateway:
+              title: Gateway
+              type: string
+
+  device:
+    title: Device Info
+    type: object
+    properties:
+      longname:
+        title: Long Name
+        type: string
+      deleted:
+        title: Deleted
+        type: string
+      lastlogin:
+        title: Last Login
+        type: string
+      deviceclass:
+        title: Device Class
+        type: string
+      deviceid:
+        title: Device ID
+        type: string
+      uri:
+        title: URI
+        type: string
+
+  processor:
+    title: Processor
+    type: object
+    properties:
+      name:
+        title: Processor Name
+        type: string
+      numberofcores:
+        title: Number of Cores
+        type: string
+      numberofcpus:
+        title: Number of CPUs
+        type: string
+
+  _extra:
+    title: Extra Details
+    type: object
+    properties:
+      osfeatures:
+        title: OS Features
+        type: object
+        properties:
+          list:
+            title: Feature List
+            type: array
+            items:
+              type: object
+              properties:
+                _index:
+                  title: Index
+                  type: integer
+                pvalue:
+                  title: Value
+                  type: string
+                pkey:
+                  title: Key
+                  type: string
+      motherboard:
+        title: Motherboard
+        type: object
+        properties:
+          product:
+            title: Product
+            type: string
+          serialnumber:
+            title: Serial Number
+            type: string
+          biosversion:
+            title: BIOS Version
+            type: string
+          version:
+            title: Version
+            type: string
+          manufacturer:
+            title: Manufacturer
+            type: string

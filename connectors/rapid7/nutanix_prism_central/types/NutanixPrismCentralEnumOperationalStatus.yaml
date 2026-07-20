@@ -1,0 +1,54 @@
+x-samos-type-name: NutanixPrismCentralEnumOperationalStatus
+x-samos-namespace: nutanix.prism.central
+title: Nutanix Prism Central Operational Status
+description: Operational status values for Nutanix Prism Central clusters.
+
+x-samos-extends-types:
+  - type-name: EnumOperationalStatus
+    subtype-priority: 1
+
+x-samos-keys:
+  - id
+
+x-samos-global-zone: true
+x-samos-default-hide-from-graph: true
+x-samos-hidden: true
+
+x-samos-table:
+  - name: value
+  - name: description
+
+x-samos-detail:
+  - name: value
+  - name: description
+  - name: id
+  - name: map_to
+
+properties:
+  id:
+    type: string
+    title: Id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Enum
+      property-name: id
+  value:
+    type: string
+    title: Value
+    x-samos-fulfills:
+      type-name: Enum
+      property-name: value
+  map_to:
+    type: string
+    title: Map To Id
+    x-samos-correlation:
+      priority: 1
+      correlation-key: EnumId
+      correlation-type: Enum
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description

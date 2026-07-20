@@ -1,11 +1,11 @@
 id: kaseya.vsa9
 name: Kaseya VSA 9
 author: Rapid7
-version: 1.0.0
+version: 1.3.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Remove Beta label
+  - Added M1051 (Update Software) mitigation to KaseyaVSA9Agent via patch scan status API.
 
 types:
   - KaseyaVSA9Asset

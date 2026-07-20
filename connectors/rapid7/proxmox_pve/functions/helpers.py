@@ -15,7 +15,6 @@ from .sc_settings import Settings
 USER_PATH = "/api2/json/access/users"
 GROUP_PATH = "/api2/json/access/groups"
 CLUSTER_PATH = "/api2/json/cluster/resources"
-VM_PATH = "/api2/json/nodes/pve/qemu"
 NODE_PATH = "/api2/json/nodes"
 
 
@@ -108,7 +107,8 @@ class ProxmoxPVEClient():
         for vm in vm_data:
             vm_detail = {}
             vm_id = vm.get("vmid")
-            resp = self.make_get_request(endpoint=VM_PATH + f'/{vm_id}/config', q_params={})
+            node_name = vm.get("node")
+            resp = self.make_get_request(endpoint=NODE_PATH + f'/{node_name}/qemu/{vm_id}/config', q_params={})
             config_data = resp.get("data", {})
             # To get MAC addresses from the network interfaces
             net0_value = config_data.get("net0")

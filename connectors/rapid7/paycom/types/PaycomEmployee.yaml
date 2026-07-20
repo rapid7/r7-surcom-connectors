@@ -1,0 +1,973 @@
+x-samos-type-name: PaycomEmployee
+x-samos-namespace: paycom
+title: Paycom Employee
+description: An employee record from Paycom
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - employee_code
+
+required:
+  - employee_code
+
+x-samos-table:
+  - name: d_full_name
+  - name: work_email
+  - name: business_title
+  - name: department_description
+  - name: d_active
+  - name: hire_date
+  - name: location
+
+x-samos-detail:
+  - name: d_full_name
+  - name: firstname
+  - name: middlename
+  - name: lastname
+  - name: nickname
+  - name: work_email
+  - name: personal_email
+  - name: primary_phone
+  - name: secondary_phone
+  - name: business_title
+  - name: position_title
+  - name: position_family
+  - name: department_code
+  - name: department_description
+  - name: d_active
+  - name: employee_status
+  - name: hire_date
+  - name: termination_date
+  - name: termination_reason
+  - name: rehire_date
+  - name: birth_date
+  - name: age
+  - name: gender
+  - name: location
+  - name: street
+  - name: city
+  - name: state
+  - name: zipcode
+  - name: country_paid_in
+  - name: supervisor_primary
+  - name: supervisor_secondary
+  - name: employee_badge
+  - name: pay_frequency
+  - name: hourly_or_salary
+  - name: exempt_status
+  - name: dol_status
+  - name: length_of_service_since_hire
+  - name: last_pay_change
+  - name: last_review
+  - name: next_review
+  - name: emergency_1_contact
+  - name: emergency_1_phone
+  - name: emergency_1_relationship
+
+x-samos-derived-properties:
+  d_full_name:
+    title: Full Name
+    type: string
+    syntax: jmespath
+    value: "employee_name || join(' ', [firstname, middlename, lastname][?@])"
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_active:
+    title: Active
+    type: boolean
+    syntax: jmespath
+    value: "employee_status == 'A'"
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+  d_employee_id:
+    title: Employee ID
+    type: string
+    syntax: jmespath
+    value: 'employee_code'
+    x-samos-fulfills:
+      type-name: User
+      property-name: employee_id
+
+properties:
+  eecode:
+    x-samos-hidden: true
+    type: string
+
+  eename:
+    x-samos-hidden: true
+    type: string
+
+  employee_code:
+    title: Employee Code
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  employee_badge:
+    title: Badge Number
+    type: string
+
+  eebadge:
+    type: string
+    x-samos-hidden: true
+
+  employee_gl_code:
+    title: GL Code
+    type: string
+    x-samos-hidden: true
+
+  firstname:
+    title: First Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+
+  middlename:
+    title: Middle Name
+    type: string
+
+  lastname:
+    title: Last Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+
+  # This nickname property is not suitable for correlation as User.nickname
+  nickname:
+    title: Nickname
+    type: string
+
+  employee_name:
+    title: Employee Name
+    type: string
+    x-samos-hidden: true
+
+  preferred_first_name:
+    title: Preferred First Name
+    type: string
+
+  preferred_last_name:
+    title: Preferred Last Name
+    type: string
+
+  preferred_middle_name:
+    title: Preferred Middle Name
+    type: string
+
+  preferred_suffix:
+    title: Preferred Suffix
+    type: string
+
+  work_email:
+    title: Work Email
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+
+  personal_email:
+    title: Personal Email
+    type: string
+
+  primary_phone:
+    title: Primary Phone
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+
+  primary_phone_country_code:
+    title: Primary Phone Country Code
+    type: string
+
+  primary_phone_type:
+    title: Primary Phone Type
+    type: integer
+
+  primary_phone_work_extension:
+    title: Primary Phone Extension
+    type: string
+    nullable: true
+
+  secondary_phone:
+    title: Secondary Phone
+    type: string
+
+  secondary_phone_country_code:
+    title: Secondary Phone Country Code
+    type: string
+    nullable: true
+
+  secondary_phone_type:
+    title: Secondary Phone Type
+    type: integer
+
+  secondary_phone_work_extension:
+    title: Secondary Phone Extension
+    type: string
+    nullable: true
+
+  street:
+    title: Street Address
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: address
+
+  streetaddr:
+    type: string
+    x-samos-hidden: true
+
+  apt_suite_other:
+    title: Apt/Suite/Other
+    type: string
+
+  city:
+    title: City
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: city
+
+  cityaddr:
+    type: string
+    x-samos-hidden: true
+
+  state:
+    title: State
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: state
+
+  homestate:
+    type: string
+    x-samos-hidden: true
+
+  zipcode:
+    title: Zip Code
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: postal_code
+
+  country_paid_in:
+    title: Country
+    type: string
+
+  homephone_country_code:
+    title: Home Phone Country Code
+    type: string
+
+  homephone:
+    title: Home Phone
+    type: string
+
+  employee_status:
+    title: Employee Status Code
+    type: string
+
+  eestatus:
+    type: string
+    x-samos-hidden: true
+
+  hire_date:
+    title: Hire Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date
+
+  termination_date:
+    title: Termination Date
+    type: string
+    format: date-time
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: end_date
+
+  termination_reason:
+    title: Termination Reason
+    type: string
+
+  termination_type:
+    title: Termination Type
+    type: string
+
+  rehire_date:
+    title: Rehire Date
+    type: string
+    format: date-time
+    nullable: true
+
+  previous_termination_date:
+    title: Previous Termination Date
+    type: string
+    format: date-time
+    nullable: true
+
+  seniority_date:
+    title: Seniority Date
+    type: string
+    format: date-time
+
+  new_hire:
+    title: New Hire
+    type: boolean
+
+  new_hire_report_date:
+    title: New Hire Report Date
+    type: string
+    format: date-time
+
+  employee_added:
+    title: Employee Added Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+
+  length_of_service_since_hire:
+    title: Length of Service (Since Hire)
+    type: string
+
+  length_of_service_since_rehire:
+    title: Length of Service (Since Rehire)
+    type: string
+
+  birth_date:
+    title: Birth Date
+    type: string
+    format: date-time
+
+  age:
+    title: Age
+    type: integer
+
+  gender:
+    title: Gender
+    type: string
+    description: '1 = Male, 2 = Female'
+
+  actual_marital_status:
+    title: Marital Status Code
+    type: string
+
+  actual_marital_status_description:
+    title: Marital Status
+    type: string
+
+  ethnic_background:
+    title: Ethnic Background
+    type: string
+
+  business_title:
+    title: Business Title
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: title
+
+  position_title:
+    title: Position Title
+    type: string
+
+  position_id:
+    title: Position ID
+    type: string
+
+  position_code:
+    title: Position Code
+    type: string
+
+  position_family:
+    title: Position Family
+    type: string
+
+  position_family_code:
+    title: Position Family Code
+    type: string
+
+  position_family_name:
+    title: Position Family Name
+    type: string
+
+  position_level:
+    title: Position Level
+    type: string
+
+  position_seat_number:
+    title: Position Seat Number
+    type: string
+
+  position_seat_title:
+    title: Position Seat Title
+    type: string
+
+  position:
+    title: Position
+    type: string
+    x-samos-hidden: true
+
+  last_position_change_date:
+    title: Last Position Change Date
+    type: string
+    format: date-time
+
+  department_code:
+    title: Department Code
+    type: string
+
+  deptcode:
+    type: string
+    x-samos-hidden: true
+
+  department_description:
+    title: Department
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: department
+
+  deptdesc:
+    type: string
+    x-samos-hidden: true
+
+  location:
+    title: Location
+    type: string
+
+  companyLocationId:
+    title: Company Location ID
+    type: integer
+
+  companyEstablishmentId:
+    title: Company Establishment ID
+    type: integer
+
+  supervisor_primary:
+    title: Primary Supervisor
+    type: string
+
+  supervisor_primary_code:
+    title: Primary Supervisor Code
+    type: string
+
+  supervisor_secondary:
+    title: Secondary Supervisor
+    type: string
+
+  supervisor_secondary_code:
+    title: Secondary Supervisor Code
+    type: string
+
+  supervisor_tertiary:
+    title: Tertiary Supervisor
+    type: string
+
+  supervisor_tertiary_code:
+    title: Tertiary Supervisor Code
+    type: string
+
+  supervisor_quaternary:
+    title: Quaternary Supervisor
+    type: string
+
+  supervisor_quaternary_code:
+    title: Quaternary Supervisor Code
+    type: string
+
+  supervisor_approval:
+    title: Approval Supervisor
+    type: string
+
+  supervisor_approval_code:
+    title: Approval Supervisor Code
+    type: string
+
+  supervisor_talent:
+    title: Talent Supervisor
+    type: string
+
+  supervisor_talent_management:
+    title: Talent Management Supervisor
+    type: string
+
+  employee_supervisor_level:
+    title: Supervisor Level
+    type: string
+
+  employee_supervisor_pin:
+    title: Supervisor PIN
+    type: string
+
+  manager_level:
+    title: Manager Level
+    type: string
+
+  pay_class:
+    title: Pay Class
+    type: string
+
+  pay_frequency:
+    title: Pay Frequency
+    type: string
+    description: 'B = Bi-weekly, W = Weekly, M = Monthly, S = Semi-monthly'
+
+  hourly_or_salary:
+    title: Hourly or Salary
+    type: boolean
+    description: 'false = Hourly, true = Salary'
+
+  alternate_pay_frequency:
+    title: Alternate Pay Frequency
+    type: string
+
+  last_pay_change:
+    title: Last Pay Change Date
+    type: string
+    format: date-time
+
+  most_recent_check_date:
+    title: Most Recent Check Date
+    type: string
+    format: date-time
+
+  has_direct_deposit:
+    title: Has Direct Deposit
+    type: boolean
+
+  comission_only:
+    title: Commission Only
+    type: boolean
+
+  # Employment Classification
+  fulltime_or_parttime:
+    title: Full-time or Part-time
+    type: integer
+    description: '1 = Full-time, 2 = Part-time'
+
+  dol_status:
+    title: DOL Status
+    type: string
+
+  exempt_status:
+    title: Exempt Status
+    type: string
+    description: 'Exempt or Non-Exempt'
+
+  eeoc_class:
+    title: EEOC Class Code
+    type: string
+
+  eeoc_class_description:
+    title: EEOC Class
+    type: string
+
+  employee_type_1099:
+    title: 1099 Employee
+    type: boolean
+
+  statutory_employee:
+    title: Statutory Employee
+    type: boolean
+
+  non_resident_alien:
+    title: Non-Resident Alien
+    type: boolean
+
+  parttime_to_fulltime_date:
+    title: Part-time to Full-time Date
+    type: string
+    format: date-time
+    nullable: true
+
+  fulltime_to_parttime_date:
+    title: Full-time to Part-time Date
+    type: string
+    format: date-time
+    nullable: true
+
+  seasonal_to_fulltime_date:
+    title: Seasonal to Full-time Date
+    type: string
+    format: date-time
+    nullable: true
+
+  fulltime_to_seasonal_date:
+    title: Full-time to Seasonal Date
+    type: string
+    format: date-time
+    nullable: true
+
+  parttime_to_seasonal_date:
+    title: Part-time to Seasonal Date
+    type: string
+    format: date-time
+    nullable: true
+
+  seasonal_to_parttime_date:
+    title: Seasonal to Part-time Date
+    type: string
+    format: date-time
+    nullable: true
+
+  temporary_to_fulltime_date:
+    title: Temporary to Full-time Date
+    type: string
+    format: date-time
+    nullable: true
+
+  fulltime_to_temporary_date:
+    title: Full-time to Temporary Date
+    type: string
+    format: date-time
+    nullable: true
+
+  last_review:
+    title: Last Review Date
+    type: string
+    format: date-time
+
+  next_review:
+    title: Next Review Date
+    type: string
+    format: date-time
+    nullable: true
+
+  eligible_401k:
+    title: 401k Eligible Date
+    type: string
+    format: date-time
+
+  participation_401k:
+    title: 401k Participation
+    type: string
+    nullable: true
+
+  hours_401k:
+    title: 401k Hours
+    type: string
+
+  part_num_401k:
+    title: 401k Part Number
+    type: string
+
+  match_eligible:
+    title: Match Eligible
+    type: string
+    nullable: true
+
+  retirement_plan:
+    title: Retirement Plan
+    type: boolean
+
+  available_health_insurance:
+    title: Health Insurance Available
+    type: boolean
+
+  current_key_employee:
+    title: Key Employee
+    type: boolean
+
+  highly_comp_employee:
+    title: Highly Compensated Employee
+    type: integer
+
+  # Leave Information
+  leave_start:
+    title: Leave Start Date
+    type: string
+    format: date-time
+    nullable: true
+
+  leave_end:
+    title: Leave End Date
+    type: string
+    format: date-time
+    nullable: true
+
+  cobra_start:
+    title: COBRA Start Date
+    type: string
+    format: date-time
+    nullable: true
+
+  cobra_end:
+    title: COBRA End Date
+    type: string
+    format: date-time
+    nullable: true
+
+  # Emergency Contacts
+  emergency_1_contact:
+    title: Emergency Contact 1
+    type: string
+
+  emergency_1_phone:
+    title: Emergency Contact 1 Phone
+    type: string
+
+  emergency_1_phone_country_code:
+    title: Emergency Contact 1 Phone Country Code
+    type: string
+
+  emergency_1_relationship:
+    title: Emergency Contact 1 Relationship
+    type: string
+
+  emergency_2_contact:
+    title: Emergency Contact 2
+    type: string
+
+  emergency_2_phone:
+    title: Emergency Contact 2 Phone
+    type: string
+
+  emergency_2_phone_country_code:
+    title: Emergency Contact 2 Phone Country Code
+    type: string
+    nullable: true
+
+  emergency_2_relationship:
+    title: Emergency Contact 2 Relationship
+    type: string
+
+  emergency_3_contact:
+    title: Emergency Contact 3
+    type: string
+
+  emergency_3_phone:
+    title: Emergency Contact 3 Phone
+    type: string
+
+  emergency_3_phone_country_code:
+    title: Emergency Contact 3 Phone Country Code
+    type: string
+    nullable: true
+
+  emergency_3_relationship:
+    title: Emergency Contact 3 Relationship
+    type: string
+
+  # Terminal / Schedule Information
+  employee_terminal_group:
+    title: Terminal Group
+    type: string
+
+  employee_terminal_group_description:
+    title: Terminal Group Description
+    type: string
+
+  clocksequencenumber:
+    title: Clock Sequence Number
+    type: string
+
+  clockseq:
+    type: string
+    x-samos-hidden: true
+
+  schedule_group:
+    title: Schedule Group
+    type: integer
+
+  schedule_time_zone:
+    title: Schedule Time Zone
+    type: string
+
+  primary_schedule_group_description:
+    title: Primary Schedule Group Description
+    type: string
+    nullable: true
+
+  custom_standard_hours:
+    title: Custom Standard Hours
+    type: string
+
+  # Workers Compensation
+  workers_comp_code:
+    title: Workers Comp Code
+    type: string
+
+  workers_comp_desc:
+    title: Workers Comp Description
+    type: string
+
+  # Labor / Organization Information
+  labor_allocation_profile:
+    title: Labor Allocation Profile
+    type: string
+
+  labor_allocation_details:
+    title: Labor Allocation Details
+    type: string
+
+  union_code:
+    title: Union Code
+    type: string
+
+  # VETS Information
+  vets_4212_emp_category:
+    title: VETS 4212 Employee Category
+    type: integer
+
+  vets_4212_job_category:
+    title: VETS 4212 Job Category
+    type: string
+
+  # Additional Fields
+  ee_message:
+    title: Employee Message
+    type: string
+
+  print_ee_message:
+    title: Print Employee Message
+    type: boolean
+
+  report_new_hire:
+    title: Report New Hire
+    type: boolean
+
+  preferred_on_paystub:
+    title: Preferred on Paystub
+    type: boolean
+
+  # Category fields (cat1-cat20)
+  cat1:
+    title: Category 1 Code
+    type: string
+  cat1desc:
+    title: Category 1
+    type: string
+  cat2:
+    title: Category 2 Code
+    type: string
+  cat2desc:
+    title: Category 2
+    type: string
+  cat3:
+    title: Category 3 Code
+    type: string
+  cat3desc:
+    title: Category 3
+    type: string
+  cat4:
+    title: Category 4 Code
+    type: string
+  cat4desc:
+    title: Category 4
+    type: string
+  cat5:
+    title: Category 5 Code
+    type: string
+  cat5desc:
+    title: Category 5
+    type: string
+  cat6:
+    title: Category 6 Code
+    type: string
+  cat6desc:
+    title: Category 6
+    type: string
+  cat7:
+    title: Category 7 Code
+    type: string
+  cat7desc:
+    title: Category 7
+    type: string
+  cat8:
+    title: Category 8 Code
+    type: string
+  cat8desc:
+    title: Category 8
+    type: string
+  cat9:
+    title: Category 9 Code
+    type: string
+  cat9desc:
+    title: Category 9
+    type: string
+  cat10:
+    title: Category 10 Code
+    type: string
+  cat10desc:
+    title: Category 10
+    type: string
+  cat11:
+    title: Category 11 Code
+    type: string
+  cat11desc:
+    title: Category 11
+    type: string
+  cat12:
+    title: Category 12 Code
+    type: string
+  cat12desc:
+    title: Category 12
+    type: string
+  cat13:
+    title: Category 13 Code
+    type: string
+  cat13desc:
+    title: Category 13
+    type: string
+  cat14:
+    title: Category 14 Code
+    type: string
+  cat14desc:
+    title: Category 14
+    type: string
+  cat15:
+    title: Category 15 Code
+    type: string
+  cat15desc:
+    title: Category 15
+    type: string
+  cat16:
+    title: Category 16 Code
+    type: string
+  cat16desc:
+    title: Category 16
+    type: string
+  cat17:
+    title: Category 17 Code
+    type: string
+  cat17desc:
+    title: Category 17
+    type: string
+  cat18:
+    title: Category 18 Code
+    type: string
+  cat18desc:
+    title: Category 18
+    type: string
+  cat19:
+    title: Category 19 Code
+    type: string
+  cat19desc:
+    title: Category 19
+    type: string
+  cat20:
+    title: Category 20 Code
+    type: string
+  cat20desc:
+    title: Category 20
+    type: string

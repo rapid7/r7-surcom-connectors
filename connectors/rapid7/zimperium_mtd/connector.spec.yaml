@@ -1,0 +1,86 @@
+id: zimperium.mtd
+name: Zimperium MTD
+author: Rapid7
+version: 0.2.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Removed zScan scope
+  - Added import feed for CVEs and Threats
+
+types:
+  - ZimperiumMTDApp
+  - ZimperiumMTDDevice
+  - ZimperiumMTDTeam
+  - ZimperiumMTDThreat
+  - ZimperiumMTDSoftwareInstallation
+  - ZimperiumMTDVulnerability
+  - ZimperiumMTDVulnerabilityFinding
+  - ZimperiumMTDExposureSeverityEnum
+  - ZimperiumMTDOSFamilyEnum
+  # Below types hidden; zScan types are moving to a dedicated connector.
+  - ZimperiumMTDScanApp
+  - ZimperiumMTDScanAppFinding
+  - ZimperiumMTDScanAppExposure
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Zimperium MTD Devices, Software and Teams
+    description: Import mobile device and software inventory from Zimperium MTD.
+    return_types:
+      - ZimperiumMTDApp
+      - ZimperiumMTDDevice
+      - ZimperiumMTDTeam
+      - ZimperiumMTDSoftwareInstallation
+
+  - id: import_cve
+    title: Zimperium MTD CVEs and Threats
+    description: Import device CVEs and threats from Zimperium MTD.
+    return_types:
+      - ZimperiumMTDThreat
+      - ZimperiumMTDVulnerability
+      - ZimperiumMTDVulnerabilityFinding
+
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: Base URL for the Zimperium MTD console API.
+    example: https://example.zimperium.com
+
+  client_id:
+    type: string
+    title: Client ID
+    description: The API client ID used for authentication with the Zimperium MTD API.
+
+  client_secret:
+    type: string
+    title: Client Secret
+    description: The API client secret used for authentication with the Zimperium MTD API.
+    format: password
+
+  severity_threshold:
+    title: Threat Severity Threshold
+    description: The minimum severity level of threats to import.
+    type: string
+    enum:
+      - Normal
+      - Low
+      - High
+      - Critical
+    default: Critical
+
+  threat_lookback_days:
+    title: Threat Lookback Day(s)
+    description: The number of days to look back for threats when importing.
+    type: integer
+    default: 7
+
+runtime: py311
+
+categories:
+  - endpoint_management
+
+show_orchestrator_ui: false

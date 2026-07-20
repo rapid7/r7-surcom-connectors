@@ -1,0 +1,66 @@
+id: suse.manager
+name: SUSE Manager
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release.
+
+types:
+  - SuseManagerAsset
+  - SuseManagerExposure
+  - SuseManagerFinding
+  - SuseManagerAssetGroup
+  - SuseManagerOrganization
+  - SuseManagerIdentity
+  - SuseManagerSoftware
+  - SuseManagerSoftwareInstallation
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: SUSE Manager Systems, Groups, Organizations, Users, Packages, and Findings
+    description: Imports all managed systems, system groups, organizations, users, installed packages, and vulnerability findings from SUSE Manager.
+    return_types:
+      - SuseManagerAsset
+      - SuseManagerExposure
+      - SuseManagerFinding
+      - SuseManagerAssetGroup
+      - SuseManagerOrganization
+      - SuseManagerIdentity
+      - SuseManagerSoftware
+      - SuseManagerSoftwareInstallation
+
+settings:
+  server_url:
+    type: string
+    title: Server URL
+    example: https://suse-manager.example.com
+    description: The base URL of the SUSE Manager server (e.g., https://suse-manager.example.com or https://10.0.0.1)
+
+  username:
+    type: string
+    title: Username
+    example: admin
+    description: The username used to authenticate to the SUSE Manager API.
+
+  password:
+    type: string
+    title: Password
+    description: The password used to authenticate to the SUSE Manager API.
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+    nullable: false
+
+runtime: py311
+
+categories:
+  - endpoint_management
+  - vulnerability_management

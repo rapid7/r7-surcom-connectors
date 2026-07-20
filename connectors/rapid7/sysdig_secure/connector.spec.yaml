@@ -1,0 +1,79 @@
+id: sysdig.secure
+name: Sysdig Secure
+author: Rapid7
+version: 0.2.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of the Surface Command types that are part of this connector.
+# Type IDs must be unique across all Connectors.
+types:
+  - SysdigSecureAwsAccount
+  - SysdigSecureCloudProvider
+  - SysdigSecureFinding
+  - SysdigSecureHost
+  - SysdigSecureImage
+  - SysdigSecureKubeNode
+  - SysdigSecureKubeCluster
+  - SysdigSecureVulnerability
+  - SysdigSecureKubeWorkload
+
+# Functions provided by this connector.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Sysdig Secure Assets and Vulnerabilities
+    description: >-
+      Import AWS accounts, hosts, images, Kubernetes nodes, clusters, workloads,
+      and vulnerability findings from Sysdig Secure.
+    return_types:
+      - SysdigSecureAwsAccount
+      - SysdigSecureFinding
+      - SysdigSecureHost
+      - SysdigSecureImage
+      - SysdigSecureKubeNode
+      - SysdigSecureKubeCluster
+      - SysdigSecureVulnerability
+      - SysdigSecureKubeWorkload
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Domain URL
+    description: >-
+      Domain URL for the Sysdig Secure instance. Use the hostname for your
+      region.
+    example: https://secure.sysdig.com
+    default: https://us2.app.sysdig.com
+
+  api_token:
+    type: string
+    title: API Token
+    description: >-
+      Sysdig Secure API token for authentication. Retrieve from the Sysdig
+      Secure UI under Settings > User Profile > Sysdig API Token.
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity.
+    default: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - cloud_security
+  - vulnerability_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: true

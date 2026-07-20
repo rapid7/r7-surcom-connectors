@@ -1,0 +1,70 @@
+x-samos-type-name: SonicWallCaptureClientSoftwareInstallation
+x-samos-namespace: sonicwall.capture.client
+title: SonicWall Capture Client Software Installation
+description: >-
+  A cross-reference linking an endpoint device to a vulnerable application
+  detected by SonicWall Capture Client.
+
+x-samos-extends-types:
+  - type-name: SoftwareInstallation
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: x_device_id
+  - name: x_application_id
+  - name: applicationVersion
+  - name: detectionDate
+
+x-samos-detail:
+  - name: x_device_id
+  - name: x_application_id
+  - name: applicationVersion
+  - name: detectionDate
+
+x-samos-derived-properties:
+  # Composite key combining application and device IDs to uniquely identify each install
+  d_id:
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: "join('_', [x_application_id, x_device_id])"
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: id
+
+properties:
+  x_application_id:
+    title: Application
+    type: string
+    x-samos-ref-types:
+      - type-name: SonicWallCaptureClientApplication
+        key-name: applicationId
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: software_ref
+
+  x_device_id:
+    title: Device
+    type: string
+    x-samos-ref-types:
+      - type-name: SonicWallCaptureClientDevice
+        key-name: deviceId
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: asset_ref
+
+  applicationVersion:
+    title: Application Version
+    type: string
+
+  detectionDate:
+    title: Detection Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: first_seen

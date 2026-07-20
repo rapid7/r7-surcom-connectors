@@ -1,0 +1,61 @@
+x-samos-type-name: SuseManagerFinding
+x-samos-namespace: suse.manager
+title: SUSE Manager Finding
+description: A finding in a managed Linux system in SUSE Manager
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Finding
+    subtype-priority: 5
+
+x-samos-keys:
+  - d_finding_id
+
+x-samos-table:
+  - name: system_id
+  - name: advisory_name
+  - name: issue_date
+
+x-samos-detail:
+  - name: system_id
+  - name: x_exposure_id
+  - name: issue_date
+
+x-samos-derived-properties:
+  d_finding_id:
+    title: Finding ID
+    type: string
+    syntax: expression
+    x-samos-hidden: true
+    x-samos-immutable: true
+    value: '{x_exposure_id}_{system_id}'
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+
+properties:
+  x_exposure_id:
+    type: string
+    title: Exposure
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability
+    x-samos-ref-types:
+      - type-name: SuseManagerExposure
+        key-name: id
+  system_id:
+    type: string
+    title: System
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to
+    x-samos-ref-types:
+      - type-name: SuseManagerAsset
+        key-name: id
+  advisory_name:
+    type: string
+    title: Advisory Name
+  issue_date:
+    type: string
+    title: Issue Date
+    format: date-time

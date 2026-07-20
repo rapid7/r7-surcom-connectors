@@ -1,0 +1,14 @@
+[
+  {
+    "id": "DEV",
+    "value": "Development",
+    "map_to": "Environment: Development",
+    "description": "Development environment"
+  },
+  {
+    "id": "PROD",
+    "value": "Production",
+    "map_to": "Environment: Production",
+    "description": "Production environment"
+  }
+]

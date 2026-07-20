@@ -1,0 +1,56 @@
+id: ubuntu.landscape
+name: Ubuntu Landscape
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+types:
+  - UbuntuLandscapeComputer
+  - UbuntuLandscapePackage
+  - UbuntuLandscapePackageInstallation
+  - UbuntuLandscapeGroup
+  - UbuntuLandscapeTag
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Ubuntu Landscape Computers and Packages
+    description: >-
+      Imports computers, groups, installed packages, package installations,
+      and tags from Ubuntu Landscape.
+    return_types:
+      - UbuntuLandscapeComputer
+      - UbuntuLandscapePackage
+      - UbuntuLandscapePackageInstallation
+      - UbuntuLandscapeGroup
+      - UbuntuLandscapeTag
+
+settings:
+  url:
+    type: string
+    title: Landscape URL
+    description: The URL of your Landscape server
+    example: https://landscape.example.com
+
+  access_key:
+    type: string
+    title: Access Key
+    description: API access key for authenticating with the Landscape /api/v2/login/access-key endpoint
+
+  secret_key:
+    type: string
+    title: Secret Key
+    format: password
+    description: API secret key associated with the access key
+
+runtime: py311
+
+categories:
+  - endpoint_management
+  - asset_management
+
+show_orchestrator_ui: true

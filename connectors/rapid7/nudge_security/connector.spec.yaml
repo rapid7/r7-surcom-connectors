@@ -1,0 +1,42 @@
+id: nudge.security
+name: Nudge Security
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial Beta release
+
+types:
+  - NudgeSecurityApp
+  - NudgeSecurityAccount
+  - NudgeSecurityUserGroup
+  - NudgeSecurityUser
+  - NudgeSecurityFinding
+  - NudgeSecurityExposure
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Nudge Security apps, accounts, users, groups, findings, and exposures
+    description: Import all apps, accounts, users, user groups, findings, and exposures from Nudge Security
+    return_types:
+      - NudgeSecurityApp
+      - NudgeSecurityAccount
+      - NudgeSecurityUser
+      - NudgeSecurityUserGroup
+      - NudgeSecurityFinding
+      - NudgeSecurityExposure
+
+settings:
+  api_token:
+    type: string
+    title: API Token
+    description: Bearer token generated in Nudge Security UI under Settings > API Tokens
+    format: password
+
+runtime: py311
+
+categories:
+  - iam

@@ -1,0 +1,95 @@
+x-samos-type-name: GophishPlatformUser
+x-samos-namespace: gophish.platform
+title: Gophish User
+description: A user for phishing simulation campaigns in Gophish.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: User
+
+x-samos-keys:
+  - email
+
+x-samos-table:
+  - name: email
+  - name: first_name
+  - name: last_name
+  - name: modified_date
+
+x-samos-detail:
+  - name: email
+  - name: first_name
+  - name: last_name
+  - name: position
+  - name: modified_date
+
+x-samos-derived-properties:
+  # fulfills the 'EmailAddress' property to user:email as it can't be added when immutable is true
+  d_email:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'email'
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+
+  d_name:
+    # To fullfill the 'name' property to user:name as it cant be added when its array of strings
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: "join(' ', [first_name, last_name]) || email"
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  modified_date:
+    type: string
+    format: date-time
+    title: Modified Date
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+
+  email:
+    type: string
+    title: Email
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  first_name:
+    type: string
+    title: First Name
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+
+  last_name:
+    type: string
+    title: Last Name
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+
+  position:
+    type: string
+    title: Position
+    x-samos-fulfills:
+      type-name: User
+      property-name: title
+
+x-samos-virtual:
+  # Fulfill `core.principal:groups` by finding all GophishPlatformGroups
+  # whose targets include this user's email.
+  groups:
+    type-name: GophishPlatformGroup
+    cypher-pattern: >
+      <-[:`e:GophishPlatformGroup:d_email`]-(:GophishPlatformGroup)

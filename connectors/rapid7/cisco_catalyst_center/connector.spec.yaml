@@ -1,0 +1,84 @@
+id: cisco.catalyst.center
+name: Cisco Catalyst Center
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - CiscoCatalystCenterNetworkDevice
+  - CiscoCatalystCenterSite
+  - CiscoCatalystCenterClient
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Cisco Catalyst Center Devices, Sites, and Clients
+    description: Import network devices, sites, and clients from Cisco Catalyst Center
+    return_types:
+      - CiscoCatalystCenterNetworkDevice
+      - CiscoCatalystCenterSite
+      - CiscoCatalystCenterClient
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: URL
+    description: IP address or fully qualified domain name (FQDN) of the Cisco Catalyst Center server
+    example: https://catalyst-center.example.com
+
+  username:
+    type: string
+    title: User Name
+    description: Username for authenticating with Cisco Catalyst Center
+
+  password:
+    type: string
+    title: Password
+    format: password
+    description: Password for authenticating with Cisco Catalyst Center
+
+  import_clients:
+    type: boolean
+    title: Import Clients?
+    description: If enabled, import wireless and wired clients connected to network devices
+    default: false
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# OpenAPI reference schema for Cisco Catalyst Center API.
+# Types use $ref to inherit properties from this schema.
+reference-schemas:
+  - url: https://developer.cisco.com/docs/catalyst-center/api-reference
+    file: refdocs/openapi_cisco_catalyst_center.json
+
+# List any Python dependencies available on PyPI that are required by this connector.
+# `codegen` will generate a `requirements.txt` file with pinned versions of these dependencies.
+# python_dependencies:
+#  - another_dependency
+
+# Categories for this connector in the Extension Library.
+categories:
+  - network_firewall
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

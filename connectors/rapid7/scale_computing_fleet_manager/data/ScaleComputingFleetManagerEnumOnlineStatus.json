@@ -1,0 +1,12 @@
+[
+  {
+    "id": "online",
+    "value": "Operational",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "offline",
+    "value": "Non-Operational",
+    "map_to": "OperationalStatus: Non-Operational"
+  }
+]

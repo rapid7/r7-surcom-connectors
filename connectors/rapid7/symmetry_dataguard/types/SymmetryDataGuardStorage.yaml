@@ -1,0 +1,156 @@
+x-samos-type-name: SymmetryDataGuardStorage
+x-samos-namespace: symmetry.dataguard
+title: Symmetry DataGuard Data Storage
+description: A data storage (e.g., S3 bucket, Google Drive, database) with
+  aggregated classification labels from all scanned objects within it.
+type: object
+x-samos-detail-prefer-type-title: false
+x-samos-extends-types:
+  - type-name: Storage
+    subtype-priority: 2
+
+x-samos-keys:
+  - x_storage_id
+
+x-samos-table:
+  - name: d_name
+  - name: backendType
+  - name: classifiedObjects
+  - name: classifications
+  - name: storeSize
+  - name: creationTimestamp
+
+x-samos-detail:
+  - name: store
+  - name: backendType
+  - name: classifiedObjects
+  - name: classifications
+  - name: instance
+  - name: metadata
+  - name: x_url
+  - name: storeSize
+  - name: creationTimestamp
+
+x-samos-derived-properties:
+  d_aws_arn:
+    # AWS ARN is derived for S3 buckets to create a unique identifier for the bucket in AWS.
+    title: AWS ARN
+    type: string
+    syntax: jmespath
+    # Example for S3 buckets; adjust as needed for other backend types.
+    x-samos-hidden: true
+    value: "backendType == `s3` && join('', [`arn:aws:s3:::`, storeId]) || `null`"
+    x-samos-correlation:
+      correlation-key: Storage.CloudResourceId
+      correlation-type: Storage
+      priority: 1
+
+  d_name:
+    # The "name" property is derived to fulfill core.named-object:name
+    # based on the backendType and store properties.
+    title: Name
+    type: string
+    syntax: expression
+    value: '{backendType}: {store}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_provider:
+    title: Cloud Provider
+    type: string
+    syntax: jmespath
+    x-samos-hidden: true
+    value: >-
+      backendType == `s3` && `aws` ||
+      backendType == `gdrive` && `gcp` ||
+      backendType == `onedrive` && `azure` || `null`
+    x-samos-ref-types:
+      - type-name: SymmetryDataGuardCloudProviderEnum
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.cloud-component
+      property-name: provider
+
+properties:
+  x_storage_id:
+    # To avoid deriving the property,
+    # x_storage_id is storageId extracted from code to fulfill core.component.id.
+    title: ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  storeId:
+    title: Data Store ID
+    x-samos-hidden: true
+    type: string
+    x-samos-immutable: true
+    description: The store identifier as reported by Symmetry DataGuard
+  backendType:
+    title: Backend Type
+    type: string
+    description: The type of storage backend (e.g., s3, gdrive, onedrive, postgresql).
+  classifications:
+    title: Classifications
+    type: array
+    description: Aggregated list of all unique data classification labels found
+      across objects in this store.
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: SymmetryDataGuardClassificationEnum
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: information_type
+  classifiedObjects:
+    title: Classified Objects
+    type: integer
+    description: The number of classified objects found in this store.
+  creationTimestamp:
+    title: Creation Timestamp
+    type: string
+    format: date-time
+    description: The timestamp when this storage record was created in Symmetry DataGuard.
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  instance:
+    title: Instance
+    type: object
+    description: Instance identifier associated with the storage when present.
+  metadata:
+    title: Metadata
+    type: object
+    description: Additional metadata about the storage.
+  storeSize:
+    title: Store Size
+    type: integer
+    description: The total size of the data store in bytes, if reported by Symmetry
+      DataGuard.
+  store:
+    title: Data Store
+    type: string
+    description: The data store or container name (e.g., bucket name, drive name,
+      database name) if reported by Symmetry DataGuard.
+  x_url:
+    title: Open In Source
+    type: string
+    format: url
+    x-samos-hidden: true
+    description: URL to view this data store in the Symmetry DataGuard dashboard.
+    x-samos-fulfills:
+      type-name: Storage
+      property-name: uri
+    x-samos-external-url:
+      primary-source-url: true
+      external-source-title: 'DataGuard'
+
+x-samos-virtual:
+  users:
+    type-name: SymmetryDataGuardIdentity
+    cypher-pattern: >
+      <-[:`e:SymmetryDataGuardStoreXref:storeUniqueId`]-(:SymmetryDataGuardStoreXref)-[:`e:SymmetryDataGuardStoreXref:identityUniqueId`]->(:SymmetryDataGuardIdentity)

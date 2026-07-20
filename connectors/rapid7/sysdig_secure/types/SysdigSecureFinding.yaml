@@ -1,0 +1,92 @@
+x-samos-type-name: SysdigSecureFinding
+x-samos-namespace: sysdig.secure
+title: Sysdig Secure Finding
+description: >-
+  A finding representing a specific vulnerability affecting a specific asset
+  (host, Kubernetes node, or container image) as detected by Sysdig Secure.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Finding
+
+x-samos-keys:
+  - x_id
+
+x-samos-derived-properties:
+  d_name:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'join(` on `, [x_vulnerabilityName, x_assetName])'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+x-samos-table:
+  - name: x_assetName
+  - name: x_vulnerabilityName
+  - name: x_assetType
+  - name: x_createdAt
+  - name: x_publicationDate
+
+x-samos-detail:
+  - name: x_vulnerabilityName
+  - name: x_assetName
+  - name: x_assetType
+  - name: x_createdAt
+  - name: x_publicationDate
+
+properties:
+  x_id:
+    type: string
+    title: Finding ID
+    description: Composite key of vulnerability name and affected asset identifier.
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+  x_vulnerabilityName:
+    type: string
+    title: Vulnerability
+    description: CVE ID of the vulnerability.
+    x-samos-ref-types:
+      - key-name: name
+        type-name: SysdigSecureVulnerability
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability
+  x_assetName:
+    type: string
+    title: Asset
+    description: >-
+      Identifier of the affected asset. For hosts and nodes this is the name,
+      for images the imageId, and for workloads the composite key
+      (clusterName::namespaceName::name).
+    x-samos-ref-types:
+      - key-name: name
+        type-name: SysdigSecureHost
+      - key-name: name
+        type-name: SysdigSecureKubeNode
+      - key-name: imageId
+        type-name: SysdigSecureImage
+      - key-name: d_id
+        type-name: SysdigSecureKubeWorkload
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to
+  x_assetType:
+    type: string
+    title: Asset Type
+    description: Type of the affected asset (Host, Kubernetes Node, Container Image, or Kubernetes Workload).
+  x_createdAt:
+    type: string
+    title: Created At
+    format: date-time
+    description: Timestamp when the finding was created in Sysdig Secure.
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: first_seen
+  x_publicationDate:
+    type: string
+    title: Publication Date
+    format: date-time
+    description: Timestamp when the vulnerability was published.

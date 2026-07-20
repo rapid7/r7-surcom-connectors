@@ -1,0 +1,46 @@
+id: scale.computing.fleet.manager
+name: Scale Computing Fleet Manager
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+reference-schemas:
+  - url: https://api.scalecomputing.com/api/v2/openapi.json
+    file: refdocs/openapi.json
+
+types:
+  - ScaleComputingFleetManagerCluster
+  - ScaleComputingFleetManagerVM
+  - ScaleComputingFleetManagerSourceTag
+  - ScaleComputingFleetManagerEnumOnlineStatus
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Scale Computing Fleet Manager Clusters and Virtual Machines
+    description: Import Clusters and Virtual Machines from Scale Computing Fleet Manager.
+    return_types:
+      - ScaleComputingFleetManagerCluster
+      - ScaleComputingFleetManagerVM
+      - ScaleComputingFleetManagerSourceTag
+
+settings:
+  cluster_viewer_api_key:
+    type: string
+    title: API Key
+    description: >-
+      API key for a role that includes the Cluster Viewer and VM Viewer permissions.
+      These permissions provide read access to both clusters and virtual machines in Fleet Manager.
+    format: password
+
+# Runtime platform for this connector.
+runtime: py311
+
+categories:
+  - asset_management
+
+show_orchestrator_ui: false

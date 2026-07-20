@@ -1,6 +1,5 @@
 x-samos-type-name: OpenAIUser
 x-samos-namespace: openai
-
 title: OpenAI User
 description: An organization member from the OpenAI Organization Users API
 
@@ -8,7 +7,12 @@ x-samos-extends-types:
   - type-name: User
     subtype-priority: 3
 
+$ref: 'https://raw.githubusercontent.com/openai/openai-openapi/main/openapi.yaml#/components/schemas/User'
+
 x-samos-keys:
+  - id
+
+required:
   - id
 
 x-samos-table:
@@ -22,10 +26,21 @@ x-samos-detail:
   - name: email
   - name: role
   - name: added_at
-  - name: projects
 
 x-samos-derived-properties:
+  d_username:
+    # Derived to fulfill the `username` property of the `User` type.
+    title: Username
+    type: string
+    syntax: jmespath
+    value: "split(not_null(email, ''), '@') | [0]"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+
   d_admin:
+    # Derived to fulfill the `is_administrator` property of the `core.principal` type.
     title: Administrator?
     type: boolean
     syntax: jmespath
@@ -38,23 +53,30 @@ x-samos-derived-properties:
 properties:
   id:
     type: string
-    title: Id
+    title: ID
     x-samos-immutable: true
+    x-samos-hidden: true
     x-samos-fulfills:
       type-name: User
       property-name: id
+    x-samos-correlation:
+      correlation-key: User.guid
+      correlation-type: User
+      priority: 4
   object:
     type: string
     title: Object
   name:
     type: string
     title: Name
+    nullable: true
     x-samos-fulfills:
       type-name: core.named-object
       property-name: name
   email:
     type: string
     title: Email
+    nullable: true
     x-samos-fulfills:
       type-name: User
       property-name: email
@@ -65,7 +87,14 @@ properties:
   role:
     type: string
     title: Role
+    nullable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: title
   added_at:
     type: integer
     title: Added At
     format: epoch
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date

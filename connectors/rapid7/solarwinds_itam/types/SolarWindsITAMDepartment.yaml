@@ -7,7 +7,7 @@ x-samos-extends-types:
   - type-name: core.component-group
     subtype-priority: 3
 
-$ref: https://api.samanage.com#/components/schemas/Department
+$ref: https://example.samanage.com#/components/schemas/Department
 
 x-samos-keys:
   - d_id
@@ -64,5 +64,5 @@ properties:
 
   default_assignee_id:
     title: Default Assignee ID
-    type: integer
     nullable: true
+    type: integer

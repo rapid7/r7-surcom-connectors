@@ -1,0 +1,65 @@
+x-samos-type-name: UbuntuLandscapeTag
+x-samos-namespace: ubuntu.landscape
+title: Ubuntu Landscape Tag
+description: A tag applied to a computer managed by Ubuntu Landscape
+x-samos-detail-prefer-type-title: true
+x-samos-global-zone: true
+x-samos-extends-types:
+  - type-name: SourceTag
+
+x-samos-keys:
+  - d_tag_key
+  - d_tag_value
+
+x-samos-table:
+  - name: key
+  - name: value
+
+x-samos-detail:
+  - name: key
+  - name: value
+
+x-samos-derived-properties:
+  d_name:
+    title: Name
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: '{key}: {value}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_tag_value:
+    title: Tag Value
+    type: string
+    syntax: expression
+    value: '{value}'
+    x-samos-immutable: true
+    x-samos-hidden: true
+
+  d_tag_key:
+    title: Tag Key
+    type: string
+    syntax: expression
+    value: '{key}_{value}'
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: id
+
+properties:
+  key:
+    title: Key
+    type: string
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: key
+
+  value:
+    title: Value
+    type: string
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: value

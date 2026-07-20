@@ -1,0 +1,123 @@
+x-samos-type-name: BlueCatMicetroCNAMERecord
+x-samos-namespace: bluecat.micetro
+title: BlueCat Micetro CNAME Record
+description: A DNS CNAME resource record mapping an alias hostname to a canonical hostname in BlueCat Micetro.
+x-samos-detail-prefer-type-title: true
+
+# CNAME is a DNS record type that maps a domain name to another domain name.
+# It allows for aliasing one domain name to another, which can be useful for redirecting
+# traffic or managing multiple domain names under a single canonical name.
+
+# These entities are in the global zone
+x-samos-global-zone: true
+
+x-samos-extends-types:
+  - type-name: Domain
+    subtype-priority: 3
+
+x-samos-keys:
+  - ref
+
+required:
+  - ref
+
+x-samos-table:
+  - name: name
+  - name: data
+  - name: enabled
+
+x-samos-detail:
+  - name: name
+  - name: data
+  - name: ttl
+  - name: comment
+  - name: enabled
+  - name: aging
+  - name: x_zoneRef
+
+x-samos-derived-properties:
+  d_name:
+    # This property is derived from the record's name and is used to fulfill the name property of the Domain type.
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'name'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  ref:
+    title: Record Reference
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Alias Hostname
+    type: string
+    description: The alias hostname defined by this CNAME record.
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: value
+    x-samos-correlation:
+      correlation-key: Domain.value
+      correlation-type: Domain
+      priority: 3
+
+  type:
+    title: Record Type
+    type: string
+    description: Always 'CNAME' for this record type.
+
+  ttl:
+    title: TTL
+    type: string
+    description: Time-To-Live for the DNS record.
+
+  data:
+    title: Canonical Hostname
+    type: string
+    description: The canonical hostname this CNAME record points to.
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: resolves_to_refs
+    x-samos-ref-types:
+      - key-name: value
+        type-name: Domain
+
+  comment:
+    title: Comment
+    type: string
+    description: Optional comment string for the DNS record.
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  enabled:
+    title: Enabled?
+    type: boolean
+    description: True if the record is enabled.
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  aging:
+    title: Aging
+    type: integer
+    description: DNS aging/scavenging timestamp value for the record.
+
+  x_zoneRef:
+    title: Parent Zone
+    type: string
+    description: Reference to the DNS zone containing this record.
+    x-samos-ref-types:
+      - key-name: ref
+        type-name: BlueCatMicetroZone
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref

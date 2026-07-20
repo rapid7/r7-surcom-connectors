@@ -1,0 +1,93 @@
+x-samos-type-name: UbuntuLandscapePackage
+x-samos-namespace: ubuntu.landscape
+title: Ubuntu Landscape Package
+description: A software package from an Ubuntu Landscape managed computer
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Software
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: name
+  - name: current_version
+  - name: available_version
+  - name: summary
+
+x-samos-detail:
+  - name: name
+  - name: current_version
+  - name: available_version
+  - name: summary
+
+x-samos-derived-properties:
+  d_id:
+    # id is a integer, but core.component expects string, so derived and we convert it here
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'to_string(id)'
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_vendor_version:
+    # Concatenates the package name and installed version into a single string
+    # for fulfilling the 'Software:Software.vendor-product-version' correlation key.
+    type: string
+    title: Vendor Product Version
+    x-samos-hidden: true
+    syntax: jmespath
+    value: join(`-`,[name,current_version][?@])
+    x-samos-correlation:
+      correlation-key: Software.vendor-product-version
+      correlation-type: Software
+      priority: 3
+
+  d_name:
+    # The software name does not contain the version,
+    # we use the software name and version to create a derived property
+    # for fulfilling the core.named-object.name
+    type: string
+    x-samos-hidden: true
+    syntax: expression
+    value: '{name} {current_version}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  id:
+    title: Package ID
+    type: integer
+    x-samos-immutable: true
+    x-samos-hidden: true
+
+  name:
+    title: Package Name
+    type: string
+    x-samos-fulfills:
+      type-name: Software
+      property-name: product
+
+  summary:
+    title: Summary
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  current_version:
+    title: Installed Version
+    type: string
+    x-samos-fulfills:
+      type-name: Software
+      property-name: version
+
+  available_version:
+    title: Available Version
+    type: string
+    nullable: true

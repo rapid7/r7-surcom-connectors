@@ -1,7 +1,7 @@
 id: pdq.deploy.inventory
 name: PDQ Deploy and Inventory (Beta)
 author: Rapid7
-version: 0.2.0
+version: 0.3.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:

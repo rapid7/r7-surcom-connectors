@@ -29,6 +29,17 @@ x-samos-detail:
   - name: organizationId
   - name: lastLogon
 
+x-samos-derived-properties:
+  d_active:
+    x-samos-hidden: true
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: 'status == `Active`'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
 properties:
   id:
     title: User ID
@@ -37,6 +48,10 @@ properties:
     x-samos-fulfills:
       type-name: User
       property-name: id
+
+  autoEditing:
+    title: Auto Editing Enabled?
+    type: boolean
 
   userName:
     title: User Name

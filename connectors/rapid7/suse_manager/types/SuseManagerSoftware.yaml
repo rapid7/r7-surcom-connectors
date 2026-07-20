@@ -1,0 +1,89 @@
+x-samos-type-name: SuseManagerSoftware
+x-samos-namespace: suse.manager
+title: SUSE Manager Software
+description: An installed software package on a SUSE Manager managed system
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Software
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: version
+  - name: release
+  - name: arch
+
+x-samos-detail:
+  - name: name
+  - name: version
+  - name: release
+  - name: epoch
+  - name: arch
+
+x-samos-derived-properties:
+  d_name:
+    # The software name does not contain the version,
+    # we use the software name and version to create a derived property
+    # for fulfilling the core.named-object.name
+    type: string
+    x-samos-hidden: true
+    syntax: expression
+    value: '{name} {version}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_version:
+    # For consistency with other Linux software types, version includes {ver}-{rel}
+    type: string
+    title: Version
+    x-samos-hidden: true
+    syntax: jmespath
+    value: join(`-`,[version,release][?@])
+    x-samos-fulfills:
+      type-name: Software
+      property-name: version
+
+  d_vendor_version:
+    # Concatenates the vendor, product, and version into a single string,
+    # for fulfilling the 'Software:Software.vendor-product-version'
+    type: string
+    title: Vendor Product Version
+    x-samos-hidden: true
+    syntax: jmespath
+    value: join(`-`,[name,version,release][?@])
+    x-samos-correlation:
+      correlation-key: Software.vendor-product-version
+      correlation-type: Software
+      priority: 3
+
+properties:
+  release:
+    type: string
+    title: Release
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: Software
+      property-name: product
+  epoch:
+    type: string
+    title: Epoch
+  arch:
+    type: string
+    title: Arch
+  version:
+    type: string
+    title: Version
+  id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id

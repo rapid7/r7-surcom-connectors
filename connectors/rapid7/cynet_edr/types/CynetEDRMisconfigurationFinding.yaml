@@ -1,0 +1,91 @@
+x-samos-type-name: CynetEDRMisconfigurationFinding
+x-samos-namespace: cynet.edr
+title: Cynet EDR Misconfiguration Finding
+description: A per-host instance of a Cynet ESPM misconfiguration rule
+
+x-samos-extends-types:
+  - type-name: Finding
+    subtype-priority: 5
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: hostName
+  - name: riskId
+  - name: hostIp
+  - name: firstSeen
+  - name: lastSeen
+
+x-samos-detail:
+  - name: hostName
+  - name: riskId
+  - name: hostIp
+  - name: firstSeen
+  - name: lastSeen
+
+x-samos-derived-properties:
+  d_id:
+    # The /endpoints API does not return a finding ID, so we compose one
+    # from the parent rule (riskId) and the affected host (hostName).
+    x-samos-hidden: true
+    x-samos-immutable: true
+    title: Finding ID
+    type: string
+    syntax: expression
+    value: '{riskId}_{hostName}'
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+
+  d_name: # human-readable label for this finding: rule ID + affected host
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: '{riskId} on {hostName}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+# Fields sourced from the Cynet Unified API V3 OpenAPI export
+# (https://help.api.cynet.com/docs/API-V3),
+# Hosts area → GET /api/v2/hosts/{site_guid}/espm/misconfigurations/endpoints response schema.
+properties:
+  hostName:
+    type: string
+    title: Host
+    description: Hostname of the affected endpoint.
+    x-samos-ref-types:
+      - type-name: CynetEDRHost
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to
+  riskId:
+    type: string
+    title: Rule Name
+    description: Cynet identifier of the parent misconfiguration rule.
+    x-samos-ref-types:
+      - type-name: CynetEDRMisconfiguration
+        key-name: riskId
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability
+  hostIp:
+    type: string
+    format: ip-addr
+    title: Host IP
+  firstSeen:
+    type: string
+    format: date-time
+    title: First Seen
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: first_seen
+  lastSeen:
+    type: string
+    format: date-time
+    title: Last Seen
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: last_seen

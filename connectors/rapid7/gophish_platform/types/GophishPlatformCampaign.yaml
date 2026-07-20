@@ -1,0 +1,248 @@
+x-samos-type-name: GophishPlatformCampaign
+x-samos-namespace: gophish.platform
+title: Gophish Campaign
+description: A phishing simulation campaign from Gophish representing a security awareness test.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Assessment
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: status
+  - name: launch_date
+  - name: completed_date
+
+x-samos-detail:
+  - name: name
+  - name: status
+  - name: url
+  - name: template
+  - name: page
+  - name: results
+  - name: timeline
+  - name: created_date
+  - name: launch_date
+  - name: send_by_date
+  - name: completed_date
+  - name: smtp
+
+properties:
+  id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Assessment
+      property-name: id
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  created_date:
+    type: string
+    format: date-time
+    title: Created Date
+
+  launch_date:
+    type: string
+    format: date-time
+    title: Launch Date
+    x-samos-fulfills:
+      type-name: Assessment
+      property-name: start_date
+
+  send_by_date:
+    type: string
+    format: date-time
+    title: Send By Date
+
+  completed_date:
+    type: string
+    format: date-time
+    title: Completed Date
+    x-samos-fulfills:
+      type-name: Assessment
+      property-name: end_date
+
+  template:
+    type: object
+    title: Email Template
+    properties:
+      id:
+        type: integer
+        title: Template ID
+      name:
+        type: string
+        title: Template Name
+      envelope_sender:
+        type: string
+        title: Envelope Sender
+      subject:
+        type: string
+        title: Subject
+      text:
+        type: string
+        title: Text Body
+      html:
+        type: string
+        title: HTML Body
+      modified_date:
+        type: string
+        format: date-time
+        title: Modified Date
+      attachments:
+        type: array
+        title: Attachments
+        items:
+          type: object
+
+  page:
+    type: object
+    title: Landing Page
+    properties:
+      id:
+        type: integer
+        title: Page ID
+      name:
+        type: string
+        title: Page Name
+      html:
+        type: string
+        title: HTML Content
+      capture_credentials:
+        type: boolean
+        title: Capture Credentials?
+      capture_passwords:
+        type: boolean
+        title: Capture Passwords?
+      redirect_url:
+        type: string
+        format: url
+        title: Redirect URL
+      modified_date:
+        type: string
+        format: date-time
+        title: Modified Date
+
+  status:
+    type: string
+    title: Status
+
+  timeline:
+    type: array
+    title: Timeline
+    items:
+      type: object
+      properties:
+        campaign_id:
+          type: integer
+          title: Campaign ID
+        email:
+          type: string
+          title: Email
+        time:
+          type: string
+          format: date-time
+          title: Time
+        message:
+          type: string
+          title: Message
+
+  smtp:
+    type: object
+    title: SMTP Profile
+    properties:
+      id:
+        type: integer
+        title: SMTP ID
+      interface_type:
+        type: string
+        title: Interface Type
+      name:
+        type: string
+        title: SMTP Name
+      host:
+        type: string
+        title: SMTP Host
+      username:
+        type: string
+        title: Username
+      password:
+        type: string
+        title: Password
+        x-samos-hidden: true
+      from_address:
+        type: string
+        format: email
+        title: From Address
+      ignore_cert_errors:
+        type: boolean
+        title: Ignore Certificate Errors?
+      headers:
+        type: array
+        title: Custom Headers
+        items:
+          type: object
+      modified_date:
+        type: string
+        format: date-time
+        title: Modified Date
+
+  url:
+    type: string
+    format: url
+    title: Phishing URL
+
+  results:
+    type: array
+    title: Campaign Results
+    items:
+      type: object
+      properties:
+        id:
+          type: string
+          title: Result ID
+        status:
+          type: string
+          title: Status
+        ip:
+          type: string
+          title: IP Address
+          format: ip-addr
+        latitude:
+          type: number
+          title: Latitude
+        longitude:
+          type: number
+          title: Longitude
+        send_date:
+          type: string
+          format: date-time
+          title: Send Date
+        reported:
+          type: boolean
+          title: Reported Phishing Attempt?
+        modified_date:
+          type: string
+          format: date-time
+          title: Modified Date
+        email:
+          type: string
+          format: email
+          title: Recipient Email
+        first_name:
+          type: string
+          title: Recipient First Name
+        last_name:
+          type: string
+          title: Recipient Last Name
+        position:
+          type: string
+          title: Recipient Position

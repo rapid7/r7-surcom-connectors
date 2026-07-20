@@ -18,7 +18,7 @@ def test(user_log: Logger, **settings: Settings):
     delinea = DelineaSecretServerClient(settings=settings, user_log=user_log)
 
     for _, value in ENDPOINTS.items():
-        delinea.make_request(endpoint=value)
+        delinea.make_request(endpoint=value, params={"skip": 0, "take": 1})
 
     return {"status": "success",
             "message": "Successfully connected to Delinea Secret Server"}

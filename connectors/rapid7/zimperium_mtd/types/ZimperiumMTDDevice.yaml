@@ -1,0 +1,428 @@
+x-samos-type-name: ZimperiumMTDDevice
+x-samos-namespace: zimperium.mtd
+title: Zimperium MTD Device
+description: A mobile device managed by Zimperium MTD with application
+  inventory, OS risk posture, and threat state.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: fullType
+  - name: model
+  - name: operator
+  - name: riskPostureName
+  - name: teamName
+  - name: appStatus
+  - name: lastSeen
+
+x-samos-detail:
+  - name: fullType
+  - name: model
+  - name: operator
+  - name: appStatus
+  - name: operatorNumeric
+  - name: riskPosture
+  - name: riskPostureName
+  - name: d_riskyThreats
+  - name: teamId
+  - name: activationName
+  - name: agentType
+  - name: os
+  - name: deviceOwner
+  - name: threatState
+  - name: zappInstance
+  - name: appVersions
+  - name: processed
+  - name: dormancyProcessed
+  - name: additionalDeviceInfo
+  - name: processedAt
+  - name: loginAttempts
+  - name: lastLogin
+  - name: created
+  - name: lastSeen
+
+x-samos-derived-properties:
+  d_name:
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'join(` `, [fullType, model, operator ][?@])'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_active:
+    type: boolean
+    x-samos-hidden: true
+    syntax: jmespath
+    value: "appStatus == 'ACTIVE'"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_agent_version:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'join(`, `, zappInstance[*].zversion)'
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+
+  d_mitigations:
+    type: array
+    x-samos-hidden: true
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    syntax: jmespath
+    # M1012 - Enterprise Policy (EMM/MDM): device managed by Zimperium MTD
+    # M1037 - Filter Network Traffic: VPN active on device
+    # M1056 - Location Services: location services disabled on device
+    # M1047 - Risk Posture: device risk posture is elevated or critical
+    value: >-
+      [
+        appStatus == `ACTIVE` && `M1012` || null,
+        appStatus == `ACTIVE` && zappInstance[0].permissionsState[?permissionName == `VPN` && permissionState == `ALLOW`] | [0] && `M1037` || null,
+        appStatus == `ACTIVE` && zappInstance[0].permissionsState[?permissionName == `DEVICE_LOCATION_STATE` && permissionState == `DISABLED`] | [0] && `M1056` || null,
+        riskPosture >= `2` && `M1047` || null
+      ] | [?@]
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+  d_riskyThreats:
+    title: Risky Threat(s)
+    type: array
+    syntax: jmespath
+    value: 'threatState.riskyThreats'
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: ZimperiumMTDThreat
+
+properties:
+  id:
+    title: Device ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  groupId:
+    x-samos-hidden: true
+    title: Group ID
+    type: string
+
+  riskPosture:
+    title: Risk Posture Score
+    type: integer
+
+  riskPostureName:
+    title: Risk Posture
+    type: string
+
+  accountId:
+    x-samos-hidden: true
+    title: Account ID
+    type: string
+
+  teamId:
+    title: Team
+    type: string
+    x-samos-ref-types:
+      - key-name: id
+        type-name: ZimperiumMTDTeam
+
+  teamName:
+    title: Team
+    type: string
+
+  created:
+    title: Created
+    type: integer
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  lastSeen:
+    title: Last Seen
+    type: integer
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  os:
+    title: OS Info
+    type: object
+    properties:
+      id:
+        title: OS ID
+        type: integer
+      name:
+        title: OS Name
+        type: string
+      type:
+        title: OS Type
+        type: string
+      version:
+        title: OS Version
+        type: string
+      patchDate:
+        title: Patch Date
+        type: string
+      versionUpgradeable:
+        title: Version Upgradeable?
+        type: boolean
+      maxOsVersion:
+        title: Max OS Version
+        type: string
+      maxOsPatchDate:
+        title: Max OS Patch Date
+        type: string
+      osVersionId:
+        title: OS Version ID
+        type: integer
+      cveCount:
+        title: CVE Count
+        type: integer
+      osRiskChecksum:
+        title: OS Risk Checksum
+        type: string
+
+  deviceOwner:
+    title: Device Owner
+    type: object
+    properties:
+      firstName:
+        title: First Name
+        type: string
+      lastName:
+        title: Last Name
+        type: string
+      email:
+        title: Email
+        type: string
+        format: email
+
+  zappInstance:
+    title: zApp Instances
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: Instance ID
+          type: string
+        zappId:
+          title: zApp ID
+          type: string
+        zappName:
+          title: zApp Name
+          type: string
+        groupId:
+          title: Group ID
+          type: string
+        name:
+          title: Name
+          type: string
+        bundleId:
+          title: Bundle ID
+          type: string
+        version:
+          title: Version
+          type: string
+        buildNumber:
+          title: Build Number
+          type: string
+        lastSeen:
+          title: Last Seen
+          type: integer
+          format: epoch-millis
+        isUnknownSourceEnabled:
+          title: Unknown Source Enabled?
+          type: boolean
+        externalTrackingId1:
+          title: External Tracking ID 1
+          type: string
+        externalTrackingId2:
+          title: External Tracking ID 2
+          type: string
+        agentType:
+          title: Agent Type
+          type: integer
+        permissionsState:
+          title: Permissions
+          type: array
+          items:
+            type: object
+            properties:
+              permissionName:
+                title: Permission Name
+                type: string
+              permissionState:
+                title: Permission State
+                type: string
+        serverlessDetection:
+          title: Serverless Detection?
+          type: boolean
+        zversion:
+          title: zVersion
+          type: string
+        zbuildNumber:
+          title: zBuild Number
+          type: string
+
+  fullType:
+    title: Device Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  model:
+    title: Model
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+
+  operator:
+    title: Carrier
+    type: string
+
+  operatorNumeric:
+    title: Carrier Code
+    type: string
+
+  deleted:
+    title: Deleted?
+    type: boolean
+    x-samos-hidden: true
+
+  additionalDeviceInfo:
+    title: Additional Device Info
+    type: array
+    items:
+      type: object
+
+  activationName:
+    title: Activation Name
+    type: string
+
+  agentType:
+    title: Agent Type
+    type: integer
+
+  appVersions:
+    x-samos-hidden: true
+    title: Installed Apps
+    type: array
+    items:
+      type: object
+      properties:
+        appVersionId:
+          title: App Version ID
+          type: string
+          x-samos-ref-types:
+            - key-name: id
+              type-name: ZimperiumMTDApp
+        bundleId:
+          title: Bundle ID
+          type: string
+        installationType:
+          title: Installation Type
+          type: string
+        enabled:
+          title: Enabled?
+          type: boolean
+
+  processed:
+    title: Processed?
+    type: boolean
+
+  processedAt:
+    title: Processed At
+    type: integer
+    format: epoch-millis
+
+  threatState:
+    title: Threat State
+    type: object
+    properties:
+      hadCriticalMitigation:
+        title: Had Critical Mitigation?
+        type: boolean
+      criticalThreats:
+        title: Critical Threats
+        type: array
+        items:
+          type: string
+      numberOfCriticalThreats:
+        title: Critical Threat Count
+        type: integer
+      addOrRemoveCritical:
+        title: Add or Remove Critical?
+        type: boolean
+      hadRiskyMitigation:
+        title: Had Risky Mitigation?
+        type: boolean
+      riskyThreats:
+        title: Risky Threats
+        type: array
+        items:
+          type: string
+      numberOfRiskyThreats:
+        title: Risky Threat Count
+        type: integer
+      addOrRemoveRisky:
+        title: Add or Remove Risky?
+        type: boolean
+
+  appStatus:
+    title: App Status
+    type: string
+
+  dormancyProcessed:
+    title: Dormancy Processed?
+    type: boolean
+
+  loginAttempts:
+    title: Login Attempts
+    type: integer
+
+  lastLogin:
+    title: Last Login
+    type: integer
+    format: epoch-millis
+
+  zdeviceId:
+    title: zDevice ID
+    type: string
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.agent-software-uuid
+      correlation-type: Machine
+      priority: 3
+
+x-samos-virtual:
+  exposures:
+    type-name: Exposure
+    cypher-pattern: >
+      <-[:`e:Finding:applies_to`]-(:ZimperiumMTDVulnerabilityFinding)-[:`e:Finding:vulnerability`]->(e:ZimperiumMTDVulnerability)
+  vulnerabilities:
+    type-name: Vulnerability
+    cypher-pattern: >
+      <-[:`e:Finding:applies_to`]-(:ZimperiumMTDVulnerabilityFinding)-[:`e:Finding:vulnerability`]->(e:ZimperiumMTDVulnerability)

@@ -1,0 +1,677 @@
+[
+  {
+    "id": "ABA-Routing-Number",
+    "map_to": "national_bank_number",
+    "value": "ABA Routing Number"
+  },
+  {
+    "id": "AWS-Access-Key",
+    "map_to": "aws_credentials",
+    "value": "AWS Access Key"
+  },
+  {
+    "id": "AWS-Cognito-Identity-Pool-Id",
+    "map_to": "credential_general_low",
+    "value": "AWS Cognito Identity Pool Id"
+  },
+  {
+    "id": "AWS-MWS-Auth-Token",
+    "map_to": "credential_general",
+    "value": "AWS MWS Auth Token"
+  },
+  {
+    "id": "AWS-Presigned-URL",
+    "map_to": "credential_general",
+    "value": "AWS Presigned URL"
+  },
+  {
+    "id": "AWS-SNS-Topic",
+    "map_to": "credential_general_low",
+    "value": "AWS SNS Topic"
+  },
+  {
+    "id": "Aadhaar-Number-(India)",
+    "map_to": "national_identification_number",
+    "value": "Aadhaar Number (India)"
+  },
+  {
+    "id": "Account-Balance",
+    "map_to": "financial_general_high",
+    "value": "Account Balance"
+  },
+  {
+    "id": "Account-Number",
+    "map_to": "bank_account_number",
+    "value": "Account Number"
+  },
+  {
+    "id": "Age",
+    "map_to": "age",
+    "value": "Age"
+  },
+  {
+    "id": "Argentina-CUIT",
+    "map_to": "taxpayer_identification_number",
+    "value": "Argentina CUIT"
+  },
+  {
+    "id": "Argentina-DNI",
+    "map_to": "national_identification_number",
+    "value": "Argentina DNI"
+  },
+  {
+    "id": "Australia-Bank-Account-Number",
+    "map_to": "bank_account_number",
+    "value": "Australia Bank Account Number"
+  },
+  {
+    "id": "Australia-Medical-Account-Number",
+    "map_to": "national_healthcare_number",
+    "value": "Australia Medical Account Number"
+  },
+  {
+    "id": "Australia-Passport-Number",
+    "map_to": "passport_number",
+    "value": "Australia Passport Number"
+  },
+  {
+    "id": "Australia-Street-Address",
+    "map_to": "mailing_address",
+    "value": "Australia Street Address"
+  },
+  {
+    "id": "Australia-Tax-File-Number",
+    "map_to": "taxpayer_identification_number",
+    "value": "Australia Tax File Number"
+  },
+  {
+    "id": "Azure-SAS-Token",
+    "map_to": "azure_auth_token",
+    "value": "Azure SAS Token"
+  },
+  {
+    "id": "Belgium-Driver-License",
+    "map_to": "drivers_license_number",
+    "value": "Belgium Driver License"
+  },
+  {
+    "id": "Belgium-National-Number",
+    "map_to": "national_identification_number",
+    "value": "Belgium National Number"
+  },
+  {
+    "id": "Belgium-Passport",
+    "map_to": "passport_number",
+    "value": "Belgium Passport"
+  },
+  {
+    "id": "Belgium-Street-Address",
+    "map_to": "mailing_address",
+    "value": "Belgium Street Address"
+  },
+  {
+    "id": "Birth-Date",
+    "map_to": "birth_date",
+    "value": "Birth Date"
+  },
+  {
+    "id": "BoardOfDirectors-data",
+    "map_to": "financial_general_high",
+    "value": "BoardOfDirectors data"
+  },
+  {
+    "id": "Brazil-CNPJ",
+    "map_to": "national_business_number",
+    "value": "Brazil CNPJ"
+  },
+  {
+    "id": "Brazil-CPF",
+    "map_to": "taxpayer_identification_number",
+    "value": "Brazil CPF"
+  },
+  {
+    "id": "Brazil-Driving-License",
+    "map_to": "drivers_license_number",
+    "value": "Brazil Driving License"
+  },
+  {
+    "id": "Brazil-National-ID",
+    "map_to": "national_identification_number",
+    "value": "Brazil National ID"
+  },
+  {
+    "id": "Brazil-Passport",
+    "map_to": "passport_number",
+    "value": "Brazil Passport"
+  },
+  {
+    "id": "CUSIP",
+    "map_to": "financial_general_low",
+    "value": "CUSIP"
+  },
+  {
+    "id": "Canada-Driver-License",
+    "map_to": "drivers_license_number",
+    "value": "Canada Driver License"
+  },
+  {
+    "id": "Canada-Passport",
+    "map_to": "passport_number",
+    "value": "Canada Passport"
+  },
+  {
+    "id": "Canada-Routing-Number",
+    "map_to": "national_bank_number",
+    "value": "Canada Routing Number"
+  },
+  {
+    "id": "Canada-SIN",
+    "map_to": "social_insurance_number",
+    "value": "Canada SIN"
+  },
+  {
+    "id": "Cloudinary-Credential",
+    "map_to": "credential_general",
+    "value": "Cloudinary Credential"
+  },
+  {
+    "id": "Codice-Fiscale-(Italy)",
+    "map_to": "taxpayer_identification_number",
+    "value": "Codice Fiscale (Italy)"
+  },
+  {
+    "id": "Colombia-NIT",
+    "map_to": "taxpayer_identification_number",
+    "value": "Colombia NIT"
+  },
+  {
+    "id": "Colombia-NUIP",
+    "map_to": "national_identification_number",
+    "value": "Colombia NUIP"
+  },
+  {
+    "id": "Confidential-named",
+    "map_to": "financial_general_high",
+    "value": "Confidential named"
+  },
+  {
+    "id": "Core-Account-PAN",
+    "map_to": "credit_card_number",
+    "value": "Core Account PAN"
+  },
+  {
+    "id": "Credit-Card",
+    "map_to": "credit_card_number",
+    "value": "Credit Card"
+  },
+  {
+    "id": "Credit-Card-CVV",
+    "map_to": "credit_card_verification_code",
+    "value": "Credit Card CVV"
+  },
+  {
+    "id": "Credit-Card-Expiry",
+    "map_to": "credit_card_expiration",
+    "value": "Credit Card Expiry"
+  },
+  {
+    "id": "Credit-Card-Magnetic-Stripe",
+    "map_to": "credit_card_magnetic_stripe",
+    "value": "Credit Card Magnetic Stripe"
+  },
+  {
+    "id": "Credit-Card-PIN",
+    "map_to": "credit_card_verification_code",
+    "value": "Credit Card PIN"
+  },
+  {
+    "id": "Crypto-Wallet-Number",
+    "map_to": "financial_general_medium",
+    "value": "Crypto Wallet Number"
+  },
+  {
+    "id": "Customer-data",
+    "map_to": "pii_general_high",
+    "value": "Customer data"
+  },
+  {
+    "id": "Death-Date",
+    "map_to": "pii_general_high",
+    "value": "Death Date"
+  },
+  {
+    "id": "Dynatrace-Token",
+    "map_to": "credential_general",
+    "value": "Dynatrace Token"
+  },
+  {
+    "id": "EU-Country",
+    "map_to": "country",
+    "value": "EU Country"
+  },
+  {
+    "id": "Email-Address",
+    "map_to": "email_address",
+    "value": "Email Address"
+  },
+  {
+    "id": "FCM-Server-Key",
+    "map_to": "credential_general",
+    "value": "FCM Server Key"
+  },
+  {
+    "id": "Facebook-Client-ID",
+    "map_to": "credential_general_low",
+    "value": "Facebook Client ID"
+  },
+  {
+    "id": "Facebook-Secret-Key",
+    "map_to": "credential_general",
+    "value": "Facebook Secret Key"
+  },
+  {
+    "id": "Financial-Institution",
+    "map_to": "financial_general_low",
+    "value": "Financial Institution"
+  },
+  {
+    "id": "Financial-data",
+    "map_to": "financial_general_high",
+    "value": "Financial data"
+  },
+  {
+    "id": "Firebase-Database",
+    "map_to": "credential_general_low",
+    "value": "Firebase Database"
+  },
+  {
+    "id": "France-INSEE-Code",
+    "map_to": "national_identification_number",
+    "value": "France INSEE Code"
+  },
+  {
+    "id": "GenAI-reference",
+    "map_to": "pii_general_low",
+    "value": "GenAI reference"
+  },
+  {
+    "id": "Gender",
+    "map_to": "gender",
+    "value": "Gender"
+  },
+  {
+    "id": "Geo-Location",
+    "map_to": "gps_coordinates",
+    "value": "Geo Location"
+  },
+  {
+    "id": "GitHub-Personal-Access-Token",
+    "map_to": "credential_general",
+    "value": "GitHub Personal Access Token"
+  },
+  {
+    "id": "Google-API-Key",
+    "map_to": "gcp_api_key",
+    "value": "Google API Key"
+  },
+  {
+    "id": "HTTP-Cookie",
+    "map_to": "http_cookie",
+    "value": "HTTP Cookie"
+  },
+  {
+    "id": "HiringDoc-I9-Keywordsmatch",
+    "map_to": "pii_general_high",
+    "value": "HiringDoc I9 Keywordsmatch"
+  },
+  {
+    "id": "HiringDoc-W4-Keywordsmatch",
+    "map_to": "pii_general_high",
+    "value": "HiringDoc W4 Keywordsmatch"
+  },
+  {
+    "id": "IBAN-Code",
+    "map_to": "iban_number",
+    "value": "IBAN Code"
+  },
+  {
+    "id": "INSEE-Code-(France)",
+    "map_to": "national_identification_number",
+    "value": "INSEE Code (France)"
+  },
+  {
+    "id": "IP-Address",
+    "map_to": "ip_address",
+    "value": "IP Address"
+  },
+  {
+    "id": "ImmigrationDoc-DS2019-Keywordsmatch",
+    "map_to": "pii_general_high",
+    "value": "ImmigrationDoc DS2019 Keywordsmatch"
+  },
+  {
+    "id": "ImmigrationDoc-I20-Keywordsmatch",
+    "map_to": "pii_general_high",
+    "value": "ImmigrationDoc I20 Keywordsmatch"
+  },
+  {
+    "id": "ImmigrationDoc-I327-Keywordsmatch",
+    "map_to": "pii_general_high",
+    "value": "ImmigrationDoc I327 Keywordsmatch"
+  },
+  {
+    "id": "ImmigrationDoc-I551-Keywordsmatch",
+    "map_to": "pii_general_high",
+    "value": "ImmigrationDoc I551 Keywordsmatch"
+  },
+  {
+    "id": "ImmigrationDoc-I571-Keywordsmatch",
+    "map_to": "pii_general_high",
+    "value": "ImmigrationDoc I571 Keywordsmatch"
+  },
+  {
+    "id": "ImmigrationDoc-I766-Keywordsmatch",
+    "map_to": "pii_general_high",
+    "value": "ImmigrationDoc I766 Keywordsmatch"
+  },
+  {
+    "id": "ImmigrationDoc-I797-Keywordsmatch",
+    "map_to": "pii_general_high",
+    "value": "ImmigrationDoc I797 Keywordsmatch"
+  },
+  {
+    "id": "ImmigrationDoc-I94-Keywordsmatch",
+    "map_to": "pii_general_high",
+    "value": "ImmigrationDoc I94 Keywordsmatch"
+  },
+  {
+    "id": "ImmigrationDoc-N550-Keywordsmatch",
+    "map_to": "pii_general_high",
+    "value": "ImmigrationDoc N550 Keywordsmatch"
+  },
+  {
+    "id": "ImmigrationDoc-N560-Keywordsmatch",
+    "map_to": "pii_general_high",
+    "value": "ImmigrationDoc N560 Keywordsmatch"
+  },
+  {
+    "id": "India-Aadhaar-Number",
+    "map_to": "national_identification_number",
+    "value": "India Aadhaar Number"
+  },
+  {
+    "id": "International-Phone-Number",
+    "map_to": "phone_number",
+    "value": "International Phone Number"
+  },
+  {
+    "id": "Italy-Codice-Fiscale",
+    "map_to": "taxpayer_identification_number",
+    "value": "Italy Codice Fiscale"
+  },
+  {
+    "id": "Linkedin-Client-ID",
+    "map_to": "credential_general_low",
+    "value": "Linkedin Client ID"
+  },
+  {
+    "id": "Mailchimp-API-Key",
+    "map_to": "credential_general",
+    "value": "Mailchimp API Key"
+  },
+  {
+    "id": "Mailgun-API-Key",
+    "map_to": "credential_general",
+    "value": "Mailgun API Key"
+  },
+  {
+    "id": "Malaysia-MyKad",
+    "map_to": "national_identification_number",
+    "value": "Malaysia MyKad"
+  },
+  {
+    "id": "Malaysia-Passport-Number",
+    "map_to": "passport_number",
+    "value": "Malaysia Passport Number"
+  },
+  {
+    "id": "Medical-Illness",
+    "map_to": "phi_general_high",
+    "value": "Medical Illness"
+  },
+  {
+    "id": "Medical-Institution",
+    "map_to": "phi_general_medium",
+    "value": "Medical Institution"
+  },
+  {
+    "id": "Password",
+    "map_to": "password",
+    "value": "Password"
+  },
+  {
+    "id": "Payroll-Information",
+    "map_to": "financial_general_high",
+    "value": "Payroll Information"
+  },
+  {
+    "id": "Person-Name",
+    "map_to": "name",
+    "value": "Person Name"
+  },
+  {
+    "id": "Phone-Number",
+    "map_to": "phone_number",
+    "value": "Phone Number"
+  },
+  {
+    "id": "Portugal-CC",
+    "map_to": "national_identification_number",
+    "value": "Portugal CC"
+  },
+  {
+    "id": "Portugal-NIF",
+    "map_to": "taxpayer_identification_number",
+    "value": "Portugal NIF"
+  },
+  {
+    "id": "Private-Key",
+    "map_to": "credential_general",
+    "value": "Private Key"
+  },
+  {
+    "id": "Product-data",
+    "map_to": "financial_general_medium",
+    "value": "Product data"
+  },
+  {
+    "id": "Public-Key",
+    "map_to": "credential_general_low",
+    "value": "Public Key"
+  },
+  {
+    "id": "Resume-Keywordsmatch",
+    "map_to": "resume",
+    "value": "Resume Keywordsmatch"
+  },
+  {
+    "id": "Resume-Pathbased",
+    "map_to": "resume",
+    "value": "Resume Pathbased"
+  },
+  {
+    "id": "Sales-data",
+    "map_to": "financial_general_medium",
+    "value": "Sales data"
+  },
+  {
+    "id": "Sendgrid-API-Key",
+    "map_to": "credential_general",
+    "value": "Sendgrid API Key"
+  },
+  {
+    "id": "Shopify-Custom-App-Token",
+    "map_to": "credential_general",
+    "value": "Shopify Custom App Token"
+  },
+  {
+    "id": "Shopify-Private-App-Token",
+    "map_to": "credential_general",
+    "value": "Shopify Private App Token"
+  },
+  {
+    "id": "Shopify-Shared-Secret",
+    "map_to": "credential_general",
+    "value": "Shopify Shared Secret"
+  },
+  {
+    "id": "Slack-Bot-Token",
+    "map_to": "credential_general",
+    "value": "Slack Bot Token"
+  },
+  {
+    "id": "Slack-User-Token",
+    "map_to": "credential_general",
+    "value": "Slack User Token"
+  },
+  {
+    "id": "Slack-Webhook",
+    "map_to": "credential_general",
+    "value": "Slack Webhook"
+  },
+  {
+    "id": "SonarQube-Token",
+    "map_to": "credential_general",
+    "value": "SonarQube Token"
+  },
+  {
+    "id": "South-African-Identity",
+    "map_to": "national_identification_number",
+    "value": "South African Identity"
+  },
+  {
+    "id": "Square-Access-Token",
+    "map_to": "credential_general",
+    "value": "Square Access Token"
+  },
+  {
+    "id": "Square-OAuth-Secret",
+    "map_to": "oauth_client_secret",
+    "value": "Square OAuth Secret"
+  },
+  {
+    "id": "Street-Address",
+    "map_to": "mailing_address",
+    "value": "Street Address"
+  },
+  {
+    "id": "Switzerland-AHV",
+    "map_to": "national_identification_number",
+    "value": "Switzerland AHV"
+  },
+  {
+    "id": "Switzerland-Driving-License",
+    "map_to": "drivers_license_number",
+    "value": "Switzerland Driving License"
+  },
+  {
+    "id": "Taiwan-Driving-License",
+    "map_to": "drivers_license_number",
+    "value": "Taiwan Driving License"
+  },
+  {
+    "id": "Taiwan-National-ID",
+    "map_to": "national_identification_number",
+    "value": "Taiwan National ID"
+  },
+  {
+    "id": "Taiwan-Passport",
+    "map_to": "passport_number",
+    "value": "Taiwan Passport"
+  },
+  {
+    "id": "Transaction-Date",
+    "map_to": "date",
+    "value": "Transaction Date"
+  },
+  {
+    "id": "Transaction-Description",
+    "map_to": "financial_general_medium",
+    "value": "Transaction Description"
+  },
+  {
+    "id": "Twilio-API-Key",
+    "map_to": "credential_general",
+    "value": "Twilio API Key"
+  },
+  {
+    "id": "Twitter-Secret",
+    "map_to": "credential_general",
+    "value": "Twitter Secret"
+  },
+  {
+    "id": "UK-National-Insurance-Number",
+    "map_to": "national_insurance_number",
+    "value": "UK National Insurance Number"
+  },
+  {
+    "id": "US-DEA-ID",
+    "map_to": "drug_enforcement_agency_number",
+    "value": "US DEA ID"
+  },
+  {
+    "id": "US-Driving-License",
+    "map_to": "drivers_license_number",
+    "value": "US Driving License"
+  },
+  {
+    "id": "US-HCPCS",
+    "map_to": "healthcare_procedure_code",
+    "value": "US HCPCS"
+  },
+  {
+    "id": "US-HICN",
+    "map_to": "health_insurance_claim_number",
+    "value": "US HICN"
+  },
+  {
+    "id": "US-ITIN",
+    "map_to": "taxpayer_identification_number",
+    "value": "US ITIN"
+  },
+  {
+    "id": "US-MBI",
+    "map_to": "national_healthcare_number",
+    "value": "US MBI"
+  },
+  {
+    "id": "US-NDC",
+    "map_to": "national_drug_code",
+    "value": "US NDC"
+  },
+  {
+    "id": "US-NPI",
+    "map_to": "national_provider_identifier",
+    "value": "US NPI"
+  },
+  {
+    "id": "US-Passport-Number",
+    "map_to": "passport_number",
+    "value": "US Passport Number"
+  },
+  {
+    "id": "US-SSN",
+    "map_to": "social_security_number",
+    "value": "US SSN"
+  },
+  {
+    "id": "Username",
+    "map_to": "credential_general_low",
+    "value": "Username"
+  },
+  {
+    "id": "VIN",
+    "map_to": "vehicle_identification_number",
+    "value": "VIN"
+  }
+]

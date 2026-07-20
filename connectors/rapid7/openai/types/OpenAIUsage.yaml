@@ -1,0 +1,113 @@
+x-samos-type-name: OpenAIUsage
+x-samos-namespace: openai
+title: OpenAI Usage
+description: API completions usage data
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: user_id
+  - name: total_num_model_requests
+  - name: total_input_tokens
+  - name: total_output_tokens
+  - name: total_input_cached_tokens
+
+x-samos-detail:
+  - name: user_id
+  - name: total_num_model_requests
+  - name: total_input_tokens
+  - name: total_output_tokens
+  - name: total_input_cached_tokens
+  - name: total_input_text_tokens
+  - name: total_input_image_tokens
+  - name: total_input_cached_text_tokens
+  - name: total_input_cached_audio_tokens
+  - name: total_input_cached_image_tokens
+  - name: total_input_uncached_tokens
+  - name: total_input_cache_write_tokens
+  - name: total_output_text_tokens
+  - name: total_output_image_tokens
+  - name: models
+
+x-samos-derived-properties:
+  d_id:
+    # Derived to fulfill the `id` property of the `User` type.
+    title: ID
+    type: string
+    syntax: expression
+    value: '{user_id}'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  d_name:
+    # Derived to fulfill the `name` property of the `core.named-object` type.
+    title: Name
+    type: string
+    syntax: expression
+    value: '{user_id}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+required:
+  - user_id
+
+properties:
+  user_id:
+    type: string
+    title: User
+    x-samos-correlation:
+      correlation-key: User.guid
+      correlation-type: User
+      priority: 4
+  total_num_model_requests:
+    type: integer
+    title: Total Model Requests
+  total_input_tokens:
+    type: integer
+    title: Total Input Tokens
+  total_output_tokens:
+    type: integer
+    title: Total Output Tokens
+  total_input_cached_tokens:
+    type: integer
+    title: Total Cached Input Tokens
+  total_input_text_tokens:
+    type: integer
+    title: Total Input Text Tokens
+  total_input_image_tokens:
+    type: integer
+    title: Total Input Image Tokens
+  total_input_cached_text_tokens:
+    type: integer
+    title: Total Cached Input Text Tokens
+  total_input_cached_audio_tokens:
+    type: integer
+    title: Total Cached Input Audio Tokens
+  total_input_cached_image_tokens:
+    type: integer
+    title: Total Cached Input Image Tokens
+  total_input_uncached_tokens:
+    type: integer
+    title: Total Uncached Input Tokens
+  total_input_cache_write_tokens:
+    type: integer
+    title: Total Input Cache Write Tokens
+  total_output_text_tokens:
+    type: integer
+    title: Total Output Text Tokens
+  total_output_image_tokens:
+    type: integer
+    title: Total Output Image Tokens
+  models:
+    type: object
+    title: Usage by Model

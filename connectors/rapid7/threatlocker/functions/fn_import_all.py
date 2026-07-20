@@ -66,6 +66,11 @@ def _get_applications(client: helpers.ThreatLockerClient, user_log: Logger):
 def _get_computers(client: helpers.ThreatLockerClient, user_log: Logger):
     page_number = 1
     params = {
+        # Stable sort prevents page overlap (duplicate/missing records) during
+        # pagination. Per the ComputerParameterDto schema, valid orderBy values
+        # are: computername, group, action, lastcheckin, computerinstalldate,
+        # deniedcountthreedays, updatechannel, threatlockerversion.
+        "orderBy": "computername",
         "pageSize": 500,  # Computers endpoint has a max page size of 500
         "pageNumber": page_number,
     }
@@ -97,6 +102,9 @@ def _get_computers(client: helpers.ThreatLockerClient, user_log: Logger):
 def _get_organizations(client: helpers.ThreatLockerClient, user_log: Logger):
     page_number = 1
     params = {
+        # Per the ThreatLocker API docs, valid orderBy values for this endpoint
+        # are: billingMethod, businessClassificationName, dateAdded, name.
+        "orderBy": "name",
         "pageSize": 500,  # Organizations endpoint has a max page size of 500
         "pageNumber": page_number,
     }

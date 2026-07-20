@@ -1,0 +1,193 @@
+x-samos-type-name: ZimperiumMTDScanApp
+x-samos-namespace: zimperium.mtd
+title: Zimperium zScan App
+description: A mobile device application registered in Zimperium zScan for
+  security analysis.
+
+x-samos-hidden: true # Hidden; zScan types are moving to a dedicated connector.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Software
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: bundleId
+  - name: platform
+  - name: appSource
+  - name: privacyScore
+  - name: securityScore
+  - name: appVersion
+  - name: lastScanned
+
+x-samos-detail:
+  - name: name
+  - name: bundleId
+  - name: platform
+  - name: appSource
+  - name: privacyScore
+  - name: securityScore
+  - name: teamId
+  - name: marketLink
+  - name: marketVersion
+  - name: appAutoUpdate
+  - name: md5
+  - name: sha256
+  - name: lastScanned
+  - name: created
+  - name: modified
+
+x-samos-derived-properties:
+  d_vendor_product_version:
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'join(`-`, [bundleId, name][?@])'
+    x-samos-correlation:
+      correlation-key: Software.vendor-product-version
+      correlation-type: Software
+      priority: 3
+
+  d_software_type:
+    type: string
+    x-samos-hidden: true
+    syntax: expression
+    value: 'APPLICATION'
+    x-samos-ref-types:
+      - type-name: EnumSoftwareType
+        key-name: id
+    x-samos-fulfills:
+      type-name: Software
+      property-name: type
+
+  d_mitigations:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    syntax: jmespath
+    # M1016 - Vulnerability Scanning: platform identifies out-of-date OS or vulnerable libraries
+    value: >-
+      [
+        lastScanned != `null` && `M1016` || null
+      ] | [?@]
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+  d_name:
+    type: string
+    x-samos-hidden: true
+    syntax: expression
+    value: '{name} {marketVersion}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  id:
+    title: App ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+
+  bundleId:
+    title: Bundle
+    type: string
+
+  platform:
+    title: Platform
+    type: string
+    x-samos-fulfills:
+      type-name: Software
+      property-name: target_platform
+    x-samos-ref-types:
+      - key-name: id
+        type-name: ZimperiumMTDOSFamilyEnum
+
+  appSource:
+    title: App Source
+    type: string
+
+  appAutoUpdate:
+    title: Auto Update?
+    type: boolean
+
+  accountId:
+    x-samos-hidden: true
+    title: Account ID
+    type: string
+
+  teamId:
+    title: Team
+    type: string
+    x-samos-ref-types:
+      - key-name: id
+        type-name: ZimperiumMTDTeam
+
+  lastAssessmentId:
+    x-samos-hidden: true
+    title: Last Assessment ID
+    type: string
+
+  created:
+    title: Created
+    type: integer
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  modified:
+    title: Modified
+    type: integer
+    format: epoch-millis
+
+  lastScanned:
+    title: Last Scanned
+    type: integer
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  marketLink:
+    title: Market Link
+    type: string
+    format: url
+
+  md5:
+    title: MD5 Hash
+    type: string
+
+  sha256:
+    title: SHA-256 Hash
+    type: string
+
+  privacyScore:
+    title: Privacy Score
+    type: integer
+
+  securityScore:
+    title: Security Score
+    type: integer
+
+  marketVersion:
+    title: Market Version
+    type: string
+    x-samos-fulfills:
+      type-name: Software
+      property-name: version

@@ -1,0 +1,125 @@
+x-samos-type-name: VeeamDataPlatformRepository
+x-samos-namespace: veeam.data.platform
+title: Veeam Backup Repository
+description: A backup repository in the Veeam Backup & Replication of all backup repositories that are added to the backup infrastructure.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Storage
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: type
+  - name: description
+  - name: hostId
+  - name: repository.path
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: type
+  - name: hostId
+  - name: uniqueId
+  - name: repository
+  - name: mountServer
+
+properties:
+  id:
+    title: Repository ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  type:
+    title: Repository Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  hostId:
+    title: Host Server
+    type: string
+    x-samos-ref-types:
+      - type-name: VeeamDataPlatformManagedServer
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+  uniqueId:
+    title: Unique ID
+    type: string
+    x-samos-hidden: true
+
+  repository:
+    title: Repository Settings
+    type: object
+    properties:
+      path:
+        title: Path
+        type: string
+        x-samos-fulfills:
+          type-name: Storage
+          property-name: uri
+      taskLimitEnabled:
+        title: Task Limit Enabled?
+        type: boolean
+      maxTaskCount:
+        title: Max Task Count
+        type: integer
+      readWriteLimitEnabled:
+        title: Read/Write Limit Enabled?
+        type: boolean
+      readWriteRate:
+        title: Read/Write Rate (MB/s)
+        type: integer
+      useFastCloningOnXFSVolumes:
+        title: Fast Cloning on XFS?
+        type: boolean
+      advancedSettings:
+        title: Advanced Settings
+        type: object
+        properties:
+          RotatedDriveCleanupMode:
+            title: Rotated Drive Cleanup Mode
+            type: string
+          alignDataBlocks:
+            title: Align Data Blocks?
+            type: boolean
+          decompressBeforeStoring:
+            title: Decompress Before Storing?
+            type: boolean
+          rotatedDrives:
+            title: Rotated Drives?
+            type: boolean
+          perVmBackup:
+            title: Per-VM Backup?
+            type: boolean
+
+  mountServer:
+    title: Mount Server
+    type: object
+    properties:
+      mountServerSettingsType:
+        title: Settings Type
+        type: string

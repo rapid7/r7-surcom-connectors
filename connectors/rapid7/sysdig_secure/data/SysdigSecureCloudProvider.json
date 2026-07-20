@@ -1,0 +1,17 @@
+[
+  {
+    "id": "AWS",
+    "value": "Amazon EKS",
+    "map_to": "CloudProvider: Amazon EKS"
+  },
+  {
+    "id": "Azure",
+    "value": "Azure AKS",
+    "map_to": "CloudProvider: Azure AKS"
+  },
+  {
+    "id": "GCP",
+    "value": "Google GKE",
+    "map_to": "CloudProvider: Google GKE"
+  }
+]

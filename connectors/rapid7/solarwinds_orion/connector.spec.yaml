@@ -1,11 +1,11 @@
 ﻿id: solarwinds.orion
 name: SolarWinds Orion
 author: Rapid7
-version: 1.5.0
+version: 1.6.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Remove ModernIcon field from Node and Application queries to fix compatibility with older SolarWinds Orion versions
+  - Increase timeout and decrease limit for Node SWQL queries.
 
 reference-schemas:
   - url: https://solarwinds.github.io/OrionSDK/2024.4
@@ -21,7 +21,8 @@ functions:
   - id: test
   - id: import_all
     title: SolarWinds Orion Agents, Nodes, and Applications
-    description: Imports all agents, nodes, applications and application templates from SolarWinds Orion
+    description: Imports all agents, nodes, applications and application templates
+      from SolarWinds Orion
     return_types:
       - SolarWindsOrionNode
       - SolarWindsOrionApplication

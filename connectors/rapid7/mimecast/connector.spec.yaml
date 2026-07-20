@@ -1,12 +1,11 @@
 id: mimecast
 name: Mimecast
 author: Rapid7
-version: 1.0.0
+version: 1.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Remove Beta label
-
+  - Updating the documentation for the API permissions required for this connector.
 types:
   - MimecastGatewayDetail
   - MimecastInternalDomain

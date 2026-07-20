@@ -82,6 +82,7 @@ The available categories are:
   { "id": "security_operations", "displayName": "Security Operations", "examples": "Incydr, XSOAR, SolarWinds Orion, Nexthink, Splunk, Devo SIEM, Exabeam" },
   { "id": "endpoint_management", "displayName": "Endpoint Management", "examples": "Microsoft Intune, Jamf, Kaseya VSA, NinjaOne, baramundi" },
   { "id": "phishing", "displayName": "Phishing", "examples": "KnowBe4, Proofpoint TAP" },
+  { "id": "privileged_access_management", "displayName": "Privileged Access Management", "examples": "CyberArk PAM, BeyondTrust" },
   { "id": "iam", "displayName": "Identity & Access Management", "examples": "CyberArk PAM, PingOne, Entra ID, Okta, Cisco Duo" },
   { "id": "cloud_service_provider", "displayName": "Cloud Provider / Infrastructure", "examples": "AWS, Azure Compute, VMWare" },
   { "id": "cloud_security", "displayName": "Cloud Security", "examples": "Orca, Wiz, Trend CloudOne, Cisco Umbrella, Aqua CSPM" },
@@ -196,6 +197,11 @@ The available categories are:
 - Do not include records where all values are placeholder strings like `"string"` — sample data should look realistic.
 - Sample data must include records that exercise derived properties — if a derived property transforms data, the sample should demonstrate that transformation.
 - Use `x_` prefix for Python-generated properties added to a vendor's return type. Do not use `x_` on properties in entirely custom types.
+
+---
+
+## types/*.yaml
+- For each new type added, tell the user to take advantage of the Agent Skills provided with the `surcom-sdk` to enhance the type. An example prompt would be: "Using the `sc-type-system` agent skill, read the sample data for this type, then review it and list any other correlations, fulfills, or references you think this type should include."
 
 ---
 

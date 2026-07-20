@@ -1,0 +1,449 @@
+x-samos-type-name: IllumioVen
+x-samos-namespace: illumio
+title: Illumio VEN
+description: A Virtual Enforcement Node (VEN) agent installed on a workload to enforce segmentation policies.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: hostname
+  - name: description
+  - name: status
+  - name: version
+  - name: os_platform
+  - name: ven_type
+
+x-samos-detail:
+  - name: name
+  - name: hostname
+  - name: description
+  - name: uid
+  - name: status
+  - name: version
+  - name: activation_type
+  - name: os_id
+  - name: os_detail
+  - name: os_platform
+  - name: active_pce_fqdn
+  - name: target_pce_fqdn
+  - name: ven_type
+  - name: unpair_allowed
+  - name: authentication_recovery
+  - name: last_heartbeat_at
+  - name: last_goodbye_at
+  - name: upgrade_expires_at
+  - name: upgrade_target_version
+  - name: caps
+  - name: conditions
+  - name: container_cluster
+  - name: interfaces
+  - name: labels
+  - name: secure_connect
+  - name: workloads
+  - name: created_at
+  - name: updated_at
+
+x-samos-derived-properties:
+  # Map `status == active` onto core.component / active boolean
+  d_active:
+    x-samos-hidden: true
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: 'status == `active`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  # Flatten `interfaces[].address` into a single IP list for Machine.ips
+  d_ips:
+    x-samos-hidden: true
+    title: IPs
+    type: array
+    syntax: jmespath
+    value: 'interfaces[].address'
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  # Hostname containing a dot — used for qualified hostname correlation
+  d_qualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'hostname && contains(hostname, `.`) && hostname || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  # Hostname without a dot — used for unqualified hostname correlation
+  d_unqualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'hostname && !contains(hostname, `.`) && hostname || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  # Flatten `labels[]` to label hrefs referencing IllumioLabel records
+  d_source_tags:
+    x-samos-hidden: true
+    title: Source Tags
+    type: array
+    syntax: jmespath
+    value: 'labels[].href'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: IllumioLabel
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+
+properties:
+  id:
+    title: Object ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  href:
+    title: Href
+    type: string
+    x-samos-hidden: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  hostname:
+    title: Hostname
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  uid:
+    title: UID
+    type: string
+
+  status:
+    title: Status
+    type: string
+
+  version:
+    title: Version
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+
+  activation_type:
+    title: Activation Type
+    type: string
+
+  os_id:
+    title: OS ID
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_product
+
+  os_detail:
+    title: OS Detail
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  os_platform:
+    title: OS Platform
+    type: string
+
+  active_pce_fqdn:
+    title: Active PCE FQDN
+    type: string
+
+  target_pce_fqdn:
+    title: Target PCE FQDN
+    type: string
+
+  ven_type:
+    title: VEN Type
+    type: string
+
+  unpair_allowed:
+    title: Unpair Allowed?
+    type: boolean
+
+  authentication_recovery:
+    title: Authentication Recovery?
+    type: boolean
+
+  last_heartbeat_at:
+    title: Last Heartbeat At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+
+  last_goodbye_at:
+    title: Last Goodbye At
+    type: string
+    format: date-time
+
+  upgrade_expires_at:
+    title: Upgrade Expires At
+    type: string
+    format: date-time
+
+  upgrade_target_version:
+    title: Upgrade Target Version
+    type: string
+
+  labels:
+    title: Labels
+    type: array
+    items:
+      type: object
+      properties:
+        href:
+          title: Label Href
+          type: string
+          x-samos-ref-types:
+            - type-name: IllumioLabel
+              key-name: id
+        key:
+          title: Label Key
+          type: string
+        value:
+          title: Label Value
+          type: string
+
+  interfaces:
+    title: Interfaces
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          title: Interface Name
+          type: string
+        address:
+          title: IP Address
+          type: string
+          format: ip-addr
+        cidr_block:
+          title: CIDR Block
+          type: integer
+        link_state:
+          title: Link State
+          type: string
+        default_gateway_address:
+          title: Default Gateway
+          type: string
+          format: ip-addr
+        friendly_name:
+          title: Friendly Name
+          type: string
+        network_detection_mode:
+          title: Network Detection Mode
+          type: string
+        network:
+          title: Network
+          type: object
+          properties:
+            href:
+              title: Network Href
+              type: string
+            name:
+              title: Network Name
+              type: string
+        href:
+          title: Interface Href
+          type: string
+
+  workloads:
+    title: Workloads
+    type: array
+    items:
+      type: object
+      properties:
+        href:
+          title: Workload Href
+          type: string
+          x-samos-ref-types:
+            - type-name: IllumioWorkload
+              key-name: id
+        name:
+          title: Workload Name
+          type: string
+        managed:
+          title: Managed?
+          type: boolean
+        hostname:
+          title: Hostname
+          type: string
+        os_id:
+          title: OS ID
+          type: string
+        os_detail:
+          title: OS Detail
+          type: string
+        online:
+          title: Online?
+          type: boolean
+        enforcement_mode:
+          title: Enforcement Mode
+          type: string
+        visibility_level:
+          title: Visibility Level
+          type: string
+        labels:
+          title: Labels
+          type: array
+          items:
+            type: object
+            properties:
+              href:
+                title: Label Href
+                type: string
+              key:
+                title: Label Key
+                type: string
+              value:
+                title: Label Value
+                type: string
+        interfaces:
+          title: Interfaces
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                title: Interface Name
+                type: string
+              address:
+                title: IP Address
+                type: string
+                format: ip-addr
+              cidr_block:
+                title: CIDR Block
+                type: integer
+
+  container_cluster:
+    title: Container Cluster
+    type: object
+    properties:
+      href:
+        title: Cluster Href
+        type: string
+      name:
+        title: Cluster Name
+        type: string
+
+  secure_connect:
+    title: Secure Connect
+    type: object
+    properties:
+      matching_issuer_name:
+        title: Matching Issuer Name
+        type: string
+
+  conditions:
+    title: Conditions
+    type: array
+    items:
+      type: object
+      properties:
+        first_reported_timestamp:
+          title: First Reported
+          type: string
+          format: date-time
+        latest_event:
+          title: Latest Event
+          type: object
+          properties:
+            notification_type:
+              title: Notification Type
+              type: string
+            severity:
+              title: Severity
+              type: string
+            href:
+              title: Event Href
+              type: string
+            info:
+              title: Info
+              type: object
+            timestamp:
+              title: Timestamp
+              type: string
+              format: date-time
+
+  caps:
+    title: Capabilities
+    type: array
+    items:
+      type: string
+
+  created_at:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_first_seen
+
+  updated_at:
+    title: Updated At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  created_by:
+    title: Created By
+    type: object
+    x-samos-hidden: true
+    properties:
+      href:
+        title: Creator Href
+        type: string
+
+  updated_by:
+    title: Updated By
+    type: object
+    x-samos-hidden: true
+    properties:
+      href:
+        title: Updater Href
+        type: string

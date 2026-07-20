@@ -1,0 +1,326 @@
+x-samos-type-name: CynetEDRHost
+x-samos-namespace: cynet.edr
+title: Cynet EDR Host
+description: A host (endpoint) protected by Cynet EDR
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id
+
+required:
+  - hostname
+
+x-samos-table:
+  - name: hostname
+  - name: operating_system
+  - name: last_ip
+  - name: risk_level
+  - name: last_scan
+
+x-samos-detail:
+  - name: hostname
+  - name: operating_system
+  - name: risk_level
+  - name: last_ip
+  - name: last_mask
+  - name: hd_serial
+  - name: last_ms_update
+  - name: last_scan
+  - name: number_of_processes
+  - name: number_of_logged_users
+  - name: total_cpu_percentage
+  - name: system_partition_size
+  - name: system_partition_free_space
+  - name: total_memory
+  - name: total_free_memory
+  - name: memory_percentage
+  - name: scanGroup
+  - name: Antivirus
+  - name: domains
+  - name: users
+
+x-samos-derived-properties:
+  d_id:
+    # Derives the SC component id from `hostname`; fulfills core.component:id.
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: hostname
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_name:
+    # `hostname` fulfills Machine:id, so we derive name from the same value.
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: hostname
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_last_seen: # maps last_scan (most recent host scan) to core.component:last_seen
+    x-samos-hidden: true
+    type: string
+    format: date-time
+    syntax: jmespath
+    value: last_scan
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  d_mitigations:
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    # M1016 (Vulnerability Scanning) — host has been scanned at least once.
+    # M1049 (Antivirus/Antimalware) — Cynet AV is enabled on this host.
+    value: >-
+      [
+        last_scan && `M1016` || null,
+        Antivirus.Status == `Enabled` && `M1049` || null
+      ] | [?@]
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+  d_qualified_hostname:
+    # Cynet's `hostname` can be either an FQDN or a short hostname; split
+    # so both correlations fire (peer: ThreatLockerComputer, IllumioWorkload).
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'hostname && contains(hostname, `.`) && hostname || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_unqualified_hostname: # short hostname (no dot) for Machine.unqualified-hostname correlation
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'hostname && !contains(hostname, `.`) && hostname || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_endpoint_protection_active:
+    # True when Cynet AV reports Status = "Enabled" on this host.
+    # Peer pattern: CheckPointHarmonyEndpointAsset.
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: 'Antivirus.Status == `Enabled`'
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_protection_active
+
+  d_users: # links host to its observed users via injected x_client_db_id (matches CynetEDRUser.d_id)
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: 'users[].x_client_db_id | [?@]'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CynetEDRUser
+          key-name: d_id
+
+# Fields sourced from the Cynet Unified API V3 OpenAPI export
+# (https://help.api.cynet.com/docs/API-V3),
+# Hosts area → GET /api/full/host response schema.
+properties:
+  hostname:
+    type: string
+    title: Hostname
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+  risk_level:
+    type: integer
+    title: Risk Level
+    description: Cynet-assigned numeric risk score for the host.
+  operating_system:
+    type: string
+    title: Operating System
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+  last_ms_update:
+    type: string
+    format: date-time
+    title: Last OS Update
+  hd_serial:
+    type: integer
+    title: Disk Serial Number
+  last_scan:
+    type: string
+    format: date-time
+    title: Last Scan
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_scanned
+
+  last_ip:
+    type: string
+    format: ip-addr
+    title: Last IP
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  last_mask:
+    type: string
+    title: Last Subnet Mask
+  number_of_processes:
+    type: integer
+    title: Process Count
+  number_of_logged_users:
+    type: integer
+    title: Logged-in User Count
+  total_cpu_percentage:
+    type: integer
+    title: CPU Usage (%)
+  system_partition_size:
+    type: integer
+    title: System Partition Size (bytes)
+  system_partition_free_space:
+    type: integer
+    title: System Partition Free Space (bytes)
+  total_memory:
+    type: integer
+    title: Total Memory (bytes)
+  total_free_memory:
+    type: integer
+    title: Free Memory (bytes)
+  memory_percentage:
+    type: integer
+    title: Memory Usage (%)
+  scanGroup:
+    type: object
+    title: Scan Group
+    properties:
+      ScanGroupName:
+        type: string
+        title: Scan Group Name
+      DistributionType:
+        type: string
+        title: Distribution Type
+      PlatformType:
+        type: string
+        title: Platform Type
+  Antivirus:
+    type: object
+    title: Antivirus
+    properties:
+      Status:
+        type: string
+        title: AV Status
+      DatabaseDate:
+        type: string
+        format: date-time
+        title: AV Database Date
+        x-samos-fulfills:
+          type-name: core.managed.endpoint
+          property-name: endpoint_definitions_date
+      DatabaseVersion:
+        type: string
+        title: AV Database Version
+  domains:
+    type: array
+    title: Domains
+    description: Domains contacted from this host.
+    items:
+      type: object
+      properties:
+        domain_name:
+          type: string
+          title: Domain Name
+        remote_ips:
+          type: array
+          title: Remote IPs
+          items:
+            type: string
+            format: ip-addr
+        first_seen:
+          type: string
+          format: date-time
+          title: First Seen
+        last_seen:
+          type: string
+          format: date-time
+          title: Last Seen
+        av_detections:
+          type: integer
+          title: AV Detections
+        classification:
+          type: string
+          title: Classification
+  users:
+    type: array
+    title: Users
+    description: Users observed on this host.
+    items:
+      type: object
+      properties:
+        username:
+          type: string
+          title: Username
+        risk_level:
+          type: integer
+          title: Risk Level
+        first_seen:
+          type: string
+          format: date-time
+          title: First Seen
+        last_seen:
+          type: string
+          format: date-time
+          title: Last Seen
+        last_login:
+          type: string
+          format: date-time
+          title: Last Login
+        logged_to_machines_last_month:
+          type: integer
+          title: Logged To Machines (Last Month)
+        logged_to_machines_last_3_months:
+          type: integer
+          title: Logged To Machines (Last 3 Months)
+        logged_to_machines_total:
+          type: integer
+          title: Logged To Machines (Total)
+        rdp_to_machines_last_month:
+          type: integer
+          title: RDP To Machines (Last Month)
+        rdp_to_machines_last_3_month:
+          type: integer
+          title: RDP To Machines (Last 3 Months)
+        rdp_to_machines_total:
+          type: integer
+          title: RDP To Machines (Total)
+        x_client_db_id:
+          type: string
+          title: Client DB ID
+          description: Injected by connector from UserDTO2.ClientDbId (coerced to string); used by d_users to link this host to its CynetEDRUser records.
+
+x-samos-virtual:
+  vulnerabilities:
+    type-name: Vulnerability
+    cypher-pattern: >
+      <-[:`e:Finding:applies_to`]-(:CynetEDRVulnerabilityFinding)-[:`e:Finding:vulnerability`]->(:CynetEDRVulnerability)-[:`e:Exposure:vulnerabilities`]->(:Vulnerability)
+  exposures:
+    type-name: Exposure
+    cypher-pattern: >
+      <-[:`e:Finding:applies_to`]-(:CynetEDRMisconfigurationFinding)-[:`e:Finding:vulnerability`]->(:CynetEDRMisconfiguration)

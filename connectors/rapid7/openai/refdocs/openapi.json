@@ -1,0 +1,105 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenAI API (filtered)",
+    "description": "Filtered OpenAPI spec containing only schemas referenced by this connector.",
+    "version": "2.3.0"
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "description": "Represents an individual `user` within an organization.",
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": ["organization.user"],
+            "description": "The object type, which is always `organization.user`"
+          },
+          "id": {
+            "type": "string",
+            "description": "The identifier, which can be referenced in API endpoints"
+          },
+          "name": {
+            "type": ["string", "null"],
+            "description": "The name of the user"
+          },
+          "email": {
+            "type": ["string", "null"],
+            "description": "The email address of the user"
+          },
+          "role": {
+            "type": ["string", "null"],
+            "description": "`owner` or `reader`"
+          },
+          "added_at": {
+            "type": "integer",
+            "format": "unixtime",
+            "description": "The Unix timestamp (in seconds) of when the user was added."
+          }
+        },
+        "required": ["object", "id", "name", "email", "role", "added_at"]
+      },
+      "UsageCompletionsResult": {
+        "type": "object",
+        "description": "The aggregated completions usage details of the specific time bucket.",
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": ["organization.usage.completions.result"],
+            "description": "The object type"
+          },
+          "input_tokens": {
+            "type": "integer",
+            "description": "The aggregated number of text input tokens used, including cached tokens."
+          },
+          "input_cached_tokens": {
+            "type": "integer",
+            "description": "The aggregated number of text input tokens that has been cached from previous requests."
+          },
+          "output_tokens": {
+            "type": "integer",
+            "description": "The aggregated number of text output tokens used."
+          },
+          "input_audio_tokens": {
+            "type": "integer",
+            "description": "The aggregated number of audio input tokens used, including cached tokens."
+          },
+          "output_audio_tokens": {
+            "type": "integer",
+            "description": "The aggregated number of audio output tokens used."
+          },
+          "num_model_requests": {
+            "type": "integer",
+            "description": "The count of requests made to the model."
+          },
+          "project_id": {
+            "type": ["string", "null"],
+            "description": "When `group_by=project_id`, this field provides the project ID of the grouped usage result."
+          },
+          "user_id": {
+            "type": ["string", "null"],
+            "description": "When `group_by=user_id`, this field provides the user ID of the grouped usage result."
+          },
+          "api_key_id": {
+            "type": ["string", "null"],
+            "description": "When `group_by=api_key_id`, this field provides the API key ID of the grouped usage result."
+          },
+          "model": {
+            "type": ["string", "null"],
+            "description": "When `group_by=model`, this field provides the model name of the grouped usage result."
+          },
+          "batch": {
+            "type": ["boolean", "null"],
+            "description": "When `group_by=batch`, this field tells whether the grouped usage result is batch or not."
+          },
+          "service_tier": {
+            "type": ["string", "null"],
+            "description": "When `group_by=service_tier`, this field provides the service tier of the grouped usage result."
+          }
+        },
+        "required": ["object", "input_tokens", "output_tokens", "num_model_requests"]
+      }
+    }
+  }
+}

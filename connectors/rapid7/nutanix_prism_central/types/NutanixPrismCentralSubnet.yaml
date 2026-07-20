@@ -1,0 +1,368 @@
+x-samos-type-name: NutanixPrismCentralSubnet
+x-samos-namespace: nutanix.prism.central
+title: Nutanix Prism Central Subnet
+description: A network subnet (VLAN or overlay) managed by Nutanix Prism Central.
+
+$ref: https://developers.nutanix.com/api-reference?namespace=networking&version=v4.1&modified=1#/components/schemas/networking.v4.1.config.Subnet
+
+x-samos-extends-types:
+  - type-name: Network
+    subtype-priority: 3
+
+x-samos-keys:
+  - extId
+
+x-samos-derived-properties:
+  d_virtual:
+    type: boolean
+    value: '`true`'
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: virtual
+
+x-samos-table:
+  - name: name
+  - name: subnetType
+  - name: ipUsage.numAssignedIPs
+  - name: ipUsage.numFreeIPs
+  - name: ipPrefix
+  - name: clusterName
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: subnetType
+  - name: networkId
+  - name: ipPrefix
+  - name: clusterName
+  - name: clusterReferenceList
+  - name: vpcReference
+  - name: virtualSwitchReference
+  - name: isNatEnabled
+  - name: isExternal
+  - name: isAdvancedNetworking
+  - name: bridgeName
+  - name: hypervisorType
+  - name: ipConfig
+  - name: dhcpOptions
+  - name: ipUsage
+  - name: migrationState
+  - name: dynamicIpAddresses
+  - name: reservedIpAddresses
+  - name: externalDhcpServers
+  - name: networkFunctionChainReference
+  - name: vpc
+  - name: virtualSwitch
+
+properties:
+  extId:
+    title: External ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  subnetType:
+    title: Subnet Type
+    type: string
+
+  networkId:
+    title: VLAN ID
+    type: integer
+
+  ipPrefix:
+    title: IP Prefix (CIDR)
+    type: string
+    x-samos-fulfills:
+      type-name: Network
+      property-name: cidr
+    x-samos-correlation:
+      correlation-key: Network.cidr
+      correlation-type: Network
+      priority: 4
+
+  clusterName:
+    title: Cluster Name
+    type: string
+
+  clusterReference:
+    title: Cluster
+    type: string
+    x-samos-hidden: true
+    x-samos-ref-types:
+      - type-name: NutanixPrismCentralCluster
+        key-name: extId
+
+  clusterReferenceList:
+    title: Clusters
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: NutanixPrismCentralCluster
+          key-name: extId
+
+  clusterNameList:
+    title: Cluster Names
+    type: array
+    x-samos-hidden: true
+    items:
+      type: string
+
+  vpcReference:
+    title: VPC
+    type: string
+    x-samos-ref-types:
+      - type-name: NutanixPrismCentralVpc
+        key-name: extId
+
+  virtualSwitchReference:
+    title: Virtual Switch
+    type: string
+
+  isNatEnabled:
+    title: NAT Enabled?
+    type: boolean
+
+  isExternal:
+    title: External?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_external
+
+  isAdvancedNetworking:
+    title: Advanced Networking?
+    type: boolean
+
+  bridgeName:
+    title: Bridge Name
+    type: string
+
+  hypervisorType:
+    title: Hypervisor Type
+    type: string
+
+  networkFunctionChainReference:
+    title: Network Function Chain
+    type: string
+
+  migrationState:
+    title: Migration State
+    type: string
+
+  virtualSwitch:
+    title: Virtual Switch
+    type: object
+    additionalProperties: true
+
+  vpc:
+    title: VPC
+    type: object
+    additionalProperties: true
+
+  ipConfig:
+    title: IP Configuration
+    type: array
+    items:
+      type: object
+      properties:
+        ipv4:
+          title: IPv4 Config
+          type: object
+          properties:
+            ipSubnet:
+              title: IP Subnet
+              type: object
+              properties:
+                ip:
+                  title: IP
+                  type: object
+                  properties:
+                    value:
+                      title: Network Address
+                      type: string
+                      format: ip-addr
+                    prefixLength:
+                      title: Prefix Length
+                      type: integer
+                prefixLength:
+                  title: Prefix Length
+                  type: integer
+            defaultGatewayIp:
+              title: Default Gateway
+              type: object
+              properties:
+                value:
+                  title: IP Address
+                  type: string
+                  format: ip-addr
+                prefixLength:
+                  title: Prefix Length
+                  type: integer
+            dhcpServerAddress:
+              title: DHCP Server
+              type: object
+              properties:
+                value:
+                  title: IP Address
+                  type: string
+                  format: ip-addr
+            poolList:
+              title: IP Pools
+              type: array
+              items:
+                type: object
+                properties:
+                  startIp:
+                    title: Start IP
+                    type: object
+                    properties:
+                      value:
+                        title: IP Address
+                        type: string
+                        format: ip-addr
+                  endIp:
+                    title: End IP
+                    type: object
+                    properties:
+                      value:
+                        title: IP Address
+                        type: string
+                        format: ip-addr
+
+  dhcpOptions:
+    title: DHCP Options
+    type: object
+    properties:
+      domainName:
+        title: Domain Name
+        type: string
+      searchDomains:
+        title: Search Domains
+        type: array
+        items:
+          type: string
+      domainNameServers:
+        title: DNS Servers
+        type: array
+        items:
+          type: object
+          properties:
+            ipv4:
+              title: IPv4
+              type: object
+              properties:
+                value:
+                  title: IP Address
+                  type: string
+                  format: ip-addr
+      tftpServerName:
+        title: TFTP Server Name
+        type: string
+      bootFileName:
+        title: Boot File Name
+        type: string
+      ntpServers:
+        title: NTP Servers
+        type: array
+        items:
+          type: object
+          properties:
+            ipv4:
+              title: IPv4
+              type: object
+              properties:
+                value:
+                  title: IP Address
+                  type: string
+                  format: ip-addr
+
+  ipUsage:
+    title: IP Usage
+    type: object
+    properties:
+      numMacs:
+        title: MAC Count
+        type: integer
+      numFreeIPs:
+        title: Free IPs
+        type: integer
+      numAssignedIPs:
+        title: Assigned IPs
+        type: integer
+      ipPoolUsages:
+        title: IP Pool Usages
+        type: array
+        items:
+          type: object
+          properties:
+            numFreeIPs:
+              title: Free IPs
+              type: integer
+            numTotalIPs:
+              title: Total IPs
+              type: integer
+            range:
+              title: Range
+              type: object
+              properties:
+                startIp:
+                  title: Start IP
+                  type: object
+                  properties:
+                    value:
+                      title: IP Address
+                      type: string
+                      format: ip-addr
+                endIp:
+                  title: End IP
+                  type: object
+                  properties:
+                    value:
+                      title: IP Address
+                      type: string
+                      format: ip-addr
+
+  reservedIpAddresses:
+    title: Reserved IP Addresses
+    type: array
+    items:
+      type: object
+      additionalProperties: true
+
+  dynamicIpAddresses:
+    title: Dynamic IP Addresses
+    type: array
+    items:
+      type: object
+      additionalProperties: true
+
+  externalDhcpServers:
+    title: External DHCP Servers
+    type: array
+    items:
+      type: object
+      additionalProperties: true
+
+  metadata:
+    title: Metadata
+    type: object
+    additionalProperties: true

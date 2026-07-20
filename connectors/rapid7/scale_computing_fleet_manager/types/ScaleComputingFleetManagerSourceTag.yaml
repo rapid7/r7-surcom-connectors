@@ -1,0 +1,58 @@
+x-samos-type-name: ScaleComputingFleetManagerSourceTag
+x-samos-namespace: scale.computing.fleet.manager
+title: Scale Computing Fleet Manager Source Tag
+description: A tag applied to a Scale Computing Fleet Manager cluster or virtual machine.
+
+x-samos-global-zone: true
+
+x-samos-extends-types:
+  - type-name: SourceTag
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: key
+  - name: value
+
+x-samos-detail:
+  - name: key
+  - name: value
+
+x-samos-derived-properties:
+  d_name:
+    title: Name
+    type: string
+    syntax: expression
+    value: '{value}'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: id
+
+  key:
+    type: string
+    title: Tag
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: key
+
+  value:
+    type: string
+    title: Value
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: value

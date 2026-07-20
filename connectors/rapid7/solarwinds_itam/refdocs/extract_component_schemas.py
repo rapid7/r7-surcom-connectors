@@ -31,6 +31,43 @@ ENTITY_MAP = {
     'Software': ('/softwares/{id}', 'software'),
 }
 
+
+def _variant_types(variants):
+    """Return the set of 'type' values present across a list of oneOf/anyOf variants."""
+    return {v.get("type") for v in variants if isinstance(v, dict) and "type" in v}
+
+
+def remove_nested_one_of(node):
+    """Recursively walk the entire JSON tree and collapse oneOf/anyOf combiners.
+
+    Rules:
+      - string + integer  → type: integer   (integer is the superset; avoids "1" vs 1 mismatches)
+      - string + boolean  → type: boolean  (stringly-typed booleans become proper booleans)
+      - anything else     → left as-is (combiner kept)
+
+    Walks ALL dict values and ALL list elements so no nesting level is missed.
+    """
+    if isinstance(node, dict):
+        for combiner in ("oneOf", "anyOf"):
+            if combiner in node:
+                variants = node[combiner]
+                types = _variant_types(variants)
+                if {"string", "integer"} <= types:
+                    node["type"] = "integer"
+                    del node[combiner]
+                elif {"string", "boolean"} <= types:
+                    node["type"] = "boolean"
+                    del node[combiner]
+
+        # Recurse into every value in the dict
+        for value in list(node.values()):
+            remove_nested_one_of(value)
+
+    elif isinstance(node, list):
+        for item in node:
+            remove_nested_one_of(item)
+
+
 # Extract schemas from path responses into components/schemas
 components_schemas = {}
 
@@ -44,12 +81,17 @@ for name, (path, key) in ENTITY_MAP.items():
     json_content = content.get('application/json', {})
     response_schema = json_content.get('schema', {})
     entity_schema = response_schema.get('properties', {}).get(key, {})
-
     if entity_schema and 'properties' in entity_schema:
-        components_schemas[name] = copy.deepcopy(entity_schema)
-        print(f"Extracted '{name}' from {path} -> {len(entity_schema['properties'])} properties")
+        extracted = copy.deepcopy(entity_schema)
+        remove_nested_one_of(extracted)
+        components_schemas[name] = extracted
+        print(f"Extracted '{name}' from {path} -> {len(extracted['properties'])} properties")
     else:
         print(f"WARNING: Could not extract '{name}' from {path}")
+
+# Collapse all oneOf/anyOf combiners across the entire schema (paths, responses, etc.)
+print("\nCollapsing oneOf/anyOf across the full schema...")
+remove_nested_one_of(schema)
 
 # Add components/schemas to the spec
 if 'components' not in schema:

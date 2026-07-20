@@ -11,6 +11,7 @@ x-samos-global-zone: true
 
 x-samos-keys:
   - id
+  - domain
 
 x-samos-table:
   - name: domain
@@ -23,21 +24,6 @@ x-samos-detail:
   - name: sendOnly
   - name: local
   - name: inboundType
-
-x-samos-derived-properties:
-  d_domain:
-    # domain already fulfills `Domain:value`
-    # so fulfills `core.owned-entity:owners` derived the property
-    title: Domain User
-    type: string
-    value: 'domain'
-    syntax: jmespath
-    x-samos-ref-types:
-      - key-name: domain
-        type-name: MimecastUser
-    x-samos-fulfills:
-      type-name: core.owned-entity
-      property-name: owners
 
 properties:
   id:
@@ -67,3 +53,9 @@ properties:
   sendOnly:
     title: Send Only?
     type: boolean
+
+x-samos-virtual:
+  owners:
+    type-name: MimecastUser
+    cypher-pattern: >
+      <-[:`e:MimecastUser:domain`]-(:MimecastUser)

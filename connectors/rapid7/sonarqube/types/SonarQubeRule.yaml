@@ -8,7 +8,8 @@ x-samos-extends-types:
 
 x-samos-keys:
   - key
-
+required:
+  - key
 x-samos-table:
   - name: name
   - name: repo
@@ -66,6 +67,21 @@ x-samos-derived-properties:
       x-samos-fulfills:
         type-name: Exposure
         property-name: solution
+  d_exposure_type:
+    # Pass the raw `type` field value (e.g. VULNERABILITY, BUG) as the
+    # SonarQubeEnumExposureType id. The enum's map_to field resolves it to
+    # the correct ExposureType string. Defaults to BUG (Weakness) when type
+    # is null or absent (e.g. SonarQube Cloud issues).
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'type || `BUG`'
+    x-samos-ref-types:
+      - type-name: SonarQubeEnumExposureType
+        key-name: id
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: exposure_type
 properties:
   key:
     type: string
@@ -141,12 +157,6 @@ properties:
   type:
     type: string
     title: Type
-    x-samos-fulfills:
-      type-name: Exposure
-      property-name: exposure_type
-    x-samos-ref-types:
-      - type-name: SonarQubeEnumExposureType
-        key-name: id
   defaultRemFnType:
     type: string
     title: Default Rem Fn Type

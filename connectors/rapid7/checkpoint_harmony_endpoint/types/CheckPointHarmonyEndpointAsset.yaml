@@ -11,6 +11,9 @@ x-samos-extends-types:
 x-samos-keys:
   - computerId
 
+required:
+  - computerId
+
 x-samos-table:
   - name: computerName
   - name: computerIP
@@ -703,6 +706,9 @@ properties:
     properties:
       prebootType:
         title: Preboot Type
+        type: string
+      fdeRecoveryType:
+        title: FDE Recovery Type
         type: string
 
   bladeStatus:

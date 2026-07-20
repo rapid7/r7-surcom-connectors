@@ -1,0 +1,69 @@
+id: auth0
+name: Auth0
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - Auth0User
+  - Auth0Role
+  - Auth0Organization
+  - Auth0Client
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Auth0 Users, Roles, Organizations and Clients
+    description: Import all Users, Roles, Organizations and Clients from Auth0.
+    return_types:
+      - Auth0User
+      - Auth0Role
+      - Auth0Organization
+      - Auth0Client
+
+# Configuration settings for this connector.
+settings:
+  domain:
+    type: string
+    title: Tenant Domain
+    description: Auth0 tenant domain.
+    example: dev-xxxxxxxx.us.auth0.com
+
+  client_id:
+    type: string
+    title: Client ID
+    description: Client ID of the Machine-to-Machine application authorized for the Auth0 Management API.
+
+  client_secret:
+    type: string
+    title: Client Secret
+    description: Client Secret of the Machine-to-Machine application authorized for the Auth0 Management API.
+    format: password
+
+# Runtime platform for this connector.
+runtime: py311
+
+# List any Python dependencies available on PyPI that are required by this connector.
+# `codegen` will generate a `requirements.txt` file with pinned versions of these dependencies.
+python_dependencies:
+  # Pin urllib3 to match insightconnect-plugin-runtime (orchestrator) constraint.
+  - urllib3==2.6.3
+
+# Categories for this connector in the Extension Library.
+categories:
+  - iam
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

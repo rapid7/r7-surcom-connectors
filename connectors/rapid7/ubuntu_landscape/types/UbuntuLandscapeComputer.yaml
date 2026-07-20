@@ -1,0 +1,379 @@
+x-samos-type-name: UbuntuLandscapeComputer
+x-samos-namespace: ubuntu.landscape
+title: Ubuntu Landscape Computer
+description: A computer managed by Ubuntu Landscape
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: title
+  - name: hostname
+  - name: d_active
+  - name: d_ip_addresses
+  - name: d_mac_addresses
+  - name: distribution_info.description
+  - name: reboot_required_flag
+  - name: last_ping_time
+  - name: last_exchange_time
+
+x-samos-detail:
+  - name: title
+  - name: hostname
+  - name: d_active
+  - name: d_ip_addresses
+  - name: d_mac_addresses
+  - name: archived
+  - name: distribution
+  - name: distribution_info.description
+  - name: total_memory
+  - name: total_swap
+  - name: vm_info
+  - name: reboot_required_flag
+  - name: access_group
+  - name: tags
+  - name: comment
+  - name: update_manager_prompt
+  - name: container_info
+  - name: cloud_instance_metadata
+  - name: ubuntu_pro_info
+  - name: is_wsl_instance
+  - name: num_child
+  - name: registered_at
+  - name: last_ping_time
+  - name: last_exchange_time
+
+x-samos-derived-properties:
+  d_id:
+    x-samos-hidden: true
+    # id is integer but core.component expects string, so we convert it here
+    type: string
+    syntax: jmespath
+    value: 'to_string(id)'
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_ip_addresses:
+    # fulfills `Machine:ips` derived the property
+    title: IP Addresses
+    value: 'network_devices[?starts_with(interface, `en`) || starts_with(interface, `eth`) ].ip_address'
+    syntax: jmespath
+    type: array
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  d_mac_addresses:
+    title: MAC Addresses
+    type: array
+    syntax: jmespath
+    value: 'network_devices[?starts_with(interface, `en`) || starts_with(interface, `eth`) ].mac_address'
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+
+  d_qualified_hostnames:
+    title: Qualified Hostnames
+    type: array
+    syntax: jmespath
+    value: '[hostname][?contains(@, `.`) == `true`]'
+    items:
+      type: string
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_unqualified_hostnames:
+    title: Unqualified Hostnames
+    type: array
+    syntax: jmespath
+    value: '[hostname][?contains(@, `.`) == `false`]'
+    items:
+      type: string
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_vm_info:
+    # This is a derived property to determine if the machine is virtual or physical based on the presence of vm_info.
+    # Landscape does not provide a direct field for this, but vm_info is only present for virtual machines.
+    title: VM Instance?
+    type: boolean
+    syntax: jmespath
+    value: 'vm_info != null'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: virtual
+
+  d_active:
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: 'archived == `false`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_mitigations:
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    syntax: jmespath
+    value: '!archived && [`M1051`] || null'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  id:
+    title: Computer ID
+    type: integer
+    x-samos-hidden: true
+
+  title:
+    title: Title
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  hostname:
+    title: Hostname
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  distribution:
+    title: Distribution
+    type: string
+
+  total_memory:
+    title: Total Memory (MB)
+    type: integer
+
+  total_swap:
+    title: Total Swap (MB)
+    type: integer
+
+  tags:
+    title: Tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: UbuntuLandscapeTag
+          key-name: d_tag_value
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+
+  access_group:
+    title: Access Group
+    type: string
+
+  last_ping_time:
+    title: Last Ping Time
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  last_exchange_time:
+    title: Last Exchange Time
+    type: string
+    format: date-time
+
+  reboot_required_flag:
+    title: Reboot Required?
+    type: boolean
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: pending_reboot
+
+  vm_info:
+    title: VM Type
+    type: string
+
+  container_info:
+    title: Container Info
+    type: string
+
+  cloud_instance_metadata:
+    title: Cloud Instance Metadata
+    type: object
+
+  ubuntu_pro_info:
+    title: Ubuntu Pro Info
+    type: object
+
+  livepatch_info:
+    title: Livepatch Info
+    type: object
+
+  ubuntu_pro_reboot_required_info:
+    title: Ubuntu Pro Reboot Required Info
+    type: object
+    nullable: true
+
+  is_wsl_instance:
+    title: WSL Instance?
+    type: boolean
+
+  comment:
+    title: Comment
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  registered_at:
+    title: Registered At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  update_manager_prompt:
+    title: Update Manager Prompt
+    type: string
+
+  distribution_info:
+    title: Distribution Info
+    type: object
+    properties:
+      release:
+        title: Release
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_version
+      code_name:
+        title: Codename
+        type: string
+      description:
+        title: OS Product
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_product
+      distributor:
+        title: Distributor
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: operating_system
+
+  archived:
+    title: Archived?
+    type: boolean
+
+  machine_id:
+    title: Machine ID
+    type: string
+
+  employee_id:
+    title: Employee ID
+    type: string
+
+  num_child:
+    title: Number of Children
+    type: integer
+
+  cloud_init:
+    title: Cloud Init
+    type: object
+
+  upgrades:
+    title: Upgrades
+    type: object
+
+  network_devices:
+    title: Network Devices
+    type: array
+    x-samos-hidden: true
+    items:
+      type: object
+      properties:
+        interface:
+          title: Interface
+          type: string
+        ip_address:
+          title: IP Address
+          type: string
+        mac_address:
+          title: MAC Address
+          type: string
+        broadcast_address:
+          title: Broadcast Address
+          type: string
+        netmask:
+          title: Netmask
+          type: string
+        speed:
+          title: Speed
+          type: integer
+        duplex:
+          title: Duplex?
+          type: boolean
+
+  clone_id:
+    title: Clone ID
+    type: integer
+    nullable: true
+    x-samos-hidden: true
+
+  secrets_name:
+    title: Secrets Name
+    type: string
+    nullable: true
+    x-samos-hidden: true
+
+  parent:
+    title: Parent
+    type: object
+    nullable: true
+    x-samos-hidden: true
+
+  children:
+    title: Children
+    type: array
+    nullable: true
+    x-samos-hidden: true
+    items:
+      type: object
+
+  default_child:
+    title: Default Child
+    type: object
+    nullable: true
+    x-samos-hidden: true
+
+  is_default_child:
+    title: Default Child?
+    type: boolean
+    nullable: true

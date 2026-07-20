@@ -1,0 +1,108 @@
+x-samos-type-name: SonicWallCaptureClientApplication
+x-samos-namespace: sonicwall.capture.client
+title: SonicWall Capture Client Application
+description: A vulnerable application detected on endpoints managed by SonicWall Capture Client.
+
+x-samos-extends-types:
+  - type-name: Software
+    subtype-priority: 3
+
+x-samos-keys:
+  - applicationId
+
+x-samos-table:
+  - name: name
+  - name: vendor
+  - name: highestSeverity
+  - name: highestNvdBaseScore
+  - name: cveCount
+  - name: endpointCount
+  - name: detectionDate
+
+x-samos-detail:
+  - name: name
+  - name: applicationId
+  - name: vendor
+  - name: x_version
+  - name: cveCount
+  - name: daysDetected
+  - name: endpointCount
+  - name: estimate
+  - name: highestNvdBaseScore
+  - name: highestSeverity
+  - name: detectionDate
+
+x-samos-derived-properties:
+  # Combines vendor, name, and version for software correlation across sources
+  d_vendor_product_version:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: "join('-', [vendor, name, x_version])"
+    x-samos-correlation:
+      correlation-key: Software.vendor-product-version
+      correlation-type: Software
+      priority: 3
+
+properties:
+  applicationId:
+    title: Application ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  cveCount:
+    title: CVE Count
+    type: integer
+
+  daysDetected:
+    title: Days Detected
+    type: integer
+
+  detectionDate:
+    title: Detection Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  endpointCount:
+    title: Endpoint Count
+    type: integer
+
+  estimate:
+    title: Estimate?
+    type: boolean
+
+  highestNvdBaseScore:
+    title: Highest NVD Base Score
+    type: string
+
+  highestSeverity:
+    title: Highest Severity
+    type: string
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  vendor:
+    title: Vendor
+    type: string
+    x-samos-fulfills:
+      type-name: Software
+      property-name: vendor
+
+  x_version:
+    title: Version
+    type: string
+    x-samos-fulfills:
+      type-name: Software
+      property-name: version

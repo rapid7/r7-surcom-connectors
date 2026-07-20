@@ -1,0 +1,404 @@
+x-samos-type-name: NutanixPrismCentralCluster
+x-samos-namespace: nutanix.prism.central
+title: Nutanix Prism Central Cluster
+description: A Nutanix hyperconverged infrastructure cluster managed by Prism Central.
+
+$ref: https://developers.nutanix.com/api-reference?namespace=clustermgmt&version=v4.1&modified=1#/components/schemas/clustermgmt.v4.1.config.Cluster
+
+x-samos-extends-types:
+  - type-name: core.cluster
+    subtype-priority: 3
+
+x-samos-keys:
+  - extId
+
+x-samos-table:
+  - name: name
+  - name: vmCount
+  - name: inefficientVmCount
+  - name: nodes.numberOfNodes
+  - name: containerName
+
+x-samos-detail:
+  - name: name
+  - name: nodes.numberOfNodes
+  - name: upgradeStatus
+  - name: vmCount
+  - name: inefficientVmCount
+  - name: containerName
+  - name: backupEligibilityScore
+  - name: config
+  - name: categories
+  - name: nodes
+  - name: network
+
+x-samos-derived-properties:
+  d_is_encrypted:
+    type: boolean
+    value: "length(config.encryptionScope[?@ == 'CLUSTER' || @ == 'CONTAINER']) > `0`"
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_encrypted
+
+  d_active:
+    type: boolean
+    value: 'config.isAvailable'
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_operational_status:
+    type: string
+    value: 'config.operationMode'
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: operational_status
+    x-samos-ref-types:
+      - key-name: id
+        type-name: NutanixPrismCentralEnumOperationalStatus
+
+  d_members:
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: NutanixPrismCentralHost
+          key-name: extId
+    value: 'nodes.nodeList[].nodeUuid'
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component-group
+      property-name: members
+
+properties:
+  extId:
+    title: External ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  upgradeStatus:
+    title: Upgrade Status
+    type: string
+
+  vmCount:
+    title: VM Count
+    type: integer
+
+  inefficientVmCount:
+    title: Inefficient VM Count
+    type: integer
+
+  containerName:
+    title: Container Name
+    type: string
+
+  backupEligibilityScore:
+    title: Backup Eligibility Score
+    type: integer
+
+  categories:
+    title: Categories
+    type: array
+    items:
+      type: string
+
+  clusterProfileExtId:
+    title: Cluster Profile ID
+    type: string
+
+  nodes:
+    title: Nodes
+    type: object
+    properties:
+      numberOfNodes:
+        title: Number of Nodes
+        type: integer
+      nodeList:
+        title: Node List
+        type: array
+        items:
+          type: object
+          properties:
+            nodeUuid:
+              title: Node UUID
+              type: string
+            hostIp:
+              title: Host IP
+              type: object
+              properties:
+                ipv4:
+                  title: IPv4
+                  type: object
+                  properties:
+                    value:
+                      title: IP Address
+                      type: string
+                      format: ip-addr
+                    prefixLength:
+                      title: Prefix Length
+                      type: integer
+            controllerVmIp:
+              title: Controller VM IP
+              type: object
+              properties:
+                ipv4:
+                  title: IPv4
+                  type: object
+                  properties:
+                    value:
+                      title: IP Address
+                      type: string
+                      format: ip-addr
+                    prefixLength:
+                      title: Prefix Length
+                      type: integer
+
+  config:
+    title: Configuration
+    type: object
+    properties:
+      incarnationId:
+        title: Incarnation ID
+        type: integer
+      buildInfo:
+        title: Build Info
+        type: object
+        properties:
+          version:
+            title: Version
+            type: string
+          fullVersion:
+            title: Full Version
+            type: string
+          buildType:
+            title: Build Type
+            type: string
+          commitId:
+            title: Commit ID
+            type: string
+          shortCommitId:
+            title: Short Commit ID
+            type: string
+      hypervisorTypes:
+        title: Hypervisor Types
+        type: array
+        items:
+          type: string
+      clusterFunction:
+        title: Cluster Function
+        type: array
+        items:
+          type: string
+      timezone:
+        title: Timezone
+        type: string
+      authorizedPublicKeyList:
+        title: Authorized Public Keys
+        type: array
+        x-samos-hidden: true
+        items:
+          type: object
+          properties:
+            name:
+              title: Key Name
+              type: string
+            key:
+              title: Key
+              type: string
+      redundancyFactor:
+        title: Redundancy Factor
+        type: integer
+      clusterArch:
+        title: Architecture
+        type: string
+      operationMode:
+        title: Operation Mode
+        type: string
+      isLts:
+        title: LTS?
+        type: boolean
+      isAvailable:
+        title: Available?
+        type: boolean
+      isRemoteSupportEnabled:
+        title: Remote Support Enabled?
+        type: boolean
+      isPasswordRemoteLoginEnabled:
+        title: Password Remote Login Enabled?
+        type: boolean
+      encryptionInTransitStatus:
+        title: Encryption in Transit
+        type: string
+      encryptionOption:
+        title: Encryption Options
+        type: array
+        items:
+          type: string
+      encryptionScope:
+        title: Encryption Scope
+        type: array
+        items:
+          type: string
+      pulseStatus:
+        title: Pulse Status
+        type: object
+        properties:
+          isEnabled:
+            title: Enabled?
+            type: boolean
+          piiScrubbingLevel:
+            title: PII Scrubbing Level
+            type: string
+      faultToleranceState:
+        title: Fault Tolerance State
+        type: object
+        properties:
+          currentMaxFaultTolerance:
+            title: Current Max Fault Tolerance
+            type: integer
+          desiredMaxFaultTolerance:
+            title: Desired Max Fault Tolerance
+            type: integer
+          domainAwarenessLevel:
+            title: Domain Awareness Level
+            type: string
+          currentClusterFaultTolerance:
+            title: Current Cluster Fault Tolerance
+            type: string
+          desiredClusterFaultTolerance:
+            title: Desired Cluster Fault Tolerance
+            type: string
+          redundancyStatus:
+            title: Redundancy Status
+            type: object
+            properties:
+              isCassandraPreparationDone:
+                title: Cassandra Preparation Done?
+                type: boolean
+              isZookeeperPreparationDone:
+                title: Zookeeper Preparation Done?
+                type: boolean
+      clusterSoftwareMap:
+        title: Software Map
+        type: array
+        items:
+          type: object
+          properties:
+            softwareType:
+              title: Software Type
+              type: string
+            version:
+              title: Version
+              type: string
+
+  network:
+    title: Network
+    type: object
+    properties:
+      externalAddress:
+        title: External Address
+        type: object
+        properties:
+          ipv4:
+            title: IPv4
+            type: object
+            properties:
+              value:
+                title: IP Address
+                type: string
+                format: ip-addr
+              prefixLength:
+                title: Prefix Length
+                type: integer
+      externalDataServiceIp:
+        title: Data Service IP
+        type: object
+        properties:
+          ipv4:
+            title: IPv4
+            type: object
+            properties:
+              value:
+                title: IP Address
+                type: string
+                format: ip-addr
+              prefixLength:
+                title: Prefix Length
+                type: integer
+      externalSubnet:
+        title: External Subnet
+        type: string
+      internalSubnet:
+        title: Internal Subnet
+        type: string
+      nameServerIpList:
+        title: Name Servers
+        type: array
+        items:
+          type: object
+          properties:
+            ipv4:
+              title: IPv4
+              type: object
+              properties:
+                value:
+                  title: IP Address
+                  type: string
+                  format: ip-addr
+            fqdn:
+              title: FQDN
+              type: object
+              properties:
+                value:
+                  title: Value
+                  type: string
+      ntpServerIpList:
+        title: NTP Servers
+        type: array
+        items:
+          type: object
+          properties:
+            fqdn:
+              title: FQDN
+              type: object
+              properties:
+                value:
+                  title: Value
+                  type: string
+      nfsSubnetWhitelist:
+        title: NFS Subnet Whitelist
+        type: array
+        items:
+          type: string
+      smtpServer:
+        title: SMTP Server
+        type: object
+        additionalProperties: true
+      masqueradingIp:
+        title: Masquerading IP
+        type: object
+        additionalProperties: true
+      masqueradingPort:
+        title: Masquerading Port
+        type: integer
+      managementServer:
+        title: Management Server
+        type: object
+        additionalProperties: true

@@ -1,0 +1,57 @@
+x-samos-type-name: AirlockDigitalGroup
+x-samos-namespace: airlock.digital
+title: Airlock Digital Group
+description: A policy group used to organize and apply policies to endpoints in Airlock Digital.
+x-samos-extends-types:
+  - type-name: core.component-group
+
+x-samos-keys:
+  - groupid
+
+x-samos-supernode: true
+
+x-samos-table:
+  - name: name
+  - name: parent
+
+x-samos-detail:
+  - name: name
+  - name: parent
+
+properties:
+  groupid:
+    title: Group
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  parent:
+    title: Parent Group
+    type: string
+    x-samos-ref-types:
+      - type-name: AirlockDigitalGroup
+        key-name: groupid
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+  hidden:
+    title: Hidden
+    type: integer
+    x-samos-hidden: true
+
+x-samos-virtual:
+  members:
+    type-name: AirlockDigitalAgent
+    cypher-pattern: >
+      <-[:`e:AirlockDigitalAgent:groupid`]-(:AirlockDigitalAgent)

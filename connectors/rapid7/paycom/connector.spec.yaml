@@ -1,0 +1,56 @@
+id: paycom
+name: Paycom
+author: Rapid7
+version: 1.0.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release of Paycom connector for importing employee data from Paycom HR system.
+
+types:
+  - PaycomEmployee
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Paycom Employees
+    description: Import all Employees from Paycom
+    return_types:
+      - PaycomEmployee
+
+settings:
+  url:
+    type: string
+    title: API Base URL
+    description: The base URL for Paycom tenant.
+    example: https://www.paycomonline.net
+
+  api_sid:
+    type: string
+    title: API SID
+    description: The API SID from Paycom API Setup.
+
+  api_token:
+    type: string
+    title: API Token
+    description: The API Token from Paycom API Setup.
+    format: password
+
+  omit_pii:
+    type: boolean
+    title: Omit PII fields?
+    description: When enabled, omits personal_email, age, birth_date, emergency contact, and address fields from imported data.
+    default: false
+
+runtime: py311
+
+# Add required Python dependencies here. Pin each dependency to a specific
+# version.
+# python_dependencies:
+#  - "another_dependency==1.0.0"
+
+categories:
+  - iam
+
+show_orchestrator_ui: false

@@ -11,7 +11,7 @@ x-samos-extends-types:
   - type-name: Machine
     subtype-priority: 3
 
-$ref: https://api.samanage.com#/components/schemas/Hardware
+$ref: https://example.samanage.com#/components/schemas/Hardware
 
 # Key: d_id (string conversion of integer id). Used as the unique identifier for this asset.
 x-samos-keys:
@@ -52,12 +52,6 @@ x-samos-detail:
   - name: created_at
   - name: updated_at
   - name: detected_at
-
-# x-samos-virtual:
-#   installed_software:
-#     type-name: Software
-#     cypher-pattern: >-
-#       <-[:`e:SolarWindsITAMSoftwareInstallation:x_hardware_id`]- (:SolarWindsITAMSoftwareInstallation) -[:`e:SolarWindsITAMSoftwareInstallation:x_software_id`]-> (:SolarWindsITAMSoftware)
 
 x-samos-derived-properties:
   d_id:
@@ -135,6 +129,28 @@ x-samos-derived-properties:
       type-name: Machine
       property-name: hostnames
 
+  d_qualified_hostname:
+    # Emits name as qualified-hostname only when it contains a dot (i.e. is an FQDN).
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: "name && contains(name, '.') && name || null"
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_unqualified_hostname:
+    # Emits name as unqualified-hostname only when it does NOT contain a dot (i.e. is a short name).
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: "name && !contains(name, '.') && name || null"
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
 properties:
   custom:
     title: Custom
@@ -156,10 +172,6 @@ properties:
   name:
     title: Name
     type: string
-    x-samos-correlation:
-      correlation-key: Machine.unqualified-hostname
-      correlation-type: Machine
-      priority: 3
     x-samos-fulfills:
       type-name: core.named-object
       property-name: name
@@ -283,6 +295,7 @@ properties:
         nullable: true
       default_assignee_id:
         title: Default Assignee ID
+        nullable: true
         type: integer
 
   username:
@@ -632,13 +645,3 @@ properties:
     x-samos-hidden: true
     items:
       type: object
-
-  x_installed_software_ids:
-    title: Installed Software
-    type: array
-    x-samos-hidden: true
-    items:
-      type: string
-      x-samos-ref-types:
-        - type-name: SolarWindsITAMSoftware
-          key-name: d_id

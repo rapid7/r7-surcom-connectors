@@ -1,0 +1,406 @@
+x-samos-type-name: NutanixPrismCentralHost
+x-samos-namespace: nutanix.prism.central
+title: Nutanix Prism Central Host
+description: A physical host node in a Nutanix cluster managed by Prism Central.
+
+$ref: https://developers.nutanix.com/api-reference?namespace=clustermgmt&version=v4.1&modified=1#/components/schemas/clustermgmt.v4.1.config.Host
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - extId
+
+x-samos-table:
+  - name: hostName
+  - name: hostType
+  - name: nodeStatus
+  - name: cpuModel
+  - name: hypervisor.numberOfVms
+
+x-samos-detail:
+  - name: hostName
+  - name: hostType
+  - name: nodeStatus
+  - name: cluster.uuid
+  - name: cpuModel
+  - name: numberOfCpuCores
+  - name: numberOfCpuThreads
+  - name: numberOfCpuSockets
+  - name: cpuCapacityHz
+  - name: cpuFrequencyHz
+  - name: memorySizeBytes
+  - name: blockModel
+  - name: blockSerial
+  - name: nodeSerial
+  - name: bootTimeUsecs
+  - name: isDegraded
+  - name: isSecureBooted
+  - name: isHardwareVirtualized
+  - name: isRebootPending
+  - name: maintenanceState
+  - name: controllerVm
+  - name: disk
+  - name: hypervisor
+  - name: ipmi
+
+x-samos-derived-properties:
+  d_active:
+    title: Active?
+    type: boolean
+    value: 'isDegraded == `false`'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+    x-samos-hidden: true
+
+  d_ips:
+    title: IP Addresses
+    type: array
+    items:
+      type: string
+      format: ip-addr
+    value: '[hypervisor.externalAddress.ipv4.value, hypervisor.externalAddress.ipv6.value] | [?@ != null]'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+    x-samos-hidden: true
+
+  d_cpus:
+    title: CPUs
+    type: integer
+    value: 'numberOfCpuCores'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: cpus
+    x-samos-hidden: true
+
+  d_hostname:
+    title: Hostname
+    type: string
+    value: 'hostName'
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 4
+
+  d_unqualified_hostname:
+    title: Unqualified Hostname
+    type: string
+    value: '$.hostName.`split(., 0, 1)`'
+    syntax: jsonpath
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+properties:
+  extId:
+    title: External ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  hostName:
+    title: Hostname
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  hostType:
+    title: Host Type
+    type: string
+
+  nodeStatus:
+    title: Node Status
+    type: string
+
+  cpuModel:
+    title: CPU Model
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+
+  numberOfCpuCores:
+    title: CPU Cores
+    type: integer
+
+  numberOfCpuThreads:
+    title: CPU Threads
+    type: integer
+
+  numberOfCpuSockets:
+    title: CPU Sockets
+    type: integer
+
+  cpuCapacityHz:
+    title: CPU Capacity (Hz)
+    type: integer
+
+  cpuFrequencyHz:
+    title: CPU Frequency (Hz)
+    type: integer
+
+  memorySizeBytes:
+    title: Memory (Bytes)
+    type: integer
+
+  blockModel:
+    title: Block Model
+    type: string
+
+  blockSerial:
+    title: Block Serial
+    type: string
+
+  nodeSerial:
+    title: Node Serial
+    type: string
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 5
+
+  bootTimeUsecs:
+    title: Boot Time (usecs)
+    type: integer
+    x-samos-hidden: true
+
+  isDegraded:
+    title: Degraded?
+    type: boolean
+
+  isSecureBooted:
+    title: Secure Booted?
+    type: boolean
+
+  isHardwareVirtualized:
+    title: Hardware Virtualized?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: virtual
+
+  hasCsr:
+    title: Has CSR?
+    type: boolean
+
+  keyManagementDeviceToCertStatus:
+    title: Key Management Device Cert Status
+    type: array
+    items:
+      type: object
+      additionalProperties: true
+
+  isRebootPending:
+    title: Reboot Pending?
+    type: boolean
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: pending_reboot
+
+  maintenanceState:
+    title: Maintenance State
+    type: string
+
+  gpuDriverVersion:
+    title: GPU Driver Version
+    type: string
+
+  gpuList:
+    title: GPUs
+    type: array
+    items:
+      type: string
+
+  rackableUnitUuid:
+    title: Rackable Unit UUID
+    type: string
+
+  defaultVhdLocation:
+    title: Default VHD Location
+    type: string
+
+  defaultVhdContainerUuid:
+    title: Default VHD Container UUID
+    type: string
+
+  defaultVmLocation:
+    title: Default VM Location
+    type: string
+
+  defaultVmContainerUuid:
+    title: Default VM Container UUID
+    type: string
+
+  failoverClusterFqdn:
+    title: Failover Cluster FQDN
+    type: string
+
+  failoverClusterNodeStatus:
+    title: Failover Cluster Node Status
+    type: string
+
+  hypervisor:
+    title: Hypervisor
+    type: object
+    properties:
+      externalAddress:
+        title: External Address
+        type: object
+        properties:
+          ipv4:
+            title: IPv4
+            type: object
+            properties:
+              value:
+                title: IP Address
+                type: string
+                format: ip-addr
+              prefixLength:
+                title: Prefix Length
+                type: integer
+      userName:
+        title: User Name
+        type: string
+      fullName:
+        title: Full Name
+        type: string
+      type:
+        title: Hypervisor Type
+        type: string
+      numberOfVms:
+        title: Number of VMs
+        type: integer
+      state:
+        title: State
+        type: string
+      acropolisConnectionState:
+        title: Acropolis Connection State
+        type: string
+
+  controllerVm:
+    title: Controller VM
+    type: object
+    properties:
+      externalAddress:
+        title: External Address
+        type: object
+        properties:
+          ipv4:
+            title: IPv4
+            type: object
+            properties:
+              value:
+                title: IP Address
+                type: string
+                format: ip-addr
+              prefixLength:
+                title: Prefix Length
+                type: integer
+      backplaneAddress:
+        title: Backplane Address
+        type: object
+        properties:
+          ipv4:
+            title: IPv4
+            type: object
+            properties:
+              value:
+                title: IP Address
+                type: string
+                format: ip-addr
+              prefixLength:
+                title: Prefix Length
+                type: integer
+      rdmaBackplaneAddress:
+        title: RDMA Backplane Address
+        type: array
+        items:
+          type: object
+          additionalProperties: true
+      natIp:
+        title: NAT IP
+        type: object
+        additionalProperties: true
+      natPort:
+        title: NAT Port
+        type: integer
+      isInMaintenanceMode:
+        title: In Maintenance Mode?
+        type: boolean
+
+  cluster:
+    title: Cluster
+    type: object
+    x-samos-hidden: true
+    properties:
+      uuid:
+        title: Cluster
+        type: string
+        x-samos-ref-types:
+          - type-name: NutanixPrismCentralCluster
+            key-name: extId
+      name:
+        title: Cluster Name
+        type: string
+
+  disk:
+    title: Disks
+    type: array
+    x-samos-hidden: true
+    items:
+      type: object
+      properties:
+        uuid:
+          title: Disk UUID
+          type: string
+        mountPath:
+          title: Mount Path
+          type: string
+        sizeInBytes:
+          title: Size (Bytes)
+          type: integer
+        serialId:
+          title: Serial ID
+          type: string
+        storageTier:
+          title: Storage Tier
+          type: string
+
+  ipmi:
+    title: IPMI
+    type: object
+    properties:
+      ip:
+        title: IP Address
+        type: object
+        properties:
+          ipv4:
+            title: IPv4
+            type: object
+            properties:
+              value:
+                title: IP
+                type: string
+                format: ip-addr
+              prefixLength:
+                title: Prefix Length
+                type: integer
+      username:
+        title: Username
+        type: string

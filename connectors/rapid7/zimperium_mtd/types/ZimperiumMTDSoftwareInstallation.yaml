@@ -1,0 +1,49 @@
+x-samos-type-name: ZimperiumMTDSoftwareInstallation
+x-samos-namespace: zimperium.mtd
+title: Zimperium MTD Software Installation
+description: Links a Zimperium MTD managed device to an installed application.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: SoftwareInstallation
+    subtype-priority: 3
+
+x-samos-keys:
+  - x_id
+
+x-samos-table:
+  - name: x_deviceId
+  - name: x_softwareId
+
+x-samos-detail:
+  - name: x_deviceId
+  - name: x_softwareId
+
+properties:
+  x_id:
+    title: Installation ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: id
+
+  x_deviceId:
+    title: Device
+    type: string
+    x-samos-ref-types:
+      - key-name: id
+        type-name: ZimperiumMTDDevice
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: asset_ref
+
+  x_softwareId:
+    title: Software
+    type: string
+    x-samos-ref-types:
+      - key-name: id
+        type-name: ZimperiumMTDApp
+    x-samos-fulfills:
+      type-name: SoftwareInstallation
+      property-name: software_ref

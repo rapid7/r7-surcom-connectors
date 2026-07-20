@@ -1,0 +1,156 @@
+x-samos-type-name: NableNcentralCustomer
+x-samos-namespace: nable.ncentral
+title: N-able N-central Customer
+description: Customer or site organization from N-able N-central.
+
+x-samos-extends-types:
+  - type-name: Organization
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_customerId
+
+x-samos-table:
+  - name: customerName
+  - name: orgUnitType
+  - name: city
+  - name: stateProv
+  - name: country
+  - name: contactEmail
+
+x-samos-detail:
+  - name: customerName
+  - name: orgUnitType
+  - name: d_parentId
+  - name: externalId
+  - name: externalId2
+  - name: phone
+  - name: contactTitle
+  - name: contactFirstName
+  - name: contactLastName
+  - name: contactEmail
+  - name: contactPhone
+  - name: contactPhoneExt
+  - name: contactDepartment
+  - name: street1
+  - name: street2
+  - name: city
+  - name: stateProv
+  - name: country
+  - name: county
+  - name: postalCode
+
+x-samos-derived-properties:
+  d_customerId:
+    title: Customer ID
+    type: string
+    syntax: jmespath
+    value: to_string(customerId)
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+
+  d_parentId:
+    title: Parent Organization
+    type: string
+    syntax: jmespath
+    value: parentId && to_string(parentId)
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+    x-samos-ref-types:
+      - type-name: NableNcentralCustomer
+        key-name: d_customerId
+
+properties:
+  customerId:
+    title: Customer ID
+    type: integer
+    x-samos-immutable: true
+    x-samos-hidden: true
+
+  customerName:
+    title: Customer Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  orgUnitType:
+    title: Organization Unit Type
+    type: string
+
+  parentId:
+    title: Parent ID
+    type: integer
+
+  externalId:
+    title: External ID
+    type: string
+
+  externalId2:
+    title: External ID 2
+    type: string
+
+  phone:
+    title: Phone
+    type: string
+
+  contactTitle:
+    title: Contact Title
+    type: string
+
+  contactFirstName:
+    title: Contact First Name
+    type: string
+
+  contactLastName:
+    title: Contact Last Name
+    type: string
+
+  contactEmail:
+    title: Contact Email
+    type: string
+    format: email
+
+  contactPhone:
+    title: Contact Phone
+    type: string
+
+  contactPhoneExt:
+    title: Contact Phone Extension
+    type: string
+
+  contactDepartment:
+    title: Contact Department
+    type: string
+
+  street1:
+    title: Street 1
+    type: string
+
+  street2:
+    title: Street 2
+    type: string
+
+  city:
+    title: City
+    type: string
+
+  stateProv:
+    title: State/Province
+    type: string
+
+  country:
+    title: Country
+    type: string
+
+  county:
+    title: County
+    type: string
+
+  postalCode:
+    title: Postal Code
+    type: string

@@ -16,6 +16,7 @@ from requests.auth import HTTPBasicAuth
 AUTH_ENDPOINT = "/api/v1.0/auth"
 ASSET_ENDPOINT = "/api/v1.0/assetmgmt/assets"
 AGENT_ENDPOINT = "/api/v1.0/assetmgmt/agents"
+PATCH_STATUS_ENDPOINT = "/api/v1.0/assetmgmt/patch/{agent_id}/status"
 MACHINE_GROUP_ENDPOINT = "/api/v1.0/system/machinegroups"
 ORG_ENDPOINT = "/api/v1.0/system/orgs"
 USER_ENDPOINT = "/api/v1.0/system/users"
@@ -122,3 +123,19 @@ class KaseyaVSA9Client:
             )
 
         return self.make_request(endpoint=endpoints[resource_type], params=params)
+
+    def get_patch_status(self, agent_id: str) -> dict:
+        """Get patch scan status for a single agent.
+
+        Calls GET /api/v1.0/assetmgmt/patch/{agentId}/status as documented at:
+        https://help.vsa9.kaseya.com/help/Content/Modules/rest-api/33673.htm
+
+        Args:
+            agent_id (str): The AgentId to query.
+
+        Returns:
+            dict: Patch status fields from the Result key (e.g. LastPatchScan).
+        """
+        endpoint = PATCH_STATUS_ENDPOINT.format(agent_id=agent_id)
+        response = self.make_request(endpoint=endpoint)
+        return response.get("Result") or {}

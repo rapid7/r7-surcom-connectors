@@ -1,0 +1,99 @@
+x-samos-type-name: Auth0Organization
+x-samos-namespace: auth0
+title: Auth0 Organization
+description: An Organization from Auth0
+
+x-samos-extends-types:
+  - type-name: Organization
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: display_name
+  - name: name
+  - name: metadata.region
+
+x-samos-detail:
+  - name: display_name
+  - name: name
+  - name: metadata.region
+  - name: branding
+  - name: metadata
+  - name: token_quota
+
+properties:
+  id:
+    title: ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+
+  name:
+    title: Name
+    description: URL-safe identifier for the organization (e.g. "acme-users").
+    type: string
+
+  display_name:
+    title: Display Name
+    description: Human-readable name of the organization (e.g. "Acme Users").
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  branding:
+    title: Branding
+    type: object
+    properties:
+      logo_url:
+        title: Logo URL
+        type: string
+      colors:
+        title: Colors
+        type: object
+        properties:
+          primary:
+            title: Primary Color
+            type: string
+          page_background:
+            title: Page Background Color
+            type: string
+
+  metadata:
+    title: Metadata
+    description: Tenant-defined custom metadata for the organization.
+    type: object
+    properties:
+      region:
+        title: Region
+        type: string
+
+  token_quota:
+    title: Token Quota
+    description: Per-organization rate limits for issued tokens.
+    type: object
+    properties:
+      client_credentials:
+        title: Client Credentials Quota
+        type: object
+        properties:
+          enforce:
+            title: Enforce?
+            type: boolean
+          per_day:
+            title: Tokens Per Day
+            type: integer
+          per_hour:
+            title: Tokens Per Hour
+            type: integer
+
+x-samos-virtual:
+  # Fulfill the `users` (Business Users) property of core.owned-entity with Auth0 Users that are connected to this Organization via the `organizations` relationship.
+  users:
+    type-name: Auth0User
+    cypher-pattern: >
+      <-[:`e:Auth0User:organizations`]-(:Auth0User)

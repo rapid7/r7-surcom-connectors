@@ -1,0 +1,104 @@
+x-samos-type-name: JFrogArtifactoryProject
+x-samos-namespace: jfrog.artifactory
+title: JFrog Artifactory Project
+description: A project in JFrog Artifactory
+
+x-samos-extends-types:
+  - type-name: core.component-group
+  - type-name: core.named-object
+  - type-name: core.component
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: display_name
+  - name: project_key
+  - name: description
+  - name: soft_limit
+  - name: storage_quota_bytes
+
+x-samos-detail:
+  - name: display_name
+  - name: description
+  - name: project_key
+  - name: storage_quota_bytes
+  - name: soft_limit
+  - name: storage_quota_email_notification
+  - name: admin_privileges
+
+properties:
+  id:
+    title: Object ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  display_name:
+    title: Display Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  project_key:
+    title: Project Key
+    type: string
+
+  admin_privileges:
+    title: Admin Privileges
+    type: object
+    properties:
+      manage_members:
+        title: Manage Members?
+        type: boolean
+      manage_resources:
+        title: Manage Resources?
+        type: boolean
+      index_resources:
+        title: Index Resources?
+        type: boolean
+      manage_remote_repository:
+        title: Manage Remote Repository?
+        type: boolean
+      create_remote_repository:
+        title: Create Remote Repository?
+        type: boolean
+      delete_remote_repository:
+        title: Delete Remote Repository?
+        type: boolean
+      create_local_repository:
+        title: Create Local Repository?
+        type: boolean
+      delete_local_repository:
+        title: Delete Local Repository?
+        type: boolean
+      create_virtual_repository:
+        title: Create Virtual Repository?
+        type: boolean
+      delete_virtual_repository:
+        title: Delete Virtual Repository?
+        type: boolean
+
+  storage_quota_bytes:
+    title: Storage Quota Bytes
+    type: integer
+
+  soft_limit:
+    title: Soft Limit?
+    type: boolean
+
+  storage_quota_email_notification:
+    title: Storage Quota Email Notification?
+    type: boolean

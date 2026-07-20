@@ -1,19 +1,20 @@
 id: openai
 name: OpenAI
 author: Rapid7
-version: 1.0.0
+version: 1.1.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Remove Beta label
+  - Add OpenAIUsage type for completions usage data
 
 # IDs of Surface Command types in this connector.
 # Type IDs must be unique across all connectors. Prefix each with a SnakeCased
 # version of the connector ID.
 types:
   - OpenAIUser
+  - OpenAIUsage
 
 # Functions provided by this connector. Include a `test` function and at least
 # one other function that returns one or more types defined in `types`.
@@ -21,10 +22,11 @@ functions:
   - id: test
 
   - id: import_all
-    title: Import All
-    description: Import OpenAI organization users and ChatGPT usage data
+    title: OpenAI Users and Usage
+    description: Import OpenAI organization users and API usage data
     return_types:
       - OpenAIUser
+      - OpenAIUsage
 
 # Configuration settings for this connector.
 settings:
@@ -35,8 +37,21 @@ settings:
     description: Admin-level API key for authentication (format sk-admin-...)
     example: sk-admin-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+  lookback_days:
+    type: integer
+    title: Look Back Day(s)
+    description: >-
+      Number of days of usage data to retrieve. Defaults to 7
+    default: 7
+    minimum: 1
+
 # Runtime platform for this connector.
 runtime: py311
+
+# Reference schemas for type validation.
+reference-schemas:
+  - url: https://raw.githubusercontent.com/openai/openai-openapi/main/openapi.yaml
+    file: refdocs/openapi.json
 
 # Categories for this connector in the Extension Library.
 categories:

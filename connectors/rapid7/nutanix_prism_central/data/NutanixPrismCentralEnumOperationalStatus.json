@@ -1,0 +1,32 @@
+[
+  {
+    "id": "NORMAL",
+    "value": "Operational",
+    "description": "Normal operation mode.",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "STAND_ALONE",
+    "value": "Operational",
+    "description": "Stand-alone operation mode.",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "READ_ONLY",
+    "value": "Non-Operational",
+    "description": "Read-only operation mode.",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "OVERRIDE",
+    "value": "Non-Operational",
+    "description": "Override operation mode.",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "SWITCH_TO_TWO_NODE",
+    "value": "Operational",
+    "description": "Switch to two-node operation mode.",
+    "map_to": "OperationalStatus: Operational"
+  }
+]

@@ -1,0 +1,272 @@
+x-samos-type-name: ZimperiumMTDApp
+x-samos-namespace: zimperium.mtd
+title: Zimperium MTD App
+description: A mobile device software registered in Zimperium MTD for security analysis.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Software
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: bundleId
+  - name: platform
+  - name: source
+  - name: classification
+  - name: security
+  - name: privacy
+  - name: securityRisk
+  - name: privacyRisk
+  - name: version
+  - name: deviceCount
+
+x-samos-detail:
+  - name: name
+  - name: bundleId
+  - name: platform
+  - name: version
+  - name: riskVersion
+  - name: source
+  - name: classification
+  - name: security
+  - name: securityRisk
+  - name: privacy
+  - name: privacyRisk
+  - name: developerName
+  - name: developerSignature
+  - name: hash
+  - name: processState
+  - name: managed
+  - name: deviceCount
+  - name: cves
+  - name: marketVersion
+  - name: binaryVersion
+  - name: installationTypes
+  - name: marketPrimaryVersion
+  - name: marketSecondaryVersion
+  - name: binaryPrimaryVersion
+  - name: binarySecondaryVersion
+  - name: riskSyncCounter
+  - name: countModified
+  - name: created
+  - name: updatedOn
+
+x-samos-derived-properties:
+  d_vendor_product_version:
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'join(`-`, [bundleId, name][?@])'
+    x-samos-correlation:
+      correlation-key: Software.vendor-product-version
+      correlation-type: Software
+      priority: 3
+
+  d_software_type:
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: 'APPLICATION'
+    x-samos-ref-types:
+      - type-name: EnumSoftwareType
+        key-name: id
+    x-samos-fulfills:
+      type-name: Software
+      property-name: type
+
+  d_mitigations:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    syntax: jmespath
+    # M1016 - Vulnerability Scanning: platform identifies out-of-date OS or vulnerable libraries
+    value: >-
+      [
+        processState == `AVAILABLE` && `M1016` || null
+      ] | [?@]
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+  d_version:
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    value: 'marketVersion || version'
+    x-samos-fulfills:
+      type-name: Software
+      property-name: version
+
+  d_name:
+    type: string
+    x-samos-hidden: true
+    syntax: expression
+    value: '{name} {version}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  id:
+    title: App ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  processState:
+    title: Process State
+    type: string
+
+  accountId:
+    title: Account ID
+    type: string
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: Software
+      property-name: product
+
+  bundleId:
+    title: Bundle
+    type: string
+
+  version:
+    title: Version
+    type: string
+
+  riskVersion:
+    title: Risk Version
+    type: string
+
+  hash:
+    title: Hash
+    type: string
+
+  platform:
+    title: Platform
+    type: string
+    x-samos-fulfills:
+      type-name: Software
+      property-name: target_platform
+    x-samos-ref-types:
+      - key-name: id
+        type-name: ZimperiumMTDOSFamilyEnum
+
+  platformId:
+    title: Platform ID
+    type: integer
+
+  deviceCount:
+    title: Device Count
+    type: integer
+
+  source:
+    title: Source
+    type: string
+
+  classification:
+    title: Classification
+    type: string
+
+  securityRisk:
+    title: Security Risk Score
+    type: integer
+
+  security:
+    title: Security Risk
+    type: string
+
+  privacyRisk:
+    title: Privacy Risk Score
+    type: integer
+
+  privacy:
+    title: Privacy Risk
+    type: string
+
+  cves:
+    title: CVEs
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Vulnerability
+
+  developerSignature:
+    title: Developer Signature
+    type: string
+
+  developerName:
+    title: Developer
+    type: string
+
+  managed:
+    title: Managed?
+    type: boolean
+
+  created:
+    title: Created
+    type: integer
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  updatedOn:
+    title: Updated On
+    type: integer
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  riskSyncCounter:
+    title: Risk Sync Counter
+    type: integer
+
+  countModified:
+    title: Count Modified
+    type: integer
+    format: epoch-millis
+
+  installationTypes:
+    title: Installation Types
+    type: array
+    items:
+      type: string
+
+  marketVersion:
+    title: Market Version
+    type: string
+
+  marketPrimaryVersion:
+    title: Market Primary Version
+    type: string
+
+  marketSecondaryVersion:
+    title: Market Secondary Version
+    type: string
+
+  binaryPrimaryVersion:
+    title: Binary Primary Version
+    type: string
+
+  binarySecondaryVersion:
+    title: Binary Secondary Version
+    type: string
+
+  binaryVersion:
+    title: Binary Version
+    type: string

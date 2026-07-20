@@ -1,0 +1,360 @@
+x-samos-type-name: AvigilonAltaUser
+x-samos-namespace: avigilon.alta
+title: Avigilon Alta User
+description: A user (identity) from Avigilon Alta (Openpath) Access with assigned access groups and site permissions.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_user_id
+  - id
+required:
+  - id
+x-samos-table:
+  - name: identity.fullName
+  - name: identity.email
+  - name: externalId
+  - name: status
+  - name: d_groups
+  - name: d_sites
+  - name: d_active
+  - name: department
+  - name: lastActivityAt
+
+x-samos-detail:
+  - name: identity.fullName
+  - name: identity.firstName
+  - name: identity.lastName
+  - name: identity.email
+  - name: identity.mobilePhone
+  - name: opal
+  - name: externalId
+  - name: status
+  - name: d_groups
+  - name: d_sites
+  - name: d_active
+  - name: hasRemoteUnlock
+  - name: isOverrideAllowed
+  - name: title
+  - name: department
+  - name: personId
+  - name: lastActivityAt
+  - name: statusLastUpdatedAt
+  - name: roles
+  - name: createdAt
+  - name: updatedAt
+  - name: startDate
+  - name: endDate
+
+x-samos-derived-properties:
+  d_user_id:
+    # API returns integer id; unified User.id is string.
+    title: User ID
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  d_active:
+    # Derived from `status` field. 'A' (Active) indicates an active user.
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: 'status == `A`'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+  d_groups:
+    title: Access Groups
+    type: array
+    syntax: jmespath
+    value: 'groups[*].id.to_string(@)'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: AvigilonAltaGroup
+          key-name: d_group_id
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups
+
+  d_sites:
+    title: Sites
+    type: array
+    syntax: jmespath
+    value: 'sites[*].id.to_string(@)'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: AvigilonAltaSite
+          key-name: d_site_id
+
+properties:
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+  opal:
+    title: Opal ID
+    type: string
+  externalId:
+    title: External ID
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: employee_id
+  status:
+    title: Status
+    type: string
+  startDate:
+    title: Start Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date
+  endDate:
+    title: End Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: end_date
+  startAndEndDateTimeZoneId:
+    title: Timezone
+    type: string
+    x-samos-hidden: true
+  hasRemoteUnlock:
+    title: Remote Unlock?
+    type: boolean
+  isOverrideAllowed:
+    title: Override Allowed?
+    type: boolean
+  identity:
+    title: Identity
+    type: object
+    properties:
+      id:
+        title: Identity ID
+        type: integer
+        x-samos-hidden: true
+      opal:
+        title: Identity Opal
+        type: string
+        x-samos-hidden: true
+      email:
+        title: Email
+        type: string
+        x-samos-fulfills:
+          type-name: User
+          property-name: email
+        x-samos-correlation:
+          correlation-key: User.email
+          correlation-type: User
+          priority: 4
+      firstName:
+        title: First Name
+        type: string
+        x-samos-fulfills:
+          type-name: User
+          property-name: first_name
+      middleName:
+        title: Middle Name
+        type: string
+      lastName:
+        title: Last Name
+        type: string
+        x-samos-fulfills:
+          type-name: User
+          property-name: last_name
+      fullName:
+        title: Full Name
+        type: string
+        x-samos-fulfills:
+          type-name: core.named-object
+          property-name: name
+      initials:
+        title: Initials
+        type: string
+      isEmailVerified:
+        title: Email Verified?
+        type: boolean
+      mobilePhone:
+        title: Mobile Phone
+        type: string
+        x-samos-fulfills:
+          type-name: User
+          property-name: telephone
+      language:
+        title: Language
+        type: string
+      roles:
+        title: Identity Roles
+        type: array
+        items:
+          type: object
+      mfaCredentials:
+        title: MFA Credentials
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              title: MFA Credential ID
+              type: integer
+              x-samos-hidden: true
+            name:
+              title: MFA Credential Name
+              type: string
+              x-samos-hidden: true
+            status:
+              title: MFA Credential Status
+              type: string
+            mfaCredentialType:
+              title: MFA Credential Type Details
+              type: object
+              properties:
+                id:
+                  title: MFA Credential Type ID
+                  type: integer
+                  x-samos-hidden: true
+                modelName:
+                  title: MFA Credential Type Model Name
+                  type: string
+                  x-samos-hidden: true
+                name:
+                  title: MFA Credential Type Name
+                  type: string
+                totpSoftDevice:
+                  title: TOTP Soft Device
+                  type: object
+                  properties:
+                    id:
+                      title: TOTP Soft Device ID
+                      type: integer
+                      x-samos-hidden: true
+            createdAt:
+              title: MFA Credential Created At
+              type: string
+              format: date-time
+            updatedAt:
+              title: MFA Credential Updated At
+              type: string
+              format: date-time
+      namespace:
+        title: Namespace
+        type: object
+      idpUniqueIdentifier:
+        title: IDP Unique ID
+        type: string
+      pmsUniqueIdentifier:
+        title: PMS Unique ID
+        type: string
+      needsPasswordChange:
+        title: Needs Password Change?
+        type: boolean
+      nicknames:
+        title: Nicknames
+        type: array
+        items:
+          type: object
+      createdAt:
+        title: Identity Created At
+        type: string
+        format: date-time
+      updatedAt:
+        title: Identity Updated At
+        type: string
+        format: date-time
+      users:
+        title: Identity Users
+        type: array
+        items:
+          type: object
+  groups:
+    title: Groups
+    type: array
+    items:
+      type: object
+  sites:
+    title: Sites
+    type: array
+    items:
+      type: object
+  roles:
+    title: Roles
+    type: array
+    items:
+      type: object
+  userCustomFields:
+    title: Custom Fields
+    type: array
+    items:
+      type: object
+  buildingFloorUnits:
+    title: Building Floor Units
+    type: array
+    items:
+      type: object
+  title:
+    title: Job Title
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: title
+  department:
+    title: Department
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: department
+  personId:
+    title: Person ID
+    type: string
+  lastActivityAt:
+    title: Last Activity At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+  statusLastUpdatedAt:
+    title: Status Last Updated At
+    type: string
+    format: date-time
+  manuallyInactivatedAt:
+    title: Manually Inactivated At
+    type: string
+    format: date-time
+  pictureUrl:
+    title: Picture URL
+    type: string
+    x-samos-hidden: true
+  pictureFullSizeUrl:
+    title: Picture Full Size URL
+    type: string
+    x-samos-hidden: true
+  lastParcelReminderAt:
+    title: Last Parcel Reminder At
+    type: string
+    format: date-time
+    x-samos-hidden: true
+  createdAt:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+  updatedAt:
+    title: Updated At
+    type: string
+    format: date-time

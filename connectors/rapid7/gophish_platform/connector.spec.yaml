@@ -1,0 +1,63 @@
+id: gophish.platform
+name: Gophish
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+current_changes:
+  - Initial release of Gophish connector for phishing campaigns and groups
+
+types:
+  - GophishPlatformCampaign
+  - GophishPlatformFinding
+  - GophishPlatformGroup
+  - GophishPlatformTemplate
+  - GophishPlatformUser
+
+# Functions provided by this connector.
+functions:
+  - id: test
+    title: Test Gophish Connection
+    description: Validates the connection to the Gophish API
+
+  - id: import_all
+    title: Gophish Campaigns, Findings, Groups, Templates, and Users
+    description: Imports phishing campaigns, findings, groups, templates, and target users from Gophish
+    return_types:
+      - GophishPlatformCampaign
+      - GophishPlatformFinding
+      - GophishPlatformGroup
+      - GophishPlatformTemplate
+      - GophishPlatformUser
+
+# Configuration settings for this connector.
+settings:
+  base_url:
+    type: string
+    title: Base URL
+    description: The base URL of your Gophish instance (e.g., https://gophish.example:3333)
+    example: https://gophish.example:3333
+
+  api_key:
+    type: string
+    title: API Key
+    description: The Gophish API key for authentication. Generate an API key in Gophish under Settings > API.
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - phishing
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

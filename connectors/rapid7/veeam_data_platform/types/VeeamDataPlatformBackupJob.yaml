@@ -1,0 +1,81 @@
+x-samos-type-name: VeeamDataPlatformBackupJob
+x-samos-namespace: veeam.data.platform
+title: Veeam Backup Job
+description: A Veeam Backup & Replication job representing all backups that are created on or imported to the backup server.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: core.named-object
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: platformName
+  - name: jobType
+  - name: repositoryName
+  - name: creationTime
+
+x-samos-detail:
+  - name: name
+  - name: platformName
+  - name: jobId
+  - name: jobType
+  - name: platformId
+  - name: creationTime
+  - name: repositoryId
+  - name: repositoryName
+  - name: policyUniqueId
+
+properties:
+  id:
+    title: Backup ID
+    type: string
+    x-samos-immutable: true
+
+  name:
+    title: Backup Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  platformName:
+    title: Platform Name
+    type: string
+
+  jobId:
+    title: Job ID
+    type: string
+    x-samos-ref-types:
+      - type-name: VeeamDataPlatformJob
+        key-name: id
+
+  jobType:
+    title: Job Type
+    type: string
+
+  policyUniqueId:
+    title: Policy Unique ID
+    type: string
+
+  platformId:
+    title: Platform ID
+    type: string
+
+  creationTime:
+    title: Creation Time
+    type: string
+    format: date-time
+
+  repositoryId:
+    title: Repository
+    type: string
+    x-samos-ref-types:
+      - type-name: VeeamDataPlatformRepository
+        key-name: id
+
+  repositoryName:
+    title: Repository Name
+    type: string

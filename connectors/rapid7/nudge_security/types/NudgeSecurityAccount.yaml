@@ -1,0 +1,192 @@
+x-samos-type-name: NudgeSecurityAccount
+x-samos-namespace: nudge.security
+title: Nudge Security Account
+description: A user's account on a SaaS application discovered by Nudge Security.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: name
+  - name: domain_canonical
+  - name: app_id
+  - name: user_id
+  - name: is_admin
+  - name: mfa_status
+  - name: has_oauth
+  - name: first_date
+
+x-samos-detail:
+  - name: name
+  - name: domain_canonical
+  - name: app_id
+  - name: user_id
+  - name: is_admin
+  - name: mfa_status
+  - name: has_oauth
+  - name: first_account
+  - name: last_password_reset
+  - name: discovery_info
+  - name: auth_methods
+  - name: metadata
+  - name: labels
+  - name: fields
+  - name: first_date
+  - name: last_date
+  - name: last_billing_date
+
+x-samos-derived-properties:
+  d_id:
+    # The "id" property is an integer; derive a string to fulfill User.id.
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  d_has_mfa:
+    # The "mfa_status" property is a string; derive a boolean to fulfill core.principal:has_mfa.
+    type: boolean
+    syntax: jmespath
+    value: mfa_status == 'enabled'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: has_mfa
+
+  d_email:
+    # primary_email is a reference; derive a separate property to fulfill User.email.
+    type: string
+    syntax: jmespath
+    value: metadata.user_email
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+
+properties:
+  id:
+    title: ID
+    type: integer
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  app_id:
+    title: App
+    type: integer
+    x-samos-ref-types:
+      - type-name: NudgeSecurityApp
+        key-name: id
+  user_id:
+    title: User
+    type: integer
+    # Not a reference, we correlate with this user instead
+    # x-samos-ref-types:
+    #   - type-name: NudgeSecurityUser
+    #     key-name: id
+  domain_canonical:
+    title: Canonical Domain
+    type: string
+  first_account:
+    title: First Account?
+    type: boolean
+  is_admin:
+    title: Admin?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_administrator
+  has_oauth:
+    title: OAuth
+    type: string
+  mfa_status:
+    title: MFA Status
+    type: string
+  discovery_info:
+    title: Discovery Info
+    type: string
+  first_date:
+    title: First Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+  last_date:
+    title: Last Seen
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+  last_password_reset:
+    title: Last Password Reset
+    type: string
+    format: date-time
+  last_billing_date:
+    title: Last Billing Date
+    type: string
+    format: date-time
+  auth_methods:
+    title: Authentication Methods
+    type: array
+    items:
+      type: object
+      properties:
+        auth_method_name:
+          title: Auth Method Name
+          type: string
+        auth_type:
+          title: Auth Type
+          type: string
+        first_activity:
+          title: First Activity
+          type: string
+          format: date-time
+        last_activity:
+          title: Last Activity
+          type: string
+          format: date-time
+        last_seen:
+          title: Last Seen
+          type: string
+          format: date-time
+        mfa_status:
+          title: MFA Status
+          type: string
+        provider_account_id:
+          title: Provider Account ID
+          type: integer
+  metadata:
+    title: Metadata
+    type: object
+    properties:
+      user_email:
+        title: User Email
+        type: string
+        format: email
+  labels:
+    title: Labels
+    type: array
+    items:
+      type: string
+  fields:
+    title: Custom Fields
+    type: array
+    items:
+      type: object

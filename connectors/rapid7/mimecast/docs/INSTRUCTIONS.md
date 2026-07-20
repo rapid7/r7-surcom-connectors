@@ -18,8 +18,23 @@
 
   - **Client ID**: OAuth client ID for Mimecast API authentication
   - **Client Secret**: OAuth client secret for Mimecast API authentication
+  
 
   To generate the Client ID and Client Secret, refer to the [Mimecast documentation](https://mimecastsupport.zendesk.com/hc/en-us/articles/34000360548755-API-Integrations-Managing-API-2-0-for-Cloud-Gateway).
+
+  While creating the Mimecast API 2.0 application, enable the following **Products**:
+
+  - **Domain Management** — required for domain-related APIs
+  - **User and Group Management** — required for user and group APIs
+  - **Email Security Cloud Gateway** — required for gateway details and outbound IP APIs
+  - **Threats, Security Events, and Data** — required for threat and security event APIs
+
+  Also ensure the assigned **Application Role** has appropriate **Read** permissions for:
+
+  - **Threat & Security Events**
+  - **Gateway Tracking**
+  - **Users and Groups**
+  - **Domains and Directory Data**
 
   ### Optional Settings
 

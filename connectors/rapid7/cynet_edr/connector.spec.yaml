@@ -1,0 +1,95 @@
+id: cynet.edr
+name: Cynet EDR
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+types:
+  - CynetEDRHost
+  - CynetEDRUser
+  - CynetEDRVulnerability
+  - CynetEDRVulnerabilityFinding
+  - CynetEDRMisconfiguration
+  - CynetEDRMisconfigurationFinding
+  - CynetEDREnumSeverity
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Cynet Hosts, Users, Vulnerabilities and Misconfigurations
+    description: Import Hosts, Users, Vulnerabilities (CVEs), and Misconfigurations from Cynet EDR.
+    return_types:
+      - CynetEDRHost
+      - CynetEDRUser
+      - CynetEDRVulnerability
+      - CynetEDRVulnerabilityFinding
+      - CynetEDRMisconfiguration
+      - CynetEDRMisconfigurationFinding
+
+#   https://help.api.cynet.com/docs/API-V3/qm828iyzpzl1a-authentication
+settings:
+  url:
+    type: string
+    title: Cynet API URL
+    description: >-
+      Tenant-specific Cynet 360 API base URL
+    example: https://YOUR_DOMAIN.api.cynet.com
+
+  access_key:
+    type: string
+    title: Access Key
+    description: API user Access-Key issued in the Cynet Console.
+    format: password
+
+  secret_key:
+    type: string
+    title: Secret Key
+    description: API user Secret-Key issued in the Cynet Console.
+    format: password
+
+  site_guid:
+    type: string
+    title: Site GUID
+    description: >-
+      GUID of the Cynet site to query. See our documentation for more details.
+    example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+
+  client_id:
+    type: string
+    title: Client ID
+    description: >-
+      Cynet site (client) ID sent as the `client_id` header on every API request.
+      See our documentation for more details.
+
+  look_back_days:
+    type: integer
+    title: Look Back Days
+    description: Import hosts and users seen in the last N days.
+    default: 30
+    minimum: 1
+
+# Runtime platform for this connector.
+runtime: py311
+
+# List any Python dependencies available on PyPI that are required by this connector.
+# `codegen` will generate a `requirements.txt` file with pinned versions of these dependencies.
+# python_dependencies:
+#  - another_dependency
+
+# Connectors whose types are referenced by this connector's type YAML files.
+depends-on:
+  - mitre.attack.app
+
+# Categories for this connector in the Extension Library.
+categories:
+  - endpoint_detection_response
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

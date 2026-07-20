@@ -1,0 +1,681 @@
+x-samos-type-name: NutanixPrismCentralVirtualMachine
+x-samos-namespace: nutanix.prism.central
+title: Nutanix Prism Central Virtual Machine
+description: A virtual machine running on Nutanix AHV, managed by Prism Central.
+
+$ref: https://developers.nutanix.com/api-reference?namespace=vmm&version=v4.1&modified=1#/components/schemas/vmm.v4.1.ahv.config.Vm
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - extId
+
+x-samos-table:
+  - name: name
+  - name: powerState
+  - name: numSockets
+  - name: numCoresPerSocket
+  - name: memorySizeBytes
+  - name: machineType
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: host.extId
+  - name: cluster.extId
+  - name: d_subnet_ids
+  - name: d_ips
+  - name: d_mac_addresses
+  - name: powerState
+  - name: machineType
+  - name: numSockets
+  - name: numCoresPerSocket
+  - name: numThreadsPerCore
+  - name: numNumaNodes
+  - name: memorySizeBytes
+  - name: createTime
+  - name: updateTime
+  - name: hardwareClockTimezone
+  - name: protectionType
+  - name: isAgentVm
+  - name: isLiveMigrateCapable
+  - name: isCpuPassthroughEnabled
+  - name: isCpuHotplugEnabled
+  - name: isMemoryOvercommitEnabled
+  - name: isVgaConsoleEnabled
+  - name: isGpuConsoleEnabled
+  - name: isBrandingEnabled
+  - name: generationUuid
+  - name: isCrossClusterMigrationInProgress
+  - name: enabledCpuFeatures
+  - name: biosUuid
+  - name: gpus
+  - name: nics
+  - name: disks
+  - name: guestTools
+  - name: apcConfig
+  - name: availabilityZone
+  - name: bootConfig
+  - name: categories
+  - name: cdRoms
+
+x-samos-derived-properties:
+  d_active:
+    title: Active?
+    type: boolean
+    value: "powerState == 'ON'"
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+    x-samos-hidden: true
+
+  d_cpus:
+    title: CPUs
+    type: integer
+    value: 'numSockets * numCoresPerSocket'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: cpus
+    x-samos-hidden: true
+
+  d_ips:
+    title: IP Addresses
+    type: array
+    items:
+      type: string
+      format: ip-addr
+    value: 'nics[].nicNetworkInfo.ipv4Config.ipAddress.value | [?@ != null]'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  d_mac_addresses:
+    title: MAC Addresses
+    type: array
+    items:
+      type: string
+      format: mac-addr
+    value: 'nics[].nicBackingInfo.macAddress | [?@ != null]'
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+
+  d_subnet_ids:
+    title: Subnets
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: NutanixPrismCentralSubnet
+          key-name: extId
+    value: 'nics[].nicNetworkInfo.subnet.extId | [?@ != null]'
+    syntax: jmespath
+
+  d_hostnames:
+    title: Hostnames
+    type: string
+    value: 'name && contains(name, `.`) && name || null'
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 4
+
+properties:
+  extId:
+    title: External ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  createTime:
+    title: Created
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  updateTime:
+    title: Updated
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  powerState:
+    title: Power State
+    type: string
+
+  machineType:
+    title: Machine Type
+    type: string
+
+  numSockets:
+    title: CPU Sockets
+    type: integer
+
+  numCoresPerSocket:
+    title: Cores per Socket
+    type: integer
+
+  numThreadsPerCore:
+    title: Threads per Core
+    type: integer
+
+  numNumaNodes:
+    title: NUMA Nodes
+    type: integer
+
+  memorySizeBytes:
+    title: Memory (Bytes)
+    type: integer
+
+  enabledCpuFeatures:
+    title: Enabled CPU Features
+    type: array
+    items:
+      type: string
+
+  isVcpuHardPinningEnabled:
+    title: vCPU Hard Pinning?
+    type: boolean
+
+  isCpuPassthroughEnabled:
+    title: CPU Passthrough?
+    type: boolean
+
+  isMemoryOvercommitEnabled:
+    title: Memory Overcommit?
+    type: boolean
+
+  isGpuConsoleEnabled:
+    title: GPU Console?
+    type: boolean
+
+  isCpuHotplugEnabled:
+    title: CPU Hotplug?
+    type: boolean
+
+  isScsiControllerEnabled:
+    title: SCSI Controller?
+    type: boolean
+
+  isVgaConsoleEnabled:
+    title: VGA Console?
+    type: boolean
+
+  isBrandingEnabled:
+    title: Branding?
+    type: boolean
+
+  isAgentVm:
+    title: Agent VM?
+    type: boolean
+
+  isLiveMigrateCapable:
+    title: Live Migrate Capable?
+    type: boolean
+
+  isCrossClusterMigrationInProgress:
+    title: Cross-Cluster Migration in Progress?
+    type: boolean
+
+  generationUuid:
+    title: Generation UUID
+    type: string
+
+  biosUuid:
+    title: BIOS UUID
+    type: string
+
+  hardwareClockTimezone:
+    title: Hardware Clock Timezone
+    type: string
+
+  protectionType:
+    title: Protection Type
+    type: string
+
+  protectionPolicyState:
+    title: Protection Policy State
+    type: object
+    additionalProperties: true
+
+  availabilityZone:
+    title: Availability Zone
+    type: object
+    properties:
+      extId:
+        title: Availability Zone ID
+        type: string
+
+  guestCustomization:
+    title: Guest Customization
+    type: object
+    additionalProperties: true
+
+  vtpmConfig:
+    title: vTPM Config
+    type: object
+    properties:
+      isVtpmEnabled:
+        title: vTPM Enabled?
+        type: boolean
+
+  apcConfig:
+    title: APC Config
+    type: object
+    properties:
+      isApcEnabled:
+        title: APC Enabled?
+        type: boolean
+
+  source:
+    title: Source
+    type: object
+    additionalProperties: true
+
+  host:
+    title: Host
+    type: object
+    x-samos-hidden: true
+    properties:
+      extId:
+        title: Host
+        type: string
+        x-samos-ref-types:
+          - type-name: NutanixPrismCentralHost
+            key-name: extId
+
+  cluster:
+    title: Cluster
+    type: object
+    properties:
+      extId:
+        title: Cluster
+        type: string
+        x-samos-ref-types:
+          - type-name: NutanixPrismCentralCluster
+            key-name: extId
+
+  nics:
+    title: Network Interfaces
+    type: array
+    items:
+      type: object
+      properties:
+        extId:
+          title: NIC ID
+          type: string
+        nicBackingInfo:
+          title: Backing Info
+          type: object
+          properties:
+            $objectType:
+              title: Object Type
+              type: string
+            model:
+              title: Model
+              type: string
+            macAddress:
+              title: MAC Address
+              type: string
+              format: mac-addr
+            isConnected:
+              title: Connected?
+              type: boolean
+            numQueues:
+              title: Queues
+              type: integer
+            sriovProfileReference:
+              title: SR-IOV Profile Reference
+              type: object
+              properties:
+                extId:
+                  title: NIC Profile ID
+                  type: string
+            dpOffloadProfileReference:
+              title: DP Offload Profile Reference
+              type: object
+              properties:
+                extId:
+                  title: NIC Profile ID
+                  type: string
+            hostPcieDeviceReference:
+              title: Host PCIe Device Reference
+              type: object
+              properties:
+                extId:
+                  title: PCIe Device ID
+                  type: string
+        nicNetworkInfo:
+          title: Network Info
+          type: object
+          properties:
+            $objectType:
+              title: Object Type
+              type: string
+            nicType:
+              title: NIC Type
+              type: string
+            networkFunctionChain:
+              title: Network Function Chain
+              type: object
+              properties:
+                extId:
+                  title: Network Function Chain ID
+                  type: string
+            networkFunctionNicType:
+              title: Network Function NIC Type
+              type: string
+            subnet:
+              title: Subnet
+              type: object
+              properties:
+                extId:
+                  title: Subnet ID
+                  type: string
+                  x-samos-ref-types:
+                    - type-name: NutanixPrismCentralSubnet
+                      key-name: extId
+            vlanMode:
+              title: VLAN Mode
+              type: string
+            vlanId:
+              title: VLAN ID
+              type: integer
+            trunkedVlans:
+              title: Trunked VLANs
+              type: array
+              items:
+                type: integer
+            shouldAllowUnknownMacs:
+              title: Allow Unknown MACs?
+              type: boolean
+            ipv4Config:
+              title: IPv4 Config
+              type: object
+              properties:
+                shouldAssignIp:
+                  title: Should Assign IP?
+                  type: boolean
+                ipAddress:
+                  title: IP Address
+                  type: object
+                  properties:
+                    value:
+                      title: IP
+                      type: string
+                      format: ip-addr
+                    prefixLength:
+                      title: Prefix Length
+                      type: integer
+                secondaryIpAddressList:
+                  title: Secondary IPs
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      value:
+                        title: IP
+                        type: string
+                        format: ip-addr
+                      prefixLength:
+                        title: Prefix Length
+                        type: integer
+            ipv4Info:
+              title: IPv4 Info
+              type: object
+              properties:
+                learnedIpAddresses:
+                  title: Learned IP Addresses
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      value:
+                        title: IP
+                        type: string
+                        format: ip-addr
+                      prefixLength:
+                        title: Prefix Length
+                        type: integer
+            ipv6Info:
+              title: IPv6 Info
+              type: object
+              properties:
+                learnedIpv6Addresses:
+                  title: Learned IPv6 Addresses
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      value:
+                        title: IPv6
+                        type: string
+                      prefixLength:
+                        title: Prefix Length
+                        type: integer
+
+  disks:
+    title: Disks
+    type: array
+    items:
+      type: object
+      properties:
+        extId:
+          title: Disk ID
+          type: string
+        diskAddress:
+          title: Disk Address
+          type: object
+          properties:
+            busType:
+              title: Bus Type
+              type: string
+            index:
+              title: Index
+              type: integer
+        backingInfo:
+          title: Backing Info
+          type: object
+          properties:
+            diskSizeBytes:
+              title: Disk Size (Bytes)
+              type: integer
+            diskExtId:
+              title: Disk External ID
+              type: string
+            storageContainer:
+              title: Storage Container
+              type: object
+              properties:
+                extId:
+                  title: Container ID
+                  type: string
+            storageConfig:
+              title: Storage Config
+              type: object
+              properties:
+                isEncryptionEnabled:
+                  title: Encryption Enabled?
+                  type: boolean
+            dataSource:
+              title: Data Source
+              type: object
+              additionalProperties: true
+            isMigrationInProgress:
+              title: Migration In Progress?
+              type: boolean
+
+  guestTools:
+    title: Guest Tools
+    type: object
+    properties:
+      version:
+        title: Version
+        type: string
+      isInstalled:
+        title: Installed?
+        type: boolean
+      isEnabled:
+        title: Enabled?
+        type: boolean
+      isReachable:
+        title: Reachable?
+        type: boolean
+      guestOsVersion:
+        title: Guest OS Version
+        type: string
+      isIsoInserted:
+        title: ISO Inserted?
+        type: boolean
+      capabilities:
+        title: Capabilities
+        type: array
+        items:
+          type: string
+      availableVersion:
+        title: Available Version
+        type: string
+      isVssSnapshotCapable:
+        title: VSS Snapshot Capable?
+        type: boolean
+      isVmMobilityDriversInstalled:
+        title: VM Mobility Drivers Installed?
+        type: boolean
+      isCommunicationActiveOverSerialPort:
+        title: Communication Active Over Serial Port?
+        type: boolean
+
+  categories:
+    title: Categories
+    type: array
+    items:
+      type: object
+      properties:
+        extId:
+          title: Category ID
+          type: string
+
+  gpus:
+    title: GPUs
+    type: array
+    items:
+      type: object
+      properties:
+        extId:
+          title: GPU ID
+          type: string
+        mode:
+          title: Mode
+          type: string
+        vendor:
+          title: Vendor
+          type: string
+        name:
+          title: Name
+          type: string
+
+  bootConfig:
+    title: Boot Config
+    type: object
+    additionalProperties: true
+
+  storageConfig:
+    title: Storage Config
+    type: object
+    additionalProperties: true
+
+  ownershipInfo:
+    title: Ownership Info
+    type: object
+    additionalProperties: true
+
+  project:
+    title: Project
+    type: object
+    additionalProperties: true
+
+  cdRoms:
+    title: CD-ROMs
+    type: array
+    items:
+      type: object
+      properties:
+        extId:
+          title: CD-ROM ID
+          type: string
+        diskAddress:
+          title: Disk Address
+          type: object
+          properties:
+            busType:
+              title: Bus Type
+              type: string
+            index:
+              title: Index
+              type: integer
+        backingInfo:
+          title: Backing Info
+          type: object
+          additionalProperties: true
+
+  serialPorts:
+    title: Serial Ports
+    type: array
+    items:
+      type: object
+      properties:
+        extId:
+          title: Serial Port ID
+          type: string
+        isConnected:
+          title: Connected?
+          type: boolean
+        index:
+          title: Index
+          type: integer
+
+  pcieDevices:
+    title: PCIe Devices
+    type: array
+    items:
+      type: object
+      additionalProperties: true

@@ -9,7 +9,7 @@ description: A software product from SolarWinds IT Asset Management.
 x-samos-extends-types:
   - type-name: Software
 
-$ref: https://api.samanage.com#/components/schemas/Software
+$ref: https://example.samanage.com#/components/schemas/Software
 
 # Key: d_id (string conversion of integer id). Used as the unique identifier for this software.
 x-samos-keys:
@@ -17,7 +17,7 @@ x-samos-keys:
   - id
 
 x-samos-table:
-  - name: name
+  - name: product
   - name: vendor.name
   - name: version
   - name: category.name
@@ -25,7 +25,7 @@ x-samos-table:
   - name: first_detected
 
 x-samos-detail:
-  - name: name
+  - name: product
   - name: vendor.name
   - name: version
   - name: category.name
@@ -62,6 +62,18 @@ x-samos-derived-properties:
       correlation-type: Software
       priority: 3
 
+  d_name:
+    # The software name does not contain the version,
+    # we use the software name and version to create a derived property
+    # for fulfilling the core.named-object.name
+    type: string
+    x-samos-hidden: true
+    syntax: expression
+    value: '{name} {version}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
 properties:
   custom:
     title: Custom
@@ -78,8 +90,8 @@ properties:
     title: Name
     type: string
     x-samos-fulfills:
-      type-name: core.named-object
-      property-name: name
+      type-name: Software
+      property-name: product
 
   manufacturer:
     title: Manufacturer
@@ -96,14 +108,14 @@ properties:
         title: Category ID
         type: integer
       name:
-        title: Category Name
+        title: Category
         type: string
-        x-samos-ref-types:
-          - type-name: EnumSoftwareType
-            key-name: id
-        x-samos-fulfills:
-          type-name: Software
-          property-name: type
+        # x-samos-ref-types:
+        #   - type-name: EnumSoftwareType
+        #     key-name: id
+        # x-samos-fulfills:
+        #   type-name: Software
+        #   property-name: type
 
   vendor:
     title: Vendor

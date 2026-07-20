@@ -1,0 +1,62 @@
+id: veeam.data.platform
+name: Veeam Data Platform (Beta)
+author: Rapid7
+version: 0.2.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+types:
+  - VeeamDataPlatformBackupJob
+  - VeeamDataPlatformJob
+  - VeeamDataPlatformInventory
+  - VeeamDataPlatformManagedServer
+  - VeeamDataPlatformRepository
+  - VeeamDataPlatformRestorePoint
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Veeam Data Platform Assets
+    description: Import backup jobs, job configurations, inventory objects, managed servers,
+      repositories, and restore points from Veeam Backup and Replication
+    return_types:
+      - VeeamDataPlatformBackupJob
+      - VeeamDataPlatformJob
+      - VeeamDataPlatformInventory
+      - VeeamDataPlatformManagedServer
+      - VeeamDataPlatformRepository
+      - VeeamDataPlatformRestorePoint
+
+settings:
+  url:
+    type: string
+    title: API URL
+    description: Base URL of the Veeam Backup & Replication REST API, including port (default port is 9419)
+    example: https://veeam.example.com:9419
+
+  username:
+    type: string
+    title: Username
+    description: Username for a Veeam Backup & Replication account with API access and adequate permissions
+
+  password:
+    type: string
+    title: Password
+    description: Password for the Veeam Backup & Replication account
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity.
+    default: true
+
+runtime: py311
+
+categories:
+  - asset_management
+
+show_orchestrator_ui: true

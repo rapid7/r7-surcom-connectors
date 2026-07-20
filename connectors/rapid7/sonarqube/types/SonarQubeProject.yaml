@@ -8,7 +8,8 @@ x-samos-extends-types:
 
 x-samos-keys:
   - key
-
+required:
+  - key
 x-samos-table:
   - name: name
   - name: organization

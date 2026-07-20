@@ -1,0 +1,108 @@
+x-samos-type-name: AvigilonAltaGroup
+x-samos-namespace: avigilon.alta
+title: Avigilon Alta Access Group
+description: An access group from Avigilon Alta (Openpath) Access. Defines which users can access which sites.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: UserGroup
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_group_id
+  - id
+required:
+  - id
+x-samos-table:
+  - name: name
+  - name: description
+  - name: userCount
+  - name: d_sites
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: userCount
+  - name: d_sites
+  - name: badgeConfig
+  - name: createdAt
+  - name: updatedAt
+
+x-samos-derived-properties:
+  d_group_id:
+    # API returns integer id; unified UserGroup.id is string.
+    title: Group ID
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+
+  d_sites:
+    title: Sites
+    type: array
+    syntax: jmespath
+    value: 'sites[*].id.to_string(@)'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: AvigilonAltaSite
+          key-name: d_site_id
+
+properties:
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: UserGroup.name
+      correlation-type: UserGroup
+      priority: 3
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  userCount:
+    title: User Count
+    type: integer
+  badgeConfig:
+    title: Badge Config
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+      nameConfig:
+        title: Name Config
+        type: object
+  sites:
+    title: Sites
+    type: array
+    items:
+      type: object
+    x-samos-hidden: true
+  createdAt:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+  updatedAt:
+    title: Updated At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen

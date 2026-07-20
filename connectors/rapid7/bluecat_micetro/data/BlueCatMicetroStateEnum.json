@@ -1,0 +1,27 @@
+[
+  {
+    "id": "Free",
+    "value": "Free",
+    "map_to": "OperationalStatus: Planned"
+  },
+  {
+    "id": "Assigned",
+    "value": "Assigned",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "Claimed",
+    "value": "Claimed",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "Pending",
+    "value": "Pending",
+    "map_to": "OperationalStatus: Planned"
+  },
+  {
+    "id": "Held",
+    "value": "Held",
+    "map_to": "OperationalStatus: Non-Operational"
+  }
+]

@@ -1,0 +1,45 @@
+x-samos-type-name: SymmetryDataGuardObjectXref
+x-samos-namespace: symmetry.dataguard
+title: Symmetry DataGuard Object Xref
+description: Cross-reference linking an identity to a classified object.
+type: object
+x-samos-detail-prefer-type-title: true
+x-samos-default-hide-from-graph: true
+x-samos-hidden: true
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: identityUniqueId
+  - name: objectUniqueId
+
+x-samos-detail:
+  - name: identityUniqueId
+  - name: objectUniqueId
+
+x-samos-derived-properties:
+  d_id:
+    type: string
+    x-samos-hidden: true
+    title: ID
+    description: Composite key of identityUniqueId and objectUniqueId.
+    syntax: jmespath
+    value: 'join(`_`, [identityUniqueId, objectUniqueId])'
+    x-samos-immutable: true
+
+properties:
+  identityUniqueId:
+    title: Identity
+    type: string
+    x-samos-ref-types:
+      - type-name: SymmetryDataGuardIdentity
+        key-name: x_identity_id
+
+  objectUniqueId:
+    title: Classified Object
+    type: string
+    description: DataGuard internal ID of the destination data object.
+    example: 'aws.123456789012.s3.my-bucket.path/to/file.txt'
+    x-samos-ref-types:
+      - type-name: SymmetryDataGuardClassifiedObject
+        key-name: x_object_id

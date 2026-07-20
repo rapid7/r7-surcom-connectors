@@ -1,0 +1,65 @@
+id: jfrog.artifactory
+name: JFrog Artifactory
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - JFrogArtifactoryUser
+  - JFrogArtifactoryUserGroup
+  - JFrogArtifactoryProject
+  - JFrogArtifactoryRepository
+  - JFrogArtifactoryEnumEnvironment
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Artifactory Users, Groups, Projects and Repositories
+    description: Import Users, Groups, Projects and Repositories from JFrog Artifactory
+    return_types:
+      - JFrogArtifactoryUser
+      - JFrogArtifactoryUserGroup
+      - JFrogArtifactoryProject
+      - JFrogArtifactoryRepository
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: The root URL of your JFrog Platform instance
+    example: https://example.jfrog.io/
+
+  reference_token:
+    type: string
+    title: Reference Token
+    description: Identity reference token for authenticating with the JFrog Platform APIs
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - application_development
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

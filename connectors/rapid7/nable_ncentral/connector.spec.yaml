@@ -1,0 +1,86 @@
+id: nable.ncentral
+name: N-able N-central
+author: Rapid7
+version: 2.0.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+# Replaces the old nable.ncentral.app connector (SOAP-based, now deprecated)
+
+current_changes:
+  - Migrated the connector from SOAP to REST framework
+  - Add a new JWT Token setting
+
+types:
+  - NableNcentralCustomer
+  - NableNcentralDevice
+  - NcentralCustomer # deprecated here for backward compatibility
+  - NcentralDevice # deprecated here for backward compatibility
+
+functions:
+  - id: test
+    legacy_id: nable.ncentral.test
+
+  - id: import_all
+    legacy_id: nable.ncentral.import.all
+    title: N-able N-central Customers and Devices
+    description: Imports N-able N-central Customers and Devices
+    return_types:
+      - NableNcentralCustomer
+      - NableNcentralDevice
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Server URL
+    description: The URL of your N-able N-central server instance.
+    example: https://ncentral.example.com
+    secret_reference: 'nable.ncentral.url'
+
+  jwt_token:
+    type: string
+    title: JWT Token
+    format: password
+    description: The JSON Web Token generated from an API-only user account in N-central.
+    secret_reference: 'nable.ncentral.jwt_token'
+
+  verify:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+    nullable: false
+    secret_reference: 'nable.ncentral.verify'
+
+  username:
+    type: string
+    title: N-central Username (Deprecated)
+    x-samos-hidden: true
+    description: Deprecated, see documentation for details
+    nullable: true
+    secret_reference: 'nable.ncentral.username'
+
+  password:
+    type: string
+    format: password
+    title: N-central Password (Deprecated)
+    x-samos-hidden: true
+    description: Deprecated, see documentation for details
+    nullable: true
+    secret_reference: 'nable.ncentral.password'
+
+  page_size:
+    type: integer
+    title: Page Size (Deprecated)
+    x-samos-hidden: true
+    description: Deprecated, see documentation for details
+    nullable: true
+    secret_reference: 'nable.ncentral.page_size'
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - asset_management
+
+show_orchestrator_ui: false
