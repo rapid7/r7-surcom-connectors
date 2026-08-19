@@ -14,4 +14,7 @@ info:
     - target:not-deployed
     - strategy:cloud
     - exposure:external-ship
-    
+  x-cortex-owners:
+    - name: rapid7/surface-command-connectors
+      type: group
+      provider: GITHUB
