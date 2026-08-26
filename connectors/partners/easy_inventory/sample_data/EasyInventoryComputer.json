@@ -1,0 +1,164 @@
+[
+  {
+    "id": 1001,
+    "status": 5,
+    "name": "NB-EXAMPLE-001",
+    "idEquipmentClass": 2,
+    "dateOfInclusion": "2025-03-11",
+    "lastInventory": "2026-07-20",
+    "idSite": 3,
+    "idDepartment": 7,
+    "idPerson": 415,
+    "idLogon": 88,
+    "manufacturer": "Example Manufacturer",
+    "model": "Example Notebook 14",
+    "cpu": "Example CPU i7 1.70GHz",
+    "ram": 16.0,
+    "averageRam": 62,
+    "hd": 476.94,
+    "freeHd": 201.35,
+    "hd2": 0.0,
+    "freeHd2": 0.0,
+    "idOs": 12,
+    "host": "nb-example-001",
+    "domain": "example.local",
+    "mac": "00:1A:2B:3C:4D:5E",
+    "tcpIp": "10.20.30.41",
+    "idCompany": 1,
+    "latitude": "-19.9191",
+    "longitute": "-43.9386",
+    "descOs": "Example Windows 11 Pro",
+    "identification": 90211,
+    "idPlatform": 1,
+    "platformDescription": "Windows",
+    "celsius": 54,
+    "health": 97,
+    "health2": 0,
+    "performance": 1,
+    "idGeofence": 2,
+    "idFenceSituation": 2,
+    "assetId": "ASSET-004512",
+    "depreciationM": 60,
+    "depreciationR": 500.0,
+    "depreciationS": 2350.0,
+    "vincPerson": 1,
+    "averageCpu": 23,
+    "antivirusName": "Example Antivirus",
+    "warrantyDate": "2028-03-10",
+    "extendedWarrantyDate": "2029-03-10",
+    "fields": [
+      {
+        "idField": 1,
+        "name": "Cost Center",
+        "value": "CC-1000"
+      }
+    ],
+    "adapters": [
+      {
+        "mac": "00:1A:2B:3C:4D:5E",
+        "name": "Example Gigabit Ethernet",
+        "ip": "10.20.30.41"
+      },
+      {
+        "mac": "00:1A:2B:3C:4D:5F",
+        "name": "Example Wireless Adapter",
+        "ip": "10.20.40.77"
+      }
+    ],
+    "disks": [
+      {
+        "name": "Example NVMe 512G",
+        "type": "SSD",
+        "primary": true,
+        "serie": "EXAMPLESERIAL001",
+        "total": 476.94,
+        "free": 201.35,
+        "celsius": 41,
+        "badBlocks": 0,
+        "seekErrors": 0,
+        "paramOnHours": 8120,
+        "remaining": 94,
+        "health": 97
+      }
+    ],
+    "monitors": [
+      {
+        "type": "LCD",
+        "name": "Example Monitor 24"
+      }
+    ]
+  },
+  {
+    "id": 1002,
+    "status": 5,
+    "name": "DT-EXAMPLE-002",
+    "idEquipmentClass": 1,
+    "dateOfInclusion": "2024-09-02",
+    "lastInventory": "2026-07-19",
+    "idSite": 1,
+    "idDepartment": 4,
+    "idPerson": 208,
+    "idLogon": 51,
+    "manufacturer": "Example Manufacturer",
+    "model": "Example Desktop Mini",
+    "cpu": "Example CPU i5 2.40GHz",
+    "ram": 8.0,
+    "averageRam": 71,
+    "hd": 238.47,
+    "freeHd": 55.12,
+    "hd2": 0.0,
+    "freeHd2": 0.0,
+    "idOs": 20,
+    "host": "dt-example-002",
+    "domain": "example.local",
+    "mac": "00:1A:2B:AA:BB:CC",
+    "tcpIp": "10.20.31.15",
+    "idCompany": 1,
+    "latitude": "-23.5505",
+    "longitute": "-46.6333",
+    "descOs": "Example Linux 22.04 LTS",
+    "identification": 90455,
+    "idPlatform": 2,
+    "platformDescription": "Linux",
+    "celsius": 47,
+    "health": 88,
+    "health2": 0,
+    "performance": 2,
+    "idGeofence": null,
+    "idFenceSituation": null,
+    "assetId": "ASSET-004980",
+    "depreciationM": 60,
+    "depreciationR": 300.0,
+    "depreciationS": 900.0,
+    "vincPerson": 2,
+    "averageCpu": 46,
+    "antivirusName": null,
+    "warrantyDate": "2027-09-01",
+    "extendedWarrantyDate": null,
+    "fields": [],
+    "adapters": [
+      {
+        "mac": "00:1A:2B:AA:BB:CC",
+        "name": "Example Ethernet Controller",
+        "ip": "10.20.31.15"
+      }
+    ],
+    "disks": [
+      {
+        "name": "Example SATA 256G",
+        "type": "SSD",
+        "primary": true,
+        "serie": "EXAMPLESERIAL002",
+        "total": 238.47,
+        "free": 55.12,
+        "celsius": 38,
+        "badBlocks": 0,
+        "seekErrors": 0,
+        "paramOnHours": 15230,
+        "remaining": 81,
+        "health": 88
+      }
+    ],
+    "monitors": []
+  }
+]

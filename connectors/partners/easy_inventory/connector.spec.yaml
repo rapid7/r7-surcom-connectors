@@ -1,0 +1,68 @@
+
+id: easy.inventory
+name: Easy Inventory
+author: community
+version: 0.1.0
+notice: Copyright © 2026 Breno Teodoro. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - EasyInventoryComputer
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Import All
+    description: Import all computers from Easy Inventory
+    return_types:
+      - EasyInventoryComputer
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: URL
+    description: >-
+      Base URL of the Easy Inventory API.
+    example: https://api.easyinventory.com.br
+    default: https://api.easyinventory.com.br
+
+  token:
+    type: string
+    title: API Token
+    description: >-
+      The public token for your Easy Inventory base. In Easy Inventory this is
+      the "Token público", available in your account after activation.
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity.
+    default: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# List any Python dependencies available on PyPI that are required by this connector.
+# `codegen` will generate a `requirements.txt` file with pinned versions of these dependencies.
+# python_dependencies:
+#  - another_dependency
+
+# Categories for this connector in the Extension Library.
+categories:
+  - asset_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false
