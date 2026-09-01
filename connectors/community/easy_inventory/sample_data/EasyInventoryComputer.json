@@ -23,10 +23,10 @@
     "host": "nb-example-001",
     "domain": "example.local",
     "mac": "00:1A:2B:3C:4D:5E",
-    "tcpIp": "10.20.30.41",
+    "tcpIp": "192.0.2.10",
     "idCompany": 1,
-    "latitude": "-19.9191",
-    "longitute": "-43.9386",
+    "latitude": "0.0000",
+    "longitute": "0.0000",
     "descOs": "Example Windows 11 Pro",
     "identification": 90211,
     "idPlatform": 1,
@@ -57,12 +57,12 @@
       {
         "mac": "00:1A:2B:3C:4D:5E",
         "name": "Example Gigabit Ethernet",
-        "ip": "10.20.30.41"
+        "ip": "192.0.2.10"
       },
       {
         "mac": "00:1A:2B:3C:4D:5F",
         "name": "Example Wireless Adapter",
-        "ip": "10.20.40.77"
+        "ip": "192.0.2.11"
       }
     ],
     "disks": [
@@ -112,10 +112,10 @@
     "host": "dt-example-002",
     "domain": "example.local",
     "mac": "00:1A:2B:AA:BB:CC",
-    "tcpIp": "10.20.31.15",
+    "tcpIp": "198.51.100.20",
     "idCompany": 1,
-    "latitude": "-23.5505",
-    "longitute": "-46.6333",
+    "latitude": "0.0000",
+    "longitute": "0.0000",
     "descOs": "Example Linux 22.04 LTS",
     "identification": 90455,
     "idPlatform": 2,
@@ -140,7 +140,7 @@
       {
         "mac": "00:1A:2B:AA:BB:CC",
         "name": "Example Ethernet Controller",
-        "ip": "10.20.31.15"
+        "ip": "198.51.100.20"
       }
     ],
     "disks": [

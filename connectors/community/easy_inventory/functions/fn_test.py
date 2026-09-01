@@ -21,13 +21,18 @@ def test(
         total_pages = client.get_total_pages()
 
     except Exception as err:
-        user_log.error("Failed to connect to Easy Inventory at '%s': %s", url, err)
+        # NOTE: never log or return `err` itself — the Easy Inventory token is
+        # sent as a query string parameter, so exception messages raised by
+        # the HTTP client (e.g. from `raise_for_status()`) can contain the
+        # full request URL, including the token. Only the exception type is
+        # safe to surface.
+        user_log.error("Failed to connect to Easy Inventory at '%s': %s", url, type(err).__name__)
 
         return {
             "status": "failure",
             "message": (
                 f"Could not reach the Easy Inventory API at '{url}'. "
-                f"Check the URL, the API Token and network access. Error: {err}"
+                f"Check the URL, the API Token and network access."
             )
         }
 

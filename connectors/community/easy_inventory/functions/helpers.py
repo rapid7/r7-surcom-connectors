@@ -6,6 +6,8 @@ should be placed here, so that it can be reused by all functions.
 
 from logging import Logger
 
+from requests.exceptions import HTTPError
+
 from r7_surcom_api import HttpSession
 
 from .sc_settings import Settings
@@ -40,14 +42,49 @@ class EasyInventoryClient():
         # Expose the Connector Settings to the client
         self.settings = settings
 
+        url = settings.get("url")
+        token = settings.get("token")
+
+        if not url or not token:
+            raise ValueError(
+                "Both the URL and the API Token settings are required to connect "
+                "to Easy Inventory."
+            )
+
         # Get the URL from the settings and ensure it is properly formatted
-        self.base_url = settings.get("url").strip().rstrip("/")
+        self.base_url = url.strip().rstrip("/")
 
         # Setup a Session using the Surcom HttpSession class
         self.session = HttpSession()
 
-        # Use the value of our `verify_tls` setting to determine if we should verify TLS
-        self.session.verify = settings.get("verify_tls")
+        # Use the value of our `verify_tls` setting to determine if we should verify TLS.
+        # NOTE: `requests` treats any value that is not exactly `True` as "do not
+        # verify", so a missing or None setting would silently disable certificate
+        # validation. Only an explicit False may turn it off.
+        verify_tls = settings.get("verify_tls")
+        self.session.verify = True if verify_tls is None else bool(verify_tls)
+
+    def _redact(
+        self,
+        text: str
+    ) -> str:
+        """
+        Remove the API token from a string so that it can be safely logged.
+
+        Easy Inventory authenticates with a query string parameter, so the token
+        can appear in request URLs, error messages and error response bodies.
+
+        :param text: the text to redact
+        :type text: str
+        :return: the same text, with any occurrence of the token replaced
+        :rtype: str
+        """
+        token = self.settings.get("token")
+
+        if token and text:
+            return text.replace(token, "<REDACTED>")
+
+        return text
 
     def _get(
         self,
@@ -74,7 +111,32 @@ class EasyInventoryClient():
         self.logger.debug("Requesting '%s' with params: %s", url, safe_params)
 
         r = self.session.get(url, params=request_params)
-        r.raise_for_status()
+
+        try:
+            r.raise_for_status()
+
+        except HTTPError as err:
+            # NOTE: this wraps `raise_for_status()` on purpose, and not merely to
+            # re-raise: the token is a query string parameter, so the URL recorded
+            # on the response — and therefore the message of this exception —
+            # contains the secret. Redacting here, at the single point every
+            # request passes through, keeps the token out of the logs of every
+            # caller, including the unattended import.
+            err.response.url = self._redact(r.url)
+            raise HTTPError(self._redact(str(err)), response=err.response) from None
+
+        content_type = r.headers.get("Content-Type", "")
+        if "application/json" not in content_type:
+            # The body of an error page can echo back the request URI, so it is
+            # redacted before being logged.
+            self.logger.error(
+                "Unexpected response from '%s' (Content-Type: '%s'): %s",
+                url, content_type, self._redact(r.text[:500])
+            )
+            raise ValueError(
+                f"Expected a JSON response from Easy Inventory but got "
+                f"Content-Type '{content_type}'. Check the configured URL."
+            )
 
         return r.json()
 

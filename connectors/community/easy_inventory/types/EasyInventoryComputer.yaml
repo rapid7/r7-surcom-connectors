@@ -84,6 +84,10 @@ x-samos-derived-properties:
     x-samos-fulfills:
       type-name: Machine
       property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 3
 
   d_ips:
     type: array
@@ -153,13 +157,13 @@ properties:
     type: string
 
   mac:
+    # NOTE: correlation lives on `d_mac_addresses` instead, which excludes the
+    # all-zero placeholder MAC. Correlating on this raw field directly would
+    # merge unrelated machines whenever Easy Inventory reports the placeholder
+    # as the primary MAC.
     title: MAC Address
     type: string
     format: mac-addr
-    x-samos-correlation:
-      correlation-key: MacAddr.value
-      correlation-type: Machine
-      priority: 3
 
   tcpIp:
     title: IP Address
