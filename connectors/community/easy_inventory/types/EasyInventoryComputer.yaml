@@ -70,6 +70,19 @@ x-samos-derived-properties:
       type-name: Machine
       property-name: hostnames
 
+  d_fqdn:
+    type: string
+    title: FQDN
+    x-samos-hidden: true
+    syntax: jmespath
+    # Only build an FQDN when host AND domain are set; otherwise leave empty
+    # so it never becomes an unqualified-hostname collision.
+    value: "host && domain && join('.', [host, domain])"
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 1
+
   d_mac_addresses:
     # Easy Inventory reports a primary MAC plus one entry per network adapter
     type: array
@@ -128,6 +141,17 @@ x-samos-derived-properties:
       type-name: core.managed.endpoint
       property-name: endpoint_last_seen
 
+  d_active:
+    type: boolean
+    title: Active?
+    x-samos-hidden: true
+    syntax: jmespath
+    # Only mark inactive for values explicitly documented as such.
+    value: "status != `99`"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
 properties:
   id:
     title: Easy Inventory ID
@@ -175,7 +199,7 @@ properties:
     type: string
     x-samos-fulfills:
       type-name: Machine
-      property-name: os_product
+      property-name: operating_system
 
   idOs:
     title: Operating System ID
@@ -200,6 +224,9 @@ properties:
     # manufacturer serial number
     title: Asset Tag
     type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_tag
 
   status:
     title: Status
