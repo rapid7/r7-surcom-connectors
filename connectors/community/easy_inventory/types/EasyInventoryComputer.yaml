@@ -146,8 +146,9 @@ x-samos-derived-properties:
     title: Active?
     x-samos-hidden: true
     syntax: jmespath
-    # Only mark inactive for values explicitly documented as such.
-    value: "status != `99`"
+    # Only mark inactive for values explicitly documented as such:
+    # 12 (Inativo) and 99 (Desativado).
+    value: "status != `99` && status != `12`"
     x-samos-fulfills:
       type-name: core.component
       property-name: active
