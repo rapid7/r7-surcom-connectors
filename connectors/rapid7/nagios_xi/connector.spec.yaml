@@ -1,0 +1,65 @@
+id: nagios.xi
+name: Nagios XI
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - NagiosXiHost
+  - NagiosXiHostGroup
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Nagios XI Hosts and Host Groups
+    description: Import Hosts and Host Groups from Nagios XI
+    return_types:
+      - NagiosXiHost
+      - NagiosXiHostGroup
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: The base URL of your Nagios XI instance.
+    example: https://server.example.com/nagiosxi/
+
+  api_key:
+    type: string
+    title: API Key
+    description: The API key of a Nagios XI user account.
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# List any Python dependencies available on PyPI that are required by this connector.
+# `codegen` will generate a `requirements.txt` file with pinned versions of these dependencies.
+# python_dependencies:
+#  - another_dependency
+
+# Categories for this connector in the Extension Library.
+categories:
+  - asset_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

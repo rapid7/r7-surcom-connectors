@@ -1,0 +1,455 @@
+x-samos-type-name: HalcyonAsset
+x-samos-namespace: halcyon
+title: Halcyon Asset
+description: Endpoint agent asset from the Halcyon anti-ransomware platform.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 5
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: agentVersion
+  - name: operatingSystem
+  - name: policyGroup.name
+  - name: deploymentGroup.name
+  - name: registeredDate
+  - name: heartbeat
+
+x-samos-detail:
+  - name: name
+  - name: agentVersion
+  - name: operatingSystem
+  - name: eppList
+  - name: d_ips
+  - name: macAddresses
+  - name: agent
+  - name: system
+  - name: os
+  - name: osInstall
+  - name: tags
+  - name: tenantId
+  - name: policyGroup.id
+  - name: deploymentGroup.id
+  - name: registeredDate
+  - name: heartbeat
+
+$ref: 'https://api.halcyon.ai#/components/schemas/AssetResponse'
+
+x-samos-derived-properties:
+  d_qualified_hostname:
+    # Populate qualified-hostname only when the name contains a dot (FQDN).
+    x-samos-hidden: true
+    title: Qualified Hostname
+    type: string
+    syntax: jmespath
+    value: 'name && contains(name, `.`) && name || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_unqualified_hostname:
+    # Populate unqualified-hostname only when the name has no dot.
+    x-samos-hidden: true
+    title: Unqualified Hostname
+    type: string
+    syntax: jmespath
+    value: 'name && !contains(name, `.`) && name || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_endpoint_last_seen:
+    # Derived because heartbeat already fulfills core.component:last_seen; needed to also fill endpoint_last_seen.
+    x-samos-hidden: true
+    title: Endpoint Last Seen
+    type: string
+    format: date-time
+    syntax: jmespath
+    value: 'heartbeat'
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+
+  d_endpoint_first_seen:
+    # Derived because registeredDate already fulfills core.component:first_seen; needed to also fill endpoint_first_seen.
+    x-samos-hidden: true
+    title: Endpoint First Seen
+    type: string
+    format: date-time
+    syntax: jmespath
+    value: 'registeredDate'
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_first_seen
+
+  d_ep_active:
+    # Constant true — every asset in the Halcyon API has the agent installed and active.
+    x-samos-hidden: true
+    title: Endpoint Protection Active?
+    type: boolean
+    syntax: jmespath
+    value: '`true`'
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_protection_active
+
+  d_mitigations:
+    # M1040 — behavioral engine blocks live encryption attempts.
+    # M1049 — pre-execution engine blocks known malicious executables (executionGuard: Prevention for 99.98% of assets).
+    # Both apply unconditionally to every asset present in the Halcyon API.
+    x-samos-hidden: true
+    title: Mitigations
+    type: array
+    syntax: jmespath
+    value: '[`M1040`, `M1049`]'
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+  d_ips:
+    # Shape transform: ipAddresses is [{value, ipAddressType}]; extract value strings for Machine:ips.
+    title: IP Addresses
+    type: array
+    syntax: jmespath
+    value: 'ipAddresses[].value'
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  d_hostnames:
+    # Wrap scalar name into array form required for Machine:hostnames.
+    x-samos-hidden: true
+    title: Hostnames
+    type: array
+    syntax: jmespath
+    value: '[name][?@]'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_os_product:
+    # operatingSystem value (e.g. "Microsoft Windows 11 Enterprise") matches os_product semantics.
+    x-samos-hidden: true
+    title: OS Product
+    type: string
+    syntax: jmespath
+    value: 'operatingSystem'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_product
+
+properties:
+  id:
+    title: Asset ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Hostname
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  operatingSystem:
+    title: OS Name
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  agentVersion:
+    title: Agent Version
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+
+  registeredDate:
+    title: Registered On
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  heartbeat:
+    title: Last Heartbeat
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  eppList:
+    title: EPP List
+    type: array
+    description: Other endpoint protection products detected on this asset by Halcyon.
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        lastUpdated:
+          type: string
+          format: date
+
+  deploymentGroup:
+    title: Deployment Group
+    type: object
+    properties:
+      id:
+        title: Deployment Group
+        type: string
+        x-samos-ref-types:
+          - type-name: HalcyonDeploymentGroup
+            key-name: id
+      name:
+        title: Deployment Group Name
+        type: string
+
+  autoArchiveThreshold:
+    title: Auto Archive Threshold
+    type: object
+    properties:
+      value:
+        title: Value
+        type: string
+      source:
+        title: Source
+        type: string
+
+  policyGroup:
+    title: Policy Group
+    type: object
+    properties:
+      id:
+        title: Policy Group
+        type: string
+        x-samos-ref-types:
+          - type-name: HalcyonPolicyGroup
+            key-name: id
+      name:
+        title: Policy Group Name
+        type: string
+      owner:
+        title: Owner
+        type: string
+
+  ipAddresses:
+    title: IP Addresses
+    x-samos-hidden: true
+    type: array
+    items:
+      type: object
+      properties:
+        value:
+          type: string
+        ipAddressType:
+          type: string
+
+  macAddresses:
+    title: MAC Addresses
+    type: array
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 3
+
+  tenantId:
+    title: Tenant
+    type: string
+    x-samos-ref-types:
+      - type-name: HalcyonTenant
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+
+  createdDate:
+    title: Created Date
+    type: string
+    format: date-time
+
+  lastHeartbeatDate:
+    title: Last Heartbeat Date
+    type: string
+    format: date-time
+
+  lastUpdatedDate:
+    title: Last Updated Date
+    type: string
+    format: date-time
+
+  deletedAt:
+    title: Deleted At
+    type: string
+    format: date-time
+    nullable: true
+
+  agent:
+    title: Agent
+    type: object
+    properties:
+      name:
+        title: Agent name
+        type: string
+      version:
+        title: Version
+        type: string
+      lastUpdated:
+        title: Last Updated
+        type: string
+        format: date-time
+      driverVersion:
+        title: Driver version
+        type: string
+
+  system:
+    title: System
+    type: object
+    properties:
+      bootTime:
+        title: Boot time
+        type: string
+        format: date-time
+      manufacturer:
+        title: Manufacturer
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: make
+      model:
+        title: Model
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: model
+      type:
+        title: Type
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_architecture
+      processor:
+        title: Processor
+        type: string
+      biosVersion:
+        title: BIOS version
+        type: string
+      bootDevice:
+        title: Boot device
+        type: string
+      systemLocale:
+        title: System locale
+        type: string
+      inputLocale:
+        title: Input locale
+        type: string
+      timezone:
+        title: Time zone
+        type: string
+      totalPhysicalMemory:
+        title: Total physical memory
+        type: string
+      recordedTime:
+        title: Recorded yime
+        type: string
+        format: date-time
+
+  os:
+    title: OS
+    type: object
+    properties:
+      name:
+        title: OS name
+        type: string
+      version:
+        title: OS version
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_version
+      manufacturer:
+        title: manufacturer
+        type: string
+      configuration:
+        title: Driver version
+        type: string
+      buildType:
+        title: Build type
+        type: string
+      osType:
+        title: OS type
+        type: string
+      osSubtype:
+        title: OS Subtype
+        type: string
+      packageManager:
+        title: Package manager
+        type: string
+
+  osInstall:
+    title: OS install
+    type: object
+    properties:
+      registeredOwner:
+        title: Registered owner
+        type: string
+      registeredOrg:
+        title: Registered org
+        type: string
+      productId:
+        title: product Id
+        type: string
+      installDate:
+        title: Install Date
+        type: string
+        format: date-time
+      domain:
+        title: Registered owner
+        type: string
+      logonServer:
+        title: Registered org
+        type: string
+      hotfixes:
+        title: product Id
+        type: string
+
+  tags:
+    title: Tags
+    type: array
+    items:
+      type: string

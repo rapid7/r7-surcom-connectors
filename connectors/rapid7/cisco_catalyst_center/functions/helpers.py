@@ -26,8 +26,13 @@ ENDPOINTS = {
 # Pagination limits per Cisco docs
 # https://developer.cisco.com/docs/catalyst-center/get-device-list/
 # https://developer.cisco.com/docs/catalyst-center/get-site-v2/
-# https://developer.cisco.com/docs/catalyst-center/get-device-list/
 MAX_PAGE_SIZE = 500
+
+# The /dna/data/api/v1/clients endpoint has a lower effective limit on some
+# Catalyst Center versions. The API spec default is 100; use that to ensure
+# compatibility across deployments.
+# https://developer.cisco.com/docs/catalyst-center/retrieves-the-list-of-clients-while-also-offering-basic-filtering-and-sorting-capabilities/
+CLIENTS_PAGE_SIZE = 100
 
 
 class CiscoCatalystCenterClient:

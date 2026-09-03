@@ -11,6 +11,7 @@ from typing import Any, Optional, TypedDict  # noqa: F401
 
 Settings = TypedDict('Settings', {
     'api_key': str,
+    'compliance_access_key': Optional[str],
     'include_archived_workspaces': bool,
     'lookback_days': int,
 })

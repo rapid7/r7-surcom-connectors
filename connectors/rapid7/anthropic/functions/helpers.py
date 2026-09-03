@@ -14,6 +14,8 @@ USERS_PER_PAGE = 1000
 WORKSPACES_PER_PAGE = 1000
 # https://console.anthropic.com/docs/en/api/admin/workspaces/members/list
 WORKSPACE_MERBERS_PER_PAGE = 1000
+# https://platform.claude.com/docs/en/api/compliance/organizations/list
+COMPLIANCE_PAGE_SIZE = 1000
 
 
 class AnthropicClient:
@@ -287,3 +289,169 @@ class AnthropicClient:
             f"Processed {total_records_processed} total records, "
             f"yielded {unique_actors_yielded} unique actors"
         )
+
+
+class AnthropicComplianceClient:
+    """
+    Client for the Anthropic Compliance API.
+
+    Requires a Compliance Access Key created in claude.ai. Admin API keys are
+    rejected by these endpoints with a 403.
+    https://platform.claude.com/docs/en/manage-claude/compliance-org-data
+    """
+
+    def __init__(
+        self,
+        user_log: Logger,
+        settings: Settings
+    ):
+        self.logger = user_log
+        self.settings = settings
+
+        self.base_url = "https://api.anthropic.com/v1/compliance"
+
+        self.session = HttpSession()
+        self.session.headers.update({
+            "x-api-key": self.settings.get("compliance_access_key"),
+            "anthropic-version": "2023-06-01"
+        })
+
+    def _paginate(self, url: str, params: dict = None):
+        """
+        Yield every record from a Compliance API list endpoint.
+
+        These endpoints paginate with an opaque `next_page` token that is passed
+        back unchanged as the `page` query parameter.
+        """
+        page_token = None
+        total = 0
+
+        while True:
+            request_params = dict(params or {})
+            request_params["limit"] = COMPLIANCE_PAGE_SIZE
+            if page_token:
+                request_params["page"] = page_token
+
+            response = self.session.get(url, params=request_params)
+            response.raise_for_status()
+            data = response.json()
+
+            records = data.get("data", [])
+            if not records:
+                break
+
+            for record in records:
+                total += 1
+                yield record
+
+            if not data.get("has_more", False):
+                break
+
+            page_token = data.get("next_page")
+            if not page_token:
+                break
+
+        self.logger.debug(f"Retrieved {total} records from {url}")
+
+    def test_connection(self):
+        """
+        Verify the Compliance Access Key reaches the endpoints used by the
+        organizations, users, roles, and groups import.
+
+        Returns a list of warnings for endpoints that are unavailable but do not
+        prevent the import from running.
+        """
+        warnings = []
+
+        orgs_url = f"{self.base_url}/organizations"
+        response = self.session.get(orgs_url, params={"limit": 1})
+        response.raise_for_status()
+        organizations = response.json().get("data", [])
+        self.logger.info("Successfully connected to Anthropic Compliance Organizations API")
+
+        groups_url = f"{self.base_url}/groups"
+        response = self.session.get(groups_url, params={"limit": 1})
+        response.raise_for_status()
+        self.logger.info("Successfully connected to Anthropic Compliance Groups API")
+
+        if not organizations:
+            warnings.append(
+                "No linked organizations were returned, so no organization data will be imported"
+            )
+            return warnings
+
+        org_uuid = organizations[0].get("uuid")
+
+        users_url = f"{self.base_url}/organizations/{org_uuid}/users"
+        response = self.session.get(users_url, params={"limit": 1})
+        response.raise_for_status()
+        self.logger.info("Successfully connected to Anthropic Compliance Users API")
+
+        roles_url = f"{self.base_url}/organizations/{org_uuid}/roles"
+        response = self.session.get(roles_url, params={"limit": 1})
+        response.raise_for_status()
+        self.logger.info("Successfully connected to Anthropic Compliance Roles API")
+
+        # The settings endpoint is entitled separately from the rest of the
+        # Compliance API and returns 404 when it is not enabled.
+        if self.get_organization_settings(org_uuid) is None:
+            warnings.append(
+                "Effective organization settings are not available for this parent "
+                "organization, so organizations will be imported without them"
+            )
+
+        return warnings
+
+    def get_organizations(self):
+        """Retrieve all organizations under the parent organization"""
+        self.logger.info("Fetching organizations from the Anthropic Compliance API")
+        yield from self._paginate(f"{self.base_url}/organizations")
+
+    def get_organization_users(self, org_uuid: str):
+        """Retrieve all users for a specific organization"""
+        self.logger.info(f"Fetching users for organization {org_uuid}")
+        yield from self._paginate(f"{self.base_url}/organizations/{org_uuid}/users")
+
+    def get_organization_roles(self, org_uuid: str):
+        """Retrieve all roles defined on a specific organization"""
+        self.logger.info(f"Fetching roles for organization {org_uuid}")
+        yield from self._paginate(f"{self.base_url}/organizations/{org_uuid}/roles")
+
+    def get_role_permissions(self, org_uuid: str, role_id: str) -> list:
+        """Retrieve all permissions granted to a specific role"""
+        url = f"{self.base_url}/organizations/{org_uuid}/roles/{role_id}/permissions"
+        return list(self._paginate(url))
+
+    def get_groups(self):
+        """
+        Retrieve all RBAC and SCIM-provisioned groups.
+
+        Groups are listed at the parent organization level, not per organization.
+        """
+        self.logger.info("Fetching groups from the Anthropic Compliance API")
+        yield from self._paginate(f"{self.base_url}/groups")
+
+    def get_group_members(self, group_id: str) -> list:
+        """Retrieve all members of a specific group"""
+        return list(self._paginate(f"{self.base_url}/groups/{group_id}/members"))
+
+    def get_organization_settings(self, org_uuid: str):
+        """
+        Retrieve the effective settings in force for a specific organization.
+
+        Returns None when the settings endpoint is not enabled for the parent
+        organization. An unknown organization, an organization outside the
+        parent's tree, and a parent organization without access to this endpoint
+        all return the same 404.
+        """
+        url = f"{self.base_url}/organizations/{org_uuid}/settings"
+        response = self.session.get(url)
+
+        if response.status_code == 404:
+            self.logger.debug(
+                f"Effective settings are not available for organization {org_uuid}"
+            )
+            return None
+
+        response.raise_for_status()
+        return response.json()

@@ -8,3 +8,4 @@ This file is generated from the connector.spec.yaml file, using codegen:
 # flake8: noqa
 from .fn_test import test
 from .fn_import_all import import_all
+from .fn_import_compliance import import_compliance

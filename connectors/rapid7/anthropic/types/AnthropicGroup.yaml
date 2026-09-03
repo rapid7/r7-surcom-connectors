@@ -1,0 +1,103 @@
+x-samos-type-name: AnthropicGroup
+x-samos-namespace: anthropic
+title: Anthropic Group
+description: An RBAC or SCIM-provisioned group in an Anthropic parent organization
+
+x-samos-extends-types:
+  - type-name: UserGroup
+    subtype-priority: 2
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: source_type
+  - name: roles
+  - name: x_members
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: source_type
+  - name: roles
+  - name: x_members
+  - name: created_at
+  - name: updated_at
+
+properties:
+  id:
+    title: Id
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  source_type:
+    title: Source Type
+    type: string
+    description: >-
+      Whether the group was created manually in claude.ai or synced from an
+      external identity provider through SCIM
+    enum:
+      - direct
+      - scim
+
+  roles:
+    title: Roles
+    type: array
+    description: IDs of the roles assigned to this group
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: AnthropicRole
+          key-name: id
+
+  created_at:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+
+  updated_at:
+    title: Updated At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+
+  x_members:
+    title: Members
+    type: array
+    description: IDs of the users that are members of this group
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: AnthropicOrganizationUser
+          key-name: id
+        - type-name: AnthropicUser
+          key-name: id

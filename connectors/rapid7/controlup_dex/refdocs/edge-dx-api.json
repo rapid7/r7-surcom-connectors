@@ -1,0 +1,3398 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "ControlUp for Desktops",
+    "description": "This is a working document that details the supported Edge DX API endpoints which can be used by things\n                    such as external applications, scripts, or services. If an endpoint is documented, efforts will be made\n                    to try and prevent breaking changes as the API evolves.",
+    "version": "2.159.0"
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": false,
+    "samples-languages": [
+      "shell",
+      "powershell",
+      "node",
+      "javascript",
+      "python",
+      "c",
+      "clojure",
+      "cplusplus",
+      "csharp",
+      "http",
+      "go",
+      "java",
+      "json",
+      "kotlin",
+      "objectivec",
+      "ocaml",
+      "php",
+      "r",
+      "ruby",
+      "shell",
+      "swift"
+    ]
+  },
+  "servers": [
+    {
+      "url": "https://api.controlup.com/edge/api"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "parameters": {
+      "device-token": {
+        "in": "header",
+        "name": "x-access-token",
+        "description": "A valid device access token.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "FilterField": {
+        "name": "filters[0][field]",
+        "in": "query",
+        "description": "Filters the returned data based on the specified field name. This parameter must be used in combination with `filters[0][type]` and `filters[0][value]` to define a filter condition.\nYou can add multiple filter conditions by changing the integer in the parameter names (for example, `filters[1][field]`).</br></br>\n",
+        "schema": {
+          "type": "string",
+          "example": "_created"
+        }
+      },
+      "FilterType": {
+        "name": "filters[0][type]",
+        "in": "query",
+        "description": "The type of filter used in corresponding filter condition. The type of filter you can use depends on the data type of the field.<br><br>\n`<`, `<=`, `=`, `!=`, `<=`, or `>` are used to filter numbers and dates.<br>\n`boolean` is used to filter boolean fields.<br>\n`like` is used to filter text fields.\n",
+        "schema": {
+          "type": "string",
+          "example": ">=",
+          "enum": ["<", "<=", "=", "!=", ">=", ">", "like", "boolean"]
+        }
+      },
+      "FilterValue": {
+        "name": "filters[0][value]",
+        "in": "query",
+        "description": "The value used in the corresponding filter condition. The value you can use depends on the filter type.<br><br>\nIf you are filtering a date or text field, enter a string. If you are filtering a number field, enter a number. If you are filtering a boolean field, enter a boolean. If you are filtering a text field, you can use * as a wildcard, or begin the string with !! to exclude items that contain the string.\n",
+        "schema": {
+          "oneOf": [
+            {
+              "type": "string",
+              "title": "String"
+            },
+            {
+              "type": "number",
+              "title": "Number"
+            },
+            {
+              "type": "boolean",
+              "title": "Boolean"
+            }
+          ]
+        }
+      },
+      "SorterField": {
+        "name": "sorters[0][field]",
+        "in": "query",
+        "description": "Sorts the returned data based on the specified field name. This parameter must be used in combination with `sorters[0][dir]` to set the sort order.\nYou can sort by more than one field by changing the integer in the parameter names (for example, `sorters[1][field]`). Sorters with a lower integer are applied first.</br></br>\n",
+        "schema": {
+          "type": "string",
+          "example": "_created"
+        }
+      },
+      "SorterDir": {
+        "name": "sorters[0][dir]",
+        "in": "query",
+        "description": "The sort order for the corresponding field. Set to `asc` for ascending, or `desc` for descending.",
+        "schema": {
+          "type": "string",
+          "example": "asc",
+          "enum": ["asc", "desc"]
+        }
+      }
+    },
+    "responses": {
+      "401": {
+        "description": "Invalid or missing API key."
+      },
+      "403": {
+        "description": "API key is expired."
+      },
+      "404": {
+        "description": "Resource not found."
+      },
+      "500": {
+        "description": "Something went wrong at the API service."
+      }
+    },
+    "schemas": {
+      "Alert": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates if the alert is enabled.",
+            "example": true
+          },
+          "platform": {
+            "type": "integer",
+            "format": "int32",
+            "description": "OS platform. This determines which scripts are available to select as a followup action when the alert is triggered. This does not determine which devices can trigger the script. \n* 0 - No platform selected\n* 1 - Windows\n* 2 - macOS\n* 3 - Linux\n* 4 - ChromeOS \n",
+            "example": 1
+          },
+          "servicenow_raise_incident": {
+            "type": "string",
+            "description": "Indicates if the Alert raises a ServiceNow ticket when it activates. \"true\" means that a ticket is raised.",
+            "example": "true"
+          },
+          "servicenow_ticket_type": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Type of ServiceNow ticket.\n* `1` = Incident\n* `2` = Event\n",
+            "example": 1
+          },
+          "servicenow_impact": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Impact level for the ServiceNow ticket.\n* `1` = High\n* `2` = Medium\n* `3` = Low\n",
+            "example": 2
+          },
+          "servicenow_urgency": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Urgency level for the ServiceNow ticket.\n* `1` = High\n* `2` = Medium\n* `3` = Low\n",
+            "example": 2
+          },
+          "servicenow_autoclose_interval": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Auto-close interval for the ServiceNow ticket in seconds.",
+            "example": 300
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the alert.",
+            "example": "My first alert"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the alert.",
+            "example": "Description of my first alert goes here"
+          },
+          "index": {
+            "type": "string",
+            "description": "Index associated with the alert. The alerts conditions (located in `filters) must be based off of fields in the data index.",
+            "example": "device_status"
+          },
+          "filters": {
+            "type": "array",
+            "description": "List of conditions for the alert to activate. Multiple conditions are combined using AND operators.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "description": "Field to filter on.",
+                  "example": "cpuload"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Type of comparison. Note that if you are filtering on a string field, you must use the \"like\" filter type.",
+                  "example": ">",
+                  "enum": ["=", "!=", ">=", ">", "<=", "<", "like"]
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Value to compare against. Numbers can be passed as strings.",
+                  "example": "1"
+                }
+              }
+            }
+          },
+          "results_threshold": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The number of times that the conditions must be met within the time window (`results_threshold_seconds`) for the trigger to activate.",
+            "example": 5
+          },
+          "results_threshold_seconds": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The length of time in seconds that the alert system searches back to check whether the alert's activation conditions were met.",
+            "example": 600
+          },
+          "retrigger_interval": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The minimum duration between subsequent alert activations. If the retrigger interval duration has not passed since the last alert activation, then the alert won't activate even if all conditions are met.",
+            "example": 3600
+          },
+          "severity": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Severity level of the alert.\n* 1 - Informational\n* 2 - Low\n* 3 - Medium\n* 4 - High\n* 5 - Critical\n",
+            "example": 4
+          },
+          "evaluation_mode": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Internal use only.",
+            "example": 1
+          },
+          "webhook_url": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri",
+            "description": "URL for a webhook to be triggered.",
+            "example": "https://your-domain.com/webhook-endpoint"
+          },
+          "script_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "ID of a system script to run on devices that trigger the alert. You can use [GET /scripts](list-all-scripts) to see script IDs.",
+            "example": "fpwG-4oB1426LInH16YF"
+          },
+          "user_script_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "ID of a user script to run on devices that trigger the alert. You can use [GET /scripts](list-all-scripts) to see script IDs.",
+            "example": "fpwG-4oB1426LInH16YF"
+          },
+          "script_arguments": {
+            "type": "string",
+            "nullable": true,
+            "description": "Internal use only."
+          },
+          "survey_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "ID of an on-demand survey to run on devices that trigger the alert. You can use [GET /surveys](get-surveys) to see survey IDs.",
+            "example": "fpwG-4oB1426LInH16YF"
+          },
+          "email_addresses": {
+            "type": "string",
+            "description": "A semicolon-separated list of email addresses to receive an email when the alert triggers.",
+            "example": "firstemail@gmail.com;secondemail@gmail.com"
+          }
+        }
+      },
+      "DataIndexContents": {
+        "type": "object",
+        "properties": {
+          "rows": {
+            "description": "An array of the rows (documents) in the data index. Each entry in the array is a different document. The data in each document depends on the index being retrieved.",
+            "type": "array",
+            "example": [
+              {
+                "_id": "lchs9wH4h2EKvgTVv8rd",
+                "_created": "2022-01-03T16:47:53.391Z",
+                "favourite_website": "www.controlup.com",
+                "phone_type": "iPhone 3",
+                "name": "John Doe"
+              }
+            ]
+          },
+          "rows_available": {
+            "description": "The total number of rows that are stored in the data index.",
+            "type": "integer",
+            "example": 200
+          },
+          "page_size": {
+            "description": "The number of rows that are able to be displayed per page of results.",
+            "type": "integer",
+            "example": 100
+          },
+          "aggregations": {
+            "description": "Placeholder",
+            "type": "array"
+          },
+          "start_row": {
+            "description": "The first row that can be returned on the current page.",
+            "type": "integer",
+            "example": 1
+          },
+          "end_row": {
+            "description": "The last row that can be returned on the current page.",
+            "type": "integer",
+            "example": 100
+          },
+          "mappings": {
+            "description": "Information about the fields (columns) in the index. Each entry in the array represents a different field.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IndexMappings"
+            }
+          }
+        }
+      },
+      "CustomReportDetails": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "description": "ID of the custom report.",
+            "type": "string",
+            "example": "ByRWs4IBOEdS79OieyLo"
+          },
+          "_created": {
+            "description": "The UTC date and time that the custom report was created.",
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-08-18T23:42:45.544Z"
+          },
+          "_updated": {
+            "description": "The UTC date and time that the custom report was last updated.",
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-08-18T23:42:45.544Z"
+          },
+          "_associated_id": {
+            "description": "ID of the user who created the custom report.",
+            "type": "string",
+            "example": "lJTSkoIOBFdS691iFJzH"
+          },
+          "index": {
+            "description": "The name of the index that contains the data for the custom report.",
+            "type": "string",
+            "example": "activities"
+          },
+          "name": {
+            "description": "The name of the custom report.",
+            "type": "string",
+            "example": "sample-report-name"
+          },
+          "is_public": {
+            "description": "If true, the custom report is available to all users in your organization. If false, it is only available to the user who created it.",
+            "type": "boolean",
+            "example": true
+          },
+          "config_data": {
+            "description": "Placeholder.",
+            "type": "string"
+          }
+        }
+      },
+      "IndexMappings": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "string"
+          },
+          "name": {
+            "description": "The name of the field.",
+            "type": "string",
+            "example": "_created"
+          },
+          "type": {
+            "description": "The data type of the field.",
+            "type": "string"
+          }
+        }
+      },
+      "UIState": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "description": "ID of the UI state.",
+            "type": "string",
+            "readOnly": true,
+            "example": "LZcYJosBKNNv2TxTcbgz"
+          },
+          "_created": {
+            "description": "The UTC date and time that the UI state was created.",
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "example": "2023-10-13T05:40:12.146Z"
+          },
+          "_updated": {
+            "description": "The UTC date and time that the UI state was last updated.",
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "example": "2023-10-13T05:40:12.146Z"
+          },
+          "owner": {
+            "description": "ID of the user who created the UI state (owner of it).",
+            "type": "string",
+            "readOnly": true,
+            "example": "mCRoAIsB0UdOF0PGdEWa"
+          },
+          "key": {
+            "description": "The key of the UI state. It can be anything really, but it's usually the name of the front-end page for which the state is for.",
+            "type": "string",
+            "readOnly": true,
+            "example": "devices"
+          },
+          "type": {
+            "description": "The type of the UI state. `presets` is currently the only supported UI state type.",
+            "type": "string",
+            "enum": ["presets"],
+            "readOnly": true,
+            "example": "presets"
+          },
+          "name": {
+            "description": "The name of the UI state.",
+            "type": "string",
+            "readOnly": false,
+            "example": "Active Devices"
+          },
+          "accessible_by": {
+            "description": "IDs of the users who have access to the UI state. An empty array means that only the owner can access the state. [\"\"] means that all users who can access UI states can access the state.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "readOnly": false,
+            "example": [""]
+          },
+          "data": {
+            "description": "The UI state data. It can be any object that front-end wants to store.",
+            "type": "object",
+            "additionalProperties": true,
+            "readOnly": false,
+            "example": {
+              "filters": [
+                {
+                  "field": "field2",
+                  "value": "33",
+                  "operator": "<"
+                }
+              ],
+              "sorters": [
+                {
+                  "field2": "desc"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "runcmd-multidevice": {
+        "title": "Run command as System/Root",
+        "type": "object",
+        "properties": {
+          "action_data": {
+            "description": "Details about the action to perform.",
+            "properties": {
+              "type": {
+                "description": "The type of action to perform. To run a command as System/Root, enter `DEV_RUNCMD`.",
+                "type": "string",
+                "enum": ["DEV_RUNCMD"]
+              },
+              "data": {
+                "description": "Enter the command to run.",
+                "type": "string",
+                "example": "whoami"
+              }
+            }
+          },
+          "device_ids": {
+            "$ref": "#/components/schemas/deviceIds"
+          }
+        }
+      },
+      "runcmduser-multidevice": {
+        "title": "Run command as user",
+        "type": "object",
+        "properties": {
+          "action_data": {
+            "description": "Details about the action to perform.",
+            "type": "object",
+            "properties": {
+              "type": {
+                "description": "The type of action to perform. To run a command as a user session, enter `DEV_RUNCMD_USER`. Running a user command is not available on Linux or ChromeOS devices.",
+                "type": "string",
+                "enum": ["DEV_RUNCMD_USER"]
+              },
+              "data": {
+                "type": "string",
+                "description": "A JSON-formatted string containing the following information (see sample request payload):\n\n  `command_line`: The command to run.\n  `show_window`: Sets whether to display a window on the device. For example, if you run \"notepad.exe\" with show_window=true, then notepad\n  will open in a window. If you run \"notepad.exe\" with show_window=false, then notepad will run in the background without displaying a window.\n  `session_id`: If device_ids contains only a single device, enter the ID of the session to run the command. Otherwise, ignore this parameter.\n  The \"active_users\" field in the \"_devices\" data index contains a list of active users and their session IDs. See [GET /data/{index_name}](get-data-index) for details.\n  `all_users`: If device_ids contains multiple devices, set to true. Otherwise, ignore this parameter.\n",
+                "example": "{\"all_users\":true,\"command_line\":\"whoami\",\"show_window\":false}"
+              }
+            }
+          },
+          "device_ids": {
+            "$ref": "#/components/schemas/deviceIds"
+          }
+        }
+      },
+      "sendmessageallusers-multidevice": {
+        "title": "Send message to all users",
+        "type": "object",
+        "properties": {
+          "action_data": {
+            "description": "Details about the action to perform.",
+            "type": "object",
+            "properties": {
+              "type": {
+                "description": "The type of action to perform. To send a message to all users on all selected devices, enter `DEV_CONSOLEMSG`.",
+                "type": "string",
+                "enum": ["DEV_CONSOLEMSG"]
+              },
+              "data": {
+                "description": "The message to send.",
+                "type": "string",
+                "example": "Hello! This is a test message."
+              }
+            }
+          },
+          "device_ids": {
+            "$ref": "#/components/schemas/deviceIds"
+          }
+        }
+      },
+      "sendmessagesingleuser-multidevice": {
+        "title": "Send message to a single user",
+        "type": "object",
+        "properties": {
+          "action_data": {
+            "description": "Details about the action to perform.",
+            "type": "object",
+            "properties": {
+              "type": {
+                "description": "The type of action to perform. To send a message to a single user on the device, enter `DEV_USERMSG`. This option is available only if `device_ids` contains a single device ID.",
+                "type": "string",
+                "enum": ["DEV_USERMSG"]
+              },
+              "data": {
+                "description": "A JSON-formatted string containing the following information (see sample request payload):\n\n  `session_id`: ID of the user session. The \"active_users\" field in the \"_devices\" data index contains a list of active users and their session IDs. See [GET /data/{index_name}](get-data-index) for details.\n  `message_text`: The message to send.\n",
+                "example": "{\"session_id\":\"1\",\"message_text\":\"Hello! This is a test message.\"}",
+                "type": "string"
+              }
+            }
+          },
+          "device_ids": {
+            "$ref": "#/components/schemas/deviceIds"
+          }
+        }
+      },
+      "runscript-multidevice": {
+        "title": "Run script",
+        "type": "object",
+        "properties": {
+          "action_data": {
+            "description": "Details about the action to perform.",
+            "type": "object",
+            "properties": {
+              "type": {
+                "description": "The type of action to perform. To run a script, enter `RUN_SCRIPT_V2`.",
+                "type": "string",
+                "enum": ["RUN_SCRIPT_V2"]
+              },
+              "data": {
+                "description": "A JSON-formatted string containing the following information (see sample request payload):\n\n  `script_id`: The ID of the script to run. You can use [GET /scripts](list-all-scripts) to get script IDs. Note that the type of script (user vs. system) determines how you can set the rest of the parameters below.\n  `run_as_user`: To run a user script as a single user on a single device, set to true. Otherwise, set to false.\n  `run_all_users`: To run a user script as all users on all specified devices, set to true. Otherwise, set to false.\n  `run_as_system`: To run a system script on all specified devices, set to true. Otherwise, set to false.\n  `session_id`: If you set run_as_user to true, enter the ID of the user session to run the script. If you set run_all_users to true, enter 0. If you set run_as_system to true, set to -1.\n  The \"active_users\" field in the \"_devices\" data index contains a list of active users and their session IDs. See [GET /data/{index_name}](get-data-index) for details.\n",
+                "type": "string",
+                "example": "{\"script_id\": \"GtajEowBeWR8QD22lr98C\",\"run_as_user\": false,\"session_id\": -1,\"run_all_users\": false,\"run_as_system\": true}"
+              }
+            }
+          },
+          "device_ids": {
+            "$ref": "#/components/schemas/deviceIds"
+          }
+        }
+      },
+      "runscript-singledevice": {
+        "title": "Run script",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "The type of action to perform. To run a script, enter `RUN_SCRIPT_V2`.",
+            "type": "string",
+            "enum": ["RUN_SCRIPT_V2"]
+          },
+          "data": {
+            "description": "A JSON-formatted string containing the following information (see sample request payload):\n\n  `script_id`: The ID of the script to run. You can use [GET /scripts](list-all-scripts) to get script IDs. Note that the type of script (user vs. system) determines how you can set the rest of the parameters below.\n  `run_as_user`: To run a user script as a single user, set to true. Otherwise, set to false.\n  `run_all_users`: To run a user script as all users, set to true. Otherwise, set to false.\n  `run_as_system`: To run a system script, set to true. Otherwise, set to false.\n  `session_id`: If you set run_as_user to true, enter the ID of the user session to run the script. If you set run_all_users to true, enter 0. If you set run_as_system to true, set to -1.\n  The \"active_users\" field in the \"_devices\" data index contains a list of active users and their session IDs. See [GET /data/{index_name}](get-data-index) for details.\n",
+            "type": "string",
+            "example": "{\"script_id\": \"GtajEowBeWR8QD22lr98C\",\"run_as_user\": false,\"session_id\": -1,\"run_all_users\": false,\"run_as_system\": true}"
+          }
+        }
+      },
+      "runcmd-singledevice": {
+        "title": "Run command as System/Root",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "The type of action to perform. To run a command as System/Root, enter `DEV_RUNCMD`.",
+            "type": "string",
+            "enum": ["DEV_RUNCMD"]
+          },
+          "data": {
+            "description": "The command to run.",
+            "type": "string",
+            "example": "whoami"
+          }
+        }
+      },
+      "runcmduser-singledevice": {
+        "title": "Run command as user",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "The type of action to perform. To run a command as a user session, enter `DEV_RUNCMD_USER`. Running a user command is not available on Linux or ChromeOS devices.",
+            "type": "string",
+            "enum": ["DEV_RUNCMD_USER"]
+          },
+          "data": {
+            "type": "string",
+            "description": "A JSON-formatted string containing the following information (see sample request payload):\n\n    `session_id`: ID of the user session. The \"active_users\" field in the \"_devices\" data index contains a list of active users and their session IDs. See [GET /data/{index_name}](get-data-index) for details.\n    `command_line`: The command to run.\n    `show_window`: Sets whether to display a window on the device. For example, if you run \"notepad.exe\" with show_window=true, then notepad\n    will open in a window. If you run \"notepad.exe\" with show_window=false, then notepad will run in the background without displaying a window.\n",
+            "example": "{\"session_id\":\"1\",\"command_line\":\"whoami\",\"show_window\":false}"
+          }
+        }
+      },
+      "sendmessageallusers-singledevice": {
+        "title": "Send message to all users",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "The type of action to run. To send a message to all users on the device, enter `DEV_CONSOLEMSG`.",
+            "type": "string",
+            "enum": ["DEV_CONSOLEMSG"]
+          },
+          "data": {
+            "description": "The message to send.",
+            "type": "string",
+            "example": "Hello! This is a test message."
+          }
+        }
+      },
+      "sendmessagesingleuser-singledevice": {
+        "title": "Send message to a single user",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "The type of action to run. To send a message to a single user on the device, enter `DEV_USERMSG`.",
+            "type": "string",
+            "enum": ["DEV_USERMSG"]
+          },
+          "data": {
+            "description": "A JSON-formatted string containing the following information (see sample request payload):\n\n  `session_id`: ID of the user session. The \"active_users\" field in the \"_devices\" data index contains a list of active users and their session IDs. See [GET /data/{index_name}](get-data-index) for details.\n  `message_text`: The message to send.\n",
+            "example": "{\"session_id\":\"1\",\"message_text\":\"Test message\"}",
+            "type": "string"
+          }
+        }
+      },
+      "logoffuser": {
+        "title": "Logoff user",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "The type of action to run. To logoff a user, enter `DEV_LOGOFF_USER`.",
+            "type": "string",
+            "enum": ["DEV_LOGOFF_USER"]
+          },
+          "data": {
+            "type": "string",
+            "description": "A JSON-formatted string containing the following information (see sample request payload):\n\n  `session_id`: ID of the user session. The \"active_users\" field in the \"_devices\" data index contains a list of active users and their session IDs. See [GET /data/{index_name}](get-data-index) for details.\n",
+            "example": "{\"session_id\":\"1\"}"
+          }
+        }
+      },
+      "disconnectuser": {
+        "title": "Disconnect user",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "The type of action to run. To disconnect a user, enter `DEV_DISCONNECT_USER`.",
+            "type": "string",
+            "enum": ["DEV_DISCONNECT_USER"]
+          },
+          "data": {
+            "type": "string",
+            "description": "A JSON-formatted string containing the following information (see sample request payload).\n\n  `session_id`: ID of the user session. The \"active_users\" field in the \"_devices\" data index contains a list of active users and their session IDs. See [GET /data/{index_name}](get-data-index) for details.\n",
+            "example": "{\"session_id\":\"1\"}"
+          }
+        }
+      },
+      "reboot": {
+        "title": "Reboot device",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "The type of action to run. To reboot the device, enter `DEV_REBOOT`.",
+            "type": "string",
+            "enum": ["DEV_REBOOT"]
+          }
+        }
+      },
+      "termiateprocess": {
+        "title": "Terminate process",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "The type of action to run. To terminate a process, enter `PROC_STOP`.",
+            "type": "string",
+            "enum": ["PROC_STOP"]
+          },
+          "data": {
+            "description": "The process identifier (PID) of the process to terminate.",
+            "type": "integer",
+            "format": "int64",
+            "example": 18740
+          }
+        }
+      },
+      "deviceIds": {
+        "type": "array",
+        "description": "An array of device IDs on which to perform the action. You can use [GET /devices](list-devices) to get device IDs.",
+        "items": {
+          "type": "string"
+        },
+        "example": ["rTIBRoIBOFdS29Oi1ATq", "b47LRkQIB8BdS21Oi1TYh"]
+      },
+      "Event": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the event."
+          },
+          "_created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of when the event was uploaded in the database."
+          },
+          "_updated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of when the event was last updated."
+          },
+          "created_local": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Local timestamp of when the event occured. For DEVICE events, this can be different than the `_created` time."
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the event."
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of event.",
+            "enum": ["ALERT", "DEVICE", "SECURITY", "SYSTEM"]
+          },
+          "action_type": {
+            "type": "string",
+            "nullable": true,
+            "description": "Whether device actions were performed manually by a user or automated by an alert.",
+            "enum": ["MANUAL", "AUTOMATED"]
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the event."
+          },
+          "severity": {
+            "type": "integer",
+            "description": "Severity level of the event."
+          },
+          "meta": {
+            "type": "string",
+            "description": "Additional metadata for DEVICE events."
+          },
+          "local_id": {
+            "type": "string",
+            "description": "Local identifier for DEVICE events."
+          },
+          "associated_id": {
+            "type": "string",
+            "description": "For events associated with a managed device, the device ID."
+          },
+          "associated_name": {
+            "type": "string",
+            "description": "For events associated with a managed device, the name of the device."
+          },
+          "action_name": {
+            "type": "string",
+            "description": "For actions performed from ControlUp, this is the name of the action."
+          },
+          "console_user_upn": {
+            "type": "string",
+            "nullable": true,
+            "description": "User Principal Name of the console user involved (if applicable)."
+          },
+          "alert_id": {
+            "type": "string",
+            "description": "ID of the alert that triggered the event. Returned only for alerts."
+          }
+        }
+      },
+      "script": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the script.",
+            "example": "EDqnXpcBOClmoe-Y2C1S"
+          },
+          "_created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the script was created.",
+            "example": "2025-06-11T11:02:27.665Z"
+          },
+          "_updated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the script was last updated.",
+            "example": "2025-06-11T11:26:24.384Z"
+          },
+          "version": {
+            "type": "integer",
+            "description": "Version number of the script. The version increases by 1 each time the script is updated.",
+            "example": 38
+          },
+          "hash": {
+            "type": "string",
+            "example": "38e682fc611d693eac6160d20a4a10cc390c7599"
+          },
+          "hash_256": {
+            "type": "string",
+            "example": "63908c842a5191edc12d15631fcffa00e32f9864594db929728c78088693622d"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates if the script is enabled.",
+            "example": false
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the script.",
+            "example": "tim script"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "Description of the script.",
+            "example": null
+          },
+          "level": {
+            "type": "string",
+            "description": "The permission group required to run the script. `pr_run_level_0_script` is for 'Ungrouped' scripts.",
+            "enum": [
+              "pr_run_level_0_script",
+              "pr_run_level_1_script",
+              "pr_run_level_2_script",
+              "pr_run_level_3_script",
+              "pr_run_level_4_script",
+              "pr_run_level_5_script"
+            ],
+            "example": "pr_run_level_1_script"
+          },
+          "cu_product": {
+            "type": "integer",
+            "description": "The ControlUp product that uses the script:\n* ControlUp for Desktops = 1\n* Secure DX = 2\n",
+            "example": 1
+          },
+          "language": {
+            "type": "integer",
+            "description": "* PowerShell = 1\n* VBScript (WSH) = 2\n* JScript (WSH) = 3\n* Python = 4\n* Bash = 5\n* Swift = 6\n* Command Script (cmd) = 7\n* Shell Script (sh) = 8\n* Python 3 = 9\n* Z Shell = 10\n",
+            "example": 10
+          },
+          "platform": {
+            "type": "integer",
+            "description": "The OS platform for the script.\n* Microsoft Windows = 1\n* Apple macOS = 2\n* Linux = 3\n",
+            "example": 2
+          },
+          "trigger": {
+            "type": "integer",
+            "description": "* Custom Action - System = 9999\n* Custom Action - User = 9998\n* Disabled = 0\n\nSystem Triggers:\n* Short interval timer = 1\n* Long interval timer = 2\n* Once per day = 101\n* SIP service start = 201\n* SIP service stop = 202\n* Network change = 301\n* Process started = 401 (the name of the process is in the `trigger_meta` field)\n* Logon complete = 501\n* Logon - explorer started = 502\n* Logon - new session (pre-shell) = 503\n* Logoff = 601\n* Session lock = 701\n* Session unlock = 702\n* Session disconnect = 801\n* Session reconnect = 802\n\nUser Triggers:\n* Process started = 1401 (the name of the process is in the `trigger_meta` field)\n* Logon complete = 1501\n* Logon - explorer started = 1502\n* Logon - new session (pre-shell) = 1503\n* Logoff = 1601\n* Session lock = 1701\n* Session unlock = 1702\n* Session disconnect = 1801\n* Session reconnect = 1802\n",
+            "example": 0
+          },
+          "trigger_meta": {
+            "type": "object",
+            "nullable": true,
+            "description": "Metadata related to the script trigger.",
+            "example": null
+          },
+          "timeout": {
+            "type": "integer",
+            "description": "Timeout for the script execution in milliseconds.",
+            "example": 60000
+          },
+          "run_online_only": {
+            "type": "boolean",
+            "description": "Indicates if the script runs only when online.",
+            "example": false
+          },
+          "run_idle_only": {
+            "type": "boolean",
+            "description": "Indicates if the script runs only when idle.",
+            "example": false
+          },
+          "sends_data": {
+            "type": "boolean",
+            "description": "Indicates if the script sends data.",
+            "example": false
+          },
+          "data_index": {
+            "type": "string",
+            "nullable": true,
+            "description": "If `sends_data` is enabled, this is the name of the data index to write to. This can't be a built-in data index.",
+            "example": null
+          },
+          "overwrite_existing_data": {
+            "type": "boolean",
+            "description": "If `sends_data` is enabled, this determines whether data for a device is overwritten.",
+            "example": false
+          },
+          "builtin_script": {
+            "type": "boolean",
+            "description": "Indicates if the script is a built-in script.",
+            "example": false
+          }
+        }
+      },
+      "SurveyResult": {
+        "type": "object",
+        "properties": {
+          "links": {
+            "type": "object",
+            "properties": {
+              "survey": {
+                "type": "string",
+                "description": "Link to the survey."
+              },
+              "survey-results": {
+                "type": "string",
+                "description": "Link to the survey results"
+              }
+            }
+          },
+          "id": {
+            "type": "string",
+            "description": "ID of the result."
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the record was created. This isn't necessarily the time that the survey was completed because there might have been a delay in sending the survey data to the server."
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the record was last updated. This isn't relevant for survey results."
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of survey result. `Visit` means that the survey was opened. `Start` means that the survey was started. `Result` means that the survey was completed."
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "For internal use only."
+          },
+          "survey_id": {
+            "type": "string",
+            "description": "Survey ID."
+          },
+          "survey_dates_type": {
+            "type": "string",
+            "description": "Whether the survey activates according to each device's local time zone (`Local`) or according to UTC (`UTC`). This is relevant only if the survey type is Single or Recurring."
+          },
+          "category": {
+            "type": "string",
+            "description": "Survey template category."
+          },
+          "instance_id": {
+            "type": "string",
+            "description": "For recurring surveys, this is the date and time of the survey instance."
+          },
+          "device_tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tags of the device used to access the survey. Returned only for identified surveys."
+          },
+          "device_groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Group of the device used to access the survey. Returned only for identified surveys."
+          },
+          "device_ds_groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "AD groups of the device used to complete the survey. Returned only for identified surveys"
+          },
+          "user_ds_groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The survey responder's AD groups. Returned only for identified surveys."
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "For survey completions (type=Result), this is the time when the survey was started."
+          },
+          "completed_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "For survey completions (type=Result), this is the time when the survey was completed."
+          },
+          "time_taken": {
+            "type": "integer",
+            "description": "The time taken to complete the survey in milliseconds. Returned only for survey completions."
+          },
+          "answers": {
+            "type": "array",
+            "description": "Answers to the questions in the survey. Returned only if the `include_answers` parameter is set to `true`. Note that you can't query the endpoint based on the answers.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "The type of question. This can be `Free Text`, `Single Selection`, `Multiple Selection`, or `Net Promoter Score`."
+                },
+                "question_id": {
+                  "type": "string",
+                  "format": "uuid",
+                  "description": "Question ID."
+                },
+                "time_taken": {
+                  "type": "integer",
+                  "description": "Time taken to answer the question in milliseconds."
+                },
+                "selection": {
+                  "type": "string",
+                  "description": "For single selection, multiple selection, or net promoter score questions, this is the ID or IDs of the selected answers. To see which answers correspond to each ID, you can use GET [/user-sentiment/surveys](get-survey)."
+                },
+                "score": {
+                  "type": "integer",
+                  "description": "For net promoter score questions, this is the score of the option selected. Ranges from 1 to 5."
+                },
+                "is_global": {
+                  "type": "boolean",
+                  "description": "For net promoter score questions, whether the result from this question contributes to the overall net promoter score for the survey."
+                },
+                "text": {
+                  "type": "string",
+                  "description": "For free text questions, this is the user's response to the question."
+                }
+              }
+            }
+          },
+          "score": {
+            "type": "number",
+            "description": "For survey completions (type=Result), the average this is the average score of all Net Promoter Score questions with the Global Net Promoter Score option enabled."
+          },
+          "score_raw": {
+            "type": "number",
+            "description": "For survey completions (type=Result), the average this is the average score of all Net Promoter Score questions with the Global Net Promoter Score option enabled."
+          }
+        }
+      },
+      "SurveyResultAnswers": {
+        "type": "object",
+        "properties": {
+          "links": {
+            "type": "object",
+            "properties": {
+              "survey": {
+                "type": "string",
+                "format": "uri",
+                "description": "Link to the survey."
+              },
+              "survey-results": {
+                "type": "string",
+                "format": "uri",
+                "description": "Link to the survey results."
+              }
+            }
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the record was created. This isn't necessarily the time that the survey was completed because there might have been a delay in sending the survey data to the server."
+          },
+          "updated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the record was last updated. This isn't relevant for survey answers."
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "For internal use only."
+          },
+          "survey_id": {
+            "type": "string",
+            "description": "Survey ID."
+          },
+          "survey_version": {
+            "type": "string",
+            "description": "The version of the Employee Sentiment feature for the survey. For surveys created after April 2024, this is always version 2."
+          },
+          "survey_type": {
+            "type": "string",
+            "description": "Survey type. This can be `Single`, `Recurring`, or `Custom Action`."
+          },
+          "survey_start_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The start date of the survey."
+          },
+          "survey_dates_type": {
+            "type": "string",
+            "description": "Whether the survey activates according to each device's local time zone (`Local`) or according to UTC (`UTC`). This is relevant only if the survey type is Single or Recurring."
+          },
+          "is_identified": {
+            "type": "boolean",
+            "description": "Indicates if the surveys responses are identified (non-anonymous)."
+          },
+          "category": {
+            "type": "string",
+            "description": "Survey template category."
+          },
+          "instance_id": {
+            "type": "string",
+            "nullable": true,
+            "description": "For recurring surveys, this is the date and time of the survey instance."
+          },
+          "result_id": {
+            "type": "string",
+            "description": "Result ID. All answers to a survey from a unique user and device have the same result ID."
+          },
+          "device_id": {
+            "type": "string",
+            "description": "ID of the device used to complete the survey. Returned only for identified surveys."
+          },
+          "device_name": {
+            "type": "string",
+            "description": "Name of the device used to complete the survey. Returned only for identified surveys."
+          },
+          "device_tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tags of the device used to complete the survey. Returned only for identified surveys."
+          },
+          "device_groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Group of the device used to complete the survey. Returned only for identified surveys."
+          },
+          "device_ds_groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "AD groups of the device used to complete the survey. Returned only for identified surveys."
+          },
+          "upn": {
+            "type": "string",
+            "description": "The survey responder's UPN. Returned only for identified surveys."
+          },
+          "username": {
+            "type": "string",
+            "description": "The survey responder's username."
+          },
+          "user": {
+            "type": "string",
+            "description": "For internal use only."
+          },
+          "user_ds_groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The survey responder's AD groups. Returned only for identified surveys."
+          },
+          "result_started_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the user started the survey."
+          },
+          "result_completed_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the user completed the survey."
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of question. This can be `Free Text`, `Single Selection`, `Multiple Selection`, or `Net Promoter Score`."
+          },
+          "question_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Question ID. You can use this if you want to find all answers from all users to a specific question. To see more details about the question, you can use GET [/user-sentiment/surveys](get-survey)."
+          },
+          "time_taken": {
+            "type": "integer",
+            "description": "Time taken to answer the question in milliseconds."
+          },
+          "selection": {
+            "type": "string",
+            "format": "uuid",
+            "description": "For single selection, multiple selection, or net promoter score questions, this is the ID or IDs of the selected answers. To see which answers correspond to each ID, you can use GET [/user-sentiment/surveys](get-survey)."
+          },
+          "text": {
+            "type": "string",
+            "description": "For free text questions, this is the user's response to the question."
+          },
+          "is_global": {
+            "type": "boolean",
+            "description": "For net promoter score questions, whether the result from this question contributes to the overall net promoter score for the survey."
+          },
+          "_id": {
+            "type": "string",
+            "description": "ID of the answer."
+          },
+          "_score": {
+            "type": "integer",
+            "description": "For internal use only."
+          }
+        }
+      },
+      "recurringSurvey": {
+        "title": "Recurring",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/nameAndTemplateId"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "description": "The type of survey to publish.",
+                "type": "string",
+                "enum": ["Recurring"]
+              },
+              "status": {
+                "description": "Set to `Scheduled` to publish the survey. Set to `Draft` to save the survey as a draft.",
+                "type": "string",
+                "enum": ["Scheduled", "Draft"]
+              },
+              "recurring_rule": {
+                "type": "string",
+                "description": "An [iCalendar Recurrence Rule (RRULE)](https://icalendar.org/iCalendar-RFC-5545/3-8-5-3-recurrence-rule.html) string determining how often the survey repeats and when it ends.\n\n* Example of recurring survey with no end date: `RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=MO`\n* Example of recurring survey with specified end date: `RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=MO;UNTIL=2025-01-31T03:30:00.000Z`\n* Example of recurring survey ending after a specific number of occurences: `RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=MO;COUNT=5`\n",
+                "example": "RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=MO"
+              },
+              "retries_days_count": {
+                "description": "The number of days after which a user will stop being reminded to complete the survey. You can set this from 0 to the number of days set in the `instance_duration_days` parameter.",
+                "type": "integer"
+              },
+              "retries_interval": {
+                "description": "The number of hours after a user dismisses the survey until they receive they receive another survey notification.",
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 24
+              },
+              "instance_duration_days": {
+                "type": "integer",
+                "description": "Set how long the survey lasts and can be completed after each time it occurs. If the frequency specified in the `recurring_rule` is weekly, `instance_duration_days` can be from 1-6 days. If the frequency specified in the `recurring_rule` is monthly, `instance_duration` can be from 1-21 days."
+              },
+              "start_date": {
+                "description": "The starting date and time of the survey in ISO string format.",
+                "example": "2023-11-01T04:00:00.000Z",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "status",
+              "recurring_rule",
+              "retries_days_count",
+              "retries_interval",
+              "start_date",
+              "instance_duration_days"
+            ]
+          },
+          {
+            "$ref": "#/components/schemas/commonToSingleAndRecurring"
+          }
+        ]
+      },
+      "singleSurvey": {
+        "title": "Single",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/nameAndTemplateId"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "description": "The type of survey to publish.",
+                "type": "string",
+                "enum": ["Single"]
+              },
+              "status": {
+                "description": "Set to `Scheduled` to publish the survey. Set to `Draft` to save the survey as a draft.",
+                "type": "string",
+                "enum": ["Scheduled", "Draft"]
+              },
+              "retries_interval": {
+                "description": "The number of hours after a user dismisses the survey until they receive they receive another survey notification.",
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 24
+              },
+              "start_date": {
+                "description": "The starting date and time of the survey in ISO string format.",
+                "example": "2023-11-01T04:00:00.000Z",
+                "type": "string"
+              },
+              "expiration_date": {
+                "description": "The end date and time of the survey in ISO string format.",
+                "example": "2023-11-30T05:00:00.000Z",
+                "type": "string"
+              }
+            },
+            "required": ["type", "status", "retries_interval", "start_date", "expiration_date"]
+          },
+          {
+            "$ref": "#/components/schemas/commonToSingleAndRecurring"
+          }
+        ]
+      },
+      "nameAndTemplateId": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the survey"
+          },
+          "template_id": {
+            "type": "string",
+            "description": "ID of the template from which to create the survey."
+          }
+        },
+        "required": ["name", "template_id"]
+      },
+      "commonToSingleAndRecurring": {
+        "type": "object",
+        "properties": {
+          "dates_type": {
+            "description": "Sets whether the survey scheduling is based on each device's local time zone, or UTC. For example, if you want the survey to appear for each device at 9AM in each time zone, set to `Local`. If you want the survey to appear simultaneously for all devices regardless of their time zones, set to `UTC`.",
+            "type": "string",
+            "enum": ["Local", "UTC"]
+          },
+          "targeting_type": {
+            "description": "Sets how survey participants are targeted.\n * If you target `Users`, the survey appears for all users that sign in on a devices. **You must use `included_users` to specify which users to target**. By default the survey appears for the same user multiple times if they sign in from more than one device (you can change this with the `once_per_user` parameter). You might want to target users if more than one employee uses the same device.\n * If you target `Devices`, the survey appears only once for each device. **You must use `included_devices` to specify which devices to target**.\n",
+            "type": "string",
+            "enum": ["Devices", "Users"]
+          },
+          "once_per_user": {
+            "type": "boolean",
+            "default": false,
+            "description": "If `targeting_type` is set to `Users`, you can set this to `true` so that the survey can be completed by a certain user only once, even if they sign in from multiple devices."
+          },
+          "targets_percentage": {
+            "description": "The percentage of targeted users/devices to receive the survey. For example, if you set to 50, then 50% of all users/devices that meet your inclusion and exclusion rules receive the survey (randomly selected).",
+            "type": "integer",
+            "minimum": 5,
+            "maximum": 100,
+            "default": 100
+          },
+          "included_users": {
+            "description": "Applicable and required only if `targeting_type` is set to `Users`. To target all users, set `all` to `true`. Otherwise, set `all` to `false` and use the `directory_services_groups` to target AD groups.",
+            "type": "object",
+            "properties": {
+              "all": {
+                "description": "Sets whether to target all users.",
+                "type": "boolean"
+              },
+              "directory_services_groups": {
+                "description": "An array of Active Directory groups to target.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "included_devices": {
+            "description": "Applicable and required only if `targeting_type` is set to `Devices`. To target all devices, set `all` to `true`. Otherwise, set `all` to `false` and use the other parameters to specify device targets.",
+            "type": "object",
+            "properties": {
+              "all": {
+                "description": "Sets whether to target all devices.",
+                "type": "boolean"
+              },
+              "directory_service_groups": {
+                "description": "An array of Active Directory groups to target.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "devices": {
+                "description": "Only applicable if `targeting_type` is set to `Devices`. An array of device names to target.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "groups": {
+                "description": "An array of device groups to target.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "tags": {
+                "description": "An array of device tags to target,",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "excluded_devices": {
+            "description": "Devices to exclude from receiving the survey.",
+            "type": "object",
+            "properties": {
+              "directory_services_groups": {
+                "description": "An array of Active Directory groups.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "devices": {
+                "description": "An array of device names.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "groups": {
+                "description": "An array of device groups.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "tags": {
+                "description": "An array of device tags.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "excluded_users": {
+            "description": "Users to exclude from receiving the survey.",
+            "type": "object",
+            "properties": {
+              "directory_services_groups": {
+                "description": "An array of Active Directory groups.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "is_identified": {
+            "description": "Sets whether survey participant identities are recorded (non-anonymous).",
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": ["dates_type", "targeting_type"]
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/alerts": {
+      "get": {
+        "summary": "List all Alerts",
+        "tags": ["Alerts"],
+        "description": "Returns a list of configured alerts.\n\nYou can either:\n  * Use `query` to use an OpenSearch query. Note that you can't create an OpenSearch query using the request builder built into the documentation.\n  * Use the remaining query parameters to query alerts.\n",
+        "operationId": "get-alerts",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "description": "An OpenSearch query.",
+            "schema": {
+              "type": "object",
+              "default": false
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "description": "The number of rows returned per page.",
+            "schema": {
+              "type": "integer",
+              "default": 10000,
+              "maximum": 10000
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "The page returned. The number of rows per page is set with the `size` parameter.",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "description": "The index of the `rows` array to start returning data from. The array index starts at 0. For example, if you set `from` = 2, the first two rows are excluded.",
+            "schema": {
+              "type": "integer",
+              "example": 2
+            }
+          },
+          {
+            "$ref": "#/components/parameters/FilterField"
+          },
+          {
+            "$ref": "#/components/parameters/FilterType"
+          },
+          {
+            "$ref": "#/components/parameters/FilterValue"
+          },
+          {
+            "$ref": "#/components/parameters/SorterField"
+          },
+          {
+            "$ref": "#/components/parameters/SorterDir"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of configured alerts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "description": "Unique identifier for the alert.",
+                                "example": "izWJPJcBOClmoe-Yecr0"
+                              }
+                            }
+                          },
+                          {
+                            "$ref": "#/components/schemas/Alert"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The provided query is invalid."
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create an Alert",
+        "description": "Creates a new Alert.",
+        "tags": ["Alerts"],
+        "operationId": "create-alert",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "platform",
+                  "index",
+                  "filters",
+                  "results_threshold",
+                  "results_threshold_seconds",
+                  "retrigger_interval",
+                  "severity"
+                ],
+                "properties": {
+                  "name": {
+                    "$ref": "#/components/schemas/Alert/properties/name"
+                  },
+                  "description": {
+                    "$ref": "#/components/schemas/Alert/properties/description"
+                  },
+                  "severity": {
+                    "$ref": "#/components/schemas/Alert/properties/severity"
+                  },
+                  "enabled": {
+                    "$ref": "#/components/schemas/Alert/properties/enabled"
+                  },
+                  "platform": {
+                    "$ref": "#/components/schemas/Alert/properties/platform"
+                  },
+                  "results_threshold_seconds": {
+                    "$ref": "#/components/schemas/Alert/properties/results_threshold_seconds"
+                  },
+                  "results_threshold": {
+                    "$ref": "#/components/schemas/Alert/properties/results_threshold"
+                  },
+                  "retrigger_interval": {
+                    "$ref": "#/components/schemas/Alert/properties/retrigger_interval"
+                  },
+                  "index": {
+                    "$ref": "#/components/schemas/Alert/properties/index"
+                  },
+                  "filters": {
+                    "$ref": "#/components/schemas/Alert/properties/filters"
+                  },
+                  "webhook_url": {
+                    "$ref": "#/components/schemas/Alert/properties/webhook_url"
+                  },
+                  "script_id": {
+                    "$ref": "#/components/schemas/Alert/properties/script_id"
+                  },
+                  "user_script_id": {
+                    "$ref": "#/components/schemas/Alert/properties/user_script_id"
+                  },
+                  "survey_id": {
+                    "$ref": "#/components/schemas/Alert/properties/survey_id"
+                  },
+                  "email_addresses": {
+                    "$ref": "#/components/schemas/Alert/properties/email_addresses"
+                  },
+                  "servicenow_raise_incident": {
+                    "$ref": "#/components/schemas/Alert/properties/servicenow_raise_incident"
+                  },
+                  "servicenow_ticket_type": {
+                    "$ref": "#/components/schemas/Alert/properties/servicenow_ticket_type"
+                  },
+                  "servicenow_impact": {
+                    "$ref": "#/components/schemas/Alert/properties/servicenow_impact"
+                  },
+                  "servicenow_urgency": {
+                    "$ref": "#/components/schemas/Alert/properties/servicenow_urgency"
+                  },
+                  "servicenow_autoclose_interval": {
+                    "$ref": "#/components/schemas/Alert/properties/servicenow_autoclose_interval"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Alert created."
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/alerts/{id}": {
+      "get": {
+        "summary": "Retrieve Alert",
+        "tags": ["Alerts"],
+        "description": "Returns an alert by its ID.\n",
+        "operationId": "get-alert",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ID of the alert to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Alert details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "description": "Unique identifier for the alert.",
+                          "example": "izWJPJcBOClmoe-Yecr0"
+                        }
+                      }
+                    },
+                    {
+                      "$ref": "#/components/schemas/Alert"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      },
+      "post": {
+        "summary": "Edit alert",
+        "description": "Edits an existing alert by its ID. Any parameters not passed are unchanged.",
+        "tags": ["Alerts"],
+        "operationId": "edit-alert",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ID of the alert to edit.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Alert"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Alert edited"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete alert",
+        "description": "Deletes an existing alert by its ID.",
+        "tags": ["Alerts"],
+        "operationId": "delete-alert",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ID of the alert to delete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Alert deleted"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          }
+        }
+      }
+    },
+    "/dal/{index}": {
+      "post": {
+        "summary": "Get scoped data index",
+        "tags": ["Dal"],
+        "description": "Returns the content of the specified data index, after applying a filter so that only data from devices within the `device_query` scope is returned.\n\nThe endpoint first executes `device_query` against the _devices index to get a list of device IDs. The endpoint then executes `data_query` against the index you specify in the `index` parameter, only returning data that matches the list of device IDs.\nFor example, you can use this endpoint to search the disk_info data index, but only return data for devices located in New York.\n\nA maximum of 10000 rows can be returned per request. To return more data, you must set `export` to true and use the `_source` parameter to set which fields to return in the data query. For example: `{\"data_query\":{\"_source\":[\"prop1\",\"prop2\"]},\"export\":true}`\n",
+        "operationId": "get-scoped-data-index",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "index",
+            "description": "Name of the data index to return.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "disk_info"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "device_query": {
+                    "type": "object",
+                    "description": "An OpenSearch query of the _devices data index. Use this query to search for the list of devices to include in the scope for the search of the index specified by the `index` parameter."
+                  },
+                  "data_query": {
+                    "type": "object",
+                    "description": "An OpenSearch query of the data index specified by the `index` parameter."
+                  }
+                },
+                "example": {
+                  "device_query": {
+                    "query": {
+                      "bool": {
+                        "must": {
+                          "wildcard": {
+                            "public_ip_city": "*New York*"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "data_query": {
+                    "query": {
+                      "bool": {
+                        "should": {
+                          "wildcard": {
+                            "bustype": "*SATA*"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Data index contents.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataIndexContents"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The provided query is invalid."
+          },
+          "404": {
+            "description": "The provided index name is invalid."
+          }
+        }
+      }
+    },
+    "/data": {
+      "get": {
+        "summary": "List all data indices",
+        "tags": ["Data"],
+        "description": "Returns a list of all data indices, along with the size and number of rows in each index.",
+        "operationId": "get-data-indices",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "collapse",
+            "description": "Sets whether to collapse weekly data inidices into a single data index. By default, data indices are split into smaller weekly indices so that they are easier to manage. For example, the data index _highresourceprocs_20223400 contains data from the 34th week of 2022 (in UTC).",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_devices",
+            "description": "Sets whether to return information about the _devices data index. This is the data index with the columns in the device details grid in the UI.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of data indices. Each entry in the array represents a data index.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "description": "The name of the data index.",
+                        "type": "string",
+                        "example": "installed_apps"
+                      },
+                      "size_bytes": {
+                        "description": "The size of the data index in bytes.",
+                        "type": "integer",
+                        "example": 39024
+                      },
+                      "count": {
+                        "description": "The number of documents (rows) in the data index.",
+                        "type": "integer",
+                        "example": 54
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a data index",
+        "tags": ["Data"],
+        "description": "Creates a new data index.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "index": {
+                    "description": "The name of the index.",
+                    "type": "string",
+                    "example": "sampleindexname"
+                  },
+                  "payload": {
+                    "type": "string",
+                    "description": "a JSON string with the data to be submitted to the new data index.",
+                    "example": "[{\"exampleKey\": \"exampleValue\"}]"
+                  }
+                },
+                "required": ["index", "payload"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Data index created"
+          }
+        }
+      }
+    },
+    "/data/{index_name}": {
+      "get": {
+        "summary": "Get a data index",
+        "tags": ["Data"],
+        "description": "Retrieves the contents of a data index.\n\nStandard requests can return a maximum of 10000 rows across all pages. For example, if page 1 has 7000 rows, page 2 will be cut off at 3000 rows regardless of the number of rows in the dataset. If you need more rows, set `export`=`true` and use `_source` to specify which fields to include in the export. This method returns up to 65536 rows, or your license count (whichever is greater).\n",
+        "operationId": "get-data-index",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "index_name",
+            "description": "The name of the index to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "activities"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "description": "The number of rows returned per page. The maximum is 10000 rows per page. Read the endpoint description to learn more about the 10000 row limitation.",
+            "schema": {
+              "type": "integer",
+              "default": 10000,
+              "maximum": 10000
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "The page returned. The number of rows per page is set with the `size` parameter.",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "description": "The index of the `rows` array to start returning data from. The array index starts at 0. For example, if you set `from` = 2, the first two rows are excluded.",
+            "schema": {
+              "type": "integer",
+              "example": 2
+            }
+          },
+          {
+            "in": "query",
+            "name": "export",
+            "description": "Sets whether to return the data index without any pagination, up to 65536 rows or your license count (whichever is greater). You must also use `_source` to specify which fields (columns) to return. `size`, `page`, and `from` parameters will be ignored if true.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "in": "query",
+            "name": "_source[0]",
+            "description": "If `export`=true, then this parameter sets which field of the data index to return. You can return multiple fields by sending more query parameters and changing the integer in the parameter name (for example, `_source[0]=_device_name&_source[1]=username`).",
+            "schema": {
+              "type": "string",
+              "example": "_device_name"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/FilterField"
+          },
+          {
+            "$ref": "#/components/parameters/FilterType"
+          },
+          {
+            "$ref": "#/components/parameters/FilterValue"
+          },
+          {
+            "$ref": "#/components/parameters/SorterField"
+          },
+          {
+            "$ref": "#/components/parameters/SorterDir"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data index contents.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataIndexContents"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The provided query is invalid."
+          },
+          "404": {
+            "description": "The provided index name is invalid."
+          }
+        }
+      }
+    },
+    "/data/{index_name}/mappings": {
+      "get": {
+        "summary": "Get data index mappings",
+        "tags": ["Data"],
+        "description": "Retrieves the fields within a data index, including the data type of each field.",
+        "operationId": "get-data-index-mappings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "index_name",
+            "description": "The name of the data index.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "activities"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array containing the data index mappings.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IndexMappings"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/data/{index_name}/{documentID}": {
+      "get": {
+        "summary": "Retrieve a document",
+        "tags": ["Data"],
+        "description": "Retrieves a document within a data index by its ID.",
+        "operationId": "retrieve-document",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "index_name",
+            "description": "Name of the data index that contains the document.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "activites"
+            }
+          },
+          {
+            "in": "path",
+            "name": "documentID",
+            "description": "ID of the document to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "GtZWs7QBOFdS21OieyYt"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Document retrieved successfully. The data in the document depends on the index being retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "_id": "GtZWs7QBOFdS21OieyYt",
+                  "_created": "2022-01-03T16:47:53.391Z",
+                  "favourite_website": "www.controlup.com",
+                  "phone_type": "iPhone 3",
+                  "name": "John Doe"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The index name or document ID is invalid."
+          }
+        }
+      }
+    },
+    "/data/views": {
+      "get": {
+        "summary": "List all custom reports",
+        "tags": ["Data"],
+        "description": "Returns a list of custom reports, including the configuration details of each report.",
+        "operationId": "list-custom-reports",
+        "responses": {
+          "200": {
+            "description": "List of custom reports.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "description": "An array of custom reports. Each entry in the array represents a different custom report.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CustomReportDetails"
+                      }
+                    },
+                    "rows_available": {
+                      "description": "The total number of custom reports (rows) that are available.",
+                      "type": "integer",
+                      "example": 12
+                    },
+                    "page_size": {
+                      "description": "The number of custom reports that are able to be displayed per page of results.",
+                      "type": "integer",
+                      "example": 100
+                    },
+                    "start_row": {
+                      "description": "The first custom report than can be returned on the current page.",
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "end_row": {
+                      "description": "The last custom report that can be returned on the current page.",
+                      "type": "integer",
+                      "example": 100
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/data/views/{id}": {
+      "get": {
+        "summary": "Get a custom report",
+        "tags": ["Data"],
+        "description": "Retrieves the configuration details of a custom report by it's ID.",
+        "operationId": "get-custom-report",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ID of the custom report to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "GtZWs7QBOFdS21OieyYt"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the custom report.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomReportDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/devices": {
+      "get": {
+        "tags": ["Devices"],
+        "summary": "List all devices",
+        "description": "Returns a list of devices managed by your organization, along with information about each device.\n\nStandard requests can return a maximum of 10000 rows across all pages. For example, if page 1 has 7000 rows, page 2 will be cut off at 3000 rows regardless of the number of rows in the dataset. If you need more rows, set `export`=`true` and use `_source` to specify which fields to include in the export. This method returns up to 65536 rows, or your license count (whichever is greater).\n",
+        "operationId": "list-devices",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "size",
+            "description": "The number of rows returned per page. The maximum is 10000 rows per page. To return more than 10000 rows on a single page, use the `export` parameter.",
+            "schema": {
+              "type": "integer",
+              "default": 10000,
+              "maximum": 10000
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "The page returned. The number of rows per page is set with the `size` parameter.",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "description": "The index of the `rows` array to start returning data from. The array index starts at 0. For example, if you set `from` = 2, the first two devices are excluded.",
+            "schema": {
+              "type": "integer",
+              "example": 2
+            }
+          },
+          {
+            "in": "query",
+            "name": "export",
+            "description": "Sets whether to return all devices without any pagination. The `size`, `page`, and `from` parameters will be ignored if true. To use this parameter, you must also use the `_source` parameter to specify which fields to return.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "in": "query",
+            "name": "_source[0]",
+            "description": "If `export`=true, then this parameter sets which fields to return. You can return multiple fields by sending more query parameters and changing the integer in the parameter name (for example, `_source[0]=_id&_source[1]=_created`).",
+            "schema": {
+              "type": "string",
+              "example": "_id"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/FilterField"
+          },
+          {
+            "$ref": "#/components/parameters/FilterType"
+          },
+          {
+            "$ref": "#/components/parameters/FilterValue"
+          },
+          {
+            "$ref": "#/components/parameters/SorterField"
+          },
+          {
+            "$ref": "#/components/parameters/SorterDir"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of devices",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "description": "An array of devices (rows). Each entry in the array is a different device.",
+                      "type": "array",
+                      "example": [
+                        {
+                          "_id": "lchs9wH4h2EKvgTVv8rd",
+                          "_created": "2022-01-03T16:47:53.391Z",
+                          "_platform_name": "MSWIN",
+                          "name": "sample-device",
+                          "agent_version": "2.10.0"
+                        }
+                      ]
+                    },
+                    "rows_available": {
+                      "description": "The total number of devices.",
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "page_size": {
+                      "description": "The number of devices that are able to be displayed per page of results.",
+                      "type": "integer",
+                      "example": 5000
+                    },
+                    "start_row": {
+                      "description": "The first row that can be returned on the current page.",
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "end_row": {
+                      "description": "The last row that can be returned on the current page.",
+                      "type": "integer",
+                      "example": 5000
+                    },
+                    "device_registration_code": {
+                      "description": "The code used to register the device to your Edge organization. This code is unique to the organization, not the device.",
+                      "type": "string",
+                      "example": "7239850sdf69bs42rkj24329gh4578b78sk7uy"
+                    },
+                    "total_managed_device_count": {
+                      "description": "The number of managed devices in your Edge organization.",
+                      "type": "integer"
+                    },
+                    "total_managed_device_limit": {
+                      "description": "The maximum number of devices that can be managed in your Edge organization.",
+                      "type": "integer"
+                    },
+                    "mappings": {
+                      "description": "Information about the fields that are returned for each device (row). Each entry in the array represents a different field.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/IndexMappings"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/devices/delete": {
+      "post": {
+        "tags": ["Devices"],
+        "summary": "Delete devices",
+        "description": "Delete devices by their device ID.",
+        "operationId": "delete-devices",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "device_ids": {
+                    "description": "An array of the device IDs to delete.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": ["rTIBRoIBOFdS29Oi1ATq", "b47LRkQIB8BdS21Oi1TYh"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Devices successfully deleted."
+          },
+          "400": {
+            "description": "Invalid request payload."
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/devices/tags": {
+      "get": {
+        "summary": "List all device tags",
+        "tags": ["Devices"],
+        "description": "Returns a list of all device tags, including how many devices are using each tag.",
+        "operationId": "list-device-tags",
+        "responses": {
+          "200": {
+            "description": "List of device tags.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "description": "The name of the device tag.",
+                        "type": "string"
+                      },
+                      "device_count": {
+                        "description": "The number of devices that are using the tag.",
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Devices"],
+        "summary": "Update device tags",
+        "description": "Adds or removes device tags.",
+        "operationId": "update-tags",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ids": {
+                    "description": "An array of the IDs of the devices whose tags you want to update.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": ["rTIBRoIBOFdS29Oi1ATq", "b47LRkQIB8BdS21Oi1TYh"]
+                  },
+                  "action": {
+                    "description": "Set whether to `create` or `delete` tags on the selected devices.",
+                    "type": "string",
+                    "enum": ["create", "delete"],
+                    "example": "create"
+                  },
+                  "tags": {
+                    "description": "An array of the tags to add or remove on the specified devices. Tags can be up to 150 characters long and contain lowercase letters, numbers, -, _, and spaces.",
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "maxLength": 150
+                    },
+                    "example": ["testtag1", "testtag2"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Device tags successfully updated. Returns the updated device details."
+          },
+          "400": {
+            "description": "Invalid request payload."
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/devices/groups": {
+      "get": {
+        "summary": "List all device groups",
+        "tags": ["Devices"],
+        "description": "Returns a list of all device groups, including how many devices are in each group.",
+        "operationId": "list-device-groups",
+        "responses": {
+          "200": {
+            "description": "List of device groups.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "description": "The name of the device group.",
+                        "type": "string"
+                      },
+                      "device_count": {
+                        "description": "The number of devices that are in the group.",
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/devices/set-group": {
+      "post": {
+        "summary": "Set device group",
+        "tags": ["Devices"],
+        "description": "Sets the device group for the specified devices. A device can belong to only one group at a time.",
+        "operationId": "add-device-group",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "device_ids": {
+                    "description": "An array of the IDs of the devices to add to the device group.",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": ["rTIBRoIBOFdS29Oi1ATq", "b47LRkQIB8BdS21Oi1TYh"]
+                  },
+                  "group": {
+                    "description": "The device group. This does not have to be an existing group.",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Device added to group successfully."
+          }
+        }
+      }
+    },
+    "/devices/{deviceID}/actions": {
+      "post": {
+        "tags": ["Devices"],
+        "summary": "Perform action on a single device",
+        "description": "Performs an action on the specified device.",
+        "operationId": "run-an-action-single",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "deviceID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the device on which to perform the action. You can use [GET /devices](list-devices) to see the ID for each device."
+          }
+        ],
+        "requestBody": {
+          "description": "Select the type of action you want to perform to see the required payload. There are payload request samples for each type of action.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/runcmd-singledevice"
+                  },
+                  {
+                    "$ref": "#/components/schemas/runcmduser-singledevice"
+                  },
+                  {
+                    "$ref": "#/components/schemas/sendmessageallusers-singledevice"
+                  },
+                  {
+                    "$ref": "#/components/schemas/sendmessagesingleuser-singledevice"
+                  },
+                  {
+                    "$ref": "#/components/schemas/logoffuser"
+                  },
+                  {
+                    "$ref": "#/components/schemas/disconnectuser"
+                  },
+                  {
+                    "$ref": "#/components/schemas/reboot"
+                  },
+                  {
+                    "$ref": "#/components/schemas/termiateprocess"
+                  },
+                  {
+                    "$ref": "#/components/schemas/runscript-singledevice"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Action request successfully sent."
+          },
+          "400": {
+            "description": "Invalid request payload."
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/devices/action": {
+      "post": {
+        "tags": ["Devices"],
+        "summary": "Perform action on multiple devices",
+        "description": "Performs an action on the specified devices. If you want to perform an action on only a single device, we recommend that you use [POST /devices/{deviceID}/action](run-an-action-single) for more options.",
+        "operationId": "run-an-action",
+        "requestBody": {
+          "description": "Select the type of action you want to perform to see the required `action_data`. There are payload request samples for each type of action.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/runcmd-multidevice"
+                  },
+                  {
+                    "$ref": "#/components/schemas/runcmduser-multidevice"
+                  },
+                  {
+                    "$ref": "#/components/schemas/sendmessageallusers-multidevice"
+                  },
+                  {
+                    "$ref": "#/components/schemas/sendmessagesingleuser-multidevice"
+                  },
+                  {
+                    "$ref": "#/components/schemas/runscript-multidevice"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Action request successfully sent."
+          },
+          "400": {
+            "description": "Invalid request payload."
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/events": {
+      "get": {
+        "summary": "Get system events",
+        "tags": ["Events"],
+        "description": "Returns entries from the System Events log, which contains alerts, actions, configuration changes, etc. By default, the endpoint returns 10000 events starting with the oldest event. A maximum of 10000 events can be returned per request.\n",
+        "operationId": "get-system-events",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "size",
+            "description": "The number of rows returned per page.",
+            "schema": {
+              "type": "integer",
+              "default": 10000,
+              "maximum": 10000
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "The page returned. The number of rows per page is set with the `size` parameter.",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "description": "The index of the `rows` array to start returning data from. The array index starts at 0. For example, if you set `from` = 2, the first two rows are excluded.",
+            "schema": {
+              "type": "integer",
+              "example": 2
+            }
+          },
+          {
+            "$ref": "#/components/parameters/FilterField"
+          },
+          {
+            "$ref": "#/components/parameters/FilterType"
+          },
+          {
+            "$ref": "#/components/parameters/FilterValue"
+          },
+          {
+            "$ref": "#/components/parameters/SorterField"
+          },
+          {
+            "$ref": "#/components/parameters/SorterDir"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "System Events log contents.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Event"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The provided query is invalid."
+          }
+        }
+      }
+    },
+    "/events/query": {
+      "post": {
+        "summary": "Get system events with query",
+        "operationId": "get-system-events-query",
+        "x-readme": {
+          "explorer-enabled": false
+        },
+        "tags": ["Events"],
+        "description": "Returns the same data as [GET /events](get-system-events), but lets you send an OpenSearch query in the request body.",
+        "requestBody": {
+          "description": "OpenSearch query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "query": {
+                  "term": {
+                    "_id": "ERhcqwwow455mzZoBiDB-aE"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "System Events log contents.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Event"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The provided query is invalid."
+          }
+        }
+      }
+    },
+    "/scripts": {
+      "get": {
+        "summary": "List all scripts",
+        "tags": ["Scripts"],
+        "description": "Returns a list of all scripts.\n\nYou can either:\n  * Use `query` to use an OpenSearch query. Note that you can't create an OpenSearch query using the request builder built into the documentation.\n  * Use the remaining query parameters to query scripts.\n",
+        "operationId": "list-all-scripts",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "description": "An OpenSearch query.",
+            "schema": {
+              "type": "object",
+              "default": false
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "description": "The number of rows returned per page.",
+            "schema": {
+              "type": "integer",
+              "default": 10000,
+              "maximum": 10000
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "The page returned. The number of rows per page is set with the `size` parameter.",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "description": "The index of the `rows` array to start returning data from. The array index starts at 0. For example, if you set `from` = 2, the first two rows are excluded.",
+            "schema": {
+              "type": "integer",
+              "example": 2
+            }
+          },
+          {
+            "$ref": "#/components/parameters/FilterField"
+          },
+          {
+            "$ref": "#/components/parameters/FilterType"
+          },
+          {
+            "$ref": "#/components/parameters/FilterValue"
+          },
+          {
+            "$ref": "#/components/parameters/SorterField"
+          },
+          {
+            "$ref": "#/components/parameters/SorterDir"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of configured scripts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rows": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/script"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The provided query is invalid."
+          }
+        }
+      }
+    },
+    "/user-sentiment/surveys": {
+      "get": {
+        "summary": "List all surveys",
+        "description": "Returns a list of all surveys. You can either:\n  * Use `query` to use an OpenSearch query. Note that you can't create an OpenSearch query using the request builder built into the documentation.\n  * Use the remaining query parameters to query your surveys.\n",
+        "tags": ["Surveys"],
+        "operationId": "get-surveys",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "description": "An OpenSearch query.",
+            "schema": {
+              "type": "object",
+              "default": false
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "description": "The number of rows returned per page. The maximum is 10000 rows per page. To return more than 10000 rows on a single page, use the `export` parameter.",
+            "schema": {
+              "type": "integer",
+              "default": 10000,
+              "maximum": 10000
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "The page returned. The number of rows per page is set with the `size` parameter.",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "description": "The index of the `rows` array to start returning data from. The array index starts at 0. For example, if you set `from` = 2, the first two rows are excluded.",
+            "schema": {
+              "type": "integer",
+              "example": 2
+            }
+          },
+          {
+            "$ref": "#/components/parameters/FilterField"
+          },
+          {
+            "$ref": "#/components/parameters/FilterType"
+          },
+          {
+            "$ref": "#/components/parameters/FilterValue"
+          },
+          {
+            "$ref": "#/components/parameters/SorterField"
+          },
+          {
+            "$ref": "#/components/parameters/SorterDir"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of surveys"
+          }
+        }
+      },
+      "post": {
+        "summary": "Publish a survey",
+        "description": "Publishes a new survey.",
+        "tags": ["Surveys"],
+        "operationId": "publish-survey",
+        "requestBody": {
+          "description": "Select the type of survey you want to publish to see the parameters.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/singleSurvey"
+                  },
+                  {
+                    "$ref": "#/components/schemas/recurringSurvey"
+                  },
+                  {
+                    "type": "object",
+                    "title": "On-demand survey",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "The type of survey to publish.",
+                        "enum": ["Custom Action"]
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the survey"
+                      },
+                      "template_id": {
+                        "type": "string",
+                        "description": "ID of the template from which to create the survey."
+                      },
+                      "status": {
+                        "description": "Set to `Active` to publish the survey. Set to `Draft` to save the survey as a draft.",
+                        "type": "string",
+                        "enum": ["Draft", "Active"]
+                      },
+                      "is_identified": {
+                        "description": "Sets whether survey participant identities are recorded (non-anonymous).",
+                        "type": "boolean",
+                        "default": false
+                      }
+                    },
+                    "required": ["type", "name", "template_id", "status"]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Survey created"
+          }
+        }
+      }
+    },
+    "/user-sentiment/surveys/{id}": {
+      "get": {
+        "summary": "Get a survey",
+        "description": "Returns the details of the specified survey.",
+        "tags": ["Surveys"],
+        "operationId": "get-survey",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "The ID of the survey to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Survey details"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a survey",
+        "description": "Deletes a survey",
+        "tags": ["Surveys"],
+        "operationId": "delete-survey",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ID of the survey to delete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Survey successfully deleted"
+          },
+          "404": {
+            "description": "Specified survey doesn't exist"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/user-sentiment/surveys/{id}/pause": {
+      "post": {
+        "summary": "Pause a survey",
+        "description": "Pauses a survey",
+        "tags": ["Surveys"],
+        "operationId": "pause-survey",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ID of the survey to pause.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Survey successfully paused"
+          },
+          "400": {
+            "description": "Survey can't be paused because it isn't active"
+          },
+          "404": {
+            "description": "Specified survey doesn't exist"
+          }
+        }
+      }
+    },
+    "/user-sentiment/surveys/{id}/resume": {
+      "post": {
+        "summary": "Resume a survey",
+        "description": "Resume a paused survey",
+        "tags": ["Surveys"],
+        "operationId": "resume-survey",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ID of the survey to resume.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Survey resumed successfully"
+          },
+          "400": {
+            "description": "Survey can't be resumed because it wasn't paused"
+          },
+          "404": {
+            "description": "Specified survey doesn't exist"
+          }
+        }
+      }
+    },
+    "/user-sentiment/surveys/{id}/complete": {
+      "post": {
+        "summary": "Complete a survey",
+        "description": "Completes a survey",
+        "tags": ["Surveys"],
+        "operationId": "complete-survey",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ID of the survey to complete.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Survey succesfully completed"
+          },
+          "400": {
+            "description": "Survey can't be completed because it isn't active"
+          },
+          "404": {
+            "description": "Specified survey doesn't exist"
+          }
+        }
+      }
+    },
+    "/user-sentiment/results": {
+      "get": {
+        "summary": "Get survey results",
+        "description": "Returns one row for each time a survey was opened, started, or completed. Optionally, use the `include_answers` parameter to also return survey answers.\n\nIf you are interested only in returning survey completions (results), you should add a filter to return only rows with `type=Result`. While you can use this endpoint to view all answers in a survey result, you can't query the endpoint based on the answers. To query survey answers, you can use GET [/user-sentiment/results/answers/raw](get-survey-answers).\n\nYou can either:\n  * Use `query` to use an OpenSearch query. Note that you can't create an OpenSearch query using the request builder built into the documentation.\n  * Use the remaining query parameters to query your survey results.\n",
+        "tags": ["Surveys"],
+        "operationId": "get-survey-results",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "include_answers",
+            "description": "Sets whether to return the answers to each survey question.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "description": "An OpenSearch query.",
+            "schema": {
+              "type": "object",
+              "default": false
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "description": "The number of rows returned per page. The maximum is 10000 rows per page. To return more than 10000 rows on a single page, use the `export` parameter.",
+            "schema": {
+              "type": "integer",
+              "default": 10000,
+              "maximum": 10000
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "The page returned. The number of rows per page is set with the `size` parameter.",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "description": "The index of the `rows` array to start returning data from. The array index starts at 0. For example, if you set `from` = 2, the first two rows are excluded.",
+            "schema": {
+              "type": "integer",
+              "example": 2
+            }
+          },
+          {
+            "$ref": "#/components/parameters/FilterField"
+          },
+          {
+            "$ref": "#/components/parameters/FilterType"
+          },
+          {
+            "$ref": "#/components/parameters/FilterValue"
+          },
+          {
+            "$ref": "#/components/parameters/SorterField"
+          },
+          {
+            "$ref": "#/components/parameters/SorterDir"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of surveys responses",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyResult"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/user-sentiment/results/answers/raw": {
+      "get": {
+        "summary": "Get survey answers",
+        "description": "Returns a list of all answers to survey questions.\n\nEach row represents one answer to a survey question per user per device.\n\nYou can either:\n  * Use `query` to use an OpenSearch query. Note that you can't create an OpenSearch query using the request builder built into the documentation.\n  * Use the remaining query parameters to query your survey results.\n",
+        "tags": ["Surveys"],
+        "operationId": "get-survey-answers",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "description": "An OpenSearch query.",
+            "schema": {
+              "type": "object",
+              "default": false
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "description": "The number of rows returned per page. The maximum is 10000 rows per page. To return more than 10000 rows on a single page, use the `export` parameter.",
+            "schema": {
+              "type": "integer",
+              "default": 10000,
+              "maximum": 10000
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "The page returned. The number of rows per page is set with the `size` parameter.",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "description": "The index of the `rows` array to start returning data from. The array index starts at 0. For example, if you set `from` = 2, the first two rows are excluded.",
+            "schema": {
+              "type": "integer",
+              "example": 2
+            }
+          },
+          {
+            "$ref": "#/components/parameters/FilterField"
+          },
+          {
+            "$ref": "#/components/parameters/FilterType"
+          },
+          {
+            "$ref": "#/components/parameters/FilterValue"
+          },
+          {
+            "$ref": "#/components/parameters/SorterField"
+          },
+          {
+            "$ref": "#/components/parameters/SorterDir"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of surveys answers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyResultAnswers"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Alerts",
+      "description": "Alerts let you receive notifications or automatically run an action when certain conditions occur on a device."
+    },
+    {
+      "name": "Dal",
+      "description": "The DAL (data access layer) is an advanced way to get data from an index."
+    },
+    {
+      "name": "Data",
+      "description": "These endpoints are for interacting with the raw data stored in data indices."
+    },
+    {
+      "name": "Devices",
+      "description": "Contains endpoints related to your managed devices."
+    },
+    {
+      "name": "Events",
+      "description": "The System Events log reports important events and alerts in your ControlUp for Desktops environment."
+    },
+    {
+      "name": "Scripts"
+    },
+    {
+      "name": "Surveys",
+      "description": "These endpoints are for interacting with Employee Sentiment surveys."
+    },
+    {
+      "name": "DeviceOSErrors",
+      "description": "When making requests against the Edge DX API a user must first authenticate and obtain an access token. Authentication is performed by using the authentication endpoint and providing the required credentials. Once authenticated, callers will be provided with an access token in the form of a secure, HTTP only cookie, which should be sent to the API on all further requests."
+    }
+  ]
+}

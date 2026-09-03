@@ -13,11 +13,16 @@
 
 from __future__ import annotations
 
+import time
 import uuid
 
 from r7_surcom_api import HttpSession
 
 _SOURCE_HEADER = "harmony-endpoint-py-sdk"
+
+_JOB_POLL_INTERVAL_SECS = 5
+_JOB_MAX_ATTEMPTS = 40  # ~3.5 minutes
+_JOB_MAX_POLL_FAILURES = 5  # retry transient errors before giving up
 
 
 # ---------------------------------------------------------------------------
@@ -105,8 +110,9 @@ class HarmonyEndpoint:
 
     def __init__(self):
         self._session = HttpSession()
-        self._session.headers.update({"Content-Type": "application/json"})
         self._gateway: str = ""
+        self._auth: InfinityPortalAuth | None = None
+        self._ci_token: str = ""
         self._endpoint_token: str = ""
         self._connected: bool = False
         self._session_id: str = str(uuid.uuid4())
@@ -129,6 +135,7 @@ class HarmonyEndpoint:
         API calls.
         """
         self._gateway = infinity_portal_auth.gateway.rstrip("/")
+        self._auth = infinity_portal_auth
 
         # Step 1: CI login
         ci_url = f"{self._gateway}{_CI_AUTH_PATH}"
@@ -156,6 +163,7 @@ class HarmonyEndpoint:
         ci_token = ci_data.get("data", {}).get("token")
         if not ci_token:
             raise ValueError("CI login succeeded but token was absent in response.")
+        self._ci_token = ci_token
 
         # Step 2: Endpoint login — token returned in response header
         login_url = f"{self._base_url}/v1/session/login/cloud"
@@ -170,9 +178,19 @@ class HarmonyEndpoint:
             timeout=30,
         )
         if not login_response.ok:
-            raise ValueError(
-                f"Endpoint login failed [{login_response.status_code}]"
-            )
+            if login_response.status_code == 401:
+                try:
+                    resp_json = login_response.json()
+                    if resp_json.get("forceLogout"):
+                        raise RuntimeError(
+                            "Check Point API rejected the session (forceLogout). "
+                            "The Client ID or Access Key is invalid, expired, or "
+                            "revoked. Verify the credentials are still active in "
+                            "the Infinity Portal under Global Settings > API Keys."
+                        )
+                except (ValueError, AttributeError):
+                    pass
+            login_response.raise_for_status()
         endpoint_token = login_response.headers.get("x-mgmt-api-token")
         if not endpoint_token:
             raise ValueError(
@@ -184,13 +202,17 @@ class HarmonyEndpoint:
     def disconnect(self) -> None:
         """Release the session and clear all tokens."""
         self._connected = False
+        self._auth = None
+        self._ci_token = ""  # nosec B105 - clearing token, not hardcoding one
         self._endpoint_token = ""  # nosec B105 - clearing token, not hardcoding one
         self._session.close()
         self._session = HttpSession()
-        self._session.headers.update({"Content-Type": "application/json"})
 
     def _api_headers(self, run_as_job: bool = False) -> dict:
         headers = {
+            # The original SDK sends both the CI bearer token and the endpoint
+            # session token on every API request (session_manager.py lines 121-124).
+            "Authorization": f"Bearer {self._ci_token}",
             "x-mgmt-api-token": self._endpoint_token,
             "x-mgmt-data-session-id": self._session_id,
             "x-mgmt-data-request-id": str(uuid.uuid4()),
@@ -200,6 +222,48 @@ class HarmonyEndpoint:
             headers["x-mgmt-run-as-job"] = "on"
         return headers
 
+    def _poll_job(self, job_id: str) -> object:
+        """Poll GET /v1/jobs/{job_id} until the job is complete."""
+        url = f"{self._base_url}/v1/jobs/{job_id}"
+        consecutive_failures = 0
+        _reauthed = False
+        for _ in range(_JOB_MAX_ATTEMPTS):
+            # SDK always waits before polling, including the first attempt.
+            time.sleep(_JOB_POLL_INTERVAL_SECS)
+            try:
+                response = self._session.get(
+                    url,
+                    headers=self._api_headers(),
+                    timeout=30,
+                )
+                if response.status_code == 401 and self._auth is not None and not _reauthed:
+                    # Session token expired mid-import; re-authenticate once and retry.
+                    self._connected = False
+                    self.connect(self._auth)
+                    _reauthed = True
+                    continue
+                response.raise_for_status()
+                consecutive_failures = 0
+                _reauthed = False
+            except Exception:
+                consecutive_failures += 1
+                if consecutive_failures > _JOB_MAX_POLL_FAILURES:
+                    raise
+                continue
+            data = response.json()
+            status = data.get("status") if isinstance(data, dict) else None
+            if status == "DONE":
+                return data.get("data", data)
+            if status in ("NOT_FOUND", "FAILED", "ERROR"):
+                raise RuntimeError(
+                    f"Harmony Endpoint job {job_id!r} failed with status "
+                    f"{status!r}: {data}"
+                )
+        raise TimeoutError(
+            f"Harmony Endpoint job {job_id!r} did not complete after "
+            f"{_JOB_MAX_ATTEMPTS * _JOB_POLL_INTERVAL_SECS} seconds."
+        )
+
     def _post(self, path: str, body: dict, run_as_job: bool = False) -> object:
         url = f"{self._base_url}{path}"
         response = self._session.post(
@@ -208,5 +272,24 @@ class HarmonyEndpoint:
             headers=self._api_headers(run_as_job=run_as_job),
             timeout=30,
         )
-        response.raise_for_status()
-        return response.json()
+        if response.status_code == 401:
+            try:
+                resp_json = response.json()
+                if resp_json.get("forceLogout"):
+                    raise RuntimeError(
+                        "Check Point API rejected the session (forceLogout). "
+                        "The Client ID or Access Key is invalid, expired, or "
+                        "revoked. Verify the credentials are still active in "
+                        "the Infinity Portal under Global Settings > API Keys."
+                    )
+            except (ValueError, AttributeError):
+                pass
+        if not response.ok:
+            raise RuntimeError(
+                f"Check Point API request failed [{response.status_code}] "
+                f"url={url} body={response.text!r}"
+            )
+        data = response.json()
+        if run_as_job and isinstance(data, dict) and data.get("jobId"):
+            return self._poll_job(data["jobId"])
+        return data

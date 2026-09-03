@@ -1,0 +1,96 @@
+x-samos-type-name: ControlUpDEXDevice
+x-samos-namespace: controlup.dex
+title: ControlUp DEX Device
+description: A device managed and monitored by ControlUp for Desktops (DEX).
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - _id
+
+required:
+  - _id
+
+x-samos-table:
+  - name: name
+  - name: _platform_name
+  - name: agent_version
+  - name: _created
+
+x-samos-detail:
+  - name: name
+  - name: _platform_name
+  - name: agent_version
+  - name: _created
+
+x-samos-derived-properties:
+  d_qualified_hostname:
+    type: string
+    value: name && contains(name, `.`) && name || null
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_unqualified_hostname:
+    type: string
+    value: name && !contains(name, `.`) && name || null
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_hostnames:
+    title: Hostnames
+    type: array
+    syntax: jmespath
+    value: '[name][?@]'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+properties:
+  _id:
+    title: Device ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  _created:
+    title: Created
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  name:
+    title: Device Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  _platform_name:
+    title: Platform
+    type: string
+    x-samos-ref-types:
+      - type-name: ControlUpDEXOSFamilyEnum
+        key-name: id
+
+  agent_version:
+    title: Agent Version
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version

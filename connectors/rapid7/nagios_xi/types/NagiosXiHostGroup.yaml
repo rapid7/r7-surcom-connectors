@@ -1,0 +1,109 @@
+x-samos-type-name: NagiosXiHostGroup
+x-samos-namespace: nagios.xi
+title: Nagios XI Host Group
+description: A group of hosts monitored by Nagios XI.
+
+x-samos-extends-types:
+  - type-name: core.component-group
+    subtype-priority: 3
+
+x-samos-keys:
+  - hostgroup_object_id
+
+required:
+  - hostgroup_object_id
+
+x-samos-table:
+  - name: hostgroup_name
+  - name: alias
+  - name: d_active
+  - name: d_member_host_ids
+
+x-samos-detail:
+  - name: hostgroup_name
+  - name: alias
+  - name: d_active
+  - name: d_member_host_ids
+  - name: hostgroup_object_id
+  - name: object_id
+  - name: config_type
+  - name: instance_id
+  - name: members
+
+x-samos-derived-properties:
+  d_active:
+    type: boolean
+    title: Active?
+    syntax: jmespath
+    # Nagios XI hostgroup is_active: "1" = active, "0" = inactive.
+    value: "is_active == '1'"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_member_host_ids:
+    title: Member Hosts
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: NagiosXiHost
+          key-name: host_object_id
+    syntax: jmespath
+    # Flatten members.host[].host_object_id, dropping the null placeholders
+    # Nagios XI returns for empty groups.
+    value: 'members.host[?host_object_id!=`null`].host_object_id'
+    x-samos-fulfills:
+      type-name: core.component-group
+      property-name: members
+
+properties:
+  hostgroup_object_id:
+    title: Host Group Object ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  hostgroup_name:
+    title: Host Group Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  alias:
+    title: Alias
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  object_id:
+    title: Object ID
+    type: string
+  config_type:
+    title: Config Type
+    type: string
+  is_active:
+    title: Is Active
+    type: string
+  instance_id:
+    title: Instance ID
+    type: string
+  members:
+    title: Members
+    type: object
+    properties:
+      host:
+        title: Hosts
+        type: array
+        items:
+          type: object
+          properties:
+            host_object_id:
+              title: Host
+              type: string
+              nullable: true
+            host_name:
+              title: Host Name
+              type: string
+              nullable: true

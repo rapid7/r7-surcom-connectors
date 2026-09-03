@@ -25,6 +25,11 @@ Rules are organized by file. When reviewing a diff, apply the rules for each cha
 - Function parameter order in Python code must match the parameter order declared in `connector.spec.yaml`.
 - Generated files (`sc_types.py`, `sc_settings.py`) must be regenerated after any spec change, using `surcom connector codegen`.
 
+### Releases
+- When merged to main, the connector's flags in `build_configs.yaml` determine the scope of the release.
+- "Unpublished" releases set `connector_store: false` and `extension_library: false`.  These are built and signed in CI, but not published to customers.  This process is used sparingly, only for testing connectors with specific customers.
+- "Published" releases set `connector_store: true` and `extension_library: true`, and are available to customers.
+
 ---
 
 ## connector.spec.yaml
@@ -32,7 +37,7 @@ Rules are organized by file. When reviewing a diff, apply the rules for each cha
 ### Metadata
 - `notice` must be exactly: `Copyright © 2026 Rapid7. All rights reserved.` (using the current year)
 - For connectors in the `connectors/rapid7/` path: `author` must be exactly: `Rapid7`
-- New connectors must append `(Beta)` to the `name` field and use version `0.1.0`
+- New connectors use version `0.1.0` where targeted for an "unpublished" release, or `1.0.0` for the first "published" release.
 - Every PR that changes a connector must increment the version number. MAJOR versions (e.g., 1.2.0 → 2.0.0) indicate breaking changes to types or settings. MINOR versions (e.g., 1.2.0 → 1.3.0) indicate new features or bug fixes. PATCH versions must not be used — the build system applies a patch version automatically.
 - Version numbers must only increment. Never downgrade a major version.
 - The `current_changes` field must describe only the changes in the current PR — not the full release history. The SDK handles cumulative changelogs.
@@ -188,8 +193,8 @@ The available categories are:
 - **No real customer data — EVER**. Do not include real customer names, email addresses, employee names, hostnames, account IDs, or identifiers that could identify a specific organization.
 - Use RFC-reserved safe values for anonymization:
   - Email domains: `example.com`, `example.org`, `example.net`
-  - IPv4: `192.0.2.x`, `198.51.100.x`, `203.0.113.x` (RFC 5737)
-  - IPv6: `2001:db8::` prefix (RFC 3849)
+  - IPv4: prefer `192.0.2.x`, `198.51.100.x`, `203.0.113.x` (RFC 5737), but also allow private ranges such as `10.x`
+  - IPv6: prefer `2001:db8::` prefix (RFC 3849), but also allow private ranges
   - Domain names: `example.com`, `example.org` (RFC 2606)
   - Person names: clearly fictitious (`Jane Doe`, `John Smith`)
 - Do not include company-internal or proprietary URLs that would be visible in the public repo.

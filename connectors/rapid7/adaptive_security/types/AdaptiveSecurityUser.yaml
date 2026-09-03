@@ -1,0 +1,176 @@
+x-samos-type-name: AdaptiveSecurityUser
+x-samos-namespace: adaptive.security
+title: Adaptive Security User
+description: A user from the Adaptive Security platform.
+
+$ref: https://developer.adaptivesecurity.com/api#/components/schemas/UserDto
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-virtual:
+  groups:
+    type-name: AdaptiveSecurityGroup
+    cypher-pattern: <-[:`e:AdaptiveSecurityGroup:x_members`]-(:AdaptiveSecurityGroup)
+
+x-samos-table:
+  - name: d_full_name
+  - name: email
+  - name: department
+  - name: job_title
+  - name: current_risk_score
+  - name: status
+
+x-samos-detail:
+  - name: d_full_name
+  - name: first_name
+  - name: last_name
+  - name: email
+  - name: status
+  - name: department
+  - name: job_title
+  - name: current_risk_score
+  - name: phone_number
+  - name: mobile_phone_number
+  - name: location
+  - name: divisions
+  - name: manager_name
+  - name: manager_email
+  - name: organization
+  - name: languages
+  - name: start_date
+  - name: created_at
+  - name: groups
+
+x-samos-derived-properties:
+  d_full_name:
+    title: Full Name
+    type: string
+    syntax: expression
+    value: '{first_name} {last_name}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  d_active:
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: "status == 'ACTIVE'"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+  d_telephone:
+    title: Telephone(s)
+    type: array
+    syntax: jmespath
+    value: '[phone_number, mobile_phone_number] | [?@]'
+    items:
+      type: string
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+
+properties:
+  id:
+    title: User ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+  status:
+    title: Status
+    type: string
+  email:
+    title: Email
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+  first_name:
+    title: First Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+  last_name:
+    title: Last Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+  department:
+    title: Department
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: department
+  job_title:
+    title: Job Title
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: title
+  phone_number:
+    title: Phone Number
+    type: string
+  mobile_phone_number:
+    title: Mobile Phone Number
+    type: string
+  location:
+    title: Location
+    type: string
+  divisions:
+    title: Divisions
+    type: array
+    items:
+      type: string
+  manager_name:
+    title: Manager Name
+    type: string
+  manager_email:
+    title: Manager Email
+    type: string
+    format: email
+  organization:
+    title: Organization
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: company
+  languages:
+    title: Languages
+    type: array
+    items:
+      type: string
+  start_date:
+    title: Start Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date
+  current_risk_score:
+    title: Risk Score
+    type: integer
+  created_at:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen

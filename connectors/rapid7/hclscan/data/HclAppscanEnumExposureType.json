@@ -1,0 +1,326 @@
+[
+  {
+    "id": "AbuseOfFunctionality",
+    "value": "Abuse of Functionality",
+    "map_to": "ExposureType: Weakness",
+    "description": "An attack technique that uses a website's own features and functionality to consume, defraud, or circumvent access controls mechanisms."
+  },
+  {
+    "id": "ApplicationMisconfiguration",
+    "value": "Application Misconfiguration",
+    "map_to": "ExposureType: Configuration",
+    "description": "These attacks exploit configuration weaknesses found in web applications."
+  },
+  {
+    "id": "BruteForce",
+    "value": "Brute Force",
+    "map_to": "ExposureType: Auth",
+    "description": "An automated process of trial and error used to guess a person's username, password, credit-card number or cryptographic key."
+  },
+  {
+    "id": "BufferOverflow",
+    "value": "Buffer Overflow",
+    "map_to": "ExposureType: Weakness",
+    "description": "Attacks that alter the flow of an application by overwriting parts of memory with data that exceeds the allocated size of the buffer."
+  },
+  {
+    "id": "ContentSpoofing",
+    "value": "Content Spoofing",
+    "map_to": "ExposureType: Weakness",
+    "description": "An attack technique used to trick a user into believing that certain content appearing on a website is legitimate and not from an external source."
+  },
+  {
+    "id": "CredentialSessionPrediction",
+    "value": "Credential/Session Prediction",
+    "map_to": "ExposureType: Auth",
+    "description": "A method of hijacking or impersonating a website user, by deducing or guessing the unique value that identifies a particular session or user."
+  },
+  {
+    "id": "CrossSiteRequestForgery",
+    "value": "Cross-site Request Forgery",
+    "map_to": "ExposureType: Weakness",
+    "description": "An attack that involves forcing a victim to send an HTTP request to a target destination without their knowledge or intent in order to perform an action as the victim."
+  },
+  {
+    "id": "CrossSiteScripting",
+    "value": "Cross-site Scripting",
+    "map_to": "ExposureType: Weakness",
+    "description": "An attack technique that forces a website to echo attacker-supplied executable code, which loads in a user's browser."
+  },
+  {
+    "id": "DenialOfService",
+    "value": "Denial of Service",
+    "map_to": "ExposureType: Weakness",
+    "description": "An attack technique with the intent of preventing a website from serving normal user activity."
+  },
+  {
+    "id": "DirectoryIndexing",
+    "value": "Directory Indexing",
+    "map_to": "ExposureType: Configuration",
+    "description": "Automatic directory listing/indexing is a web server function that lists all of the files within a requested directory if the normal base file is not present."
+  },
+  {
+    "id": "Fingerprinting",
+    "value": "Fingerprinting",
+    "map_to": "ExposureType: Weakness",
+    "description": "The most common methodology for attackers is to first footprint the target's web presence and enumerate as much information as possible."
+  },
+  {
+    "id": "FormatStringAttack",
+    "value": "Format String",
+    "map_to": "ExposureType: Weakness",
+    "description": "Attacks that alter the flow of an application by using string formatting library features to access other memory space."
+  },
+  {
+    "id": "HTTPRequestSmuggling",
+    "value": "HTTP Request Smuggling",
+    "map_to": "ExposureType: Weakness",
+    "description": "An attack technique that abuses the discrepancy in parsing of non RFC compliant HTTP requests between two HTTP devices to smuggle a request."
+  },
+  {
+    "id": "HTTPRequestSplitting",
+    "value": "HTTP Request Splitting",
+    "map_to": "ExposureType: Weakness",
+    "description": "HTTP Request Splitting is an attack that enables forcing the browser to send arbitrary HTTP requests, inflicting XSS and poisoning the browser's cache."
+  },
+  {
+    "id": "HTTPResponseSmuggling",
+    "value": "HTTP Response Smuggling",
+    "map_to": "ExposureType: Weakness",
+    "description": "A technique to smuggle 2 HTTP responses from a server to a client, through an intermediary HTTP device that expects a single response from the server."
+  },
+  {
+    "id": "HTTPResponseSplitting",
+    "value": "HTTP Response Splitting",
+    "map_to": "ExposureType: Weakness",
+    "description": "The essence of HTTP Response Splitting is the attacker's ability to send a single HTTP request that forces the web server to form two HTTP responses instead of one."
+  },
+  {
+    "id": "ImproperFilesystemPermissions",
+    "value": "Improper Filesystem Permissions",
+    "map_to": "ExposureType: Configuration",
+    "description": "A threat to the confidentiality, integrity and availability of a web application arising from incorrect filesystem permissions set on files, folders, and symbolic links."
+  },
+  {
+    "id": "ImproperInputHandling",
+    "value": "Improper Input Handling",
+    "map_to": "ExposureType: Weakness",
+    "description": "One of the most common weaknesses identified across applications today. Poorly handled input is a leading cause behind critical vulnerabilities."
+  },
+  {
+    "id": "ImproperOutputHandling",
+    "value": "Improper Output Handling",
+    "map_to": "ExposureType: Weakness",
+    "description": "If an application has improper output handling, the output data may be consumed leading to vulnerabilities and actions never intended by the application developer."
+  },
+  {
+    "id": "InformationLeakage",
+    "value": "Information Leakage",
+    "map_to": "ExposureType: Data Protection",
+    "description": "An application weakness where an application reveals sensitive data, such as technical details of the web application, environment, or user-specific data."
+  },
+  {
+    "id": "InsecureIndexing",
+    "value": "Insecure Indexing",
+    "map_to": "ExposureType: Configuration",
+    "description": "A threat to the data confidentiality of the web site through an indexing process that has access to files which are not supposed to be publicly accessible."
+  },
+  {
+    "id": "InsufficientAntiAutomation",
+    "value": "Insufficient Anti-automation",
+    "map_to": "ExposureType: Control",
+    "description": "When a website permits an attacker to automate a process that should only be performed manually."
+  },
+  {
+    "id": "InsufficientAuthentication",
+    "value": "Insufficient Authentication",
+    "map_to": "ExposureType: Auth",
+    "description": "Website permits an attacker to access sensitive content or functionality without having to properly authenticate."
+  },
+  {
+    "id": "InsufficientAuthorization",
+    "value": "Insufficient Authorization",
+    "map_to": "ExposureType: Auth",
+    "description": "When a website permits access to sensitive content or functionality that should require increased access control restrictions."
+  },
+  {
+    "id": "InsufficientProcessValidation",
+    "value": "Insufficient Process Validation",
+    "map_to": "ExposureType: Control",
+    "description": "When a website permits an attacker to bypass or circumvent the intended flow control of an application."
+  },
+  {
+    "id": "InsufficientSessionExpiration",
+    "value": "Insufficient Session Expiration",
+    "map_to": "ExposureType: Auth",
+    "description": "When a website permits an attacker to reuse old session credentials or session IDs for authorization."
+  },
+  {
+    "id": "InsufficientTransLayerProtection",
+    "value": "Insufficient Transport Layer Protection",
+    "map_to": "ExposureType: Data Protection",
+    "description": "Allows communication to be exposed to untrusted third-parties."
+  },
+  {
+    "id": "IntegerOverflow",
+    "value": "Integer Overflows",
+    "map_to": "ExposureType: Weakness",
+    "description": "The condition that occurs when the result of an arithmetic operation exceeds the maximum size of the integer type used to store it."
+  },
+  {
+    "id": "LDAPInjection",
+    "value": "LDAP Injection",
+    "map_to": "ExposureType: Weakness",
+    "description": "An attack technique used to exploit websites that construct LDAP statements from user-supplied input."
+  },
+  {
+    "id": "MailCommandInjection",
+    "value": "Mail Command Injection",
+    "map_to": "ExposureType: Weakness",
+    "description": "An attack technique used to exploit mail servers and webmail applications that construct IMAP/SMTP statements from user-supplied input that is not properly sanitized."
+  },
+  {
+    "id": "MaliciousContent",
+    "value": "Malicious Content",
+    "map_to": "ExposureType: Malware",
+    "description": "Application contains code that appears to be malicious."
+  },
+  {
+    "id": "NullByteInjection",
+    "value": "Null Byte Injection",
+    "map_to": "ExposureType: Weakness",
+    "description": "An active exploitation technique used to bypass sanity checking filters in web infrastructure by adding URL-encoded null byte characters to user-supplied data."
+  },
+  {
+    "id": "OSCommanding",
+    "value": "OS Commanding",
+    "map_to": "ExposureType: Weakness",
+    "description": "An attack technique used to exploit websites by executing Operating System commands through manipulation of application input."
+  },
+  {
+    "id": "PathTraversal",
+    "value": "Path Traversal",
+    "map_to": "ExposureType: Weakness",
+    "description": "A technique that forces access to files, directories, and commands that potentially reside outside the web document root directory."
+  },
+  {
+    "id": "PredictableResourceLocation",
+    "value": "Predictable Resource Location",
+    "map_to": "ExposureType: Weakness",
+    "description": "An attack technique used to uncover hidden website content and functionality, by making educated guesses."
+  },
+  {
+    "id": "Privacy",
+    "value": "Privacy",
+    "map_to": "ExposureType: Data Protection",
+    "description": "Sensitive information stored to disk in cleartext."
+  },
+  {
+    "id": "Quality",
+    "value": "Quality",
+    "map_to": "ExposureType: Configuration",
+    "description": "Misconfiguration or flaws in a security mechanism are likely to result in dire consequences."
+  },
+  {
+    "id": "RemoteFileInclusion",
+    "value": "Remote File Inclusion",
+    "map_to": "ExposureType: Weakness",
+    "description": "An attack technique used to exploit dynamic file include mechanisms in web applications to trick the application into including remote files with malicious code."
+  },
+  {
+    "id": "RoutingDetour",
+    "value": "Routing Detour",
+    "map_to": "ExposureType: Weakness",
+    "description": "A type of Man in the Middle attack where intermediaries can be injected or hijacked to route sensitive messages to an outside location."
+  },
+  {
+    "id": "ServerMisconfiguration",
+    "value": "Server Misconfiguration",
+    "map_to": "ExposureType: Configuration",
+    "description": "Exploits configuration weaknesses found in web servers and application servers."
+  },
+  {
+    "id": "ServerSideRequestForgery",
+    "value": "Server-Side Request Forgery",
+    "map_to": "ExposureType: Weakness",
+    "description": "Incorrect processing, sanitation, or validation of user input that contains elements later joined with URI."
+  },
+  {
+    "id": "SessionFixation",
+    "value": "Session Fixation",
+    "map_to": "ExposureType: Auth",
+    "description": "An attack technique that forces a user's session ID to an explicit value. After a user's session ID has been fixed, the attacker waits for them to login."
+  },
+  {
+    "id": "SOAPArrayAbuse",
+    "value": "SOAP Array Abuse",
+    "map_to": "ExposureType: Weakness",
+    "description": "A web-service that expects an array can be the target of a XML DoS attack by forcing the SOAP server to build a huge array in memory."
+  },
+  {
+    "id": "SQLInjection",
+    "value": "SQL Injection",
+    "map_to": "ExposureType: Weakness",
+    "description": "An attack technique used to exploit websites that construct SQL statements from user-supplied input."
+  },
+  {
+    "id": "SSIInjection",
+    "value": "SSI Injection",
+    "map_to": "ExposureType: Weakness",
+    "description": "A server-side exploit technique that allows an attacker to send code into a web application, which will later be executed locally by the web server."
+  },
+  {
+    "id": "URLRedirectoryAbuse",
+    "value": "URL Redirector Abuse",
+    "map_to": "ExposureType: Weakness",
+    "description": "URL redirectors represent common functionality employed by web sites to forward an incoming request to an alternate resource, and can be used in phishing attacks."
+  },
+  {
+    "id": "UserDefined",
+    "value": "User Defined",
+    "map_to": "ExposureType: Weakness",
+    "description": "A test created by the user."
+  },
+  {
+    "id": "WeakPasswordRecoveryValidation",
+    "value": "Insufficient Password Recovery",
+    "map_to": "ExposureType: Auth",
+    "description": "When a web site permits an attacker to illegally obtain, change or recover another user's password."
+  },
+  {
+    "id": "XMLAttributeBlowup",
+    "value": "XML Attribute Blowup",
+    "map_to": "ExposureType: Weakness",
+    "description": "A denial of service attack against XML parsers."
+  },
+  {
+    "id": "XMLEntityExpansion",
+    "value": "XML Entity Expansion",
+    "map_to": "ExposureType: Weakness",
+    "description": "This exploits a capability in XML DTDs that allows the creation of custom macros called entities. An attacker can overwhelm parsers by recursively defining a set of entities."
+  },
+  {
+    "id": "XMLExternalEntities",
+    "value": "XML External Entities",
+    "map_to": "ExposureType: Weakness",
+    "description": "This technique takes advantage of a feature of XML to build documents dynamically. External entities may replace the entity value with malicious data or compromise server data access."
+  },
+  {
+    "id": "XMLInjection",
+    "value": "XML Injection",
+    "map_to": "ExposureType: Weakness",
+    "description": "An attack technique used to manipulate or compromise the logic of an XML application or service by injecting unintended XML content."
+  },
+  {
+    "id": "XPathInjection",
+    "value": "XPath Injection",
+    "map_to": "ExposureType: Weakness",
+    "description": "An attack technique used to exploit websites that construct XPath queries from user-supplied input."
+  },
+  {
+    "id": "XQueryInjection",
+    "value": "XQuery Injection",
+    "map_to": "ExposureType: Weakness",
+    "description": "XQuery Injection is a variant of the classic SQL injection attack against the XML XQuery Language."
+  }
+]

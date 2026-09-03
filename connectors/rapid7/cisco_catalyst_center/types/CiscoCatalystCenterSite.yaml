@@ -12,6 +12,9 @@ $ref: https://developer.cisco.com/docs/catalyst-center/api-reference#/components
 x-samos-keys:
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: groupNameHierarchy

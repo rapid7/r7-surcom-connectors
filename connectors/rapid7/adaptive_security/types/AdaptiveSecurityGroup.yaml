@@ -1,0 +1,89 @@
+x-samos-type-name: AdaptiveSecurityGroup
+x-samos-namespace: adaptive.security
+title: Adaptive Security Group
+description: A user group from the Adaptive Security platform.
+
+$ref: https://developer.adaptivesecurity.com/api#/components/schemas/GroupDto
+
+x-samos-extends-types:
+  - type-name: UserGroup
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: display_name
+  - name: type
+  - name: x_members
+  - name: last_refresh_at
+
+x-samos-detail:
+  - name: display_name
+  - name: type
+  - name: x_members
+  - name: status
+  - name: created_at
+  - name: last_refresh_at
+
+x-samos-derived-properties:
+  d_active:
+    title: Active?
+    type: boolean
+    syntax: jmespath
+    value: "status == 'ACTIVE'"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+properties:
+  id:
+    title: Group ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+  display_name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: UserGroup.name
+      correlation-type: UserGroup
+      priority: 4
+  type:
+    title: Group Type
+    type: string
+  status:
+    title: Status
+    type: string
+  x_members:
+    title: Members
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: AdaptiveSecurityUser
+          key-name: id
+  created_at:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+  last_refresh_at:
+    title: Last Refreshed
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen

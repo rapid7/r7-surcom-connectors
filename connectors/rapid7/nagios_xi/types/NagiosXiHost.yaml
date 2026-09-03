@@ -1,0 +1,287 @@
+x-samos-type-name: NagiosXiHost
+x-samos-namespace: nagios.xi
+title: Nagios XI Host
+description: A host monitored by Nagios XI.
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - host_object_id
+
+required:
+  - host_object_id
+
+x-samos-table:
+  - name: host_name
+  - name: address
+  - name: d_active
+  - name: check_command
+  - name: last_check
+
+x-samos-detail:
+  - name: host_name
+  - name: host_alias
+  - name: display_name
+  - name: x_ips
+  - name: address
+  - name: d_active
+  - name: state_type
+  - name: check_command
+  - name: output
+  - name: last_check
+  - name: next_check
+  - name: last_state_change
+  - name: last_time_up
+  - name: last_time_down
+  - name: last_time_unreachable
+  - name: notifications_enabled
+  - name: active_checks_enabled
+  - name: passive_checks_enabled
+  - name: is_flapping
+  - name: notes
+  - name: instance_id
+
+x-samos-derived-properties:
+  d_active:
+    type: boolean
+    title: Active?
+    syntax: jmespath
+    # Nagios host current_state: "0" = UP, "1" = DOWN, "2" = UNREACHABLE.
+    value: "current_state == '0'"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_unqualified_hostname:
+    type: string
+    syntax: jmespath
+    value: 'host_name && !contains(host_name, `.`) && host_name || null'
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_qualified_hostname:
+    type: string
+    syntax: jmespath
+    value: 'host_name && contains(host_name, `.`) && host_name || null'
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+properties:
+  host_object_id:
+    title: Host Object ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  host_name:
+    title: Host Name
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+  host_alias:
+    title: Host Alias
+    type: string
+  display_name:
+    title: Display Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  address:
+    title: Address
+    type: string
+  icon_image:
+    title: Icon Image
+    type: string
+  icon_image_alt:
+    title: Icon Image Alt
+    type: string
+  notes:
+    title: Notes
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  notes_url:
+    title: Notes URL
+    type: string
+    format: url
+  action_url:
+    title: Action URL
+    type: string
+    format: url
+  hoststatus_id:
+    title: Host Status ID
+    type: string
+  instance_id:
+    title: Instance ID
+    type: string
+  status_update_time:
+    title: Status Update Time
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  output:
+    title: Output
+    type: string
+  long_output:
+    title: Long Output
+    type: string
+  perfdata:
+    title: Performance Data
+    type: string
+  current_state:
+    title: Current State
+    type: string
+  has_been_checked:
+    title: Has Been Checked
+    type: string
+  should_be_scheduled:
+    title: Should Be Scheduled
+    type: string
+  current_check_attempt:
+    title: Current Check Attempt
+    type: string
+  max_check_attempts:
+    title: Max Check Attempts
+    type: string
+  last_check:
+    title: Last Check
+    type: string
+    format: date-time
+  next_check:
+    title: Next Check
+    type: string
+    format: date-time
+  check_type:
+    title: Check Type
+    type: string
+  check_options:
+    title: Check Options
+    type: string
+  last_state_change:
+    title: Last State Change
+    type: string
+    format: date-time
+  last_hard_state_change:
+    title: Last Hard State Change
+    type: string
+    format: date-time
+  last_hard_state:
+    title: Last Hard State
+    type: string
+  last_time_up:
+    title: Last Time Up
+    type: string
+    format: date-time
+  last_time_down:
+    title: Last Time Down
+    type: string
+    format: date-time
+  last_time_unreachable:
+    title: Last Time Unreachable
+    type: string
+    format: date-time
+  state_type:
+    title: State Type
+    type: string
+  last_notification:
+    title: Last Notification
+    type: string
+    format: date-time
+  next_notification:
+    title: Next Notification
+    type: string
+    format: date-time
+  no_more_notifications:
+    title: No More Notifications
+    type: string
+  notifications_enabled:
+    title: Notifications Enabled
+    type: string
+  problem_has_been_acknowledged:
+    title: Problem Has Been Acknowledged
+    type: string
+  acknowledgement_type:
+    title: Acknowledgement Type
+    type: string
+  current_notification_number:
+    title: Current Notification Number
+    type: string
+  passive_checks_enabled:
+    title: Passive Checks Enabled
+    type: string
+  active_checks_enabled:
+    title: Active Checks Enabled
+    type: string
+  event_handler_enabled:
+    title: Event Handler Enabled
+    type: string
+  flap_detection_enabled:
+    title: Flap Detection Enabled
+    type: string
+  is_flapping:
+    title: Is Flapping
+    type: string
+  percent_state_change:
+    title: Percent State Change
+    type: string
+  latency:
+    title: Latency
+    type: string
+  execution_time:
+    title: Execution Time
+    type: string
+  scheduled_downtime_depth:
+    title: Scheduled Downtime Depth
+    type: string
+  failure_prediction_enabled:
+    title: Failure Prediction Enabled
+    type: string
+  process_performance_data:
+    title: Process Performance Data
+    type: string
+  obsess_over_host:
+    title: Obsess Over Host
+    type: string
+  modified_host_attributes:
+    title: Modified Host Attributes
+    type: string
+  event_handler:
+    title: Event Handler
+    type: string
+  check_command:
+    title: Check Command
+    type: string
+  normal_check_interval:
+    title: Normal Check Interval
+    type: string
+  retry_check_interval:
+    title: Retry Check Interval
+    type: string
+  check_timeperiod_object_id:
+    title: Check Time Period Object ID
+    type: string
+  x_ips:
+    # `address` may be an IP or a DNS name. fn_import_all resolves the valid
+    # IPs (IPv4/IPv6) into this list; DNS-name addresses are left out.
+    title: IP Addresses
+    type: array
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips

@@ -13,6 +13,26 @@ class AnthropicClaudeCodeUser(dict):
         super().__init__(type=self.__class__.__name__, content=content)
 
 
+class AnthropicGroup(dict):
+    def __init__(self, content: dict):
+        super().__init__(type=self.__class__.__name__, content=content)
+
+
+class AnthropicOrganization(dict):
+    def __init__(self, content: dict):
+        super().__init__(type=self.__class__.__name__, content=content)
+
+
+class AnthropicOrganizationUser(dict):
+    def __init__(self, content: dict):
+        super().__init__(type=self.__class__.__name__, content=content)
+
+
+class AnthropicRole(dict):
+    def __init__(self, content: dict):
+        super().__init__(type=self.__class__.__name__, content=content)
+
+
 class AnthropicUser(dict):
     def __init__(self, content: dict):
         super().__init__(type=self.__class__.__name__, content=content)

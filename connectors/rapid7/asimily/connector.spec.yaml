@@ -1,12 +1,12 @@
 id: asimily
 name: Asimily Risk Management
 author: Rapid7
-version: 1.0.0
+version: 1.1.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Remove Beta label
+  - Provide `source` header
 
 types:
   - AsimilyDevice

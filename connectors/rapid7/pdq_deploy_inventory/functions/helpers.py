@@ -11,7 +11,12 @@ import tempfile
 from logging import Logger
 
 from impacket.smbconnection import SMBConnection
-from impacket.smb3structs import FILE_SHARE_READ, FILE_SHARE_WRITE
+from impacket.smb3structs import (
+    FILE_SHARE_READ,
+    FILE_SHARE_WRITE,
+    SMB2_DIALECT_311,
+    SMB2_SESSION_FLAG_ENCRYPT_DATA,
+)
 
 from .sc_settings import Settings
 
@@ -55,8 +60,7 @@ class PdqInventoryClient:
     def connect(self):
         """Establish SMB connection and download the Inventory database."""
         self.logger.info("Connecting to PDQ server at %s via SMB", self.host)
-        self._smb_conn = SMBConnection(self.host, self.host, sess_port=SMB_PORT)
-        self._smb_conn.login(self.username, self.password)
+        self._smb_conn = self._build_hardened_smb_connection()
 
         local_db = os.path.join(self._tmp_dir, "Database.db")
         self.logger.info("Downloading PDQ Inventory database...")
@@ -139,6 +143,53 @@ class PdqInventoryClient:
             for row in rows:
                 yield _row_to_dict(row)
 
+    def _build_hardened_smb_connection(self) -> SMBConnection:
+        """Build an SMB connection that requires signing and prefers SMB3 encryption.
+
+        Pins the negotiated dialect to SMB 3.1.1 (which mandates message signing per
+        [MS-SMB2]) and forces client-side signing to be required so a downgrade or an
+        on-path attacker cannot silently tamper with — or NTLM-relay — the session.
+        SMB3 session encryption is opted into whenever the server advertised support,
+        so the SQLite database bytes are additionally protected in transit.
+
+        impacket 0.13 does not expose public setters for these knobs, so we mutate the
+        underlying ``SMB3`` object's ``_Connection`` / ``_Session`` state — the same
+        state ``login()`` and ``sendSMB()`` read at runtime. See impacket's
+        ``smb3.SMB3.negotiateSession`` / ``login`` for the reads.
+        """
+        smb_conn = SMBConnection(
+            self.host,
+            self.host,
+            sess_port=SMB_PORT,
+            preferredDialect=SMB2_DIALECT_311,
+        )
+
+        smb_server = smb_conn.getSMBServer()
+        # Force message signing to be required for this session. ``login()`` copies
+        # ``_Connection['RequireSigning']`` into ``_Session['SigningRequired']``, which
+        # is what ``sendSMB()`` checks to decide whether to sign each packet.
+        smb_server.RequireMessageSigning = True
+        smb_server._Connection["RequireSigning"] = True
+
+        smb_conn.login(self.username, self.password)
+
+        # SMB3 per-session encryption. impacket enables this automatically when the
+        # dialect is >= 3.0 and the server advertised encryption capability; we set the
+        # flag defensively so subsequent traffic is always encrypted end to end when
+        # the server can. If the server did not advertise encryption support, we log a
+        # warning rather than forcing the flag (which would fail because encryption
+        # keys were never derived) and fall back to signing-only integrity protection.
+        if smb_server._Connection.get("SupportsEncryption"):
+            smb_server._Session["SessionFlags"] |= SMB2_SESSION_FLAG_ENCRYPT_DATA
+        else:
+            self.logger.warning(
+                "PDQ server at %s did not advertise SMB3 encryption support; "
+                "connection will proceed with signing only.",
+                self.host,
+            )
+
+        return smb_conn
+
     def test_connection(self):
         """Test SMB connectivity and verify the database file exists.
 
@@ -146,8 +197,7 @@ class PdqInventoryClient:
         file exists at the configured path — does not download the file.
         """
         self.logger.info("Testing SMB connection to %s", self.host)
-        self._smb_conn = SMBConnection(self.host, self.host, sess_port=SMB_PORT)
-        self._smb_conn.login(self.username, self.password)
+        self._smb_conn = self._build_hardened_smb_connection()
 
         # Check that the database file exists without downloading it
         db_path = self.inventory_db_path.replace("/", "\\")

@@ -1,0 +1,459 @@
+x-samos-type-name: CyCognitoExposure
+x-samos-namespace: cycognito
+title: CyCognito Exposure
+description: A security exposure or vulnerability class identified by CyCognito.
+
+x-samos-extends-types:
+  - type-name: Exposure
+    subtype-priority: 2
+
+$ref: 'https://api.platform.cycognito.com/v1#/paths/~1v1~1issues/post/responses/200/content/application~1json/schema/items'
+
+x-samos-global-zone: true
+
+x-samos-keys:
+  - issue-id
+
+required:
+  - issue-id
+
+x-samos-table:
+  - name: title
+  - name: issue-id
+  - name: issue-type
+  - name: severity
+  - name: cve-ids
+  - name: remediation-method
+
+x-samos-detail:
+  - name: title
+  - name: issue-id
+  - name: issue-type
+  - name: summary
+  - name: severity
+  - name: severity-score
+  - name: base-severity
+  - name: enhanced-severity
+  - name: enhanced-severity-score
+  - name: exploitation-complexity
+  - name: exploitation-score
+  - name: detection-complexity
+  - name: remediation-steps
+  - name: remediation-effort
+  - name: remediation-method
+  - name: potential-threat
+  - name: potential-impact
+  - name: references
+  - name: cve-ids
+  - name: compliance-violations
+  - name: d_mitre_tactic
+  - name: d_mitre_technique
+  - name: d_mitre_next_tactic
+  - name: d_mitre_next_technique
+
+x-samos-derived-properties:
+  # Classifies as Vulnerability if CVEs exist, otherwise Weakness.
+  # Not using "issue-type" because CyCognito's issue-type values (e.g.
+  # "Vulnerable Software", "Misconfiguration") are free-form strings
+  # without a fixed enum in their API — a custom enum mapping would be
+  # fragile. CVE presence is objective and matches the AppCheck DAST
+  # pattern: CVEs present → Vulnerability, absent → Weakness.
+  d_exposure_type:
+    type: string
+    syntax: jmespath
+    value: 'length("cve-ids" || `[]`) == `0` && `ExposureType: Weakness` || `ExposureType: Vulnerability`'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: exposure_type
+    x-samos-ref-types:
+      - type-name: NoeticEnumExposureType
+        key-name: id
+  # Joins the remediation-steps array into a single newline-separated string
+  d_solution:
+    type: string
+    syntax: jmespath
+    value: "join('\\n', \"remediation-steps\" || `[]`)"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: solution
+  # References MitreAttackTactic by d_name_key (enterprise-attack:<shortname>)
+  d_mitre_tactic:
+    type: string
+    title: MITRE ATT&CK Tactic
+    syntax: jmespath
+    value: 'join(`:`, [`enterprise-attack`, "mitre-attack-technique-title"])'
+    x-samos-ref-types:
+      - key-name: d_name_key
+        type-name: MitreAttackTactic
+  # References MitreAttackTechnique by d_name_key (enterprise-attack:<name>)
+  d_mitre_technique:
+    type: string
+    title: MITRE ATT&CK Technique
+    syntax: jmespath
+    value: 'join(`:`, [`enterprise-attack`, "mitre-attack-technique-subtitle"])'
+    x-samos-ref-types:
+      - key-name: d_name_key
+        type-name: MitreAttackTechnique
+  # References MitreAttackTactic for the next technique's tactic
+  d_mitre_next_tactic:
+    type: string
+    title: MITRE ATT&CK Next Tactic
+    syntax: jmespath
+    value: 'join(`:`, [`enterprise-attack`, "mitre-attack-next-technique-title"])'
+    x-samos-ref-types:
+      - key-name: d_name_key
+        type-name: MitreAttackTactic
+  # References MitreAttackTechnique for the next technique
+  d_mitre_next_technique:
+    type: string
+    title: MITRE ATT&CK Next Technique
+    syntax: jmespath
+    value: 'join(`:`, [`enterprise-attack`, "mitre-attack-next-technique-subtitle"])'
+    x-samos-ref-types:
+      - key-name: d_name_key
+        type-name: MitreAttackTechnique
+
+properties:
+  issue-id:
+    type: string
+    title: Issue ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: id
+    x-samos-correlation:
+      correlation-key: Exposure.id
+      correlation-type: Exposure
+      priority: 4
+  issue-type:
+    type: string
+    title: Issue Type
+  title:
+    type: string
+    title: Title
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  summary:
+    type: string
+    title: Summary
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  severity:
+    type: string
+    title: Severity
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: severity
+    x-samos-ref-types:
+      - type-name: CyCognitoEnumSeverity
+        key-name: id
+  severity-score:
+    type: number
+    title: Severity Score
+  base-severity:
+    type: string
+    title: Base Severity
+  base-severity-score:
+    type: number
+    title: Base Severity Score
+    x-samos-hidden: true
+  enhanced-severity:
+    type: string
+    title: Enhanced Severity
+  enhanced-severity-score:
+    type: number
+    title: Enhanced Severity Score
+  exploitation-complexity:
+    type: string
+    title: Exploitation Complexity
+  exploitation-score:
+    type: integer
+    title: Exploitation Score
+  detection-complexity:
+    type: string
+    title: Detection Complexity
+  remediation-steps:
+    type: array
+    items:
+      type: string
+    title: Remediation Steps
+  remediation-effort:
+    type: string
+    title: Remediation Effort
+  remediation-method:
+    type: string
+    title: Remediation Method
+  potential-threat:
+    type: string
+    title: Potential Threat
+  potential-impact:
+    type: array
+    items:
+      type: string
+    title: Potential Impact
+  references:
+    type: array
+    items:
+      type: string
+    title: References
+  cve-ids:
+    type: array
+    title: CVEs
+    items:
+      type: string
+  cis-controls:
+    type: array
+    items:
+      type: string
+    title: CIS Controls
+  nist-800-53-controls:
+    type: array
+    items:
+      type: string
+    title: NIST 800-53 Controls
+  nist-800-171-controls:
+    type: array
+    items:
+      type: string
+    title: NIST 800-171 Controls
+  pci-dss-controls:
+    type: array
+    items:
+      type: string
+    title: PCI DSS Controls
+  iso27001-controls:
+    type: array
+    items:
+      type: string
+    title: ISO 27001 Controls
+  iso27002-controls:
+    type: array
+    items:
+      type: string
+    title: ISO 27002 Controls
+  compliance-violations:
+    type: array
+    items:
+      type: string
+    title: Compliance Violations
+  # MITRE ATT&CK references are handled via derived properties above
+  # (d_mitre_tactic, d_mitre_technique, d_mitre_next_tactic,
+  # d_mitre_next_technique) using d_name_key lookups.
+  mitre-attack-technique-name:
+    type: string
+    title: MITRE ATT&CK Technique
+  mitre-attack-technique-title:
+    type: string
+    title: MITRE ATT&CK Tactic
+  mitre-attack-technique-subtitle:
+    type: string
+    title: MITRE ATT&CK Technique Detail
+  mitre-attack-next-technique-name:
+    type: string
+    title: MITRE ATT&CK Next Technique
+  mitre-attack-next-technique-title:
+    type: string
+    title: MITRE ATT&CK Next Tactic
+  mitre-attack-next-technique-subtitle:
+    type: string
+    title: MITRE ATT&CK Next Technique Detail
+  first-detected:
+    type: string
+    title: First Detected
+    format: date-time
+  last-detected:
+    type: string
+    title: Last Detected
+    format: date-time
+  resolved-at:
+    type: string
+    title: Resolved At
+    format: date-time
+  issue-status:
+    type: string
+    title: Issue Status
+  investigation-status:
+    type: string
+    title: Investigation Status
+  confidence:
+    type: number
+    title: Confidence Score
+  confidence-level:
+    type: string
+    title: Confidence Level
+  detection-method:
+    type: string
+    title: Detection Method
+  exploitation-availability:
+    type: string
+    title: Exploitation Availability
+  exploitation-method:
+    type: string
+    title: Exploitation Method
+  attacker-interest:
+    type: string
+    title: Attacker Interest
+  underground-activity:
+    type: string
+    title: Underground Activity
+  severity-change-reason:
+    type: string
+    title: Severity Change Reason
+  package:
+    type: string
+    title: Package
+  tools:
+    type: array
+    title: Tools
+    items:
+      type: string
+  organizations:
+    type: array
+    title: Organizations
+    items:
+      type: string
+  locations:
+    type: array
+    title: Locations
+    items:
+      type: string
+  platforms:
+    type: array
+    title: Platforms
+    items:
+      type: string
+  environments:
+    type: array
+    title: Environments
+    items:
+      type: string
+  continent:
+    type: array
+    title: Continent
+    items:
+      type: string
+  region:
+    type: array
+    title: Region
+    items:
+      type: string
+  tags:
+    type: array
+    title: Tags
+    items:
+      type: string
+  teams:
+    type: array
+    title: Teams
+    items:
+      type: string
+  comment:
+    type: object
+    title: Comment
+  comments:
+    type: array
+    title: Comments
+    items:
+      type: object
+      properties:
+        content:
+          type: string
+        created-by-name:
+          type: string
+        last-update:
+          type: string
+  advisories:
+    type: array
+    title: Advisories
+    items:
+      type: object
+      properties:
+        last-verified:
+          type: string
+          format: date-time
+        evidence-id:
+          type: string
+        evidence-last-seen:
+          type: string
+          format: date-time
+        vulnerable:
+          type: boolean
+        advisory:
+          type: string
+        issue-id:
+          type: string
+  affected-asset:
+    type: string
+    title: Affected Asset
+  affected-asset-tags:
+    type: array
+    title: Affected Asset Tags
+    items:
+      type: string
+  affected-ptr-domains:
+    type: array
+    title: Affected PTR Domains
+    items:
+      type: string
+  asset-status:
+    type: string
+    title: Asset Status
+  attractiveness:
+    type: number
+    title: Attractiveness Score
+  attractiveness-label:
+    type: string
+    title: Attractiveness
+  business-units:
+    type: array
+    title: Business Units
+    items:
+      type: string
+  evidence:
+    type: object
+    title: Evidence
+  id:
+    type: string
+    title: Internal ID
+  investigating-since:
+    type: string
+    title: Investigating Since
+    format: date-time
+  is-snoozed:
+    type: boolean
+    title: Snoozed?
+  issue-types:
+    type: array
+    title: Issue Types
+    items:
+      type: string
+  port:
+    type: number
+    title: Port
+  revalidation-request-time:
+    type: string
+    title: Revalidation Request Time
+    format: date-time
+  revalidation-requested:
+    type: boolean
+    title: Revalidation Requested
+  snooze-expiration:
+    type: string
+    title: Snooze Expiration
+    format: date-time
+  tech-owners:
+    type: array
+    title: Technical Owners
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        org-name:
+          type: string

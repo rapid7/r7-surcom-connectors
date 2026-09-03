@@ -1,0 +1,63 @@
+id: microsoft.adcs
+name: Microsoft AD Certificate Services
+author: Rapid7
+version: 1.0.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Fix large-CA imports
+
+types:
+  - MicrosoftAdcsCertificate
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: AD CS Certificates
+    description: Import all certificates from a Microsoft AD Certificate Services CA database.
+    return_types:
+      - MicrosoftAdcsCertificate
+
+settings:
+  ca_server:
+    type: string
+    title: CA Server
+    description: Hostname or IP address of the Certificate Authority server.
+    example: ca-server.lab.local
+
+  ca_name:
+    type: string
+    title: CA Name
+    description: >-
+      The common name of the Certificate Authority as shown in the Certification Authority MMC snap-in.
+    example: LAB-ROOT-CA
+
+  username:
+    type: string
+    title: Username
+    description: >-
+      A domain account with CA admin or certificate read permissions. Use DOMAIN\username format.
+    example: CORP\svc-surfcmd
+
+  password:
+    type: string
+    title: Password
+    format: password
+    description: Password for the domain account.
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity.
+    default: true
+
+runtime: py311
+
+python_dependencies:
+  - pypsrp
+
+categories:
+  - asset_management
+
+show_orchestrator_ui: false

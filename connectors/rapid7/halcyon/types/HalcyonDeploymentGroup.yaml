@@ -1,0 +1,110 @@
+x-samos-type-name: HalcyonDeploymentGroup
+x-samos-namespace: halcyon
+title: Halcyon Deployment Group
+description: >-
+  A deployment group that controls agent version targeting for endpoints
+  on the Halcyon anti-ransomware platform.
+
+x-samos-extends-types:
+  - type-name: core.component-group
+    subtype-priority: 5
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: isDefault
+  - name: kind
+  - name: assetCount
+  - name: tenantId
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: deployments
+  - name: isDefault
+  - name: kind
+  - name: assetCount
+  - name: tenantId
+
+$ref: 'https://api.halcyon.ai#/components/schemas/ManualDeploymentGroupResponse'
+
+properties:
+  id:
+    title: Deployment Group ID
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Deployment Group Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  deployments:
+    title: Deployments
+    type: object
+    properties:
+      linux:
+        title: Linux
+        type: object
+        properties:
+          version:
+            title: Version
+            type: string
+      windows:
+        title: Windows
+        type: object
+        properties:
+          version:
+            title: Version
+            type: string
+
+  isDefault:
+    title: Default Group?
+    type: boolean
+
+  kind:
+    title: Kind
+    type: string
+
+  assetCount:
+    title: Asset Count
+    type: integer
+
+  archivedAssetCount:
+    title: Archived Asset Count
+    type: integer
+
+  tenantId:
+    title: Tenant
+    type: string
+    x-samos-ref-types:
+      - type-name: HalcyonTenant
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+
+x-samos-virtual:
+  members:
+    type-name: HalcyonAsset
+    cypher-pattern: >
+      <-[:`e:HalcyonAsset:deploymentGroup.id`]-(:HalcyonAsset)

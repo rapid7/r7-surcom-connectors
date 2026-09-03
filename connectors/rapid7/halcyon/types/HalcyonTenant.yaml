@@ -1,0 +1,87 @@
+x-samos-type-name: HalcyonTenant
+x-samos-namespace: halcyon
+title: Halcyon Tenant
+description: A tenant managed by the Halcyon anti-ransomware platform.
+
+x-samos-extends-types:
+  - type-name: Organization
+    subtype-priority: 5
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: alias
+  - name: tier
+  - name: createdAt
+
+x-samos-detail:
+  - name: name
+  - name: alias
+  - name: idpAlias
+  - name: parentId
+  - name: tier
+  - name: manageTenants
+  - name: isNonEnterprise
+  - name: createdAt
+
+$ref: 'https://api.halcyon.ai#/components/schemas/TenantResponse'
+
+properties:
+  id:
+    title: Tenant ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    type: string
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+
+  name:
+    title: Tenant Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  alias:
+    title: Alias
+    type: string
+
+  idpAlias:
+    title: IDP Alias
+    type: string
+
+  manageTenants:
+    title: Manages Tenants?
+    type: boolean
+
+  parentId:
+    title: Parent Tenant
+    type: string
+    nullable: true
+    description: >-
+      The parent tenant in the Halcyon hierarchy. This refers to a Halcyon-managed parent.
+    x-samos-ref-types:
+      - type-name: HalcyonTenant
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+
+  createdAt:
+    title: Created At
+    type: string
+    format: date-time
+
+  isNonEnterprise:
+    title: Non-Enterprise?
+    type: boolean
+
+  tier:
+    title: Tier
+    type: integer

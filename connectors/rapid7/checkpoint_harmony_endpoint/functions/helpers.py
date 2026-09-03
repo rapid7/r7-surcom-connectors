@@ -221,6 +221,13 @@ class CheckPointHarmonyEndpointClient:
                 converted = _epoch_millis_to_iso(raw) or _normalize_datetime_str(raw)
                 normalized[parent] = {**parent_obj, field: converted}
 
+        # Convert superNodeServerErrorCode to string; the API may return an integer.
+        super_node = normalized.get("superNode")
+        if isinstance(super_node, dict) and "superNodeServerErrorCode" in super_node:
+            raw_code = super_node["superNodeServerErrorCode"]
+            if raw_code is not None:
+                normalized["superNode"] = {**super_node, "superNodeServerErrorCode": str(raw_code)}
+
         return normalized
 
     @staticmethod
@@ -261,7 +268,7 @@ def _epoch_millis_to_iso(value: Any) -> str | None:
         dt = datetime.fromtimestamp(millis / 1000, tz=timezone.utc)
         return dt.isoformat()
     except (ValueError, TypeError, OSError):
-        return str(value) if value else None
+        return None
 
 
 def _normalize_datetime_str(value: Any) -> str | None:
@@ -292,6 +299,10 @@ def _normalize_datetime_str(value: Any) -> str | None:
 
     text = value.strip()
     if not text:
+        return None
+
+    # Treat sentinel / status strings returned by some APIs as absent dates.
+    if text.upper() in {"N/A", "NA", "-", "NONE", "NULL"}:
         return None
 
     # Normalise trailing 'Z' to '+00:00' so fromisoformat can parse it.

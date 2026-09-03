@@ -1,0 +1,91 @@
+x-samos-type-name: AnthropicRole
+x-samos-namespace: anthropic
+title: Anthropic Role
+description: A role-based access control role defined on an Anthropic organization
+
+x-samos-extends-types:
+  - type-name: core.named-object
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: organization_uuid
+  - name: created_at
+  - name: updated_at
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: organization_uuid
+  - name: x_permissions
+  - name: created_at
+  - name: updated_at
+
+properties:
+  id:
+    title: Id
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  created_at:
+    title: Created At
+    type: string
+    format: date-time
+
+  updated_at:
+    title: Updated At
+    type: string
+    format: date-time
+
+  x_permissions:
+    title: Permissions
+    type: array
+    description: Permissions currently granted to this role
+    items:
+      type: object
+      properties:
+        action:
+          title: Action
+          type: string
+          description: The action this permission grants
+        resource_id:
+          title: Resource Id
+          type: string
+          description: ID of the resource the action is scoped to
+          x-samos-ref-types:
+            - type-name: AnthropicOrganization
+              key-name: uuid
+        resource_type:
+          title: Resource Type
+          type: string
+          description: Type of the resource the action is scoped to
+
+  organization_uuid:
+    title: Organization
+    type: string
+    description: UUID of the organization this role is defined on
+    x-samos-ref-types:
+      - type-name: AnthropicOrganization
+        key-name: uuid

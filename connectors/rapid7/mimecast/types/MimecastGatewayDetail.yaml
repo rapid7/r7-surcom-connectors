@@ -10,6 +10,9 @@ x-samos-extends-types:
 x-samos-keys:
   - x_id
 
+required:
+  - x_id
+
 x-samos-table:
   - name: d_id
   - name: inboundMxRecords.priority

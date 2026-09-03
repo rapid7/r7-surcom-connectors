@@ -1,0 +1,73 @@
+id: halcyon
+name: Halcyon
+author: Rapid7
+version: 1.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Fix a data issue with HalcyonDeploymentGroup
+
+# IDs of the Surface Command types that are part of this connector.
+# Type IDs must be unique across all Connectors.
+types:
+  - HalcyonAsset
+  - HalcyonTenant
+  - HalcyonDeploymentGroup
+  - HalcyonPolicyGroup
+
+# Functions provided by this connector.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Halcyon Assets
+    description: >-
+      Import all Assets, Tenants, Deployment Groups, and Policy Groups from the Halcyon anti-ransomware platform.
+    return_types:
+      - HalcyonAsset
+      - HalcyonTenant
+      - HalcyonDeploymentGroup
+      - HalcyonPolicyGroup
+
+# Configuration settings for this connector.
+settings:
+  username:
+    type: string
+    title: Username
+    description: >-
+      Username (email address) for authenticating with the Halcyon platform.
+    example: admin@example.com
+
+  password:
+    type: string
+    title: Password
+    format: password
+    description: Password for authenticating with the Halcyon platform.
+
+  tenant_id:
+    type: string
+    title: Tenant ID
+    description: >-
+      UUID of a specific tenant to import. Leave blank for Administrator accounts;
+      required for ReadOnly accounts.
+    example: 10000000-0000-0000-0000-000000000001
+    nullable: true
+
+# Connectors that must be installed before this connector.
+# Required because HalcyonAsset references the Mitigation type.
+depends-on:
+  - mitre.attack.app
+
+runtime: py311
+
+# OpenAPI reference schema for the Halcyon API.
+# Source: https://api.halcyon.ai/docs/index.html (Download OpenAPI specification)
+reference-schemas:
+  - url: https://api.halcyon.ai
+    file: refdocs/halcyon_openapi.json
+
+# Categories for this connector in the Extension Library.
+categories:
+  - endpoint_detection_response

@@ -13,6 +13,9 @@ x-samos-keys:
   - id
   - domain
 
+required:
+  - id
+
 x-samos-table:
   - name: domain
   - name: sendOnly

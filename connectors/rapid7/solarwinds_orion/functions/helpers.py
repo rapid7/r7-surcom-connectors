@@ -45,15 +45,10 @@ CPULoad,MemoryUsed,LoadAverage1,LoadAverage5,LoadAverage15,
 MemoryAvailable,PercentMemoryUsed,PercentMemoryAvailable,
 LastSync,LastSystemUpTimePollUtc,MachineType,IsServer,Severity,
 UiSeverity,ChildStatus,Allow64BitCounters,AgentPort,
-TotalMemory,CMTS,CustomPollerLastStatisticsPoll,
-CustomPollerLastStatisticsPollSuccess,SNMPVersion,PollInterval,
+TotalMemory,CMTS,CustomPollerLastStatisticsPoll,SNMPVersion,PollInterval,
 EngineID,RediscoveryInterval,NextPoll,NextRediscovery,StatCollection,
 External,Community,RWCommunity,IPAddressGUID,
-NodeName,BlockUntil,BufferNoMemThisHour,BufferNoMemToday,
-BufferSmMissThisHour,BufferSmMissToday,BufferMdMissThisHour,
-BufferMdMissToday,BufferBgMissThisHour,BufferBgMissToday,
-BufferLgMissThisHour,BufferLgMissToday,BufferHgMissThisHour,
-BufferHgMissToday,OrionIdPrefix,OrionIdColumn,SkippedPollingCycles,
+NodeName,BlockUntil,OrionIdPrefix,OrionIdColumn,SkippedPollingCycles,
 MinutesSinceLastSync,EntityType,DetailsUrl,
 DisplayName,Category,IsOrionServer"""
 
@@ -132,14 +127,14 @@ class SolarWindsOrionClient:
         SWIS_DEFAULT_PORT = 17774
         self.port = f_url.port if f_url.port not in (None, 80, 443) else SWIS_DEFAULT_PORT
         # SWIS queries against large Orion installations can take several minutes
-        # to respond. Use a generous read timeout (15 min) to avoid aborting
+        # to respond. Use a generous read timeout (30 min) to avoid aborting
         # queries that are still processing server-side.
         self.swis = orionsdk.SwisClient(
             self.base_url,
             self.settings.get("username"),
             self.settings.get("password"),
             verify=self.settings.get("verify_tls"),
-            session=HttpSession(timeout=(30, 1500)),
+            session=HttpSession(timeout=(30, 2000)),
             port=self.port,
         )
 

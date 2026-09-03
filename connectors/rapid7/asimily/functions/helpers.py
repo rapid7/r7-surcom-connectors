@@ -40,6 +40,9 @@ class AsimilyClient():
             self.settings.get("username"),
             self.settings.get("password")
         )
+        self.session.headers.update({
+            "source": "rapid7"
+        })
 
     def make_request(self, uri: str, params: dict = None, anomaly_severity: str = None) -> dict:
         """Make a request to the API with error handling.

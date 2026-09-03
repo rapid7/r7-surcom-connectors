@@ -1,0 +1,114 @@
+x-samos-type-name: HclAppscanExposure
+x-samos-namespace: hcl.appscan
+title: HCL AppScan Exposure
+description: A vulnerability class or security weakness identified by HCL AppScan on Cloud. One exposure represents a distinct issue type across all applications.
+
+x-samos-extends-types:
+  - type-name: Exposure
+
+x-samos-global-zone: true
+
+x-samos-keys:
+  - IssueTypeGuid
+
+required:
+  - IssueTypeGuid
+
+x-samos-table:
+  - name: IssueType
+  - name: d_severity
+  - name: Cvss
+  - name: d_cwe_id
+  - name: DiscoveryMethod
+
+x-samos-detail:
+  - name: IssueType
+  - name: IssueTypeId
+  - name: d_severity
+  - name: Cvss
+  - name: CvssVector
+  - name: d_cwe_id
+  - name: DiscoveryMethod
+  - name: Scanner
+  - name: ThreatClassId
+
+x-samos-derived-properties:
+  d_severity:
+    title: Severity
+    type: string
+    syntax: jmespath
+    value: "(Severity == 'Critical' && 'Severity: CRITICAL'
+      || Severity == 'High' && 'Severity: HIGH'
+      || Severity == 'Medium' && 'Severity: MEDIUM'
+      || Severity == 'Low' && 'Severity: LOW'
+      || 'Severity: NONE')"
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: severity
+    x-samos-ref-types:
+      - key-name: id
+        type-name: NoeticEnumSeverity
+
+  d_cwe_id:
+    title: CWE
+    type: string
+    syntax: jmespath
+    value: "join('-', ['CWE', to_string(Cwe)])"
+    x-samos-ref-types:
+      - key-name: id
+        type-name: MitreCwe
+
+properties:
+  IssueTypeGuid:
+    title: Exposure ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: id
+
+  IssueType:
+    title: Issue Type
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  IssueTypeId:
+    title: Issue Type ID
+    type: string
+
+  Severity:
+    title: Severity (Raw)
+    x-samos-hidden: true
+    type: string
+
+  Cvss:
+    title: CVSS Score
+    type: string
+
+  CvssVector:
+    title: CVSS Vector
+    type: string
+
+  Cwe:
+    title: CWE
+    type: integer
+
+  DiscoveryMethod:
+    title: Discovery Method
+    type: string
+
+  Scanner:
+    title: Scanner
+    type: string
+
+  ThreatClassId:
+    title: Threat Class
+    type: string
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: exposure_type
+    x-samos-ref-types:
+      - type-name: HclAppscanEnumExposureType
+        key-name: id

@@ -1,0 +1,179 @@
+x-samos-type-name: HclAppscanScan
+x-samos-namespace: hcl.appscan
+title: HCL AppScan Scan
+description: A security scan run in HCL AppScan on Cloud.
+
+x-samos-extends-types:
+  - type-name: Assessment
+
+$ref: https://cloud.appscan.com/swagger/v1/swagger.json#/components/schemas/MinScanModel
+
+x-samos-keys:
+  - Id
+
+required:
+  - Id
+
+x-samos-table:
+  - name: Name
+  - name: Technology
+  - name: AppName
+
+x-samos-detail:
+  - name: Name
+  - name: Technology
+  - name: AppId
+  - name: Description
+  - name: NumberOfExecutions
+  - name: Url
+  - name: CreatedAt
+  - name: LastModified
+
+properties:
+  Id:
+    title: Scan ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Assessment
+      property-name: id
+
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  AppId:
+    title: Application
+    type: string
+    x-samos-ref-types:
+      - type-name: HclAppscanApplication
+        key-name: Id
+
+  AppName:
+    title: Application Name
+    type: string
+
+  Description:
+    title: Description
+    type: string
+
+  Technology:
+    title: Technology
+    type: string
+
+  IastAgentStatus:
+    title: IAST Agent Status
+    type: string
+
+  Url:
+    title: URL
+    type: string
+
+  NumberOfExecutions:
+    title: Number of Executions
+    type: integer
+
+  CreatedAt:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: Assessment
+      property-name: start_date
+
+  LastModified:
+    title: Last Modified
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: Assessment
+      property-name: end_date
+
+  NextScheduledRun:
+    title: Next Scheduled Run
+    type: string
+    format: date-time
+
+  AssetGroupId:
+    title: Asset Group ID
+    x-samos-hidden: true
+    type: string
+
+  BusinessUnitId:
+    title: Business Unit ID
+    x-samos-hidden: true
+    type: string
+
+  IsPersonal:
+    title: Personal Scan?
+    type: boolean
+
+  EnablePromote:
+    title: Enable Promote?
+    type: boolean
+
+  RescanAllowed:
+    title: Rescan Allowed?
+    type: boolean
+
+  FullyAutomatic:
+    title: Fully Automatic?
+    type: boolean
+
+  EnableMailNotifications:
+    title: Email Notifications?
+    type: boolean
+
+  ProactiveAlerts:
+    title: Proactive Alerts?
+    type: boolean
+
+  CreatedBy:
+    title: Created By
+    x-samos-hidden: true
+    type: object
+  IastAgentType:
+    title: IAST Agent Type
+    type: string
+
+  TestOptimizationLevel:
+    title: Test Optimization Level
+    type: string
+
+  RecurrenceRule:
+    title: Recurrence Rule
+    type: string
+
+  RecurrenceEndDate:
+    title: Recurrence End Date
+    type: string
+    format: date-time
+
+  DeletedAllowed:
+    title: Delete Allowed?
+    x-samos-hidden: true
+    type: boolean
+
+  EnableEditing:
+    title: Enable Editing?
+    x-samos-hidden: true
+    type: boolean
+
+  ParsedFromUploadedFile:
+    title: Parsed From Uploaded File?
+    x-samos-hidden: true
+    type: boolean
+
+  Presence:
+    title: Presence
+    x-samos-hidden: true
+    type: object
+
+  LatestExecution:
+    title: Latest Execution
+    x-samos-hidden: true
+    type: object

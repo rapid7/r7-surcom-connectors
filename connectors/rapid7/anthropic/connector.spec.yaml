@@ -1,14 +1,15 @@
 id: anthropic
 name: Anthropic
 author: Rapid7
-version: 1.1.0
+version: 1.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Added detail to configuration instructions
-  - Update dependencies
+  - >-
+    Added import of organizations, organization users, roles, and groups from
+    the Anthropic Compliance API
 
 # IDs of Surface Command types in this connector.
 # Type IDs must be unique across all connectors. Prefix each with a SnakeCased
@@ -17,6 +18,10 @@ types:
   - AnthropicUser
   - AnthropicWorkspace
   - AnthropicClaudeCodeUser
+  - AnthropicOrganization
+  - AnthropicOrganizationUser
+  - AnthropicRole
+  - AnthropicGroup
 
 # Functions provided by this connector. Include a `test` function and at least
 # one other function that returns one or more types defined in `types`.
@@ -31,6 +36,17 @@ functions:
       - AnthropicWorkspace
       - AnthropicClaudeCodeUser
 
+  - id: import_compliance
+    title: Anthropic Organizations, Users, Roles, and Groups
+    description: >-
+      Import all organizations, organization users, roles, and groups from the
+      Anthropic Compliance API
+    return_types:
+      - AnthropicOrganization
+      - AnthropicOrganizationUser
+      - AnthropicRole
+      - AnthropicGroup
+
 # Configuration settings for this connector.
 settings:
   api_key:
@@ -38,6 +54,15 @@ settings:
     title: API Key
     description: Anthropic API key with admin permissions
     format: password
+
+  compliance_access_key:
+    type: string
+    title: Compliance Access Key
+    description: >-
+      Compliance Access Key created in claude.ai, used only by the
+      organizations, users, roles, and groups import
+    format: password
+    nullable: true
 
   include_archived_workspaces:
     type: boolean

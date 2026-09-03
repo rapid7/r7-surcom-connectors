@@ -10,6 +10,9 @@ x-samos-extends-types:
 x-samos-keys:
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: lastIP
@@ -92,6 +95,21 @@ x-samos-derived-properties:
     x-samos-fulfills:
       type-name: core.component
       property-name: active
+
+  # Asset class is always "Workstation" — IGEL OS runs exclusively on thin-client hardware, not servers.
+  # Without this override the ML classifier reads "IGEL Linux" and assigns "Server".
+  d_asset_class:
+    title: Asset Class
+    type: string
+    syntax: expression
+    value: 'MachineAssetClass: Workstation'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_class
+    x-samos-ref-types:
+      - type-name: NoeticEnumMachineAssetClass
+        key-name: id
 
 properties:
   id:

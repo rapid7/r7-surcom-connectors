@@ -1,0 +1,27 @@
+[
+  {
+    "id": "critical",
+    "value": "Critical",
+    "map_to": "Severity: CRITICAL"
+  },
+  {
+    "id": "high",
+    "value": "High",
+    "map_to": "Severity: HIGH"
+  },
+  {
+    "id": "medium",
+    "value": "Medium",
+    "map_to": "Severity: MEDIUM"
+  },
+  {
+    "id": "low",
+    "value": "Low",
+    "map_to": "Severity: LOW"
+  },
+  {
+    "id": "info",
+    "value": "Info",
+    "map_to": "Severity: NONE"
+  }
+]

@@ -1,0 +1,148 @@
+x-samos-type-name: UpGuardVendorQuestionnaire
+x-samos-namespace: upguard
+title: UpGuard Vendor Questionnaire
+description: A security questionnaire sent to or completed by a vendor, tracked by UpGuard. Completed questionnaires carry an associated score.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.named-object
+    subtype-priority: 3
+
+$ref: 'https://demo.upguard.com/api/docs#/definitions/GetQuestionnaireResponsePayload'
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: questionnaire_name
+  - name: status
+  - name: score
+  - name: percent_completed
+  - name: x_vendor_hostname
+  - name: sent_by.name
+  - name: answered_by.name
+  - name: sent_at
+  - name: answered_at
+
+x-samos-detail:
+  - name: questionnaire_name
+  - name: type_name
+  - name: status
+  - name: score
+  - name: percent_completed
+  - name: x_vendor_hostname
+  - name: recipients
+  - name: sent_by
+  - name: answered_by
+  - name: sent_at
+  - name: answered_at
+  - name: due_date
+
+x-samos-derived-properties:
+  d_name:
+    # Use questionnaire_name as the name of the questionnaire with the vendor hostname.
+    type: string
+    syntax: jmespath
+    value: "join(': ', [x_vendor_hostname, questionnaire_name || type_name])"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  id:
+    title: Questionnaire ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+
+  questionnaire_type_id:
+    title: Questionnaire Type ID
+    type: integer
+    x-samos-hidden: true
+
+  type_name:
+    title: Type
+    type: string
+
+  questionnaire_name:
+    title: Questionnaire Name
+    type: string
+
+  status:
+    title: Status
+    type: string
+    description: Current status of the questionnaire (e.g. sent, in_progress, complete).
+
+  score:
+    title: Score
+    type: integer
+    description: Questionnaire score; only present for completed questionnaires.
+
+  percent_completed:
+    title: Percent Completed
+    type: integer
+
+  recipients:
+    title: Recipients
+    type: array
+    items:
+      type: object
+      properties:
+        email:
+          title: Email
+          type: string
+        name:
+          title: Name
+          type: string
+        is_pending_invite:
+          title: Pending Invite?
+          type: boolean
+
+  sent_by:
+    title: Sent By
+    type: object
+    properties:
+      email:
+        title: Email
+        type: string
+      name:
+        title: Sent By
+        type: string
+
+  answered_by:
+    title: Answered By
+    type: object
+    properties:
+      email:
+        title: Email
+        type: string
+      name:
+        title: Answered By
+        type: string
+
+  sent_at:
+    title: Sent At
+    type: string
+    format: date-time
+
+  answered_at:
+    title: Answered At
+    type: string
+    format: date-time
+
+  due_date:
+    title: Due Date
+    type: string
+    format: date-time
+
+  x_vendor_hostname:
+    title: Vendor
+    type: string
+    description: Primary hostname of the vendor this questionnaire belongs to.
+    x-samos-ref-types:
+      - type-name: UpGuardVendor
+        key-name: primary_hostname

@@ -1,0 +1,150 @@
+x-samos-type-name: UpGuardRisk
+x-samos-namespace: upguard
+title: UpGuard Risk
+description: A security risk or misconfiguration detected by UpGuard across the organization's digital footprint.
+x-samos-detail-prefer-type-title: true
+x-samos-global-zone: true
+x-samos-extends-types:
+  - type-name: Exposure
+    subtype-priority: 3
+
+$ref: 'https://demo.upguard.com/api/docs#/definitions/Risk'
+
+x-samos-keys:
+  - id
+
+x-samos-table:
+  - name: finding
+  - name: d_exposure_type
+  - name: hostnameCount
+  - name: severity
+  - name: firstDetected
+
+x-samos-detail:
+  - name: finding
+  - name: d_exposure_type
+  - name: hostnameCount
+  - name: severity
+  - name: risk
+  - name: description
+  - name: remediation
+  - name: riskType
+  - name: riskSubtype
+  - name: x_vendor_hostname
+  - name: firstDetected
+
+required:
+  - id
+
+x-samos-derived-properties:
+  d_exposure_type:
+    # Remap "Vulnerability" category to "Weakness" for risks without a CVE
+    # (e.g. end-of-life software). All other categories pass through as-is.
+    type: string
+    syntax: jmespath
+    title: Exposure Type
+    value: "(category == 'Vulnerability' || category == 'vulnerability_management') && 'weakness' || category"
+    x-samos-ref-types:
+      - type-name: UpGuardExposureCategoryEnum
+        key-name: id
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: exposure_type
+
+properties:
+  id:
+    title: Risk
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: id
+    x-samos-correlation:
+      correlation-key: Exposure.id
+      correlation-type: Exposure
+      priority: 5
+
+  finding:
+    title: Finding
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  risk:
+    title: Risk Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  description:
+    title: Technical Description
+    type: string
+
+  remediation:
+    title: Remediation
+    type: string
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: solution
+
+  severity:
+    title: Severity
+    type: string
+    x-samos-ref-types:
+      - type-name: UpGuardExposureSeverityEnum
+        key-name: id
+    x-samos-fulfills:
+      type-name: Exposure
+      property-name: severity
+
+  category:
+    title: Category
+    type: string
+
+  firstDetected:
+    title: First Detected
+    type: string
+    format: date-time
+
+  hostnames:
+    # hostname is not part of exposure,
+    # but to avoid openschema warning, added property and hidden it.
+    x-samos-hidden: true
+    title: Affected Hostnames
+    type: array
+    items:
+      type: string
+
+  hostnameCount:
+    title: Hostname Count
+    type: integer
+
+  riskType:
+    title: Risk Type
+    type: string
+  riskSubtype:
+    title: Risk Subtype
+    type: string
+  risk_waivers:
+    title: Risk Waivers
+    type: array
+    items:
+      type: object
+  sources:
+    title: Sources
+  hostnameMeta:
+    # hostnameMeta is not part of exposure,
+    # but to avoid openschema warning, added property and hidden it.
+    x-samos-hidden: true
+    title: Hostname Meta
+
+  x_vendor_hostname:
+    title: Vendor
+    type: string
+    description: The hostname of the vendor associated with this risk, it's applicable for vendor risk.
+    x-samos-ref-types:
+      - type-name: UpGuardVendor
+        key-name: primary_hostname
