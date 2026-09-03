@@ -9,7 +9,7 @@ info:
   x-cortex-tag: r7-surcom-connectors
   x-cortex-type: service
   x-cortex-domain-parents:
-    - tag: surface-command
+    - tag: surface-command-connectors
   x-cortex-groups:
     - target:not-deployed
     - strategy:cloud
