@@ -1,0 +1,127 @@
+x-samos-type-name: UpGuardIpAddress
+x-samos-namespace: upguard
+title: UpGuard IP Address
+description: An IP address monitored by UpGuard.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: IpAddress
+    subtype-priority: 3
+
+x-samos-global-zone: true
+
+$ref: 'https://demo.upguard.com/api/docs#/definitions/IP'
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: ip
+  - name: owner
+  - name: country
+  - name: automated_score
+
+x-samos-detail:
+  - name: ip
+  - name: owner
+  - name: country
+  - name: automated_score
+  - name: asn
+  - name: as_name
+  - name: labels
+  - name: services
+  - name: x_vendor_hostname
+  - name: sources
+
+required:
+  - ip
+
+x-samos-derived-properties:
+  d_id:
+    # Derived property to fulfill the core.component.id property,
+    # because we used the ip address as IpAddress:value fulfillment.
+    type: string
+    syntax: jmespath
+    value: ip
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  d_name:
+    # Derived property to fulfill the core.named-object.name property,
+    # because we used the ip address as IpAddress:value fulfillment.
+    type: string
+    syntax: jmespath
+    value: ip
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_is_external:
+    # Mark this IP as external when it belongs to a vendor (x_vendor_hostname is set).
+    type: boolean
+    syntax: jmespath
+    value: 'x_vendor_hostname && `true` || `false`'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_external
+
+properties:
+  ip:
+    title: IP Address
+    type: string
+    format: ip-addr
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: IpAddress
+      property-name: value
+    x-samos-correlation:
+      correlation-key: IpAddress.value
+      correlation-type: IpAddress
+      priority: 4
+
+  owner:
+    title: Owner
+    type: string
+
+  country:
+    title: Country
+    type: string
+
+  services:
+    title: Services
+    type: array
+    items:
+      type: string
+
+  sources:
+    title: Discovery Sources
+    type: array
+    items:
+      type: string
+  asn:
+    title: ASN
+  automated_score:
+    title: Automated Score
+  labels:
+    title: Labels
+    type: array
+    items:
+      type: string
+
+  x_vendor_hostname:
+    title: Vendor
+    type: string
+    description: The IP address belonging to the vendor hostname, it's applicable for vendor risk.
+    x-samos-ref-types:
+      - type-name: UpGuardVendor
+        key-name: primary_hostname
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+
+  as_name:
+    title: ASN Name

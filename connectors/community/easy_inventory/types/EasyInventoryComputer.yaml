@@ -1,0 +1,472 @@
+x-samos-type-name: EasyInventoryComputer
+x-samos-namespace: easy.inventory
+title: Easy Inventory Computer
+description: A computer inventoried by the Easy Inventory agent.
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id
+
+x-samos-table:
+  - name: name
+  - name: host
+  - name: tcpIp
+  - name: descOs
+  - name: manufacturer
+  - name: model
+  - name: lastInventory
+
+x-samos-detail:
+  - name: name
+  - name: host
+  - name: domain
+  - name: tcpIp
+  - name: mac
+  - name: descOs
+  - name: manufacturer
+  - name: model
+  - name: cpu
+  - name: ram
+  - name: hd
+  - name: freeHd
+  - name: assetId
+  - name: antivirusName
+  - name: status
+  - name: dateOfInclusion
+  - name: lastInventory
+  - name: warrantyDate
+  - name: extendedWarrantyDate
+  - name: adapters
+  - name: disks
+  - name: monitors
+  - name: latitude
+  - name: longitute
+
+x-samos-derived-properties:
+  d_id:
+    # `id` is an integer in Easy Inventory, but we need a string ID
+    type: string
+    title: ID
+    syntax: expression
+    value: '{id}'
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_hostnames:
+    type: array
+    title: Hostnames
+    x-samos-hidden: true
+    syntax: jmespath
+    value: '[host, name] | [?@]'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_fqdn:
+    type: string
+    title: FQDN
+    x-samos-hidden: true
+    syntax: jmespath
+    # Only build an FQDN when host AND domain are set; otherwise leave empty
+    # so it never becomes an unqualified-hostname collision.
+    value: "host && domain && join('.', [host, domain])"
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 1
+
+  d_mac_addresses:
+    # Easy Inventory reports a primary MAC plus one entry per network adapter
+    type: array
+    title: MAC Addresses
+    x-samos-hidden: true
+    syntax: jmespath
+    # Drop the all-zero placeholder MAC so it never merges machines together.
+    value: "[[mac], adapters[].mac] | [] | [?@ && @ != '00:00:00:00:00:00']"
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 3
+
+  d_ips:
+    type: array
+    title: IP Addresses
+    x-samos-hidden: true
+    syntax: jmespath
+    # Drop 0.0.0.0 (reported by offline machines) so it never becomes a
+    # correlation value that would merge unrelated machines together.
+    value: "[[tcpIp], adapters[].ip] | [] | [?@ && @ != '0.0.0.0']"
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  d_first_seen:
+    # Easy Inventory reports dates as YYYY-MM-DD, but endpoint_first_seen
+    # requires a date-time, so we anchor the date at midnight UTC.
+    type: string
+    format: date-time
+    title: First Seen
+    x-samos-hidden: true
+    syntax: jmespath
+    value: "dateOfInclusion && join('', [dateOfInclusion, 'T00:00:00Z'])"
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_first_seen
+
+  d_last_seen:
+    type: string
+    format: date-time
+    title: Last Seen
+    x-samos-hidden: true
+    syntax: jmespath
+    value: "lastInventory && join('', [lastInventory, 'T00:00:00Z'])"
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+
+  d_active:
+    type: boolean
+    title: Active?
+    x-samos-hidden: true
+    syntax: jmespath
+    # Only mark inactive for values explicitly documented as such:
+    # 12 (Inativo) and 99 (Desativado).
+    value: 'status != `99` && status != `12`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  id:
+    title: Easy Inventory ID
+    type: integer
+    x-samos-immutable: true
+    x-samos-hidden: true
+
+  name:
+    # `name` is the same hostname as `host`, only upper-cased, so it is NOT used
+    # as a correlation key (that would just duplicate the `host` correlation).
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  host:
+    title: Hostname
+    type: string
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  domain:
+    title: Domain
+    type: string
+
+  mac:
+    # NOTE: correlation lives on `d_mac_addresses` instead, which excludes the
+    # all-zero placeholder MAC. Correlating on this raw field directly would
+    # merge unrelated machines whenever Easy Inventory reports the placeholder
+    # as the primary MAC.
+    title: MAC Address
+    type: string
+    format: mac-addr
+
+  tcpIp:
+    title: IP Address
+    type: string
+    format: ip-addr
+
+  descOs:
+    title: Operating System
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  idOs:
+    title: Operating System ID
+    type: integer
+
+  manufacturer:
+    title: Manufacturer
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+
+  model:
+    title: Model
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+
+  assetId:
+    # "Patrimônio" - an asset tag assigned by the organization, not a
+    # manufacturer serial number
+    title: Asset Tag
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_tag
+
+  status:
+    title: Status
+    description: >-
+      1: Registered manually, 2: New, 3: Changed, 4: Pending, 5: Normal,
+      9: Overdue, 10: Under maintenance, 11: Manual, 12: Inactive, 99: Disabled
+    type: integer
+
+  dateOfInclusion:
+    title: First Inventoried
+    type: string
+    format: date
+
+  lastInventory:
+    title: Last Inventoried
+    type: string
+    format: date
+
+  antivirusName:
+    title: Antivirus
+    type: string
+
+  cpu:
+    title: CPU
+    type: string
+
+  averageCpu:
+    title: Average CPU (%)
+    type: integer
+
+  celsius:
+    title: CPU Temperature (°C)
+    type: integer
+
+  ram:
+    title: RAM
+    type: number
+
+  averageRam:
+    title: Average RAM (%)
+    type: integer
+
+  hd:
+    title: Disk
+    type: number
+
+  freeHd:
+    title: Free Disk
+    type: number
+
+  hd2:
+    title: Secondary Disk
+    type: number
+
+  freeHd2:
+    title: Free Secondary Disk
+    type: number
+
+  health:
+    title: Disk 1 Health (%)
+    type: integer
+
+  health2:
+    title: Disk 2 Health (%)
+    type: integer
+
+  performance:
+    title: Performance
+    description: >-
+      1: Adequate, 2: Overloaded, 3: Critical, null/0: No information
+    type: integer
+
+  warrantyDate:
+    title: Warranty Date
+    type: string
+    format: date
+
+  extendedWarrantyDate:
+    title: Extended Warranty Date
+    type: string
+    format: date
+
+  latitude:
+    title: Latitude
+    type: string
+
+  longitute:
+    # NOTE: "longitute" is the spelling used by the Easy Inventory API
+    title: Longitude
+    type: string
+
+  identification:
+    title: Computer Identification
+    type: integer
+
+  idPlatform:
+    title: Platform ID
+    type: integer
+
+  platformDescription:
+    title: Platform
+    type: string
+
+  idEquipmentClass:
+    title: Hardware Class ID
+    type: integer
+
+  idCompany:
+    title: Company ID
+    type: integer
+
+  idSite:
+    title: Site ID
+    type: integer
+
+  idDepartment:
+    title: Department ID
+    type: integer
+
+  idPerson:
+    title: Person ID
+    type: integer
+
+  vincPerson:
+    title: Person Link
+    description: '1: User, 2: Owner'
+    type: integer
+
+  idLogon:
+    title: Logon ID
+    type: integer
+
+  idGeofence:
+    title: Geofence ID
+    type: integer
+
+  idFenceSituation:
+    title: Geofence Situation
+    description: '1: Entered, 2: Inside, 3: Left, 4: Outside'
+    type: integer
+
+  depreciationM:
+    title: Depreciation Months
+    type: integer
+
+  depreciationR:
+    title: Depreciation Residual
+    type: number
+
+  depreciationS:
+    title: Depreciation Balance
+    type: number
+
+  adapters:
+    title: Network Adapters
+    type: array
+    items:
+      type: object
+      properties:
+        mac:
+          title: MAC Address
+          type: string
+          format: mac-addr
+        name:
+          title: Name
+          type: string
+        ip:
+          title: IP Address
+          type: string
+          format: ip-addr
+
+  disks:
+    title: Disks
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          title: Name
+          type: string
+        type:
+          title: Type
+          type: string
+        primary:
+          title: Primary?
+          type: boolean
+        serie:
+          title: Serial Number
+          type: string
+        total:
+          title: Total
+          type: number
+        free:
+          title: Free
+          type: number
+        celsius:
+          title: Temperature (°C)
+          type: integer
+        badBlocks:
+          title: Bad Blocks
+          type: integer
+        seekErrors:
+          title: Seek Errors
+          type: integer
+        paramOnHours:
+          title: Power On Hours
+          type: integer
+        remaining:
+          title: Remaining Life (%)
+          type: integer
+        health:
+          title: Health (%)
+          type: integer
+
+  monitors:
+    title: Monitors
+    type: array
+    items:
+      type: object
+      properties:
+        type:
+          title: Type
+          type: string
+        name:
+          title: Name
+          type: string
+
+  fields:
+    title: Custom Fields
+    type: array
+    items:
+      type: object
+      properties:
+        idField:
+          title: Field ID
+          type: integer
+        name:
+          title: Name
+          type: string
+        value:
+          title: Value
+          type: string

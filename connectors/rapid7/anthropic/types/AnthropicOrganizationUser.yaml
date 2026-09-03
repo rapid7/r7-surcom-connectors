@@ -1,0 +1,111 @@
+x-samos-type-name: AnthropicOrganizationUser
+x-samos-namespace: anthropic
+title: Anthropic Organization User
+description: A member of an organization linked under an Anthropic parent organization
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 2
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-virtual:
+  # Fulfill `core.principal:groups` by finding the groups that list this user as
+  # a member. Membership is only returned on the group records.
+  groups:
+    type-name: AnthropicGroup
+    cypher-pattern: >
+      <-[:`e:AnthropicGroup:x_members`]-(:AnthropicGroup)
+
+x-samos-table:
+  - name: full_name
+  - name: email
+  - name: organization_role
+  - name: organization_uuid
+  - name: created_at
+
+x-samos-detail:
+  - name: full_name
+  - name: email
+  - name: organization_role
+  - name: organization_uuid
+  - name: created_at
+  - name: groups
+
+x-samos-derived-properties:
+  d_administrator:
+    title: Administrator?
+    type: boolean
+    syntax: jmespath
+    value: >-
+      contains([`owner`, `primary_owner`, `admin`, `membership_admin`],
+      organization_role)
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_administrator
+
+properties:
+  id:
+    title: Id
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  full_name:
+    title: Full Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  email:
+    title: Email
+    type: string
+    format: email
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+
+  organization_role:
+    title: Organization Role
+    type: string
+    description: >-
+      The user's built-in membership level within the listed organization. This
+      is independent of any custom RBAC role assignments.
+    enum:
+      - admin
+      - billing
+      - claude_code_user
+      - developer
+      - managed
+      - membership_admin
+      - owner
+      - primary_owner
+      - user
+
+  created_at:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date
+
+  organization_uuid:
+    title: Organization
+    type: string
+    description: UUID of the organization this user is a member of
+    x-samos-ref-types:
+      - type-name: AnthropicOrganization
+        key-name: uuid

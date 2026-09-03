@@ -1,0 +1,85 @@
+x-samos-type-name: HclAppscanFinding
+x-samos-namespace: hcl.appscan
+title: HCL AppScan Finding
+description: A specific instance of a security exposure found in an application by HCL AppScan on Cloud.
+
+x-samos-extends-types:
+  - type-name: Finding
+
+x-samos-keys:
+  - Id
+
+required:
+  - Id
+
+x-samos-table:
+  - name: IssueTypeGuid
+  - name: ApplicationId
+
+x-samos-detail:
+  - name: IssueTypeGuid
+  - name: ApplicationId
+  - name: ScanId
+  - name: DateCreated
+  - name: LastFound
+
+properties:
+  Id:
+    title: Finding ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+
+  IssueTypeGuid:
+    title: Exposure
+    type: string
+    x-samos-ref-types:
+      - type-name: HclAppscanExposure
+        key-name: IssueTypeGuid
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability
+
+  ApplicationId:
+    title: Application
+    type: string
+    x-samos-ref-types:
+      - type-name: HclAppscanApplication
+        key-name: Id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to
+
+  ScanId:
+    title: Scan
+    type: string
+    x-samos-ref-types:
+      - type-name: HclAppscanScan
+        key-name: Id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: part_of
+
+  ScanName:
+    title: Scan Name
+    type: string
+    x-samos-hidden: true
+
+  DateCreated:
+    title: Date Created
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: first_seen
+
+  LastFound:
+    title: Last Found
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: last_seen

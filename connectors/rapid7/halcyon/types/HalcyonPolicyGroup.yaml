@@ -1,0 +1,342 @@
+x-samos-type-name: HalcyonPolicyGroup
+x-samos-namespace: halcyon
+title: Halcyon Policy Group
+description: >-
+  A policy group that defines endpoint protection policy settings for assets
+  on the Halcyon anti-ransomware platform.
+
+x-samos-extends-types:
+  - type-name: core.component-group
+    subtype-priority: 5
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: owner
+  - name: isManagedByHalcyon
+  - name: tenantId
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: owner
+  - name: isDefault
+  - name: isManagedByHalcyon
+  - name: policies
+  - name: tenantId
+
+$ref: 'https://api.halcyon.ai#/components/schemas/PolicyGroupResponse'
+
+properties:
+  id:
+    title: Policy Group ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    type: string
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Policy Group Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    title: Description
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  owner:
+    title: Owner
+    type: string
+
+  isDefault:
+    title: Default Group?
+    type: boolean
+
+  isManagedByHalcyon:
+    title: Managed By Halcyon?
+    type: boolean
+
+  policies:
+    title: Policies
+    type: object
+    properties:
+      dataExfiltrationNefariousPeer:
+        title: Data Exfiltration - Nefarious Peer
+        type: object
+        properties:
+          state:
+            title: State
+            type: string
+          agentSupport:
+            title: Agent Support
+            type: object
+            properties:
+              windows:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+              linux:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+              macOs:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+      dataExfiltrationVolumetricProtection:
+        title: Data Exfiltration - Volumetric Protection
+        type: object
+        properties:
+          state:
+            title: State
+            type: string
+          settings:
+            title: Settings
+            type: object
+            properties:
+              uploadNetworkThresholdInBytes:
+                type: integer
+          agentSupport:
+            title: Agent Support
+            type: object
+            properties:
+              windows:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+              linux:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+              macOs:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+      executionGuard:
+        title: Execution Guard
+        type: object
+        properties:
+          state:
+            title: State
+            type: string
+          agentSupport:
+            title: Agent Support
+            type: object
+            properties:
+              windows:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+              linux:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+              macOs:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+      fileResilience:
+        title: File Resilience
+        type: object
+        properties:
+          state:
+            title: State
+            type: string
+          agentSupport:
+            title: Agent Support
+            type: object
+            properties:
+              windows:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+              linux:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+              macOs:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+      halcyonLastGasp:
+        title: Halcyon Last Gasp
+        type: object
+        properties:
+          state:
+            title: State
+            type: string
+          agentSupport:
+            title: Agent Support
+            type: object
+            properties:
+              windows:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+              linux:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+              macOs:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+      kernelGuard:
+        title: Kernel Guard
+        type: object
+        properties:
+          state:
+            title: State
+            type: string
+          agentSupport:
+            title: Agent Support
+            type: object
+            properties:
+              windows:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+              linux:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+              macOs:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+      sidekick:
+        title: Sidekick
+        type: object
+        properties:
+          state:
+            title: State
+            type: string
+          agentSupport:
+            title: Agent Support
+            type: object
+            properties:
+              windows:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+              linux:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+              macOs:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+      tamperGuard:
+        title: Tamper Guard
+        type: object
+        properties:
+          state:
+            title: State
+            type: string
+          agentSupport:
+            title: Agent Support
+            type: object
+            properties:
+              windows:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+              linux:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+              macOs:
+                type: object
+                properties:
+                  supportLevel:
+                    type: string
+                  minimumVersion:
+                    type: string
+
+  tenantId:
+    title: Tenant
+    type: string
+    x-samos-ref-types:
+      - type-name: HalcyonTenant
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+
+x-samos-virtual:
+  members:
+    type-name: HalcyonAsset
+    cypher-pattern: >
+      <-[:`e:HalcyonAsset:policyGroup.id`]-(:HalcyonAsset)

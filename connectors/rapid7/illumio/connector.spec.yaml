@@ -1,11 +1,11 @@
 id: illumio
 name: Illumio
 author: Rapid7
-version: 0.1.0
+version: 0.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - initial release
+  - Fix(schema) align `IllumioWorkload.firewall_coexistence` type from string to object
 
 types:
   - IllumioWorkload

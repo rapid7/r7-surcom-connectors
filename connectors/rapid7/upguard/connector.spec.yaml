@@ -1,0 +1,100 @@
+id: upguard
+name: UpGuard
+author: Rapid7
+version: 1.0.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+reference-schemas:
+  - url: https://demo.upguard.com/api/docs
+    file: refdocs/swagger.json
+
+types:
+  - UpGuardDomain
+  - UpGuardIpAddress
+  - UpGuardRisk
+  - UpGuardRiskFinding
+  - UpGuardVulnerability
+  - UpGuardVulnerabilityFinding
+  - UpGuardVendor
+  - UpGuardVendorQuestionnaire
+  # common types
+  - UpGuardExposureSeverityEnum
+  - UpGuardExposureCategoryEnum
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: UpGuard Breach Risk
+    description: >-
+      Import your own organization's external attack surface from UpGuard, including
+      domains, IP addresses, risks, and vulnerabilities detected for your registered account.
+    return_types:
+      - UpGuardDomain
+      - UpGuardIpAddress
+      - UpGuardRisk
+      - UpGuardRiskFinding
+      - UpGuardVendor
+      - UpGuardVulnerability
+      - UpGuardVulnerabilityFinding
+
+  - id: import_vendors
+    title: UpGuard Vendor Risk
+    description: >-
+      Import vendor questionnaires and details of the external attack surface from UpGuard,
+      including their domains, IP addresses, risks, and vulnerabilities.
+    return_types:
+      - UpGuardDomain
+      - UpGuardIpAddress
+      - UpGuardRisk
+      - UpGuardRiskFinding
+      - UpGuardVendor
+      - UpGuardVendorQuestionnaire
+      - UpGuardVulnerability
+      - UpGuardVulnerabilityFinding
+
+# Configuration settings for this connector.
+settings:
+  api_key:
+    type: string
+    title: API Key
+    description: API key for authenticating with the UpGuard CyberRisk API at cyber-risk.upguard.com
+    format: password
+
+  min_risk_severity:
+    type: string
+    title: Minimum Risk Severity
+    description: Lowest severity level of risks to import. All risks at this level and above are included (e.g. selecting High imports both High and Critical).
+    enum:
+      - Info
+      - Low
+      - Medium
+      - High
+      - Critical
+    default: High
+
+  active_domains_only:
+    type: boolean
+    title: Active Domains Only?
+    description: If true, only domains that are currently active will be imported. If false, all domains will be imported regardless of their status.
+    default: true
+
+  import_vendor_assets:
+    type: boolean
+    title: Import Vendor Assets?
+    description:
+      If true, vendor domains, IP addresses, risks, and vulnerabilities will be imported in addition to vendor questionnaires.
+      Disable to import only vendor records and questionnaires, which is faster and typically more relevant.
+    default: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - external_attack_surface
+
+show_orchestrator_ui: true

@@ -1,0 +1,160 @@
+x-samos-type-name: MicrosoftAdcsCertificate
+x-samos-namespace: microsoft.adcs
+title: Microsoft ADCS Certificate
+description: A certificate issued by a Microsoft Active Directory Certificate Services CA.
+
+x-samos-extends-types:
+  - type-name: Certificate
+    subtype-priority: 5
+
+x-samos-keys:
+  - serial_number
+
+required:
+  - serial_number
+
+x-samos-table:
+  - name: common_name
+  - name: issuer
+  - name: disposition
+  - name: d_active
+  - name: not_valid_before
+  - name: not_valid_after
+
+x-samos-detail:
+  - name: common_name
+  - name: subject
+  - name: issuer
+  - name: serial_number
+  - name: certificate_template
+  - name: disposition
+  - name: d_active
+  - name: d_is_revoked
+  - name: d_is_wildcard
+  - name: key_algorithm
+  - name: key_length
+  - name: request_id
+  - name: not_valid_before
+  - name: not_valid_after
+
+x-samos-derived-properties:
+  d_active:
+    title: Active?
+    type: boolean
+    value: "disposition == 'Issued'"
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_is_revoked:
+    title: Revoked?
+    type: boolean
+    value: "disposition == 'Revoked'"
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: is_revoked
+
+  d_is_wildcard:
+    title: Wildcard?
+    type: boolean
+    value: "contains(common_name, '*')"
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: is_wildcard
+
+  d_serial_number:
+    title: Serial Number
+    type: string
+    value: serial_number
+    x-samos-hidden: true
+    syntax: jmespath
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: serial_number
+
+properties:
+  request_id:
+    title: Request ID
+    type: integer
+    description: The unique request ID in the CA database.
+
+  common_name:
+    title: Common Name
+    type: string
+    description: The common name (CN) of the certificate subject.
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  subject:
+    title: Subject
+    type: string
+    description: Certificate subject distinguished name as recorded in the CA database.
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: subject
+
+  issuer:
+    title: Issuer
+    type: string
+    description: Certificate issuer common name (CN of the issuing CA).
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: issuer
+
+  serial_number:
+    title: Serial Number
+    type: string
+    description: Certificate serial number assigned by the CA.
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+    x-samos-correlation:
+      priority: 3
+      correlation-key: Certificate.serial_number
+      correlation-type: Certificate
+
+  not_valid_before:
+    title: Not Valid Before
+    type: string
+    format: date-time
+    description: Date and time when the certificate becomes valid.
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: not_valid_before
+
+  not_valid_after:
+    title: Not Valid After
+    type: string
+    format: date-time
+    description: Date and time when the certificate expires.
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: not_valid_after
+
+  certificate_template:
+    title: Certificate Template
+    type: string
+    description: The AD CS template used to issue this certificate.
+
+  key_algorithm:
+    title: Key Algorithm
+    type: string
+    description: Public key algorithm used to generate the certificate key pair.
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: public_key_algorithm
+
+  key_length:
+    title: Key Length
+    type: integer
+    description: Key length in bits.
+
+  disposition:
+    title: Disposition
+    type: string
+    description: Certificate status in the CA database (e.g., Issued, Revoked, Pending, Denied).

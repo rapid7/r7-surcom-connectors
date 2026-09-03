@@ -1,0 +1,104 @@
+[
+  {
+    "id": "website_sec",
+    "value": "Configuration",
+    "description": "Security misconfigurations or weaknesses detected on web-facing services.",
+    "map_to": "ExposureType: Configuration"
+  },
+  {
+    "id": "email_sec",
+    "value": "Configuration",
+    "description": "Email authentication and security configuration issues (SPF, DKIM, DMARC).",
+    "map_to": "ExposureType: Configuration"
+  },
+  {
+    "id": "network_sec",
+    "value": "Configuration",
+    "description": "Exposed or misconfigured network services and open ports.",
+    "map_to": "ExposureType: Configuration"
+  },
+  {
+    "id": "ip_domain_reputation",
+    "value": "Data Protection",
+    "description": "IP addresses or domains associated with malicious activity or poor reputation.",
+    "map_to": "ExposureType: Data Protection"
+  },
+  {
+    "id": "brand_protect",
+    "value": "Data Protection",
+    "description": "Risks relating to brand impersonation, typosquatting, or reputational threats.",
+    "map_to": "ExposureType: Data Protection"
+  },
+  {
+    "id": "attack_surface",
+    "value": "Configuration",
+    "description": "Exposed assets or services that increase the organisation's attack surface.",
+    "map_to": "ExposureType: Configuration"
+  },
+  {
+    "id": "dns",
+    "value": "Configuration",
+    "description": "DNS configuration issues including expired domains, missing records, and zone transfer risks.",
+    "map_to": "ExposureType: Configuration"
+  },
+  {
+    "id": "vulnerability_management",
+    "value": "Vulnerability",
+    "description": "Known CVE-based software vulnerabilities detected on monitored assets.",
+    "map_to": "ExposureType: Vulnerability"
+  },
+  {
+    "id": "data_leakage",
+    "value": "Data Protection",
+    "description": "Exposed sensitive data or data leakage risks detected on public-facing systems.",
+    "map_to": "ExposureType: Data Protection"
+  },
+  {
+    "id": "encryption",
+    "value": "Configuration",
+    "description": "TLS/SSL configuration weaknesses, expired certificates, or missing HTTPS enforcement.",
+    "map_to": "ExposureType: Configuration"
+  },
+  {
+    "id": "questionnaire_risks",
+    "value": "Control",
+    "description": "Risks identified through vendor security questionnaire responses.",
+    "map_to": "ExposureType: Control"
+  },
+  {
+    "id": "vulns",
+    "value": "Vulnerability",
+    "description": "Verified security vulnerabilities detected via automated scanning.",
+    "map_to": "ExposureType: Vulnerability"
+  },
+  {
+    "id": "typosquatting",
+    "value": "Data Protection",
+    "description": "Registered domain permutations that may be used for phishing or brand abuse.",
+    "map_to": "ExposureType: Data Protection"
+  },
+  {
+    "id": "emailexposures",
+    "value": "Data Protection",
+    "description": "Exposed email addresses or credentials identified in data breach monitoring.",
+    "map_to": "ExposureType: Data Protection"
+  },
+  {
+    "id": "dataleaks",
+    "value": "Data Protection",
+    "description": "Sensitive data found exposed on public sources or dark web monitoring.",
+    "map_to": "ExposureType: Data Protection"
+  },
+  {
+    "id": "additional_evidence",
+    "value": "Control",
+    "description": "Risks identified from manually uploaded evidence documents.",
+    "map_to": "ExposureType: Control"
+  },
+  {
+    "id": "weakness",
+    "value": "Weakness",
+    "description": "A condition in a software, hardware, or service component that could contribute to the introduction of vulnerabilities. E.g., a CWE.",
+    "map_to": "ExposureType: Weakness"
+  }
+]

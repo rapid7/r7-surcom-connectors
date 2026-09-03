@@ -1,0 +1,64 @@
+id: azure.blob.storage
+name: Azure Blob Storage
+author: Rapid7
+version: 1.0.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+types:
+  - AzureBlobStorageImportConfiguration
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Azure Blob Storage JSON Records
+    description: >-
+      Download JSON blobs from Azure Blob Storage containers based on
+      the import configurations and yield the parsed records.
+    configuration_type: AzureBlobStorageImportConfiguration
+    return_types:
+      - '*'
+
+settings:
+  storage_account_url:
+    type: string
+    title: Storage Account URL
+    description: >-
+      Full blob service URL of the Azure Storage account to read from.
+    example: https://mystorageacct.blob.core.windows.net
+
+  tenant_id:
+    type: string
+    title: Tenant ID
+    description: >-
+      Microsoft Entra ID tenant (directory) ID that owns the service principal.
+
+  client_id:
+    type: string
+    title: Client ID
+    description: >-
+      Application (client) ID of the Entra ID app registration used to
+      authenticate. The app must be granted the Storage Blob Data Reader
+      role on the storage account or scoped to a specific container.
+
+  client_secret:
+    type: string
+    title: Client Secret
+    description: >-
+      Client secret value for the app registration.
+    format: password
+
+runtime: py311
+
+python_dependencies:
+  # Pin certifi to match insightconnect-plugin-runtime (orchestrator) constraint.
+  - certifi==2026.4.22
+  - defusedxml
+
+categories:
+  - cloud_service_provider
+
+show_orchestrator_ui: false

@@ -154,6 +154,12 @@ def _fetch_espm_page(
             user_log.warning(skip_warning, e.response.status_code)
             return None
         raise
+    except ValueError as e:
+        user_log.warning(
+            "Skipping remaining %s page at offset %d: malformed response (%s).",
+            endpoint_key, offset, e,
+        )
+        return None
 
 
 def _yield_vuln_records(
@@ -161,6 +167,7 @@ def _yield_vuln_records(
     items: list,
     seen_risk_ids: set,
     seen_hostnames: set,
+    user_log: Logger
 ):
     """Yield CynetEDRVulnerability + CynetEDRVulnerabilityFinding for one page.
 
@@ -175,7 +182,7 @@ def _yield_vuln_records(
             yield CynetEDRVulnerability(cve)
         if not risk_id or not product_name:
             continue
-        for endpoint in get_endpoints_for_cve(client, risk_id, product_name):
+        for endpoint in get_endpoints_for_cve(client, risk_id, product_name, user_log):
             endpoint["riskId"] = risk_id
             endpoint["productName"] = product_name
             if endpoint.get("hostName"):
@@ -212,7 +219,7 @@ def get_vulnerabilities(
         )
         if items is None:
             return
-        yield from _yield_vuln_records(client, items, seen_risk_ids, seen_hostnames)
+        yield from _yield_vuln_records(client, items, seen_risk_ids, seen_hostnames, user_log)
         user_log.info("Collected %d unique CVE(s) so far (offset %d).",
                       len(seen_risk_ids), offset)
         if len(items) < PAGE_SIZE:
@@ -225,24 +232,40 @@ def get_endpoints_for_cve(
     client: helpers.CynetEDRClient,
     risk_id: str,
     product_name: str,
+    user_log: Logger,
 ):
     """Yield every endpoint affected by a (CVE, product) pair."""
     offset = 0
     while True:
-        response = client.make_http_request(
-            "vulnerability_endpoints",
-            params={
-                "riskId": risk_id,
-                "productName": product_name,
-                "limit": PAGE_SIZE,
-                "offset": offset,
-            },
-        )
-        items = response.get("data", [])
-        yield from items
-        if len(items) < PAGE_SIZE:
+        try:
+            response = client.make_http_request(
+                "vulnerability_endpoints",
+                params={
+                    "riskId": risk_id,
+                    "productName": product_name,
+                    "limit": PAGE_SIZE,
+                    "offset": offset,
+                },
+            )
+            items = response.get("data", [])
+            yield from items
+            if len(items) < PAGE_SIZE:
+                break
+            offset += len(items)
+        except HTTPError as e:
+            if e.response is not None and e.response.status_code in (403, 404):
+                user_log.warning(
+                    "Skipping endpoint breakdown for CVE %s: endpoint returned HTTP %d.",
+                    risk_id, e.response.status_code
+                )
+                break
+            raise
+        except ValueError as e:
+            user_log.warning(
+                "Skipping endpoint breakdown for CVE %s: malformed response (%s).",
+                risk_id, e,
+            )
             break
-        offset += len(items)
 
 
 def _yield_misconfig_records(
@@ -250,6 +273,7 @@ def _yield_misconfig_records(
     items: list,
     seen_risk_ids: set,
     seen_hostnames: set,
+    user_log: Logger
 ):
     """Yield CynetEDRMisconfiguration + CynetEDRMisconfigurationFinding for one page.
 
@@ -263,7 +287,7 @@ def _yield_misconfig_records(
             yield CynetEDRMisconfiguration(misconfig)
         if not internal_id or not risk_id:
             continue
-        for endpoint in get_endpoints_for_misconfiguration(client, internal_id):
+        for endpoint in get_endpoints_for_misconfiguration(client, internal_id, user_log):
             endpoint["riskId"] = risk_id
             if endpoint.get("hostName"):
                 seen_hostnames.add(endpoint["hostName"])
@@ -297,7 +321,7 @@ def get_misconfigurations(
         )
         if items is None:
             return
-        yield from _yield_misconfig_records(client, items, seen_risk_ids, seen_hostnames)
+        yield from _yield_misconfig_records(client, items, seen_risk_ids, seen_hostnames, user_log)
         user_log.info("Collected %d unique misconfiguration(s) so far (offset %d).",
                       len(seen_risk_ids), offset)
         if len(items) < PAGE_SIZE:
@@ -309,23 +333,39 @@ def get_misconfigurations(
 def get_endpoints_for_misconfiguration(
     client: helpers.CynetEDRClient,
     internal_id: str,
+    user_log: Logger,
 ):
     """Yield every endpoint affected by a misconfiguration."""
     offset = 0
     while True:
-        response = client.make_http_request(
-            "misconfiguration_endpoints",
-            params={
-                "selectedInternalId": internal_id,
-                "limit": PAGE_SIZE,
-                "offset": offset,
-            },
-        )
-        items = response.get("data", [])
-        yield from items
-        if len(items) < PAGE_SIZE:
+        try:
+            response = client.make_http_request(
+                "misconfiguration_endpoints",
+                params={
+                    "selectedInternalId": internal_id,
+                    "limit": PAGE_SIZE,
+                    "offset": offset,
+                },
+            )
+            items = response.get("data", [])
+            yield from items
+            if len(items) < PAGE_SIZE:
+                break
+            offset += len(items)
+        except HTTPError as e:
+            if e.response is not None and e.response.status_code in (403, 404):
+                user_log.warning(
+                    "Skipping endpoint breakdown for misconfiguration %s: Child endpoint returned HTTP %d.",
+                    internal_id, e.response.status_code
+                )
+                break
+            raise
+        except ValueError as e:
+            user_log.warning(
+                "Skipping endpoint breakdown for misconfiguration %s: malformed response (%s).",
+                internal_id, e,
+            )
             break
-        offset += len(items)
 
 
 def get_hosts(
@@ -343,10 +383,22 @@ def get_hosts(
     """
     host_count = 0
     for hostname in sorted(hostnames):
-        response = client.make_http_request(
-            "host_detail",
-            params={"name": hostname},
-        )
+        try:
+            response = client.make_http_request(
+                "host_detail",
+                params={"name": hostname},
+            )
+        except HTTPError as e:
+            if e.response is not None and e.response.status_code in (400, 403, 404):
+                user_log.warning(
+                    "Skipping host '%s': /api/full/host returned HTTP %d.",
+                    hostname, e.response.status_code,
+                )
+                continue
+            raise
+        except ValueError as e:
+            user_log.warning("Skipping host '%s': malformed response (%s).", hostname, e)
+            continue
         host_record = response if isinstance(response, dict) else {}
         if not host_record.get("hostname"):
             user_log.warning("Skipping host '%s': /api/full/host returned no data.", hostname)
@@ -388,10 +440,22 @@ def get_users(
     """
     user_count = 0
     for username in sorted(usernames):
-        response = client.make_http_request(
-            "user_detail",
-            params={"name": username},
-        )
+        try:
+            response = client.make_http_request(
+                "user_detail",
+                params={"name": username},
+            )
+        except HTTPError as e:
+            if e.response is not None and e.response.status_code in (400, 403, 404):
+                user_log.warning(
+                    "Skipping user '%s': /api/full/user returned HTTP %d.",
+                    username, e.response.status_code,
+                )
+                continue
+            raise
+        except ValueError as e:
+            user_log.warning("Skipping user '%s': malformed response (%s).", username, e)
+            continue
         user_record = response if isinstance(response, dict) else {}
         for field in USER_DETAIL_NESTED_FIELDS:
             user_record.pop(field, None)

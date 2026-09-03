@@ -1,0 +1,328 @@
+x-samos-type-name: HclAppscanApplication
+x-samos-namespace: hcl.appscan
+title: HCL AppScan Application
+description: A web application registered in HCL AppScan on Cloud.
+
+x-samos-extends-types:
+  - type-name: WebSite
+
+$ref: https://cloud.appscan.com/swagger/v1/swagger.json#/components/schemas/ApplicationModel
+
+x-samos-global-zone: true
+
+x-samos-keys:
+  - Id
+
+required:
+  - Id
+
+x-samos-derived-properties:
+  d_cloud:
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: '`true`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: cloud
+
+x-samos-table:
+  - name: Name
+  - name: Url
+  - name: Technology
+  - name: BusinessImpact
+  - name: TotalIssues
+
+x-samos-detail:
+  - name: Name
+  - name: Url
+  - name: Technology
+  - name: BusinessImpact
+  - name: BusinessUnit
+  - name: RiskRating
+  - name: Hosts
+  - name: TestingStatus
+  - name: TotalIssues
+  - name: CriticalIssues
+  - name: HighIssues
+  - name: MediumIssues
+  - name: LowIssues
+  - name: InformationalIssues
+  - name: OpenIssues
+  - name: MaxSeverity
+  - name: ScanTechnologies
+  - name: AssetGroupName
+  - name: DateCreated
+  - name: LastUpdated
+
+properties:
+  Id:
+    title: Application ID
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  Url:
+    title: URL
+    type: string
+    format: uri
+    x-samos-fulfills:
+      type-name: WebSite
+      property-name: url
+    x-samos-correlation:
+      priority: 1
+      correlation-key: WebSite.url
+      correlation-type: WebSite
+
+  Technology:
+    title: Technology
+    type: string
+
+  BusinessImpact:
+    title: Business Impact
+    type: string
+
+  BusinessUnit:
+    title: Business Unit
+    type: string
+
+  BusinessUnitId:
+    title: Business Unit ID
+    x-samos-hidden: true
+    type: string
+
+  RiskRating:
+    title: Risk Rating
+    type: string
+
+  Hosts:
+    title: Hosts
+    type: string
+
+  TestingStatus:
+    title: Testing Status
+    type: string
+
+  Description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  TotalIssues:
+    title: Total Issues
+    type: integer
+
+  OpenIssues:
+    title: Open Issues
+    type: integer
+
+  NewIssues:
+    title: New Issues
+    type: integer
+
+  IssuesInProgress:
+    title: Issues In Progress
+    type: integer
+
+  CriticalIssues:
+    title: Critical Issues
+    type: integer
+
+  HighIssues:
+    title: High Issues
+    type: integer
+
+  MediumIssues:
+    title: Medium Issues
+    type: integer
+
+  LowIssues:
+    title: Low Issues
+    type: integer
+
+  InformationalIssues:
+    title: Informational Issues
+    type: integer
+
+  MaxSeverity:
+    title: Max Severity
+    type: string
+
+  CorrelationState:
+    title: Correlation State
+    type: string
+
+  OverallCompliance:
+    title: Overall Compliance?
+    type: boolean
+
+  ScanTechnologies:
+    title: Scan Technologies
+    type: string
+
+  TotalScans:
+    title: Total Scans
+    type: integer
+
+  NScanExecutions:
+    title: Scan Executions
+    type: integer
+
+  AssetGroupId:
+    title: Asset Group ID
+    x-samos-hidden: true
+    type: string
+
+  AssetGroupName:
+    title: Asset Group Name
+    type: string
+
+  CollateralDamagePotential:
+    title: Collateral Damage Potential
+    type: string
+
+  TargetDistribution:
+    title: Target Distribution
+    type: string
+
+  ConfidentialityRequirement:
+    title: Confidentiality Requirement
+    type: string
+
+  IntegrityRequirement:
+    title: Integrity Requirement
+    type: string
+
+  AvailabilityRequirement:
+    title: Availability Requirement
+    type: string
+
+  Tester:
+    title: Tester
+    type: string
+
+  BusinessOwner:
+    title: Business Owner
+    type: string
+
+  DevelopmentContact:
+    title: Development Contact
+    type: string
+
+  CreatedBy:
+    title: Created By
+    type: string
+
+  DateCreated:
+    title: Date Created
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  LastUpdated:
+    title: Last Updated
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  IssuesCleanupInProgress:
+    title: Issues Cleanup In Progress?
+    type: boolean
+
+  HasExceedingIssuesNumber:
+    title: Has Exceeding Issues Number?
+    type: boolean
+
+  HasExceedingScansNumber:
+    title: Has Exceeding Scans Number?
+    type: boolean
+
+  AutoDeleteExceededScans:
+    title: Auto Delete Exceeded Scans?
+    type: boolean
+
+  CanBeDeleted:
+    title: Can Be Deleted?
+    type: boolean
+
+  PreferredOfferingType:
+    title: Preferred Offering Type
+    type: string
+
+  RR_MaxSeverity:
+    title: RR Max Severity
+    x-samos-hidden: true
+    type: number
+
+  Type:
+    title: App Type
+    type: string
+
+  LastComment:
+    title: Last Comment
+    type: string
+
+  LockedToSubscription:
+    title: Locked To Subscription?
+    x-samos-hidden: true
+    type: boolean
+
+  SubscriptionId:
+    title: Subscription ID
+    x-samos-hidden: true
+    type: string
+
+  MHSEntitlementKey:
+    title: MHS Entitlement Key
+    x-samos-hidden: true
+    type: string
+
+  UseOnlyAppPresences:
+    title: Use Only App Presences?
+    x-samos-hidden: true
+    type: boolean
+
+  AddedToAssetGroupAt:
+    title: Added To Asset Group At
+    x-samos-hidden: true
+    type: string
+    format: date-time
+
+  CustomFields:
+    title: Custom Fields
+    x-samos-hidden: true
+    type: array
+    items: {}
+
+  ComplianceStatuses:
+    title: Compliance Statuses
+    x-samos-hidden: true
+    type: array
+    items: {}
+
+  Presences:
+    title: Presences
+    x-samos-hidden: true
+    type: array
+    items: {}
+
+  AddedToAssetGroupBy:
+    title: Added To Asset Group By
+    x-samos-hidden: true
+    type: object

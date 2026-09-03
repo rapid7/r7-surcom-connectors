@@ -45,16 +45,37 @@ ERRATA_LIST_CVES_PATH = "/errata/listCves"
 
 
 def _format_datetime(value: str) -> str:
-    """Convert datetime strings to ISO 8601 format."""
-    formats = [
-        "%Y%m%dT%H:%M:%S",  # 20260316T06:26:17
-        "%m/%d/%y %I:%M:%S %p %Z",  # 3/23/26 8:36:57 AM UTC
+    """Convert datetime strings to ISO 8601 format.
+
+    >>> _format_datetime("20260316T06:26:17")
+    '2026-03-16T06:26:17'
+    >>> _format_datetime("3/23/26 8:36:57 AM UTC")
+    '2026-03-23T08:36:57'
+    >>> _format_datetime("11/6/23 9:49:18 AM CET")
+    '2023-11-06T09:49:18'
+    >>> _format_datetime("5/26/26 8:05:34 AM CEST")
+    '2026-05-26T08:05:34'
+    >>> _format_datetime("3/7/25 2:41:11 PM CET")
+    '2025-03-07T14:41:11'
+    >>> _format_datetime("")
+    ''
+    >>> _format_datetime("not-a-date")
+    'not-a-date'
+    """
+    # Strip trailing timezone abbreviation (e.g. UTC, CET, CEST) before parsing
+    value = value.strip()
+    parts = value.rsplit(" ", 1)
+    tz = parts[1] if len(parts) == 2 else None
+    stripped = parts[0] if tz and tz.isalpha() and tz not in {"AM", "PM"} else value
+
+    candidates = [
+        ("%Y%m%dT%H:%M:%S", value),         # 20260316T06:26:17
+        ("%m/%d/%y %I:%M:%S %p", stripped),  # 3/23/26 8:36:57 AM [CET/CEST/UTC/...]
+        ("%Y-%m-%d", value),                 # 2026-03-30 (date-only → midnight)
     ]
-    for fmt in formats:
+    for fmt, val in candidates:
         try:
-            dt = datetime.strptime(value, fmt)
-            if fmt == "%m/%d/%y %I:%M:%S %p %Z":
-                dt = dt.replace(year=dt.year + 2000) if dt.year < 100 else dt
+            dt = datetime.strptime(val, fmt)
             return dt.strftime("%Y-%m-%dT%H:%M:%S")
         except (ValueError, TypeError):
             continue
@@ -66,8 +87,10 @@ _DATE_FIELDS = {
     "created_date",
     "last_boot",
     "last_checkin",
-    "last_login_date",
     "installtime",
+    "date",
+    "update_date",
+    "issue_date",
 }
 
 
@@ -154,25 +177,20 @@ class SuseManagerClient:
             asset.update(details)
             asset["id"] = str(system_id)
 
-            try:
-                network_devices = self._api_get(
-                    SYSTEM_NETWORK_DEVICES_PATH, {"sid": system_id}
-                )
-                ips = []
-                macs = []
-                for dev in network_devices:
-                    ip = dev.get("ip")
-                    mac = dev.get("hardware_address")
-                    if ip and ip != "127.0.0.1":
-                        ips.append(ip)
-                    if mac and mac != "00:00:00:00:00:00":
-                        macs.append(mac)
-                asset["network_devices"] = network_devices
-                yield _sanitize(asset)
-            except Exception as e:
-                self.logger.warning(
-                    "Error getting network devices for system %s: %s", system_id, e
-                )
+            network_devices = self._api_get(
+                SYSTEM_NETWORK_DEVICES_PATH, {"sid": system_id}
+            )
+            ips = []
+            macs = []
+            for dev in network_devices:
+                ip = dev.get("ip")
+                mac = dev.get("hardware_address")
+                if ip and ip != "127.0.0.1":
+                    ips.append(ip)
+                if mac and mac != "00:00:00:00:00:00":
+                    macs.append(mac)
+            asset["network_devices"] = network_devices
+            yield _sanitize(asset)
 
     def get_system_groups(self) -> Iterator[dict]:
         """Get all system groups with their member system IDs.
@@ -314,8 +332,6 @@ class SuseManagerClient:
                 # advisory_name to get CVEs, and id to create a unique exposure ID.
                 advisory_name = errata.get("advisory_name")
                 advisory_id = str(errata.get("id"))
-                # # The combination of these fields is used to create a unique "exposure_id" for each advisory
-                # exposure_id = f"{advisory_name}_{advisory_id}"
 
                 if not advisory_name:
                     continue

@@ -1,0 +1,151 @@
+x-samos-type-name: AnthropicOrganization
+x-samos-namespace: anthropic
+title: Anthropic Organization
+description: An organization linked under an Anthropic parent organization
+
+x-samos-extends-types:
+  - type-name: Organization
+
+x-samos-keys:
+  - uuid
+
+required:
+  - uuid
+
+x-samos-table:
+  - name: name
+  - name: created_at
+  - name: d_content_redaction_enabled
+  - name: d_ip_allowlist_enabled
+  - name: d_sso_provisioning_mode
+
+x-samos-detail:
+  - name: name
+  - name: uuid
+  - name: created_at
+  - name: d_content_redaction_enabled
+  - name: d_ip_allowlist_enabled
+  - name: d_ip_allowlist_ip_ranges
+  - name: d_sso_provisioning_mode
+  - name: d_chat_retention_days
+  - name: x_settings
+  - name: x_api_keys
+
+x-samos-derived-properties:
+  d_content_redaction_enabled:
+    title: Content Redaction Enabled?
+    type: boolean
+    syntax: jmespath
+    value: "x_settings[?name=='content_redaction_enabled'].value | [0]"
+
+  d_ip_allowlist_enabled:
+    title: IP Allowlist Enabled?
+    type: boolean
+    syntax: jmespath
+    value: "x_settings[?name=='ip_allowlist_enabled'].value | [0]"
+
+  d_ip_allowlist_ip_ranges:
+    title: IP Allowlist IP Ranges
+    type: array
+    items:
+      type: string
+    syntax: jmespath
+    value: "x_settings[?name=='ip_allowlist_ip_ranges'].value | [0]"
+
+  d_sso_provisioning_mode:
+    title: SSO Provisioning Mode
+    type: string
+    syntax: jmespath
+    value: "x_settings[?name=='sso_provisioning_mode'].value | [0]"
+
+  d_chat_retention_days:
+    title: Chat Retention (Days)
+    type: integer
+    syntax: jmespath
+    value: "x_settings[?name=='data_retention_periods'].value | [0].chat.duration"
+
+properties:
+  uuid:
+    title: UUID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  created_at:
+    title: Created At
+    type: string
+    format: date-time
+
+  x_settings:
+    title: Effective Settings
+    type: array
+    description: >-
+      Effective settings in force for this organization. A setting the
+      organization's administrators cannot change is omitted from the list.
+    items:
+      type: object
+      properties:
+        name:
+          title: Name
+          type: string
+        type:
+          title: Type
+          type: string
+          enum:
+            - boolean
+            - integer
+            - string_list
+            - provisioning_mode
+            - data_retention
+
+  x_api_keys:
+    title: Compliance API Keys
+    type: array
+    description: >-
+      Compliance Access Keys configured for the parent organization. Secret
+      values are never returned by the API.
+    items:
+      type: object
+      properties:
+        id:
+          title: Id
+          type: string
+        type:
+          title: Type
+          type: string
+        name:
+          title: Name
+          type: string
+        scopes:
+          title: Scopes
+          type: array
+          items:
+            type: string
+        is_active:
+          title: Active?
+          type: boolean
+        created_at:
+          title: Created At
+          type: string
+          format: date-time
+        created_by_id:
+          title: Created By
+          type: string
+          nullable: true
+          x-samos-ref-types:
+            - type-name: AnthropicOrganizationUser
+              key-name: id
+        expires_at:
+          title: Expires At
+          type: string
+          format: date-time
+          nullable: true

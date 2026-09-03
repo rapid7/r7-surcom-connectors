@@ -1,0 +1,49 @@
+id: cycognito
+name: CyCognito
+author: Rapid7
+version: 1.0.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+reference-schemas:
+  - url: https://api.platform.cycognito.com/v1
+    file: refdocs/cycognito_open_api.json
+
+types:
+  - CyCognitoCertificate
+  - CyCognitoDomain
+  - CyCognitoIpAddress
+  - CyCognitoIpRange
+  - CyCognitoWebApp
+  - CyCognitoExposure
+  - CyCognitoFinding
+  - CyCognitoEnumSeverity
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: CyCognito Assets and Issues
+    description: Import all IP addresses, domains, certificates, web applications, IP ranges, and issues from CyCognito
+    return_types:
+      - CyCognitoCertificate
+      - CyCognitoDomain
+      - CyCognitoIpAddress
+      - CyCognitoIpRange
+      - CyCognitoWebApp
+      - CyCognitoExposure
+      - CyCognitoFinding
+
+settings:
+  api_key:
+    type: string
+    title: API Key
+    description: API key for authenticating with the CyCognito platform
+    format: password
+
+runtime: py311
+
+categories:
+  - external_attack_surface

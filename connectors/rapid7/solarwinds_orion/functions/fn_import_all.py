@@ -28,11 +28,10 @@ def import_all(user_log: Logger, settings: Settings):
         settings (Settings): SolarWinds Orion authentication parameters.
 
     """
+    # Import Nodes
     user_log.info(
         "Getting '%s' from '%s'", SolarWindsOrionNode.__name__, settings.get("url")
     )
-
-    # Import Nodes
     yield from get_items(
         settings,
         user_log,
@@ -41,6 +40,11 @@ def import_all(user_log: Logger, settings: Settings):
         "NodeID",  # case sensitive for the pagination use
     )
     # Import Applications
+    user_log.info(
+        "Getting '%s' from '%s'",
+        SolarWindsOrionApplication.__name__,
+        settings.get("url"),
+    )
     yield from get_items(
         settings,
         user_log,
@@ -49,6 +53,11 @@ def import_all(user_log: Logger, settings: Settings):
         "ApplicationID",  # case sensitive for the pagination use
     )
     # Import Application Templates
+    user_log.info(
+        "Getting '%s' from '%s'",
+        SolarWindsOrionApplicationTemplate.__name__,
+        settings.get("url"),
+    )
     yield from get_items(
         settings,
         user_log,
@@ -57,6 +66,9 @@ def import_all(user_log: Logger, settings: Settings):
         "ApplicationTemplateID",  # case sensitive for the pagination use
     )
     # Import Agents
+    user_log.info(
+        "Getting '%s' from '%s'", SolarWindsOrionAgent.__name__, settings.get("url")
+    )
     yield from get_items(
         settings,
         user_log,

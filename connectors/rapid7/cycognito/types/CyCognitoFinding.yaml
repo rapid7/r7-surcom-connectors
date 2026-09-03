@@ -1,0 +1,85 @@
+x-samos-type-name: CyCognitoFinding
+x-samos-namespace: cycognito
+title: CyCognito Finding
+description: A finding of a specific security issue on a specific asset, identified by CyCognito.
+
+x-samos-extends-types:
+  - type-name: Finding
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: asset_type
+  - name: affected-asset
+  - name: issue-id
+
+x-samos-detail:
+  - name: asset_type
+  - name: title
+  - name: affected-asset
+  - name: issue-id
+  - name: first-detected
+  - name: last-detected
+
+properties:
+  id:
+    type: string
+    title: Id
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+  affected-asset:
+    type: string
+    title: Affected Asset
+    x-samos-ref-types:
+      - type-name: CyCognitoIpAddress
+        key-name: id
+      - type-name: CyCognitoDomain
+        key-name: id
+      - type-name: CyCognitoCertificate
+        key-name: id
+      - type-name: CyCognitoWebApp
+        key-name: id
+      - type-name: CyCognitoIpRange
+        key-name: id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to
+  issue-id:
+    type: string
+    title: Exposure
+    x-samos-ref-types:
+      - type-name: CyCognitoExposure
+        key-name: issue-id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability
+  asset_type:
+    type: string
+    title: Asset Type
+  title:
+    type: string
+    title: Title
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  first-detected:
+    type: string
+    title: First Detected
+    format: date-time
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: first_seen
+  last-detected:
+    type: string
+    title: Last Detected
+    format: date-time
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: last_seen

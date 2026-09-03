@@ -1,0 +1,78 @@
+id: hcl.appscan
+name: HCL AppScan
+author: Rapid7
+version: 0.1.0
+description: Imports applications, scans, and security issues from HCL AppScan on Cloud.
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+reference_schemas:
+  - url: https://cloud.appscan.com/swagger/v1/swagger.json
+    file: refdocs/hcl_appscan_open_api.json
+
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - HclAppscanApplication # Application here refers to website
+  - HclAppscanScan
+  - HclAppscanExposure
+  - HclAppscanFinding
+  - HclAppscanEnumExposureType
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: HCL Scans, Applications, and Issues
+    description: Import HCL Scans, Applications, and Issues
+    return_types:
+      - HclAppscanApplication
+      - HclAppscanScan
+      - HclAppscanExposure
+      - HclAppscanFinding
+
+# Configuration settings for this connector.
+settings:
+  base_url:
+    type: string
+    title: Base URL
+    description: The HCL AppScan on Cloud base URL for your datacenter region.
+    default: https://cloud.appscan.com
+
+  client_id:
+    type: string
+    title: Key ID
+    description: The API Key ID from HCL AppScan on Cloud.
+
+  client_secret:
+    type: string
+    title: Key Secret
+    description: The API Key Secret from HCL AppScan on Cloud.
+    format: password
+
+# Runtime platform for this connector.
+runtime: py311
+
+# List any Python dependencies available on PyPI that are required by this connector.
+# `codegen` will generate a `requirements.txt` file with pinned versions of these dependencies.
+# python_dependencies:
+#  - another_dependency
+
+# CWE Mapping
+depends_on:
+  - mitre.cwe.app
+
+# Categories for this connector in the Extension Library.
+categories:
+  - application_development
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

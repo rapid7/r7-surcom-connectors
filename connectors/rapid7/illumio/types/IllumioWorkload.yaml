@@ -11,6 +11,9 @@ x-samos-extends-types:
 x-samos-keys:
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: hostname
@@ -263,7 +266,11 @@ properties:
 
   firewall_coexistence:
     title: Firewall Coexistence
-    type: string
+    type: object
+    properties:
+      illumio_primary:
+        title: Illumio Primary
+        type: boolean
 
   labels:
     title: Labels

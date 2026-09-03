@@ -1,0 +1,3365 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "Adaptive API for external integrations.\n\n## 📊 API Overview\n\nThe Adaptive API enables organizations to build comprehensive reporting and analytics around their security awareness training programs. This RESTful API provides programmatic access to track employee training progress, monitor compliance, and generate insights about your organization's security training effectiveness.\n\n### Purpose & Use Cases\n\nThis API is designed for:\n- **Compliance Reporting**: Track training completion rates and identify employees with overdue trainings\n- **Progress Monitoring**: Get real-time visibility into individual and team training progress\n- **Data Integration**: Sync training data with your HRIS, BI tools, or custom dashboards\n- **Automated Workflows**: Build alerts and notifications for training milestones or compliance deadlines\n\n### Technical Design\n\nThe API follows REST principles with:\n- Resource-oriented URLs that clearly represent your data\n- Standard HTTP methods (GET for reading data)\n- JSON responses for easy parsing and integration\n- Consistent error handling with detailed error messages\n- Token-based authentication for secure access\n\n### Available Resources\n\n| Resource | Purpose | Common Use Cases |\n|----------|---------|------------------|\n| **Users** | Access employee directory data | • Export user lists for reporting<br>• Track user status changes<br>• Map users to departments |\n| **Training** | Monitor training campaigns and progress | • Track campaign completion rates<br>• Identify at-risk employees<br>• Generate compliance reports |\n\n## 🚀 Quick Start Guide\n\nGet started with the Adaptive API in just 3 steps:\n\n### Step 1: Get Your API Token\nSee [Authentication](#section/Authentication) for more details on how to generate and use API tokens.\n\n### Step 2: Make Your First API Call\n```bash\ncurl -X GET https://api.adaptivesecurity.com/v2/users \\\n  -H \"Authorization: Bearer YOUR_API_TOKEN\"\n```\n\n### Step 3: Handle the Response\n```json\n{\n  \"users\": [\n    {\n      \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n      \"email\": \"john.smith@example.com\",\n      \"first_name\": \"John\",\n      \"last_name\": \"Smith\",\n      \"status\": \"ACTIVE\"\n    }\n  ],\n  \"page_after\": \"123e4567-e89b-12d3-a456-426614174000\"\n}\n```\n\n## 🔐 Authentication\n\nAll API endpoints require authentication using an API token:\n\n```http\nAuthorization: Bearer YOUR_API_TOKEN\n```\n\n**Token Management:**\n- Tokens are generated in the Admin portal under **Settings → API**\n- Tokens have a user-set expiration but can be revoked at any time\n- Store tokens securely - treat them like passwords\n## 🌐 Base URL\n\nAll API endpoints are relative to:\n```\nhttps://api.adaptivesecurity.com\n```\n\n## 🚨 Error Handling\n\nAll API errors follow a consistent JSON structure:\n\n### Standard Error Response\n```json\n{\n  \"error_code\": \"RESOURCE_NOT_FOUND\",\n  \"message\": \"The requested user was not found\",\n  \"status_code\": 404,\n  \"request_id\": \"3e502c09-4fd3-42d3-8b3a-4e2f08de0bbf\"\n}\n```\n\n### Validation Error Response\n```json\n{\n  \"error_code\": \"VALIDATION_ERROR\",\n  \"message\": \"Request validation failed\",\n  \"status_code\": 400,\n  \"request_id\": \"1d7c1712-2b8e-43f4-90c6-1185e249bdf0\",\n  \"details\": [\n    {\n      \"field\": \"page\",\n      \"message\": \"Page must be a non-negative integer\"\n    }\n  ]\n}\n```\n\n### Error Code Reference\n| Code | Status | Description | Action |\n|------|--------|-------------|--------|\n| `INVALID_TOKEN` | 401 | Token is invalid or expired | Check token validity |\n| `RESOURCE_NOT_FOUND` | 404 | Resource doesn't exist | Verify resource ID |\n| `VALIDATION_ERROR` | 400 | Request validation failed | Check field errors |\n| `INTERNAL_SERVER_ERROR` | 500 | Server error | Contact support |\n\n## 📋 Request & Response Headers\n\n### Required Request Headers\n```http\nAuthorization: Bearer YOUR_API_TOKEN\n```\n\n### Optional Request Headers\n```http\nAccept: application/json\nContent-Type: application/json  # Required for POST/PUT\n```\n\n### Response Headers\n```http\nX-Request-ID: 6acb3ce1-672a-4a49-8fa1-f1a994eef9fd\nContent-Type: application/json\n```\n\n## 📄 Pagination\n\nList endpoints return paginated results for optimal performance:\n\n- **Page cursor**: `page_after` field in the response to get the next page\n- **Default sorting**: By creation date (newest first)\n\n### Pagination Example\n```bash\n# Get the next page of users\ncurl -X GET \"https://api.adaptivesecurity.com/v2/users?page_after=5a6dce1e-8d0f-46b1-b263-50b6adca62da\" \\\n  -H \"Authorization: Bearer YOUR_API_TOKEN\"\n```\n\n### Pagination Response\n```json\n{\n  \"users\": [...],\n  \"page_after\": \"123e4567-e89b-12d3-a456-426614174000\"\n}\n```\n\n## 🕐 Timestamps\n\nAll timestamps use ISO 8601 format in UTC:\n```\n2024-12-10T15:30:45.402Z\n```",
+    "title": "Adaptive API",
+    "version": "v2"
+  },
+  "servers": [
+    {
+      "url": "https://api.adaptivesecurity.com",
+      "description": "Production API"
+    }
+  ],
+  "security": [
+    {
+      "bearer-token": []
+    }
+  ],
+  "tags": [
+    {
+      "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>User group management endpoints",
+      "name": "Groups"
+    },
+    {
+      "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Phishing campaign and simulation management endpoints",
+      "name": "Phishing"
+    },
+    {
+      "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Training campaign and activity endpoints",
+      "name": "Training"
+    },
+    {
+      "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>User management endpoints",
+      "name": "Users"
+    },
+    {
+      "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Admin audit log endpoints",
+      "name": "Audit Logs"
+    }
+  ],
+  "paths": {
+    "/v2/audit-logs": {
+      "get": {
+        "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Retrieve a paginated list of admin audit logs. Supports filtering by date range and action types.",
+        "operationId": "listAuditLogs",
+        "parameters": [
+          {
+            "description": "Page cursor for pagination",
+            "example": "456e7890-f12b-34c5-d678-901234567890",
+            "in": "query",
+            "name": "page_after",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Number of results per page (max 1000)",
+            "example": 100,
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100
+            }
+          },
+          {
+            "description": "Filter audit logs from this date (inclusive, ISO 8601 format)",
+            "example": "2024-01-01T00:00:00Z",
+            "in": "query",
+            "name": "start_date",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "description": "Filter audit logs until this date (inclusive, ISO 8601 format)",
+            "example": "2024-12-31T23:59:59Z",
+            "in": "query",
+            "name": "end_date",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "description": "Filter by specific action types (e.g., CREATED_TRAINING_CAMPAIGN, SCHEDULED_TRAINING_CAMPAIGN, ADDED_ADMIN)",
+            "example": ["CREATED_TRAINING_CAMPAIGN", "SCHEDULED_TRAINING_CAMPAIGN"],
+            "in": "query",
+            "name": "actions",
+            "required": false,
+            "schema": {
+              "type": "array"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success Response": {
+                    "description": "Success Response",
+                    "value": {
+                      "audit_logs": [
+                        {
+                          "id": "123e4567-e89b-12d3-a456-426614174000",
+                          "actor": {
+                            "id": "a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6",
+                            "email": "admin@example.com",
+                            "role": "ACCOUNT_OWNER"
+                          },
+                          "action": "CREATED_TRAINING_CAMPAIGN",
+                          "category": "SAT_PROGRAM",
+                          "subcategory": "TRAINING",
+                          "occurred_at": "2024-12-01T14:30:00Z",
+                          "message": "Created training campaign.",
+                          "success": true
+                        },
+                        {
+                          "id": "456e7890-f12b-34c5-d678-901234567890",
+                          "actor": {
+                            "id": "b2c3d4e5-f6a7-8b9c-0d1e-f2a3b4c5d6e7",
+                            "email": "security@example.com",
+                            "role": "TEAM_ADMIN"
+                          },
+                          "action": "SCHEDULED_TRAINING_CAMPAIGN",
+                          "category": "SAT_PROGRAM",
+                          "subcategory": "TRAINING",
+                          "occurred_at": "2024-11-28T09:15:00Z",
+                          "message": "Scheduled training campaign.",
+                          "success": true
+                        }
+                      ],
+                      "page_after": "456e7890-f12b-34c5-d678-901234567890"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/AuditLogListResponseDto"
+                }
+              }
+            },
+            "description": "Successfully retrieved audit logs"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Validation Error": {
+                    "description": "Validation Error",
+                    "value": {
+                      "error_code": "VALIDATION_ERROR",
+                      "message": "Request validation failed",
+                      "status_code": 400,
+                      "request_id": "5f8e9a7b-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+                      "details": [
+                        {
+                          "field": "actions",
+                          "message": "Invalid action value: INVALID_ACTION"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponseDto"
+                }
+              }
+            },
+            "description": "Bad request - Invalid parameters"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Unauthorized Error": {
+                    "description": "Unauthorized Error",
+                    "value": {
+                      "error_code": "INVALID_TOKEN",
+                      "message": "The provided authentication token is invalid or expired",
+                      "status_code": 401,
+                      "request_id": "dcaf9f7e-6c47-4c93-bb41-0e2d8d9bb0de"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing authentication token"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Rate Limit Error": {
+                    "description": "Rate Limit Error",
+                    "value": {
+                      "error_code": "RATE_LIMIT_EXCEEDED",
+                      "message": "API rate limit exceeded. Please retry after some time",
+                      "status_code": 429,
+                      "request_id": "b7c1196e-2c6e-4d17-8f3c-fcb62d6d27a2"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Too many requests - Rate limit exceeded"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Internal Server Error": {
+                    "description": "Internal Server Error",
+                    "value": {
+                      "error_code": "INTERNAL_SERVER_ERROR",
+                      "message": "An unexpected error occurred. Please try again later",
+                      "status_code": 500,
+                      "request_id": "f351ac3c-cd5e-4ec7-89dc-191fc40a83f2"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "List audit logs",
+        "tags": ["Audit Logs"]
+      }
+    },
+    "/v2/audit-logs/{auditLogId}": {
+      "get": {
+        "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Retrieve detailed information about a specific audit log entry",
+        "operationId": "getAuditLog",
+        "parameters": [
+          {
+            "description": "Audit log ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000",
+            "in": "path",
+            "name": "auditLogId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success Response": {
+                    "description": "Success Response",
+                    "value": {
+                      "id": "123e4567-e89b-12d3-a456-426614174000",
+                      "actor": {
+                        "id": "a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6",
+                        "email": "admin@example.com",
+                        "role": "ACCOUNT_OWNER"
+                      },
+                      "action": "CREATED_TRAINING_CAMPAIGN",
+                      "category": "SAT_PROGRAM",
+                      "subcategory": "TRAINING",
+                      "occurred_at": "2024-12-01T14:30:00Z",
+                      "message": "Created training campaign.",
+                      "success": true
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/AuditLogDto"
+                }
+              }
+            },
+            "description": "Successfully retrieved audit log details"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Validation Error": {
+                    "description": "Validation Error",
+                    "value": {
+                      "error_code": "VALIDATION_ERROR",
+                      "message": "Request validation failed",
+                      "status_code": 400,
+                      "request_id": "5f8e9a7b-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+                      "details": [
+                        {
+                          "field": "auditLogId",
+                          "message": "Invalid UUID format"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponseDto"
+                }
+              }
+            },
+            "description": "Bad request - Invalid audit log ID format"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Unauthorized Error": {
+                    "description": "Unauthorized Error",
+                    "value": {
+                      "error_code": "INVALID_TOKEN",
+                      "message": "The provided authentication token is invalid or expired",
+                      "status_code": 401,
+                      "request_id": "dcaf9f7e-6c47-4c93-bb41-0e2d8d9bb0de"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing authentication token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Not Found Error": {
+                    "description": "Not Found Error",
+                    "value": {
+                      "error_code": "RESOURCE_NOT_FOUND",
+                      "message": "The requested audit log was not found",
+                      "status_code": 404,
+                      "request_id": "2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Audit log not found"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Rate Limit Error": {
+                    "description": "Rate Limit Error",
+                    "value": {
+                      "error_code": "RATE_LIMIT_EXCEEDED",
+                      "message": "API rate limit exceeded. Please retry after some time",
+                      "status_code": 429,
+                      "request_id": "b7c1196e-2c6e-4d17-8f3c-fcb62d6d27a2"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Too many requests - Rate limit exceeded"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Internal Server Error": {
+                    "description": "Internal Server Error",
+                    "value": {
+                      "error_code": "INTERNAL_SERVER_ERROR",
+                      "message": "An unexpected error occurred. Please try again later",
+                      "status_code": 500,
+                      "request_id": "f351ac3c-cd5e-4ec7-89dc-191fc40a83f2"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "Get audit log details",
+        "tags": ["Audit Logs"]
+      }
+    },
+    "/v2/groups": {
+      "get": {
+        "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Retrieve a paginated list of user groups",
+        "operationId": "listGroups",
+        "parameters": [
+          {
+            "description": "Page cursor",
+            "example": "456e7890-f12b-34c5-d678-901234567890",
+            "in": "query",
+            "name": "page_after",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size",
+            "example": 50,
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success Response": {
+                    "description": "Success Response",
+                    "value": {
+                      "groups": [
+                        {
+                          "id": "123e4567-e89b-12d3-a456-426614174000",
+                          "display_name": "Engineering Team",
+                          "type": "GENERAL",
+                          "created_at": "2024-01-15T08:30:00Z",
+                          "last_refresh_at": "2024-12-01T10:15:00Z"
+                        },
+                        {
+                          "id": "456e7890-f12b-34c5-d678-901234567890",
+                          "display_name": "Repeat Phish Failures",
+                          "type": "REMEDIATION",
+                          "created_at": "2024-03-01T09:00:00Z",
+                          "last_refresh_at": "2024-11-15T14:30:00Z"
+                        }
+                      ],
+                      "page_after": "456e7890-f12b-34c5-d678-901234567890"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/GroupListResponseDto"
+                }
+              }
+            },
+            "description": "Successfully retrieved groups"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Validation Error": {
+                    "description": "Validation Error",
+                    "value": {
+                      "error_code": "VALIDATION_ERROR",
+                      "message": "Request validation failed",
+                      "status_code": 400,
+                      "request_id": "5f8e9a7b-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+                      "details": [
+                        {
+                          "field": "page_size",
+                          "message": "Page size must be greater than or equal to 1"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponseDto"
+                }
+              }
+            },
+            "description": "Bad request - Invalid parameters"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Unauthorized Error": {
+                    "description": "Unauthorized Error",
+                    "value": {
+                      "error_code": "INVALID_TOKEN",
+                      "message": "The provided authentication token is invalid or expired",
+                      "status_code": 401,
+                      "request_id": "dcaf9f7e-6c47-4c93-bb41-0e2d8d9bb0de"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing authentication token"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Rate Limit Error": {
+                    "description": "Rate Limit Error",
+                    "value": {
+                      "error_code": "RATE_LIMIT_EXCEEDED",
+                      "message": "API rate limit exceeded. Please retry after some time",
+                      "status_code": 429,
+                      "request_id": "b7c1196e-2c6e-4d17-8f3c-fcb62d6d27a2"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Too many requests - Rate limit exceeded"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Internal Server Error": {
+                    "description": "Internal Server Error",
+                    "value": {
+                      "error_code": "INTERNAL_SERVER_ERROR",
+                      "message": "An unexpected error occurred. Please try again later",
+                      "status_code": 500,
+                      "request_id": "f351ac3c-cd5e-4ec7-89dc-191fc40a83f2"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "List groups",
+        "tags": ["Groups"]
+      }
+    },
+    "/v2/groups/{groupId}": {
+      "get": {
+        "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Retrieve detailed information about a specific group",
+        "operationId": "getGroup",
+        "parameters": [
+          {
+            "description": "Group ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000",
+            "in": "path",
+            "name": "groupId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success Response": {
+                    "description": "Success Response",
+                    "value": {
+                      "id": "9f3d18ac-654e-4a0d-b8e9-90dbe7548c1d",
+                      "display_name": "High Risk Users",
+                      "type": "GENERAL",
+                      "created_at": "2025-04-02T15:02:38.000Z",
+                      "last_refresh_at": "2025-06-26T15:02:38.000Z"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/GroupDto"
+                }
+              }
+            },
+            "description": "Successfully retrieved group details"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Unauthorized Error": {
+                    "description": "Unauthorized Error",
+                    "value": {
+                      "error_code": "INVALID_TOKEN",
+                      "message": "The provided authentication token is invalid or expired",
+                      "status_code": 401,
+                      "request_id": "dcaf9f7e-6c47-4c93-bb41-0e2d8d9bb0de"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing authentication token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Not Found Error": {
+                    "description": "Not Found Error",
+                    "value": {
+                      "error_code": "RESOURCE_NOT_FOUND",
+                      "message": "The requested group was not found",
+                      "status_code": 404,
+                      "request_id": "2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Group not found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Internal Server Error": {
+                    "description": "Internal Server Error",
+                    "value": {
+                      "error_code": "INTERNAL_SERVER_ERROR",
+                      "message": "An unexpected error occurred. Please try again later",
+                      "status_code": 500,
+                      "request_id": "f351ac3c-cd5e-4ec7-89dc-191fc40a83f2"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "Get group details",
+        "tags": ["Groups"]
+      }
+    },
+    "/v2/groups/{groupId}/users": {
+      "get": {
+        "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Retrieve a paginated list of users in a specific group",
+        "operationId": "getGroupMembers",
+        "parameters": [
+          {
+            "description": "Group ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000",
+            "in": "path",
+            "name": "groupId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page cursor",
+            "example": "456e7890-f12b-34c5-d678-901234567890",
+            "in": "query",
+            "name": "page_after",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size",
+            "example": 100,
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success Response": {
+                    "description": "Success Response",
+                    "value": {
+                      "users": [
+                        {
+                          "id": "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6",
+                          "email": "john@example.com",
+                          "joined_at": "2025-04-02T15:02:38.000Z"
+                        },
+                        {
+                          "id": "b2c3d4e5-f6g7-8h9i-0j1k-l2m3n4o5p6q7",
+                          "email": "jane@example.com",
+                          "joined_at": "2025-04-15T09:30:12.000Z"
+                        }
+                      ],
+                      "page_after": "b2c3d4e5-f6g7-8h9i-0j1k-l2m3n4o5p6q7"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/GroupUsersResponseDto"
+                }
+              }
+            },
+            "description": "Successfully retrieved group users"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Unauthorized Error": {
+                    "description": "Unauthorized Error",
+                    "value": {
+                      "error_code": "INVALID_TOKEN",
+                      "message": "The provided authentication token is invalid or expired",
+                      "status_code": 401,
+                      "request_id": "dcaf9f7e-6c47-4c93-bb41-0e2d8d9bb0de"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing authentication token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Not Found Error": {
+                    "description": "Not Found Error",
+                    "value": {
+                      "error_code": "RESOURCE_NOT_FOUND",
+                      "message": "The requested group was not found",
+                      "status_code": 404,
+                      "request_id": "8a9b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Group not found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Internal Server Error": {
+                    "description": "Internal Server Error",
+                    "value": {
+                      "error_code": "INTERNAL_SERVER_ERROR",
+                      "message": "An unexpected error occurred. Please try again later",
+                      "status_code": 500,
+                      "request_id": "f351ac3c-cd5e-4ec7-89dc-191fc40a83f2"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "Get group users",
+        "tags": ["Groups"]
+      }
+    },
+    "/v2/phishing/campaigns": {
+      "get": {
+        "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Retrieve a paginated list of phishing campaigns",
+        "operationId": "listPhishingCampaigns",
+        "parameters": [
+          {
+            "description": "Page cursor",
+            "example": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+            "in": "query",
+            "name": "page_after",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size",
+            "example": 50,
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success Response": {
+                    "description": "Success Response",
+                    "value": {
+                      "campaigns": [
+                        {
+                          "campaign_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                          "name": "Quarterly Phish Test",
+                          "target": "GROUPS",
+                          "groups": [
+                            {
+                              "group_id": "f6a7b8c9-d0e1-2345-fabc-d67890123456",
+                              "name": "All Users"
+                            }
+                          ],
+                          "scenarios": [
+                            {
+                              "scenario_id": "a7b8c9d0-e1f2-3456-abcd-e78901234567",
+                              "name": "Zoom Deepfake",
+                              "sender": "Zoom",
+                              "difficulty": "Hard",
+                              "spoofPageType": "DEEPFAKE_SPOOF_PAGE",
+                              "channel": "EMAIL",
+                              "attackVector": "LINK_CLICKED"
+                            },
+                            {
+                              "scenario_id": "a7b8c9d0-e1f2-3456-abcd-e78901234567",
+                              "name": "Google Account Compromise",
+                              "sender": "Google",
+                              "difficulty": "Easy",
+                              "spoofPageType": null,
+                              "channel": "EMAIL",
+                              "attackVector": "LINK_CLICKED"
+                            },
+                            {
+                              "scenario_id": "a7b8c9d0-e1f2-3456-abcd-e78901234567",
+                              "name": "Internal Audit Feedback",
+                              "sender": "Executive",
+                              "difficulty": "Medium",
+                              "spoofPageType": null,
+                              "channel": "EMAIL",
+                              "attackVector": "QR_CODE_SCANNED"
+                            }
+                          ],
+                          "mode": "RECURRING",
+                          "status": "IN_PROGRESS",
+                          "created_date": "2025-06-01T13:19:13.402Z",
+                          "start_date": "2025-06-10T13:19:13.402Z",
+                          "end_date": "2025-08-10T13:19:13.402Z",
+                          "distribution_interval": "TWO_WEEKS",
+                          "recurring_interval": "MONTH",
+                          "simulations": [
+                            {
+                              "simulation_id": "c18f4e0b-5678-9abc-def0-123456789abc",
+                              "start_date": "2025-06-10T13:19:13.402Z",
+                              "end_date": "2025-07-10T13:19:13.402Z",
+                              "status": "COMPLETED"
+                            },
+                            {
+                              "simulation_id": "e9a7f2d1-abcd-ef01-2345-6789abcdef01",
+                              "start_date": "2025-07-10T13:19:13.402Z",
+                              "end_date": "2025-08-10T13:19:13.402Z",
+                              "status": "IN_PROGRESS"
+                            }
+                          ]
+                        }
+                      ],
+                      "page_after": "f3c7c8f3-1234-5678-9abc-def012345678"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/PhishingCampaignListResponseDto"
+                }
+              }
+            },
+            "description": "Successfully retrieved phishing campaigns"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Validation Error": {
+                    "description": "Validation Error",
+                    "value": {
+                      "error_code": "VALIDATION_ERROR",
+                      "message": "Request validation failed",
+                      "status_code": 400,
+                      "request_id": "5f8e9a7b-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+                      "details": [
+                        {
+                          "field": "page_size",
+                          "message": "Page size must be greater than or equal to 1"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponseDto"
+                }
+              }
+            },
+            "description": "Bad request - Invalid parameters"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Unauthorized Error": {
+                    "description": "Unauthorized Error",
+                    "value": {
+                      "error_code": "INVALID_TOKEN",
+                      "message": "The provided authentication token is invalid or expired",
+                      "status_code": 401,
+                      "request_id": "dcaf9f7e-6c47-4c93-bb41-0e2d8d9bb0de"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing authentication token"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Rate Limit Error": {
+                    "description": "Rate Limit Error",
+                    "value": {
+                      "error_code": "RATE_LIMIT_EXCEEDED",
+                      "message": "API rate limit exceeded. Please retry after some time",
+                      "status_code": 429,
+                      "request_id": "b7c1196e-2c6e-4d17-8f3c-fcb62d6d27a2"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Too many requests - Rate limit exceeded"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Internal Server Error": {
+                    "description": "Internal Server Error",
+                    "value": {
+                      "error_code": "INTERNAL_SERVER_ERROR",
+                      "message": "An unexpected error occurred. Please try again later",
+                      "status_code": 500,
+                      "request_id": "f351ac3c-cd5e-4ec7-89dc-191fc40a83f2"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "List phishing campaigns",
+        "tags": ["Phishing"]
+      }
+    },
+    "/v2/phishing/campaigns/enrollments": {
+      "get": {
+        "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Retrieve details about phishing enrollments with campaign, simulation, and user filters",
+        "operationId": "getPhishingEnrollments",
+        "parameters": [
+          {
+            "description": "User ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000",
+            "in": "query",
+            "name": "user_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Phishing campaign ID",
+            "example": "f3c7c8f3-1234-5678-9abc-def012345678",
+            "in": "query",
+            "name": "campaign_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Simulation execution ID",
+            "example": "c18f4e0b-5678-9abc-def0-123456789abc",
+            "in": "query",
+            "name": "simulation_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page cursor",
+            "example": "f248c6c3-9c93-4d62-a41b-9843de18f56b",
+            "in": "query",
+            "name": "page_after",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size",
+            "example": 50,
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success Response": {
+                    "description": "Success Response",
+                    "value": {
+                      "enrollments": [
+                        {
+                          "enrollment_id": "d0e1f2a3-b4c5-6789-defa-b01234567890",
+                          "campaign_id": "c3d4e5f6-a7b8-9012-cdef-a34567890123",
+                          "simulation_id": "c18f4e0b-5678-9abc-def0-123456789abc",
+                          "user": {
+                            "id": "a3b4c5d6-e7f8-9012-abcd-e34567890123",
+                            "email": "john.smith@example.com"
+                          },
+                          "scenario_id": "a7b8c9d0-e1f2-3456-abcd-e78901234567",
+                          "scheduled_at": "2025-06-10T15:02:38.000Z",
+                          "delivered_at": "2025-06-10T15:02:38.000Z",
+                          "opened_at": "2025-06-10T15:04:38.000Z",
+                          "clicked_at": "2025-06-10T15:05:38.000Z",
+                          "replied_at": null,
+                          "attachment_opened_at": null,
+                          "credentials_entered": "2025-06-10T15:07:38.000Z",
+                          "qr_code_scanned": null,
+                          "reported_at": null,
+                          "failed_at": "2025-06-10T15:07:38.000Z",
+                          "ip": "192.168.1.100",
+                          "ip_location": "Philadelphia, PA"
+                        },
+                        {
+                          "enrollment_id": "e1f2a3b4-c5d6-7890-efab-c12345678901",
+                          "campaign_id": "d4e5f6a7-b8c9-0123-defa-b45678901234",
+                          "simulation_id": "e9a7f2d1-9999-8888-7777-9ac3",
+                          "user": {
+                            "id": "a3b4c5d6-e7f8-9012-abcd-e34567890123",
+                            "email": "john.smith@example.com"
+                          },
+                          "scenario_id": "a7b8c9d0-e1f2-3456-abcd-e78901234567",
+                          "scheduled_at": "2025-07-10T14:30:22.000Z",
+                          "delivered_at": "2025-07-10T14:30:22.000Z",
+                          "opened_at": "2025-07-10T14:35:18.000Z",
+                          "clicked_at": null,
+                          "replied_at": null,
+                          "attachment_opened_at": null,
+                          "credentials_entered": null,
+                          "qr_code_scanned": null,
+                          "reported_at": "2025-07-10T14:36:45.000Z",
+                          "failed_at": null,
+                          "ip": "192.168.1.100",
+                          "ip_location": "Philadelphia, PA"
+                        },
+                        {
+                          "enrollment_id": "f2a3b4c5-d6e7-8901-fabc-d23456789012",
+                          "campaign_id": "e5f6a7b8-c9d0-1234-efab-c56789012345",
+                          "simulation_id": "f1a2b3c4-dddd-eeee-ffff-0ab1",
+                          "user": {
+                            "id": "b4c5d6e7-f8a9-0123-bcde-f45678901234",
+                            "email": "jane.smith@example.com"
+                          },
+                          "scenario_id": "a7b8c9d0-e1f2-3456-abcd-e78901234567",
+                          "scheduled_at": "2025-06-15T10:45:12.000Z",
+                          "delivered_at": "2025-06-15T10:45:12.000Z",
+                          "opened_at": "2025-06-15T11:22:33.000Z",
+                          "clicked_at": "2025-06-15T11:23:11.000Z",
+                          "replied_at": null,
+                          "attachment_opened_at": null,
+                          "credentials_entered": null,
+                          "qr_code_scanned": null,
+                          "reported_at": null,
+                          "failed_at": "2025-06-15T11:23:38.000Z",
+                          "ip": "192.168.1.100",
+                          "ip_location": "New York, NY"
+                        }
+                      ],
+                      "page_after": "f2a3b4c5-d6e7-8901-fabc-d23456789012"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/PhishingEnrollmentListResponseDto"
+                }
+              }
+            },
+            "description": "Successfully retrieved phishing enrollment details"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Unauthorized Error": {
+                    "description": "Unauthorized Error",
+                    "value": {
+                      "error_code": "INVALID_TOKEN",
+                      "message": "The provided authentication token is invalid or expired",
+                      "status_code": 401,
+                      "request_id": "5a7384c9-b5de-4aa1-a144-faa0de243ab0"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing authentication token"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Rate Limit Error": {
+                    "description": "Rate Limit Error",
+                    "value": {
+                      "error_code": "RATE_LIMIT_EXCEEDED",
+                      "message": "API rate limit exceeded. Please retry after some time",
+                      "status_code": 429,
+                      "request_id": "6e9d2fb1-95e2-49e2-ae36-9de6e6f51c25"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Too many requests - Rate limit exceeded"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Internal Server Error": {
+                    "description": "Internal Server Error",
+                    "value": {
+                      "error_code": "INTERNAL_SERVER_ERROR",
+                      "message": "An unexpected error occurred. Please try again later",
+                      "status_code": 500,
+                      "request_id": "a0a7b8e0-fc0b-46b1-8dbb-0d04872f9678"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "Get phishing enrollments",
+        "tags": ["Phishing"]
+      }
+    },
+    "/v2/phishing/campaigns/{campaignId}": {
+      "get": {
+        "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Retrieve detailed information about a specific phishing campaign including simulation summary",
+        "operationId": "getPhishingCampaign",
+        "parameters": [
+          {
+            "description": "Campaign ID",
+            "example": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            "in": "path",
+            "name": "campaignId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success Response": {
+                    "description": "Success Response",
+                    "value": {
+                      "campaign_id": "f3c7c8f3-1234-5678-9abc-def012345678",
+                      "name": "Quarterly Phish Test",
+                      "target": "GROUPS",
+                      "groups": [
+                        {
+                          "group_id": "cf7fc19b-d312-47bb-8289-79774e3218d1",
+                          "name": "All Users"
+                        }
+                      ],
+                      "scenarios": [
+                        {
+                          "scenario_id": "a7b8c9d0-e1f2-3456-abcd-e78901234567",
+                          "name": "Zoom Deepfake",
+                          "sender": "Zoom",
+                          "difficulty": "Hard",
+                          "spoofPageType": "DEEPFAKE_SPOOF_PAGE",
+                          "channel": "EMAIL",
+                          "attackVector": "LINK_CLICKED"
+                        },
+                        {
+                          "scenario_id": "b8c9d0e1-f2a3-4567-bcde-f89012345678",
+                          "name": "Google Account Compromise",
+                          "sender": "Google",
+                          "difficulty": "Easy",
+                          "spoofPageType": "LOGIN_SPOOF_PAGE",
+                          "channel": "EMAIL",
+                          "attackVector": "LINK_CLICKED"
+                        },
+                        {
+                          "scenario_id": "c9d0e1f2-a3b4-5678-cdef-a90123456789",
+                          "name": "Internal Audit Feedback",
+                          "sender": "Executive",
+                          "difficulty": "Medium",
+                          "spoofPageType": null,
+                          "channel": "EMAIL",
+                          "attackVector": "QR_CODE_SCANNED"
+                        }
+                      ],
+                      "mode": "RECURRING",
+                      "status": "IN_PROGRESS",
+                      "created_date": "2025-06-01T13:19:13.402Z",
+                      "start_date": "2025-06-10T13:19:13.402Z",
+                      "end_date": "2025-08-10T13:19:13.402Z",
+                      "distribution_interval": "TWO_WEEKS",
+                      "recurring_interval": "MONTH",
+                      "simulations": [
+                        {
+                          "simulation_id": "c18f4e0b-5678-9abc-def0-123456789abc",
+                          "start_date": "2025-06-10T13:19:13.402Z",
+                          "end_date": "2025-07-10T13:19:13.402Z",
+                          "status": "COMPLETED"
+                        },
+                        {
+                          "simulation_id": "e9a7f2d1-9999-8888-7777-9ac3",
+                          "start_date": "2025-07-10T13:19:13.402Z",
+                          "end_date": "2025-08-10T13:19:13.402Z",
+                          "status": "IN_PROGRESS"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/PhishingCampaignDto"
+                }
+              }
+            },
+            "description": "Successfully retrieved phishing campaign details"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Unauthorized Error": {
+                    "description": "Unauthorized Error",
+                    "value": {
+                      "error_code": "INVALID_TOKEN",
+                      "message": "The provided authentication token is invalid or expired",
+                      "status_code": 401,
+                      "request_id": "dcaf9f7e-6c47-4c93-bb41-0e2d8d9bb0de"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing authentication token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Not Found Error": {
+                    "description": "Not Found Error",
+                    "value": {
+                      "error_code": "RESOURCE_NOT_FOUND",
+                      "message": "The requested phishing campaign was not found",
+                      "status_code": 404,
+                      "request_id": "2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Phishing campaign not found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Internal Server Error": {
+                    "description": "Internal Server Error",
+                    "value": {
+                      "error_code": "INTERNAL_SERVER_ERROR",
+                      "message": "An unexpected error occurred. Please try again later",
+                      "status_code": 500,
+                      "request_id": "f351ac3c-cd5e-4ec7-89dc-191fc40a83f2"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "Get phishing campaign details",
+        "tags": ["Phishing"]
+      }
+    },
+    "/v2/phishing/campaigns/{campaignId}/simulations": {
+      "get": {
+        "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Retrieve a paginated list of simulation executions for a specific campaign",
+        "operationId": "listCampaignSimulations",
+        "parameters": [
+          {
+            "description": "Campaign ID",
+            "example": "3d65f3b0-9abc-def0-1234-56789abcdef0",
+            "in": "path",
+            "name": "campaignId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page cursor",
+            "example": "c18f4e0b-dddd-eeee-ffff-0fb2",
+            "in": "query",
+            "name": "page_after",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size",
+            "example": 50,
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success Response": {
+                    "description": "Success Response",
+                    "value": {
+                      "simulations": [
+                        {
+                          "simulation_id": "c18f4e0b-dddd-eeee-ffff-0fb2",
+                          "campaign_id": "3d65f3b0-aaaa-bbbb-cccc-8c1c",
+                          "start_date": "2025-08-10T13:19:13.402Z",
+                          "end_date": "2025-09-10T13:19:13.402Z",
+                          "status": "IN_PROGRESS",
+                          "distribution_interval": "TWO_WEEKS",
+                          "scenarios": [
+                            {
+                              "scenario_id": "s-zoom-123",
+                              "name": "Zoom Deepfake",
+                              "sender": "Zoom",
+                              "difficulty": "HARD",
+                              "spoofPageType": "DEEPFAKE_SPOOF_PAGE",
+                              "channel": "EMAIL",
+                              "attackVector": "LINK_CLICKED"
+                            }
+                          ]
+                        },
+                        {
+                          "simulation_id": "e9a7f2d1-9999-8888-7777-9ac3",
+                          "campaign_id": "3d65f3b0-aaaa-bbbb-cccc-8c1c",
+                          "start_date": "2025-09-10T13:19:13.402Z",
+                          "end_date": "2025-10-10T13:19:13.402Z",
+                          "status": "SCHEDULED",
+                          "distribution_interval": "TWO_WEEKS",
+                          "scenarios": [
+                            {
+                              "scenario_id": "s-google-456",
+                              "name": "Google Account Compromise",
+                              "sender": "Google",
+                              "difficulty": "EASY",
+                              "spoofPageType": "LOGIN_SPOOF_PAGE",
+                              "channel": "EMAIL",
+                              "attackVector": "LINK_CLICKED"
+                            }
+                          ]
+                        }
+                      ],
+                      "page_after": "e9a7f2d1-9999-8888-7777-9ac3"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/PhishingSimulationListResponseDto"
+                }
+              }
+            },
+            "description": "Successfully retrieved simulation executions"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing authentication token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Not Found Error": {
+                    "description": "Not Found Error",
+                    "value": {
+                      "error_code": "RESOURCE_NOT_FOUND",
+                      "message": "The requested campaign was not found",
+                      "status_code": 404,
+                      "request_id": "2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Campaign not found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "List simulations for campaign",
+        "tags": ["Phishing"]
+      }
+    },
+    "/v2/phishing/simulations/{simulationId}": {
+      "get": {
+        "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Retrieve detailed information about a specific simulation execution",
+        "operationId": "getSimulation",
+        "parameters": [
+          {
+            "description": "Simulation Execution ID",
+            "example": "c18f4e0b-dddd-eeee-ffff-0fb2",
+            "in": "path",
+            "name": "simulationId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success Response": {
+                    "description": "Success Response",
+                    "value": {
+                      "simulation_id": "c18f4e0b-5678-9abc-def0-123456789abc",
+                      "campaign_id": "3d65f3b0-aaaa-bbbb-cccc-8c1c",
+                      "start_date": "2025-08-10T13:19:13.402Z",
+                      "end_date": "2025-09-10T13:19:13.402Z",
+                      "status": "IN_PROGRESS",
+                      "distribution_interval": "TWO_WEEKS",
+                      "scenarios": [
+                        {
+                          "scenario_id": "s-zoom-123",
+                          "name": "Zoom Deepfake",
+                          "sender": "Zoom",
+                          "difficulty": "Hard",
+                          "spoofPageType": "DEEPFAKE_SPOOF_PAGE",
+                          "channel": "EMAIL",
+                          "attackVector": "LINK_CLICKED"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/PhishingSimulationDto"
+                }
+              }
+            },
+            "description": "Successfully retrieved simulation execution details"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing authentication token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Not Found Error": {
+                    "description": "Not Found Error",
+                    "value": {
+                      "error_code": "RESOURCE_NOT_FOUND",
+                      "message": "The requested simulation execution was not found",
+                      "status_code": 404,
+                      "request_id": "2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Simulation execution not found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "Get simulation execution details",
+        "tags": ["Phishing"]
+      }
+    },
+    "/v2/training/campaigns": {
+      "get": {
+        "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Retrieve a paginated list of training campaigns",
+        "operationId": "listTrainingCampaigns",
+        "parameters": [
+          {
+            "description": "Page cursor",
+            "example": "6e8e3c89-1122-4db2-ae91-f2c6bc0d5639",
+            "in": "query",
+            "name": "page_after",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size",
+            "example": 100,
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success Response": {
+                    "description": "Success Response",
+                    "value": {
+                      "campaigns": [
+                        {
+                          "id": "2db2730a-3a9d-4b3d-87b4-1d16e1e66a88",
+                          "name": "Engineering Annual Training",
+                          "audience_type": "GROUPS",
+                          "groups": [
+                            {
+                              "id": "f95d3d85-284b-4f94-98fe-23914c805b88",
+                              "name": "Engineering Team"
+                            }
+                          ],
+                          "mode": "SCHEDULED",
+                          "status": "IN_PROGRESS",
+                          "created_at": "2025-01-01T13:19:13.402Z",
+                          "start_date": "2025-01-10T13:19:13.402Z",
+                          "end_date": "2025-04-10T13:19:13.402Z",
+                          "employee_title": "2024 Security Awareness Training"
+                        },
+                        {
+                          "id": "6e8e3c89-1122-4db2-ae91-f2c6bc0d5639",
+                          "name": "New Employee Onboarding",
+                          "audience_type": "ALL_USERS",
+                          "groups": [],
+                          "mode": "TRIGGERED",
+                          "status": "IN_PROGRESS",
+                          "created_at": "2025-06-15T08:00:00Z",
+                          "start_date": "2025-06-15T08:00:00Z",
+                          "end_date": null,
+                          "employee_title": null
+                        }
+                      ],
+                      "page_after": "6e8e3c89-1122-4db2-ae91-f2c6bc0d5639"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/TrainingCampaignListResponseDto"
+                }
+              }
+            },
+            "description": "Successfully retrieved training campaigns"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Validation Error": {
+                    "description": "Validation Error",
+                    "value": {
+                      "error_code": "VALIDATION_ERROR",
+                      "message": "Request validation failed",
+                      "status_code": 400,
+                      "request_id": "2f6f683d-c3e3-44c3-8ee2-b06b5687f255",
+                      "details": [
+                        {
+                          "field": "page_after",
+                          "message": "page_after must be a string"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponseDto"
+                }
+              }
+            },
+            "description": "Bad request - Invalid parameters"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Unauthorized Error": {
+                    "description": "Unauthorized Error",
+                    "value": {
+                      "error_code": "INVALID_TOKEN",
+                      "message": "The provided authentication token is invalid or expired",
+                      "status_code": 401,
+                      "request_id": "74fc4c18-2c80-4394-b2e2-2f137b237b92"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing authentication token"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Rate Limit Error": {
+                    "description": "Rate Limit Error",
+                    "value": {
+                      "error_code": "RATE_LIMIT_EXCEEDED",
+                      "message": "API rate limit exceeded. Please retry after some time",
+                      "status_code": 429,
+                      "request_id": "0d47b5d3-884b-42c5-a20a-04e47011ebf4"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Too many requests - Rate limit exceeded"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Internal Server Error": {
+                    "description": "Internal Server Error",
+                    "value": {
+                      "error_code": "INTERNAL_SERVER_ERROR",
+                      "message": "An unexpected error occurred. Please try again later",
+                      "status_code": 500,
+                      "request_id": "f7e20a42-3c64-4f45-8a87-76113a1ce2f0"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "List training campaigns",
+        "tags": ["Training"]
+      }
+    },
+    "/v2/training/campaigns/enrollments": {
+      "get": {
+        "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Retrieve details about training enrollments with campaign and user filters",
+        "operationId": "getTrainingCampaignEnrollments",
+        "parameters": [
+          {
+            "description": "User ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000",
+            "in": "query",
+            "name": "user_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Training campaign ID",
+            "example": "c143c964-d39b-4f0f-b3d3-07bb3aaae71e",
+            "in": "query",
+            "name": "campaign_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page cursor",
+            "example": "f248c6c3-9c93-4d62-a41b-9843de18f56b",
+            "in": "query",
+            "name": "page_after",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Number of enrollments to return per page (max 1000)",
+            "example": 100,
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success Response": {
+                    "description": "Success Response",
+                    "value": {
+                      "enrollments": [
+                        {
+                          "id": "5a6dce1e-8d0f-46b1-b263-50b6adca62da",
+                          "user": {
+                            "id": "123e4567-e89b-12d3-a456-426614174000",
+                            "email": "john.smith@example.com"
+                          },
+                          "campaign": {
+                            "id": "e7f89a36-4b8f-4865-b11a-b0f280ae6a34",
+                            "name": "Q4 Security Training",
+                            "employee_title": "2024 Security Awareness Training"
+                          },
+                          "status": "IN_PROGRESS",
+                          "enrolled_at": "2024-10-05T09:15:00Z",
+                          "due_at": "2024-10-12T09:20:00Z",
+                          "started_at": "2024-10-05T09:20:00Z",
+                          "unenrolled_at": null,
+                          "completed_at": null,
+                          "has_acknowledged_policy": false
+                        }
+                      ],
+                      "page_after": "5a6dce1e-8d0f-46b1-b263-50b6adca62da"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/UserTrainingCampaignEnrollmentListDto"
+                }
+              }
+            },
+            "description": "Successfully retrieved campaign enrollment details"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Unauthorized Error": {
+                    "description": "Unauthorized Error",
+                    "value": {
+                      "error_code": "INVALID_TOKEN",
+                      "message": "The provided authentication token is invalid or expired",
+                      "status_code": 401,
+                      "request_id": "5a7384c9-b5de-4aa1-a144-faa0de243ab0"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing authentication token"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Rate Limit Error": {
+                    "description": "Rate Limit Error",
+                    "value": {
+                      "error_code": "RATE_LIMIT_EXCEEDED",
+                      "message": "API rate limit exceeded. Please retry after some time",
+                      "status_code": 429,
+                      "request_id": "6e9d2fb1-95e2-49e2-ae36-9de6e6f51c25"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Too many requests - Rate limit exceeded"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Internal Server Error": {
+                    "description": "Internal Server Error",
+                    "value": {
+                      "error_code": "INTERNAL_SERVER_ERROR",
+                      "message": "An unexpected error occurred. Please try again later",
+                      "status_code": 500,
+                      "request_id": "a0a7b8e0-fc0b-46b1-8dbb-0d04872f9678"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "Get training campaign enrollments details",
+        "tags": ["Training"]
+      }
+    },
+    "/v2/training/campaigns/{campaignId}": {
+      "get": {
+        "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Retrieve detailed information about a specific training campaign",
+        "operationId": "getTrainingCampaign",
+        "parameters": [
+          {
+            "description": "Campaign ID",
+            "example": "e7f89a36-4b8f-4865-b11a-b0f280ae6a34",
+            "in": "path",
+            "name": "campaignId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success Response": {
+                    "description": "Success Response",
+                    "value": {
+                      "id": "88479a0e-6ef4-4bc9-9af1-d57bae0f1234",
+                      "name": "Engineering Annual Training",
+                      "audience_type": "GROUPS",
+                      "groups": [
+                        {
+                          "id": "12345654-4321-1234-9abc-def012345678",
+                          "name": "Engineers"
+                        }
+                      ],
+                      "mode": "SCHEDULED",
+                      "status": "IN_PROGRESS",
+                      "created_at": "2025-06-01T13:19:13.402Z",
+                      "start_date": "2025-06-10T13:19:13.402Z",
+                      "end_date": "2025-08-10T13:19:13.402Z",
+                      "employee_title": "2024 Security Awareness Training"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/TrainingCampaignDto"
+                }
+              }
+            },
+            "description": "Successfully retrieved training campaign details"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Unauthorized Error": {
+                    "description": "Unauthorized Error",
+                    "value": {
+                      "error_code": "INVALID_TOKEN",
+                      "message": "The provided authentication token is invalid or expired",
+                      "status_code": 401,
+                      "request_id": "dcaf9f7e-6c47-4c93-bb41-0e2d8d9bb0de"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing authentication token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Not Found Error": {
+                    "description": "Not Found Error",
+                    "value": {
+                      "error_code": "RESOURCE_NOT_FOUND",
+                      "message": "The requested training campaign was not found",
+                      "status_code": 404,
+                      "request_id": "2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Training campaign not found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Internal Server Error": {
+                    "description": "Internal Server Error",
+                    "value": {
+                      "error_code": "INTERNAL_SERVER_ERROR",
+                      "message": "An unexpected error occurred. Please try again later",
+                      "status_code": 500,
+                      "request_id": "f351ac3c-cd5e-4ec7-89dc-191fc40a83f2"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "Get training campaign details",
+        "tags": ["Training"]
+      }
+    },
+    "/v2/users": {
+      "get": {
+        "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Retrieve a paginated list of users",
+        "operationId": "listUsers",
+        "parameters": [
+          {
+            "description": "Page cursor",
+            "example": "0e3fbf7d-5b97-4aa9-9739-fac5c47a7f26",
+            "in": "query",
+            "name": "page_after",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size",
+            "example": 100,
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success Response": {
+                    "description": "Success Response",
+                    "value": {
+                      "users": [
+                        {
+                          "id": "123e4567-e89b-12d3-a456-426614174000",
+                          "status": "ACTIVE",
+                          "email": "john.smith@example.com",
+                          "first_name": "John",
+                          "last_name": "Smith",
+                          "department": "Engineering",
+                          "job_title": "Senior Engineer",
+                          "phone_number": "+15555553456",
+                          "mobile_phone_number": "+15555553457",
+                          "location": "Office A",
+                          "divisions": ["Consumer Devices"],
+                          "manager_name": "Andrew Smith",
+                          "manager_email": "andrew@example.com",
+                          "organization": "Adaptive",
+                          "languages": ["en-US"],
+                          "start_date": "2024-02-16T08:30:00Z",
+                          "current_risk_score": 40,
+                          "created_at": "2024-02-15T08:30:00Z"
+                        },
+                        {
+                          "id": "0e3fbf7d-5b97-4aa9-9739-fac5c47a7f26",
+                          "status": "ACTIVE",
+                          "email": "jane.smith@example.com",
+                          "first_name": "Jane",
+                          "last_name": "Smith",
+                          "department": "Product",
+                          "job_title": "Product Manager",
+                          "phone_number": "+15555557638",
+                          "mobile_phone_number": "+15555555432",
+                          "location": "Office B",
+                          "divisions": ["Consumer Devices"],
+                          "manager_name": "Sandy Ingram",
+                          "manager_email": "sandy@example.com",
+                          "organization": "Adaptive",
+                          "languages": ["en-US"],
+                          "start_date": "2024-01-16T08:30:00Z",
+                          "current_risk_score": 75,
+                          "created_at": "2024-01-15T08:30:00Z"
+                        }
+                      ],
+                      "page_after": "0e3fbf7d-5b97-4aa9-9739-fac5c47a7f26"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/UserListResponseDto"
+                }
+              }
+            },
+            "description": "Successfully retrieved users"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Validation Error": {
+                    "description": "Validation Error",
+                    "value": {
+                      "error_code": "VALIDATION_ERROR",
+                      "message": "Request validation failed",
+                      "status_code": 400,
+                      "request_id": "8c6b4f23-9cd0-4d38-9b55-d4a7867e0959",
+                      "details": [
+                        {
+                          "field": "page_after",
+                          "message": "Page cursor must be a string"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponseDto"
+                }
+              }
+            },
+            "description": "Bad request - Invalid parameters"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Unauthorized Error": {
+                    "description": "Unauthorized Error",
+                    "value": {
+                      "error_code": "INVALID_TOKEN",
+                      "message": "The provided authentication token is invalid or expired",
+                      "status_code": 401,
+                      "request_id": "dcaf9f7e-6c47-4c93-bb41-0e2d8d9bb0de"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing authentication token"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Rate Limit Error": {
+                    "description": "Rate Limit Error",
+                    "value": {
+                      "error_code": "RATE_LIMIT_EXCEEDED",
+                      "message": "API rate limit exceeded. Please retry after some time",
+                      "status_code": 429,
+                      "request_id": "b7c1196e-2c6e-4d17-8f3c-fcb62d6d27a2"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Too many requests - Rate limit exceeded"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Internal Server Error": {
+                    "description": "Internal Server Error",
+                    "value": {
+                      "error_code": "INTERNAL_SERVER_ERROR",
+                      "message": "An unexpected error occurred. Please try again later",
+                      "status_code": 500,
+                      "request_id": "f351ac3c-cd5e-4ec7-89dc-191fc40a83f2"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "List users",
+        "tags": ["Users"]
+      }
+    },
+    "/v2/users/{userId}": {
+      "get": {
+        "description": "<span style=\"background-color: #ff9500; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-right: 8px;\">BETA</span>Retrieve detailed information about a specific user",
+        "operationId": "getUser",
+        "parameters": [
+          {
+            "description": "User ID",
+            "example": "123e4567-e89b-12d3-a456-426614174000",
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success Response": {
+                    "description": "Success Response",
+                    "value": {
+                      "id": "123e4567-e89b-12d3-a456-426614174000",
+                      "status": "ACTIVE",
+                      "email": "john.smith@example.com",
+                      "created_at": "2024-02-15T08:30:00Z",
+                      "first_name": "John",
+                      "last_name": "Smith",
+                      "job_title": "Senior Engineer",
+                      "phone_number": "+15555553456",
+                      "mobile_phone_number": "+15555553457",
+                      "location": "Office A",
+                      "divisions": ["Consumer Devices"],
+                      "manager_name": "Andrew Smith",
+                      "manager_email": "andrew@example.com",
+                      "organization": "Adaptive",
+                      "department": "Engineering",
+                      "languages": ["en-US"],
+                      "start_date": "2024-02-16T08:30:00Z",
+                      "current_risk_score": 40
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            },
+            "description": "Successfully retrieved user details"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Unauthorized Error": {
+                    "description": "Unauthorized Error",
+                    "value": {
+                      "error_code": "INVALID_TOKEN",
+                      "message": "The provided authentication token is invalid or expired",
+                      "status_code": 401,
+                      "request_id": "dcaf9f7e-6c47-4c93-bb41-0e2d8d9bb0de"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing authentication token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Not Found Error": {
+                    "description": "Not Found Error",
+                    "value": {
+                      "error_code": "RESOURCE_NOT_FOUND",
+                      "message": "The requested user was not found",
+                      "status_code": 404,
+                      "request_id": "2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "User not found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Internal Server Error": {
+                    "description": "Internal Server Error",
+                    "value": {
+                      "error_code": "INTERNAL_SERVER_ERROR",
+                      "message": "An unexpected error occurred. Please try again later",
+                      "status_code": 500,
+                      "request_id": "f351ac3c-cd5e-4ec7-89dc-191fc40a83f2"
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "Get user details",
+        "tags": ["Users"]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AuditLogActingAdminDto": {
+        "type": "object",
+        "description": "Information about the admin who performed the action",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email address of the admin",
+            "example": "admin@example.com"
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the admin",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6"
+          },
+          "role": {
+            "type": "string",
+            "description": "Role of the admin",
+            "example": "ACCOUNT_OWNER"
+          }
+        }
+      },
+      "AuditLogDto": {
+        "type": "object",
+        "description": "Admin audit log entry",
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "The action that was performed",
+            "example": "CREATED_TRAINING_CAMPAIGN"
+          },
+          "actor": {
+            "$ref": "#/components/schemas/AuditLogActingAdminDto",
+            "description": "The admin who performed the action"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category of the action",
+            "example": "SAT_PROGRAM"
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the audit log entry",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable description of the action",
+            "example": "Created training campaign."
+          },
+          "occurred_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the action occurred (ISO 8601 format)",
+            "example": "2024-12-01T14:30:00Z"
+          },
+          "subcategory": {
+            "type": "string",
+            "description": "Subcategory of the action",
+            "example": "TRAINING"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Whether the action was successful",
+            "example": true
+          }
+        }
+      },
+      "AuditLogListResponseDto": {
+        "type": "object",
+        "description": "Paginated list of admin audit logs",
+        "properties": {
+          "audit_logs": {
+            "type": "array",
+            "description": "List of audit log entries",
+            "items": {
+              "$ref": "#/components/schemas/AuditLogDto"
+            }
+          },
+          "page_after": {
+            "type": "string",
+            "description": "Cursor for the next page of results. Null if this is the last page",
+            "example": "456e7890-f12b-34c5-d678-901234567890"
+          }
+        }
+      },
+      "CampaignGroupDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the group",
+            "example": "e7f89a36-4b8f-4865-b11a-b0f280ae6a34"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the group",
+            "example": "Finance Team"
+          }
+        }
+      },
+      "ErrorDetail": {
+        "type": "object",
+        "description": "Field-level validation error details",
+        "properties": {
+          "field": {
+            "type": "string",
+            "description": "Field name that failed validation",
+            "example": "email"
+          },
+          "message": {
+            "type": "string",
+            "description": "Validation error message for this field",
+            "example": "Email address is not valid"
+          }
+        },
+        "required": ["field", "message"]
+      },
+      "ErrorResponseDto": {
+        "type": "object",
+        "description": "Standard error response format for all API errors",
+        "properties": {
+          "error_code": {
+            "type": "string",
+            "description": "Machine-readable error code",
+            "example": "RESOURCE_NOT_FOUND"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable error message",
+            "example": "The requested user was not found"
+          },
+          "request_id": {
+            "type": "string",
+            "description": "Unique request ID for debugging",
+            "example": "8f03bdf9-ac45-4279-8dbe-f28839c2fed3"
+          },
+          "status_code": {
+            "type": "integer",
+            "format": "int32",
+            "description": "HTTP status code",
+            "example": 404
+          }
+        },
+        "required": ["error_code", "message", "request_id", "status_code"]
+      },
+      "GroupDto": {
+        "type": "object",
+        "description": "User group information",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Group creation date",
+            "example": "2024-01-15T08:30:00Z"
+          },
+          "display_name": {
+            "type": "string",
+            "description": "Group name",
+            "example": "Engineering Team"
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the group",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "last_refresh_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Group membership last updated date (can be null if initial membership calculation is still in progress)",
+            "example": "2024-12-01T10:15:00Z"
+          },
+          "status": {
+            "type": "string",
+            "description": "Group status",
+            "enum": ["ACTIVE", "ARCHIVED"],
+            "example": "ACTIVE"
+          },
+          "type": {
+            "type": "string",
+            "description": "Group type",
+            "enum": ["GENERAL", "NEW_HIRE", "REMEDIATION"],
+            "example": "GENERAL"
+          }
+        }
+      },
+      "GroupListResponseDto": {
+        "type": "object",
+        "description": "Paginated list of groups",
+        "properties": {
+          "groups": {
+            "type": "array",
+            "description": "List of groups",
+            "items": {
+              "$ref": "#/components/schemas/GroupDto"
+            }
+          },
+          "page_after": {
+            "type": "string",
+            "description": "Cursor for the next page",
+            "example": "456e7890-f12b-34c5-d678-901234567890"
+          }
+        }
+      },
+      "GroupUserDto": {
+        "type": "object",
+        "description": "User information within a group",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User email address",
+            "example": "john@example.com"
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the user",
+            "example": "615d6dd4-0045-48f8-90a9-6aba093b7676"
+          },
+          "joined_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the user joined the group",
+            "example": "2025-04-02T15:02:38.000Z"
+          }
+        }
+      },
+      "GroupUsersResponseDto": {
+        "type": "object",
+        "description": "Paginated list of users in a group",
+        "properties": {
+          "page_after": {
+            "type": "string",
+            "description": "Cursor for the next page",
+            "example": "615d6dd4-0045-48f8-90a9-6aba093b7676"
+          },
+          "users": {
+            "type": "array",
+            "description": "List of users in the group",
+            "items": {
+              "$ref": "#/components/schemas/GroupUserDto"
+            }
+          }
+        }
+      },
+      "PhishingCampaignDto": {
+        "type": "object",
+        "description": "Phishing campaign information representing the logical campaign configuration",
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "description": "Unique identifier for the campaign",
+            "example": "f3c7c8f3-1234-5678-9abc-def012345678"
+          },
+          "created_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Campaign creation date",
+            "example": "2025-06-01T13:19:13.402Z"
+          },
+          "distribution_interval": {
+            "type": "string",
+            "description": "Interval between scenario distributions within each simulation",
+            "enum": ["ALL_AT_ONCE", "DAY", "WEEK", "TWO_WEEKS", "MONTH", "THREE_MONTHS"],
+            "example": "TWO_WEEKS"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Campaign end date (null for indefinite campaigns)",
+            "example": "2025-08-10T13:19:13.402Z"
+          },
+          "groups": {
+            "type": "array",
+            "description": "Groups associated with the campaign",
+            "items": {
+              "$ref": "#/components/schemas/PhishingCampaignGroupDto"
+            }
+          },
+          "mode": {
+            "type": "string",
+            "description": "Campaign mode",
+            "enum": ["SCHEDULED", "RECURRING"],
+            "example": "RECURRING"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the phishing campaign",
+            "example": "Quarterly Phish Test"
+          },
+          "recurring_interval": {
+            "type": "string",
+            "description": "Interval for recurring campaigns (only present when mode = RECURRING)",
+            "enum": ["HOUR", "WEEK", "TWO_WEEKS", "MONTH", "THREE_MONTHS"],
+            "example": "MONTH"
+          },
+          "scenarios": {
+            "type": "array",
+            "description": "Scenarios included in the campaign",
+            "items": {
+              "$ref": "#/components/schemas/PhishingCampaignScenarioDto"
+            }
+          },
+          "simulations": {
+            "type": "array",
+            "description": "Summary list of simulation executions for this campaign",
+            "items": {
+              "$ref": "#/components/schemas/PhishingSimulationSummaryDto"
+            }
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Campaign start date",
+            "example": "2025-06-10T13:19:13.402Z"
+          },
+          "status": {
+            "type": "string",
+            "description": "Current status of the campaign",
+            "enum": ["DRAFT", "SCHEDULED", "IN_PROGRESS", "COMPLETED"],
+            "example": "IN_PROGRESS"
+          },
+          "target": {
+            "type": "string",
+            "description": "Target audience for the campaign",
+            "enum": ["ALL_USERS", "GROUPS"],
+            "example": "GROUPS"
+          }
+        }
+      },
+      "PhishingCampaignGroupDto": {
+        "type": "object",
+        "description": "Groups associated with the phishing campaign",
+        "properties": {
+          "group_id": {
+            "type": "string",
+            "description": "Unique identifier for the group",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the group",
+            "example": "All Users"
+          }
+        }
+      },
+      "PhishingCampaignListResponseDto": {
+        "type": "object",
+        "description": "Paginated list of phishing campaigns",
+        "properties": {
+          "campaigns": {
+            "type": "array",
+            "description": "List of phishing campaigns",
+            "items": {
+              "$ref": "#/components/schemas/PhishingCampaignDto"
+            }
+          },
+          "page_after": {
+            "type": "string",
+            "description": "Cursor for the next page",
+            "example": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+          }
+        }
+      },
+      "PhishingCampaignScenarioDto": {
+        "type": "object",
+        "description": "Phishing campaign scenario information",
+        "properties": {
+          "attack_vector": {
+            "type": "string",
+            "description": "User action for the scenario",
+            "enum": ["LINK_CLICKED", "TEXT_REPLIED", "PHONE_NUMBER_CALLED"],
+            "example": "LINK_CLICKED"
+          },
+          "channel": {
+            "type": "string",
+            "description": "Notification channel for the scenario",
+            "enum": ["EMAIL", "TEXT", "INBOUND_PHONE_CALL"],
+            "example": "EMAIL"
+          },
+          "difficulty": {
+            "type": "string",
+            "description": "Difficulty level of the scenario",
+            "enum": ["EASY", "MEDIUM", "HARD"],
+            "example": "HARD"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the phishing scenario",
+            "example": "Zoom Deepfake"
+          },
+          "scenario_id": {
+            "type": "string",
+            "description": "Unique identifier for the scenario",
+            "example": "s-zoom-123"
+          },
+          "sender": {
+            "type": "string",
+            "description": "Sender of the phishing email",
+            "example": "Zoom"
+          },
+          "spoof_page_type": {
+            "type": "string",
+            "description": "Spoof page type for the scenario",
+            "enum": ["LOGIN_SPOOF_PAGE", "DEEPFAKE_SPOOF_PAGE"],
+            "example": "DEEPFAKE_SPOOF_PAGE"
+          }
+        }
+      },
+      "PhishingEnrollmentDto": {
+        "type": "object",
+        "description": "Phishing enrollment details for a user in a specific simulation execution",
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "description": "Campaign identifier",
+            "example": "3d65f3b0-9abc-def0-1234-56789abcdef0"
+          },
+          "clicked_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the user clicked a link in the email",
+            "example": "2025-06-10T15:05:38.000Z"
+          },
+          "credentials_entered_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the user entered credentials",
+            "example": "2025-06-10T15:07:38.000Z"
+          },
+          "deep_fake_played_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the user played the deep fake",
+            "example": "2025-06-10T15:08:38.000Z"
+          },
+          "delivered_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the phishing email was delivered",
+            "example": "2025-06-10T15:02:38.000Z"
+          },
+          "enrollment_id": {
+            "type": "string",
+            "description": "Unique identifier for the enrollment",
+            "example": "d0e1f2a3-b4c5-6789-defa-b01234567890"
+          },
+          "failed_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the user failed the phishing test",
+            "example": "2025-06-10T15:07:38.000Z"
+          },
+          "ip": {
+            "type": "string",
+            "description": "IP address from the failure condition",
+            "example": "192.168.1.100"
+          },
+          "ip_location": {
+            "type": "string",
+            "description": "Geographic location of the IP address",
+            "example": "Philadelphia, PA"
+          },
+          "opened_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the user opened the email",
+            "example": "2025-06-10T15:04:38.000Z"
+          },
+          "phone_number_called_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the user called the phone number",
+            "example": "2025-06-10T15:08:38.000Z"
+          },
+          "qr_code_scanned_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the user scanned a QR code",
+            "example": "2025-06-10T15:08:38.000Z"
+          },
+          "reported_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the user reported the phishing email",
+            "example": "2025-06-10T15:09:38.000Z"
+          },
+          "scenario_id": {
+            "type": "string",
+            "description": "Scenario identifier",
+            "example": "a7b8c9d0-e1f2-3456-abcd-e78901234567"
+          },
+          "scheduled_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the phishing email was scheduled to be sent",
+            "example": "2025-06-10T15:02:38.000Z"
+          },
+          "simulation_id": {
+            "type": "string",
+            "description": "Simulation execution identifier",
+            "example": "c18f4e0b-5678-9abc-def0-123456789abc"
+          },
+          "text_replied_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the user replied to the text message",
+            "example": "2025-06-10T15:06:38.000Z"
+          },
+          "user": {
+            "$ref": "#/components/schemas/PhishingEnrollmentUserDto",
+            "description": "User information"
+          }
+        }
+      },
+      "PhishingEnrollmentListResponseDto": {
+        "type": "object",
+        "description": "Paginated list of phishing enrollments",
+        "properties": {
+          "enrollments": {
+            "type": "array",
+            "description": "List of phishing enrollments",
+            "items": {
+              "$ref": "#/components/schemas/PhishingEnrollmentDto"
+            }
+          },
+          "page_after": {
+            "type": "string",
+            "description": "Cursor for the next page",
+            "example": "f2a3b4c5-d6e7-8901-fabc-d23456789012"
+          }
+        }
+      },
+      "PhishingEnrollmentUserDto": {
+        "type": "object",
+        "description": "User information for phishing enrollment",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email address",
+            "example": "john.smith@example.com"
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the user",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        }
+      },
+      "PhishingSimulationDto": {
+        "type": "object",
+        "description": "Detailed phishing simulation execution information",
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "description": "Campaign identifier",
+            "example": "3d65f3b0-9abc-def0-1234-56789abcdef0"
+          },
+          "distribution_interval": {
+            "type": "string",
+            "description": "Interval between scenario distributions for this simulation",
+            "enum": ["ALL_AT_ONCE", "DAY", "WEEK", "TWO_WEEKS", "MONTH", "THREE_MONTHS"],
+            "example": "TWO_WEEKS"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "End date of this simulation execution",
+            "example": "2025-09-10T13:19:13.402Z"
+          },
+          "scenarios": {
+            "type": "array",
+            "description": "Scenarios snapshot for this specific simulation execution",
+            "items": {
+              "$ref": "#/components/schemas/PhishingCampaignScenarioDto"
+            }
+          },
+          "simulation_id": {
+            "type": "string",
+            "description": "Unique identifier for the simulation execution",
+            "example": "c18f4e0b-5678-9abc-def0-123456789abc"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Start date of this simulation execution",
+            "example": "2025-08-10T13:19:13.402Z"
+          },
+          "status": {
+            "type": "string",
+            "description": "Current status of this simulation execution",
+            "enum": ["DRAFT", "SCHEDULED", "IN_PROGRESS", "COMPLETED", "PAUSED"],
+            "example": "IN_PROGRESS"
+          }
+        }
+      },
+      "PhishingSimulationListResponseDto": {
+        "type": "object",
+        "description": "Paginated list of phishing simulation executions",
+        "properties": {
+          "page_after": {
+            "type": "string",
+            "description": "Cursor for the next page",
+            "example": "c18f4e0b-dddd-eeee-ffff-0fb2"
+          },
+          "simulations": {
+            "type": "array",
+            "description": "List of simulation executions",
+            "items": {
+              "$ref": "#/components/schemas/PhishingSimulationDto"
+            }
+          }
+        }
+      },
+      "PhishingSimulationSummaryDto": {
+        "type": "object",
+        "description": "Summary information for a phishing simulation execution",
+        "properties": {
+          "end_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "End date of this simulation execution",
+            "example": "2025-08-10T13:19:13.402Z"
+          },
+          "simulation_id": {
+            "type": "string",
+            "description": "Unique identifier for the simulation execution",
+            "example": "c18f4e0b-5678-9abc-def0-123456789abc"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Start date of this simulation execution",
+            "example": "2025-07-10T13:19:13.402Z"
+          },
+          "status": {
+            "type": "string",
+            "description": "Current status of this simulation execution",
+            "enum": ["DRAFT", "SCHEDULED", "IN_PROGRESS", "COMPLETED"],
+            "example": "COMPLETED"
+          }
+        }
+      },
+      "TrainingCampaignDto": {
+        "type": "object",
+        "description": "Training campaign information",
+        "properties": {
+          "audience_type": {
+            "type": "string",
+            "description": "Target audience type for the campaign",
+            "enum": ["GROUPS", "ALL_USERS"],
+            "example": "GROUPS"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Campaign's created date",
+            "example": "2025-01-01T13:19:13.402Z"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "End date for the campaign (null for TRIGGERED mode)",
+            "example": "2025-01-01T13:19:13.402Z"
+          },
+          "groups": {
+            "type": "array",
+            "description": "Groups associated with the campaign",
+            "items": {
+              "$ref": "#/components/schemas/CampaignGroupDto"
+            }
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the campaign",
+            "example": "e7f89a36-4b8f-4865-b11a-b0f280ae6a34"
+          },
+          "mode": {
+            "type": "string",
+            "description": "Campaign mode",
+            "enum": ["SCHEDULED", "TRIGGERED"],
+            "example": "SCHEDULED"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the training campaign",
+            "example": "Engineering Annual Training"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Start date for the campaign",
+            "example": "2025-01-01T13:19:13.402Z"
+          },
+          "status": {
+            "type": "string",
+            "description": "Current status of the campaign",
+            "enum": ["DRAFT", "SCHEDULED", "IN_PROGRESS", "COMPLETED", "OVERDUE"],
+            "example": "IN_PROGRESS"
+          },
+          "employee_title": {
+            "type": ["string", "null"],
+            "description": "Employee-facing title for the campaign. Null if no employee-facing title is set.",
+            "example": "2024 Annual Security Training"
+          }
+        }
+      },
+      "TrainingCampaignListResponseDto": {
+        "type": "object",
+        "description": "Paginated list of training campaigns",
+        "properties": {
+          "campaigns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrainingCampaignDto"
+            }
+          },
+          "page_after": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        }
+      },
+      "TrainingCampaignSummaryDto": {
+        "type": "object",
+        "description": "Training campaign information",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the campaign",
+            "example": "e7f89a36-4b8f-4865-b11a-b0f280ae6a34"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the training campaign",
+            "example": "Engineering Annual Training"
+          },
+          "employee_title": {
+            "type": ["string", "null"],
+            "description": "Employee-facing title for the campaign. Null if no employee-facing title is set.",
+            "example": "2024 Annual Security Training"
+          }
+        }
+      },
+      "UserDto": {
+        "type": "object",
+        "description": "User information",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "User's created date",
+            "example": "2025-01-01T13:19:13.402Z"
+          },
+          "current_risk_score": {
+            "type": "integer",
+            "format": "int32",
+            "description": "User's current risk score",
+            "example": 75
+          },
+          "department": {
+            "type": "string",
+            "description": "User's department",
+            "example": "Engineering"
+          },
+          "divisions": {
+            "type": "array",
+            "description": "User's divisions",
+            "example": ["Consumer Devices"],
+            "items": {
+              "type": "string"
+            }
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email address",
+            "example": "john.smith@example.com"
+          },
+          "first_name": {
+            "type": "string",
+            "description": "User's first name",
+            "example": "John"
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the user",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "job_title": {
+            "type": "string",
+            "description": "User's job title",
+            "example": "Senior Engineer"
+          },
+          "languages": {
+            "type": "array",
+            "description": "User's preferred languages",
+            "example": ["en-US"],
+            "items": {
+              "type": "string"
+            }
+          },
+          "last_name": {
+            "type": "string",
+            "description": "User's last name",
+            "example": "Smith"
+          },
+          "location": {
+            "type": "string",
+            "description": "User's location",
+            "example": "Office A"
+          },
+          "manager_email": {
+            "type": "string",
+            "description": "Manager's email address",
+            "example": "andrew@example.com"
+          },
+          "manager_name": {
+            "type": "string",
+            "description": "Manager's name",
+            "example": "Andrew Smith"
+          },
+          "mobile_phone_number": {
+            "type": "string",
+            "description": "User's mobile phone number",
+            "example": "+1-555-012-3457"
+          },
+          "organization": {
+            "type": "string",
+            "description": "Organization name",
+            "example": "Adaptive"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "User's office phone number",
+            "example": "+1-555-012-3456"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "User's start date",
+            "example": "2025-01-01T13:19:13.402Z"
+          },
+          "status": {
+            "type": "string",
+            "description": "Current status of the user",
+            "enum": ["ACTIVE", "DEACTIVATED", "EXCLUDED"],
+            "example": "ACTIVE"
+          }
+        }
+      },
+      "UserListResponseDto": {
+        "type": "object",
+        "properties": {
+          "page_after": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserDto"
+            }
+          }
+        }
+      },
+      "UserSummaryDto": {
+        "type": "object",
+        "description": "User summary information",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email address",
+            "example": "john.smith@example.com"
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the user",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        }
+      },
+      "UserTrainingCampaignEnrollmentDto": {
+        "type": "object",
+        "description": "User's enrollment details for a training campaign",
+        "properties": {
+          "campaign": {
+            "$ref": "#/components/schemas/TrainingCampaignSummaryDto"
+          },
+          "completed_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-01-01T13:19:13.402Z"
+          },
+          "due_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the user's training completion is due",
+            "example": "2025-01-08T13:19:13.402Z"
+          },
+          "enrolled_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-01-01T13:19:13.402Z"
+          },
+          "has_acknowledged_policy": {
+            "type": "boolean",
+            "example": false
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the enrollment",
+            "example": "6a10d54c-f1bf-4d1d-8864-64bfac9a0c13"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when user started the training",
+            "example": "2025-01-01T13:19:13.402Z"
+          },
+          "status": {
+            "type": "string",
+            "description": "User's enrollment status in the training campaign",
+            "enum": ["IN_PROGRESS", "COMPLETED", "INCOMPLETE", "OVERDUE", "UNENROLLED"],
+            "example": "IN_PROGRESS"
+          },
+          "unenrolled_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-01-02T13:19:13.402Z"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserSummaryDto"
+          }
+        }
+      },
+      "UserTrainingCampaignEnrollmentListDto": {
+        "type": "object",
+        "properties": {
+          "enrollments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserTrainingCampaignEnrollmentDto"
+            }
+          },
+          "page_after": {
+            "type": "string",
+            "example": "3b495a63-23f2-4284-82d0-3aa5b5c0c753"
+          }
+        }
+      },
+      "ValidationErrorResponseDto": {
+        "type": "object",
+        "description": "Error response for validation failures with field-level details",
+        "properties": {
+          "details": {
+            "type": "array",
+            "description": "List of field-level validation error details",
+            "items": {
+              "$ref": "#/components/schemas/ErrorDetail"
+            }
+          },
+          "error_code": {
+            "type": "string",
+            "description": "Machine-readable error code",
+            "example": "VALIDATION_ERROR"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable error message",
+            "example": "Request validation failed"
+          },
+          "request_id": {
+            "type": "string",
+            "description": "Unique request ID for debugging",
+            "example": "8f03bdf9-ac45-4279-8dbe-f28839c2fed3"
+          },
+          "status_code": {
+            "type": "integer",
+            "format": "int32",
+            "description": "HTTP status code",
+            "example": 400
+          }
+        },
+        "required": ["details", "error_code", "message", "request_id", "status_code"]
+      }
+    },
+    "securitySchemes": {
+      "bearer-token": {
+        "description": "API authentication token obtained from the Adaptive Admin portal (Settings → API Tokens). Include the token in the Authorization header as: Bearer YOUR_TOKEN",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  }
+}

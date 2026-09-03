@@ -1,0 +1,66 @@
+x-samos-type-name: UpGuardRiskFinding
+x-samos-namespace: upguard
+title: UpGuard Risk Finding
+description: An occurrence of a risk detected at a point in time by UpGuard.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Finding
+    subtype-priority: 3
+
+x-samos-keys:
+  - x_finding_id
+
+x-samos-table:
+  - name: x_hostname
+  - name: x_risk_id
+
+x-samos-detail:
+  - name: x_risk_id
+  - name: x_hostname
+
+required:
+  - x_finding_id
+
+x-samos-derived-properties:
+  d_name:
+    # Derived property to fulfill the core.named-object.name property,
+    # because we will use the risk ID as the name of the finding.
+    type: string
+    syntax: expression
+    value: '{x_hostname}: {x_risk_id}'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  x_finding_id:
+    title: Finding ID
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: id
+
+  x_risk_id:
+    title: Exposure/Risk
+    type: string
+    x-samos-ref-types:
+      - type-name: UpGuardRisk
+        key-name: id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: vulnerability
+
+  x_hostname:
+    title: Affected Hostname/IP Address
+    type: string
+    x-samos-ref-types:
+      - type-name: UpGuardDomain
+        key-name: hostname
+      - type-name: UpGuardIpAddress
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: Finding
+      property-name: applies_to

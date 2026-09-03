@@ -1,0 +1,635 @@
+x-samos-type-name: CyCognitoCertificate
+x-samos-namespace: cycognito
+title: CyCognito Certificate
+description: A TLS certificate discovered by CyCognito external attack surface management.
+
+x-samos-extends-types:
+  - type-name: Certificate
+    subtype-priority: 2
+
+$ref: 'https://api.platform.cycognito.com/v1#/paths/~1v1~1assets/post/responses/200/content/application~1json/schema/items'
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: subject-common-name
+  - name: issuer-organization
+  - name: public-key-type
+  - name: security-grade
+  - name: expiration
+
+x-samos-detail:
+  - name: subject-common-name
+  - name: subject-organization
+  - name: subject-alt-names
+  - name: issuer-common-name
+  - name: issuer-organization
+  - name: issues-count
+  - name: serial-number
+  - name: signature-algorithm
+  - name: public-key-type
+  - name: public-key-length
+  - name: expiration
+  - name: security-grade
+  - name: security-score
+  - name: issues-count
+  - name: severe-issues
+  - name: organizations
+  - name: ip-addresses
+  - name: domains
+  - name: tags
+  - name: first-seen
+  - name: last-seen
+
+x-samos-derived-properties:
+  # Uses the subject common name as the display name
+  d_name:
+    type: string
+    syntax: jmespath
+    value: '"subject-common-name"'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  # True if subject common name starts with '*'
+  d_is_wildcard:
+    type: boolean
+    syntax: jmespath
+    value: 'starts_with("subject-common-name" || ``, `*`)'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: is_wildcard
+
+  # True if the issuer and subject common names are the same
+  d_is_self_signed:
+    type: boolean
+    syntax: jmespath
+    value: '"issuer-common-name" == "subject-common-name"'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: is_self_signed
+  # CyCognito continuously scans assets for vulnerabilities
+  d_mitigations:
+    type: array
+    items:
+      type: string
+      properties: {}
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    value: '[`M1016`]'
+    syntax: jmespath
+    description: 'This asset record is evidence of mitigations: M1016 "Vulnerability Scanning"'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  id:
+    type: string
+    title: Id
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  type:
+    type: string
+    title: Asset Type
+  status:
+    type: string
+    title: Status
+  alive:
+    type: boolean
+    title: Alive?
+    x-samos-hidden: true
+  active:
+    type: boolean
+    title: Active?
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+  security-grade:
+    type: string
+    title: Security Grade
+  security-score:
+    type: number
+    title: Security Score
+  attractiveness:
+    type: number
+    title: Attractiveness Score
+    x-samos-hidden: true
+  attractiveness-label:
+    type: string
+    title: Attractiveness
+  investigation-status:
+    type: string
+    title: Investigation Status
+  issues-count:
+    type: integer
+    title: Issues Count
+  severe-issues:
+    type: integer
+    title: Severe Issues
+  subject-common-name:
+    type: string
+    title: Subject Common Name
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: subject
+  subject-organization:
+    type: string
+    title: Subject Organization
+  subject-organization-unit:
+    type: string
+    title: Subject OU
+  subject-country:
+    type: string
+    title: Subject Country
+  subject-state:
+    type: string
+    title: Subject State
+  subject-locality:
+    type: string
+    title: Subject Locality
+  subject-alt-names:
+    type: array
+    items:
+      type: string
+    title: Subject Alt Names
+  issuer-common-name:
+    type: string
+    title: Issuer Common Name
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: issuer
+  issuer-organization:
+    type: string
+    title: Issuer Organization
+  issuer-organization-unit:
+    type: string
+    title: Issuer OU
+    x-samos-hidden: true
+  issuer-country:
+    type: string
+    title: Issuer Country
+    x-samos-hidden: true
+  issuer-state:
+    type: string
+    title: Issuer State
+    x-samos-hidden: true
+  issuer-locality:
+    type: string
+    title: Issuer Locality
+  issuer-alt-names:
+    type: array
+    items:
+      type: string
+    title: Issuer Alt Names
+  serial-number:
+    type: string
+    title: Serial Number
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: Certificate.serial_number
+      correlation-type: Certificate
+      priority: 4
+  signature:
+    type: string
+    title: Signature
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: hashes
+    x-samos-correlation:
+      correlation-key: Certificate.thumbprint
+      correlation-type: Certificate
+      priority: 4
+  signature-algorithm:
+    type: string
+    title: Signature Algorithm
+  public-key-type:
+    type: string
+    title: Public Key Type
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: public_key_algorithm
+  public-key-length:
+    type: number
+    title: Public Key Length
+  expiration:
+    type: string
+    title: Expiration
+    format: date-time
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: not_valid_after
+  created:
+    type: string
+    title: Created
+    format: date-time
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: not_valid_before
+  certificate-subject-key-id:
+    type: string
+    title: Subject Key Id
+    x-samos-hidden: true
+  certification-authority-key-id:
+    type: string
+    title: Authority Key Id
+    x-samos-hidden: true
+  organizations:
+    type: array
+    items:
+      type: string
+    title: Organizations
+  locations:
+    type: array
+    items:
+      type: string
+    title: Locations
+  ip-addresses:
+    type: array
+    title: IP Addresses
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CyCognitoIpAddress
+          key-name: ip
+  domains:
+    type: array
+    title: Domains
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: CyCognitoDomain
+          key-name: domain
+  tags:
+    type: array
+    x-samos-hidden: true
+    items:
+      type: string
+    title: Tags
+  business-units:
+    type: array
+    items:
+      type: string
+    title: Business Units
+  teams:
+    type: array
+    items:
+      type: string
+    title: Teams
+  first-seen:
+    type: string
+    title: First Seen
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  last-seen:
+    type: string
+    title: Last Seen
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  sni-hosts:
+    type: array
+    title: SNI Hosts
+    items:
+      type: object
+      properties:
+        ip:
+          type: string
+        port:
+          type: integer
+        protocol:
+          type: string
+        sni:
+          type: string
+        time:
+          type: string
+  serving-machines:
+    type: array
+    title: Serving Machines
+    items:
+      type: object
+  attribution-certainty:
+    type: string
+    title: Attribution Certainty
+  known-status:
+    type: string
+    title: Known Status
+  related:
+    type: string
+    title: Related
+  comment:
+    type: object
+    title: Comment
+  comments:
+    type: array
+    title: Comments
+    items:
+      type: object
+      properties:
+        content:
+          type: string
+        created-by-name:
+          type: string
+        last-update:
+          type: string
+  advisories:
+    type: array
+    title: Advisories
+    items:
+      type: object
+      properties:
+        last-verified:
+          type: string
+          format: date-time
+        evidence-id:
+          type: string
+        evidence-last-seen:
+          type: string
+          format: date-time
+        vulnerable:
+          type: boolean
+        advisory:
+          type: string
+        issue-id:
+          type: string
+  cloud-env:
+    type: array
+    title: Cloud Environment
+    items:
+      type: string
+  cloud-env-metadata:
+    type: array
+    title: Cloud Environment Metadata
+    items:
+      type: object
+  discovery-path:
+    type: array
+    title: Discovery Path
+    items:
+      type: object
+      properties:
+        src:
+          type: string
+        dest:
+          type: string
+  first-detected:
+    type: string
+    title: First Detected
+    format: date-time
+  last-detected:
+    type: string
+    title: Last Detected
+    format: date-time
+  related-asset-ids:
+    type: object
+    title: Related Asset IDs
+  revalidation-request-time:
+    type: string
+    title: Revalidation Request Time
+    format: date-time
+  revalidation-requested:
+    type: boolean
+    title: Revalidation Requested
+  tech-owners:
+    type: array
+    title: Technical Owners
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        org-name:
+          type: string
+  additional-properties:
+    type: object
+    title: Additional Properties
+  alive-evidence:
+    type: string
+    title: Alive Evidence
+  as-list:
+    type: array
+    title: AS Numbers
+    items:
+      type: string
+  asns:
+    type: array
+    title: ASN Details
+    items:
+      type: object
+  cidr:
+    type: string
+    title: CIDR
+  cis-controls:
+    type: array
+    title: CIS Controls
+    items:
+      type: string
+  closed-ports:
+    type: array
+    title: Closed Ports
+    items:
+      type: object
+  compliance-violations:
+    type: array
+    title: Compliance Violations
+    items:
+      type: string
+  continent:
+    type: array
+    title: Continent
+    items:
+      type: string
+  country-code:
+    type: string
+    title: Country Code
+  discoverability:
+    type: string
+    title: Discoverability
+  dns-rcode:
+    type: string
+    title: DNS Return Code
+  dns-records:
+    type: object
+    title: DNS Records
+  domain:
+    type: string
+    title: Domain
+  dynamic-dns:
+    type: string
+    title: Dynamic DNS
+  dynamically-resolved:
+    type: array
+    title: Dynamically Resolved
+    items:
+      type: object
+  environments:
+    type: array
+    title: Environments
+    items:
+      type: string
+  formats:
+    type: array
+    title: Formats
+    items:
+      type: string
+  has-form:
+    type: boolean
+    title: Has Form?
+  has-login:
+    type: boolean
+    title: Has Login?
+  home-page-description:
+    type: string
+    title: Home Page Description
+  home-page-status-code:
+    type: number
+    title: Status Code
+  home-page-title:
+    type: string
+    title: Home Page Title
+  home-page-url:
+    type: string
+    title: Home Page URL
+  hosting-type:
+    type: string
+    title: Hosting Type
+  ip:
+    type: string
+    title: IP Address
+  ip-ranges:
+    type: array
+    title: IP Ranges
+    items:
+      type: object
+  ips-count:
+    type: number
+    title: IP Count
+  is-encrypted:
+    type: string
+    title: Encrypted?
+  is-subdomain:
+    type: boolean
+    title: Subdomain?
+  iso27001-controls:
+    type: array
+    title: ISO 27001 Controls
+    items:
+      type: string
+  iso27002-controls:
+    type: array
+    title: ISO 27002 Controls
+    items:
+      type: string
+  name-servers:
+    type: array
+    title: Name Servers
+    items:
+      type: string
+  nist-800-171-controls:
+    type: array
+    title: NIST 800-171 Controls
+    items:
+      type: string
+  nist-800-53-controls:
+    type: array
+    title: NIST 800-53 Controls
+    items:
+      type: string
+  open-ports:
+    type: array
+    title: Open Ports
+    items:
+      type: object
+  parent-domain:
+    type: string
+    title: Parent Domain
+  pci-dss-controls:
+    type: array
+    title: PCI DSS Controls
+    items:
+      type: string
+  platforms:
+    type: array
+    title: Platforms
+    items:
+      type: string
+  ptr-domains:
+    type: array
+    title: PTR Domains
+    items:
+      type: object
+  range:
+    type: string
+    title: IP Range
+  range-description:
+    type: string
+    title: Range Description
+  range-name:
+    type: string
+    title: Range Name
+  region:
+    type: array
+    title: Region
+    items:
+      type: string
+  registered-org-name:
+    type: string
+    title: Registered Org Name
+  registrant:
+    type: string
+    title: Registrant
+  registrar:
+    type: string
+    title: Registrar
+  related-screenshot-urls:
+    type: object
+    title: Screenshot URLs
+  services:
+    type: array
+    title: Services
+    items:
+      type: object
+  source:
+    type: string
+    title: Source Registry
+  supported-protocols:
+    type: array
+    title: Supported Protocols
+    items:
+      type: string
+  web-pages:
+    type: array
+    title: Web Pages
+    items:
+      type: string
+  web-resources-urls:
+    type: array
+    title: Web Resource URLs
+    items:
+      type: string
+  web-servers:
+    type: array
+    title: Web Servers
+    items:
+      type: string
+  webapp-address:
+    type: string
+    title: Web App Address

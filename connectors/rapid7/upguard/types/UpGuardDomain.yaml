@@ -1,0 +1,117 @@
+x-samos-type-name: UpGuardDomain
+x-samos-namespace: upguard
+title: UpGuard Domain
+description: An internet domain monitored by UpGuard.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Domain
+    subtype-priority: 3
+x-samos-global-zone: true
+
+$ref: 'https://demo.upguard.com/api/docs#/definitions/Domain'
+
+x-samos-keys:
+  - hostname
+
+x-samos-table:
+  - name: hostname
+  - name: automated_score
+  - name: active
+  - name: primary_domain
+  - name: scanned_at
+
+x-samos-detail:
+  - name: hostname
+  - name: automated_score
+  - name: active
+  - name: primary_domain
+  - name: labels
+  - name: x_vendor_hostname
+  - name: scanned_at
+
+x-samos-derived-properties:
+  d_id:
+    # Derived property to fulfill the core.component.id property,
+    # because we will use the hostname as the id of the domain.
+    type: string
+    syntax: jmespath
+    value: hostname
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_name:
+    # Derived property to fulfill the core.named-object.name property,
+    # because we will use the hostname as the name of the domain.
+    type: string
+    syntax: jmespath
+    value: hostname
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_is_external:
+    # Mark this domain as external when it belongs to a vendor (x_vendor_hostname is set).
+    type: boolean
+    syntax: jmespath
+    value: 'x_vendor_hostname && `true` || `false`'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_external
+
+required:
+  - hostname
+
+properties:
+  hostname:
+    title: Hostname
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: value
+    x-samos-correlation:
+      correlation-key: Domain.value
+      correlation-type: Domain
+      priority: 4
+
+  active:
+    title: Active?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  primary_domain:
+    title: Primary Domain?
+    type: boolean
+
+  automated_score:
+    title: Automated Score
+    type: integer
+
+  scanned_at:
+    title: Last Scanned
+    type: string
+    format: date-time
+
+  x_vendor_hostname:
+    title: Vendor
+    type: string
+    description: The hostname of the vendor associated with this domain, it's applicable for vendor risk.
+    x-samos-ref-types:
+      - type-name: UpGuardVendor
+        key-name: primary_hostname
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+
+  labels:
+    title: Labels
+    type: array
+    items:
+      type: string

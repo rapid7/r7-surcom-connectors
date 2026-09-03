@@ -1,0 +1,182 @@
+x-samos-type-name: UpGuardVendor
+x-samos-namespace: upguard
+title: UpGuard Vendor
+description: A third-party vendor monitored by UpGuard for supply chain risk.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Organization
+    subtype-priority: 3
+
+$ref: 'https://demo.upguard.com/api/docs#/definitions/vendor'
+
+x-samos-keys:
+  - id
+  - primary_hostname
+
+required:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: score
+  - name: primary_hostname
+  - name: monitored
+  - name: last_assessed
+
+x-samos-detail:
+  - name: name
+  - name: primary_hostname
+  - name: score
+  - name: overallScore
+  - name: automatedScore
+  - name: monitored
+  - name: assessmentStatus
+  - name: labels
+  - name: category_scores
+  - name: domain_count_total
+  - name: domain_count_active
+  - name: domain_count_inactive
+  - name: industry_group
+  - name: industry_average_score
+  - name: industry_sector
+  - name: first_monitored
+  - name: reassessment_date
+  - name: last_assessed
+
+x-samos-derived-properties:
+  d_id:
+    # Derived property to fulfill the Organization.id property of Organization,
+    # because "id" is integer but Organization.id expects a string.
+    type: string
+    syntax: jmespath
+    value: 'to_string(id)'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+
+properties:
+  id:
+    title: Vendor ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  primary_hostname:
+    title: Primary Hostname
+    type: string
+    x-samos-immutable: true
+    x-samos-ref-types:
+      - type-name: UpGuardDomain
+        key-name: hostname
+
+  score:
+    title: Security Score
+    type: integer
+    description: UpGuard security score (0-950).
+
+  overallScore:
+    title: Overall Score
+    type: integer
+
+  automatedScore:
+    title: Automated Score
+    type: integer
+
+  category_scores:
+    title: Category Scores
+    type: object
+    properties:
+      websiteSecurity:
+        type: integer
+        title: Website Security
+      emailSecurity:
+        type: integer
+        title: Email Security
+      networkSecurity:
+        type: integer
+        title: Network Security
+      ipDomainReputation:
+        type: integer
+        title: IP/Domain Reputation
+      operationalRisk:
+        type: integer
+        title: Operational Risk
+      attackSurface:
+        type: integer
+        title: Attack Surface
+      vulnerabilityManagement:
+        type: integer
+        title: Vulnerability Management
+      encryption:
+        type: integer
+        title: Encryption
+      dns:
+        type: integer
+        title: DNS
+      dataLeakage:
+        type: integer
+        title: Data Leakage
+      brandReputation:
+        type: integer
+        title: Brand Reputation
+  labels:
+    title: Labels
+    type: array
+    items:
+      type: string
+  assessment_status:
+    title: Assessment Status
+    type: string
+  monitored:
+    title: Monitored?
+    type: boolean
+  assessmentStatus:
+    title: Assessment Status
+    type: string
+  attributes:
+    title: Attributes
+  questionnaireScore:
+    title: Questionnaire Score
+  category_risk_counts:
+    title: Category Risk Counts
+  categoryScores:
+    title: Category Scores
+  domain_count_active:
+    title: Active Domain Count
+  domain_count_inactive:
+    title: Inactive Domain Count
+  domain_count_total:
+    title: Total Domain Count
+  first_monitored:
+    title: First Monitored
+  industry_average_score:
+    title: Industry Average Score
+  industry_group:
+    title: Industry Group
+  industry_sector:
+    title: Industry Sector
+  last_assessed:
+    title: Last Assessed
+  note:
+    title: Note
+  portfolios:
+    title: Portfolios
+  reassessment_date:
+    title: Reassessment Date
+  scores_by_epoch:
+    title: Scores by Epoch
+  overall_risk_counts:
+    title: Overall Risk Counts
+  tier:
+    title: Tier
+  vendor_metadata:
+    title: Vendor Metadata

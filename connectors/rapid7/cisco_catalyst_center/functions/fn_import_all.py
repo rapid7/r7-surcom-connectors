@@ -1,6 +1,7 @@
 from logging import Logger
 
 from .helpers import (
+    CLIENTS_PAGE_SIZE,
     CiscoCatalystCenterClient,
     MAX_PAGE_SIZE,
     flatten_site_data,
@@ -56,11 +57,12 @@ def _paginate(user_log, client, data_type, type_cls):
     All endpoints use 1-based offset with response wrapped
     in {"response": [...]}.
     """
+    page_size = CLIENTS_PAGE_SIZE if data_type == "clients" else MAX_PAGE_SIZE
     offset = 1
     record_count = 0
 
     while True:
-        data = client.get_data(data_type, offset, MAX_PAGE_SIZE)
+        data = client.get_data(data_type, offset, page_size)
         records = data.get("response", [])
 
         if not records:
@@ -80,7 +82,7 @@ def _paginate(user_log, client, data_type, type_cls):
             "Finished importing %d %s", record_count, DISPLAY_NAMES[data_type],
         )
 
-        if len(records) < MAX_PAGE_SIZE:
+        if len(records) < page_size:
             break
 
         offset += len(records)

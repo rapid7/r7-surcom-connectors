@@ -1,0 +1,70 @@
+x-samos-type-name: AzureBlobStorageImportConfiguration
+x-samos-namespace: azure-blob-storage
+title: Azure Blob Storage Import Configuration
+x-samos-plural-title: Azure Blob Storage Import Configurations
+description: |
+  The Azure Blob Storage connector imports JSON data files based on the container
+  and blob-prefix configured here. Each JSON blob is mapped onto the configured
+  Surface Command type.
+
+x-samos-extends-types:
+  - type-name: sys.import-configuration
+
+x-samos-keys:
+  - d_id
+
+required:
+  - container_name
+  - import_as_type
+
+x-samos-table:
+  - name: import_as_type
+  - name: container_name
+  - name: blob_prefix
+
+x-samos-detail:
+  - name: import_as_type
+  - name: container_name
+  - name: blob_prefix
+
+x-samos-derived-properties:
+  d_id:
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: '{container_name}_{blob_prefix}_{import_as_type}'
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: sys.import-configuration
+      property-name: id
+  d_name:
+    x-samos-hidden: true
+    title: Name
+    syntax: expression
+    type: string
+    value: '{container_name}/{blob_prefix} → {import_as_type}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  container_name:
+    title: Container Name
+    description: Name of the Azure Blob Storage container to import JSON blobs from.
+    type: string
+    x-samos-immutable: true
+  blob_prefix:
+    title: Blob Prefix
+    type: string
+    description: Optional prefix to filter blobs within the container (e.g. "data/exports/"). Leave blank to process all blobs in the container.
+    x-samos-immutable: true
+  import_as_type:
+    title: Surface Command Type
+    type: string
+    description: Type into which the JSON data should be imported.
+    x-samos-fulfills:
+      type-name: sys.import-configuration
+      property-name: import_as_type
+    x-samos-ref-types:
+      - type-name: sys.type
+        key-name: x-samos-type-name

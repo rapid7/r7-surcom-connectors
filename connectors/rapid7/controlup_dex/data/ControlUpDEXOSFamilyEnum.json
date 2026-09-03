@@ -1,0 +1,17 @@
+[
+  {
+    "id": "MSWIN",
+    "value": "Windows",
+    "map_to": "OSFamily: Windows"
+  },
+  {
+    "id": "MACOS",
+    "value": "macOS",
+    "map_to": "OSFamily: macOS"
+  },
+  {
+    "id": "LINUX",
+    "value": "Linux",
+    "map_to": "OSFamily: Linux"
+  }
+]

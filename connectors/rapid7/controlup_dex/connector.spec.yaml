@@ -1,0 +1,47 @@
+id: controlup.dex
+name: ControlUp DEX
+author: Rapid7
+version: 1.0.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Initial release
+
+reference-schemas:
+  - url: https://developer.controlup.com/docs/edge-dx-api
+    file: refdocs/edge-dx-api.json
+
+types:
+  - ControlUpDEXDevice
+  - ControlUpDEXUser
+  - ControlUpDEXOSFamilyEnum
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: ControlUp DEX Devices and Users
+    description: Import all devices and platform users from ControlUp
+    return_types:
+      - ControlUpDEXDevice
+      - ControlUpDEXUser
+
+settings:
+  api_key:
+    type: string
+    title: API Key
+    format: password
+    description: >-
+      API key used to authenticate with the ControlUp API.
+
+  org_id:
+    type: string
+    title: Organization ID
+    description: >-
+      Your ControlUp organization ID.
+    example: 6a1b2c3d-4e5f-6789-abcd-ef0123456789
+
+runtime: py311
+
+categories:
+  - endpoint_management

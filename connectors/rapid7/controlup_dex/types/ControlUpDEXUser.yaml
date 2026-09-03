@@ -1,0 +1,191 @@
+x-samos-type-name: ControlUpDEXUser
+x-samos-namespace: controlup.dex
+title: ControlUp DEX User
+description: A platform user (administrator/operator) in ControlUp.
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: fullName
+  - name: email
+  - name: d_role
+  - name: settings.status
+  - name: createdAt
+
+x-samos-detail:
+  - name: fullName
+  - name: email
+  - name: firstName
+  - name: lastName
+  - name: phone
+  - name: region
+  - name: roles
+  - name: settings
+  - name: d_has_mfa
+  - name: createdAt
+  - name: updatedAt
+
+x-samos-derived-properties:
+  d_role:
+    title: Role
+    type: string
+    syntax: jmespath
+    value: 'roles[0].name'
+
+  d_is_administrator:
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: "length(roles[?name == 'Admin']) > `0`"
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_administrator
+
+  d_active:
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: "settings.status == 'active'"
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+  d_has_mfa:
+    title: MFA Enabled?
+    type: boolean
+    syntax: jmespath
+    value: "settings.mfaType != null && settings.mfaType != 'none'"
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: has_mfa
+
+  d_mitigations:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    syntax: jmespath
+    value: >-
+      [
+        (settings.mfaType != null && settings.mfaType != 'none') && `M1032` || null
+      ] | [?@]
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: mitigations
+
+properties:
+  id:
+    title: User ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  email:
+    title: Email
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 3
+
+  fullName:
+    title: Full Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  firstName:
+    title: First Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+
+  lastName:
+    title: Last Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+
+  phone:
+    title: Phone
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+
+  region:
+    title: Region
+    type: string
+
+  roles:
+    title: Roles
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          title: Role ID
+          type: integer
+        name:
+          title: Role Name
+          type: string
+        description:
+          title: Role Description
+          type: string
+        isDefault:
+          title: Default Role?
+          type: boolean
+
+  settings:
+    title: Settings
+    type: object
+    properties:
+      vdiDaasLdapLogin:
+        title: VDI/DaaS LDAP Login?
+        type: boolean
+      loginMethods:
+        title: Login Methods
+        type: array
+        items:
+          type: string
+      mfaType:
+        title: MFA Type
+        type: string
+      status:
+        title: Status
+        type: string
+
+  createdAt:
+    title: Created At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+
+  updatedAt:
+    title: Updated At
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
