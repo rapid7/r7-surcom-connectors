@@ -1,0 +1,73 @@
+x-samos-type-name: CscGlobalDomainsecIpAddress
+x-samos-namespace: csc.global.domainsec
+title: CSC Global DomainSec IP Address
+description: An IP address that a hostname in a CSC-hosted DNS zone resolves to.
+x-samos-detail-prefer-type-title: true
+
+# IP addresses from public DNS are globally unique.
+x-samos-global-zone: true
+
+x-samos-extends-types:
+  - type-name: IpAddress
+    subtype-priority: 3
+
+x-samos-keys:
+  - value
+
+required:
+  - value
+
+x-samos-table:
+  - name: value
+  - name: version
+
+x-samos-detail:
+  - name: value
+  - name: version
+
+x-samos-derived-properties:
+  # The address already fulfills IpAddress.value; a property fulfills only one target, so it is mapped to the ID here.
+  d_id:
+    type: string
+    syntax: jmespath
+    value: value
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  # The address is also the display name.
+  d_name:
+    type: string
+    syntax: jmespath
+    value: value
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  value:
+    type: string
+    title: IP Address
+    format: ip-addr
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: IpAddress
+      property-name: value
+    x-samos-correlation:
+      correlation-key: IpAddress.value
+      correlation-type: IpAddress
+      priority: 3
+
+  version:
+    type: string
+    title: IP Version
+    description: Version of the IP address, `v4` or `v6`.
+    enum:
+      - v4
+      - v6
+    x-samos-fulfills:
+      type-name: IpAddress
+      property-name: version

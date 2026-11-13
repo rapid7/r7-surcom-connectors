@@ -1,0 +1,4481 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Service for namespace AdminService",
+    "description": "This service is located at [https://localhost/service-root/](https://localhost/service-root/)",
+    "version": ""
+  },
+  "servers": [
+    {
+      "url": "https://localhost/service-root"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Microsoft.ConfigurationManager.ObjectLibrary.SensorEventUpdateTime": {
+        "title": "SensorEventUpdateTime",
+        "type": "object",
+        "properties": {
+          "ClientItemKey": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LastUpdatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.SensorEventUpdateTime-create": {
+        "title": "SensorEventUpdateTime (for create)",
+        "type": "object",
+        "properties": {
+          "ClientItemKey": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LastUpdatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          }
+        },
+        "required": ["ClientItemKey"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.SensorEventUpdateTime-update": {
+        "title": "SensorEventUpdateTime (for update)",
+        "type": "object",
+        "properties": {
+          "LastUpdatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.ConsoleAdminsData": {
+        "title": "ConsoleAdminsData",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "MachineName": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConnectedSiteCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConsoleVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConsoleConnectTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "LatestConsoleStartUpDuration": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Source": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserPrincipalName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.ConsoleAdminsData-create": {
+        "title": "ConsoleAdminsData (for create)",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "MachineName": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConnectedSiteCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConsoleVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConsoleConnectTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "LatestConsoleStartUpDuration": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Source": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserPrincipalName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["ID"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.ConsoleAdminsData-update": {
+        "title": "ConsoleAdminsData (for update)",
+        "type": "object",
+        "properties": {
+          "MachineName": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConnectedSiteCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConsoleVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConsoleConnectTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "LatestConsoleStartUpDuration": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Source": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserPrincipalName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.HubItems": {
+        "title": "HubItems",
+        "type": "object",
+        "properties": {
+          "CreatedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "DateCreated": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "DateHubMetadata": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "Disposition": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "HubContentId": {
+            "type": "string"
+          },
+          "HubId": {
+            "type": "string"
+          },
+          "ItemType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LastModifiedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnPremId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.HubItems-create": {
+        "title": "HubItems (for create)",
+        "type": "object",
+        "properties": {
+          "CreatedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "DateCreated": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "DateHubMetadata": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "Disposition": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "HubContentId": {
+            "type": "string"
+          },
+          "HubId": {
+            "type": "string"
+          },
+          "ItemType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LastModifiedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnPremId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["HubId"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.HubItems-update": {
+        "title": "HubItems (for update)",
+        "type": "object",
+        "properties": {
+          "CreatedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "DateCreated": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "DateHubMetadata": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "Disposition": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "HubContentId": {
+            "type": "string"
+          },
+          "ItemType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LastModifiedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "OnPremId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.Report": {
+        "title": "Report",
+        "type": "object",
+        "properties": {
+          "ReportGuid": {
+            "type": "string"
+          },
+          "DisplayName": {
+            "type": "string"
+          },
+          "Description": {
+            "type": "string"
+          },
+          "RDL": {
+            "type": "string"
+          },
+          "Folder": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.Report-create": {
+        "title": "Report (for create)",
+        "type": "object",
+        "properties": {
+          "ReportGuid": {
+            "type": "string"
+          },
+          "DisplayName": {
+            "type": "string"
+          },
+          "Description": {
+            "type": "string"
+          },
+          "RDL": {
+            "type": "string"
+          },
+          "Folder": {
+            "type": "string"
+          }
+        },
+        "required": ["ReportGuid"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.Report-update": {
+        "title": "Report (for update)",
+        "type": "object",
+        "properties": {
+          "DisplayName": {
+            "type": "string"
+          },
+          "Description": {
+            "type": "string"
+          },
+          "RDL": {
+            "type": "string"
+          },
+          "Folder": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.PowerBIReport": {
+        "title": "PowerBIReport",
+        "type": "object",
+        "properties": {
+          "ReportGuid": {
+            "type": "string"
+          },
+          "DisplayName": {
+            "type": "string"
+          },
+          "Description": {
+            "type": "string"
+          },
+          "PBIX": {
+            "type": "string"
+          },
+          "Folder": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.PowerBIReport-create": {
+        "title": "PowerBIReport (for create)",
+        "type": "object",
+        "properties": {
+          "ReportGuid": {
+            "type": "string"
+          },
+          "DisplayName": {
+            "type": "string"
+          },
+          "Description": {
+            "type": "string"
+          },
+          "PBIX": {
+            "type": "string"
+          },
+          "Folder": {
+            "type": "string"
+          }
+        },
+        "required": ["ReportGuid"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.PowerBIReport-update": {
+        "title": "PowerBIReport (for update)",
+        "type": "object",
+        "properties": {
+          "DisplayName": {
+            "type": "string"
+          },
+          "Description": {
+            "type": "string"
+          },
+          "PBIX": {
+            "type": "string"
+          },
+          "Folder": {
+            "type": "string"
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.SMS_CMPivotStatus": {
+        "title": "SMS_CMPivotStatus",
+        "type": "object",
+        "properties": {
+          "ScriptGuid": {
+            "type": "string"
+          },
+          "TaskID": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScriptVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScriptName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScriptLastModifiedDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "ResourceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "SiteNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DeviceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ClientOperationId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CollectionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastUpdateTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "ScriptExecutionState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ReturnCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ErrorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScriptExitCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ScriptOutput": {
+            "type": "string",
+            "nullable": true
+          },
+          "State": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TotalClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "UnknownClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "NotApplicableClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "FailedClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "CompletedClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OfflineClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OutputLength": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.SMS_CMPivotStatus-create": {
+        "title": "SMS_CMPivotStatus (for create)",
+        "type": "object",
+        "properties": {
+          "ScriptGuid": {
+            "type": "string"
+          },
+          "TaskID": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScriptVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScriptName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScriptLastModifiedDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "ResourceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "SiteNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DeviceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ClientOperationId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CollectionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastUpdateTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "ScriptExecutionState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ReturnCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ErrorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScriptExitCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ScriptOutput": {
+            "type": "string",
+            "nullable": true
+          },
+          "State": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TotalClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "UnknownClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "NotApplicableClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "FailedClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "CompletedClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OfflineClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OutputLength": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42",
+            "nullable": true
+          }
+        },
+        "required": ["ScriptGuid", "ResourceId", "ClientOperationId"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.SMS_CMPivotStatus-update": {
+        "title": "SMS_CMPivotStatus (for update)",
+        "type": "object",
+        "properties": {
+          "TaskID": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScriptVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScriptName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScriptLastModifiedDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "SiteNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DeviceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "CollectionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastUpdateTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "ScriptExecutionState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ReturnCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ErrorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "ScriptExitCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ScriptOutput": {
+            "type": "string",
+            "nullable": true
+          },
+          "State": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TotalClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "UnknownClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "NotApplicableClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "FailedClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "CompletedClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OfflineClients": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OutputLength": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.UserApplicationRequest": {
+        "title": "UserApplicationRequest",
+        "type": "object",
+        "properties": {
+          "RequestID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.UserApplicationRequest-create": {
+        "title": "UserApplicationRequest (for create)",
+        "type": "object",
+        "properties": {
+          "RequestID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": ["RequestID"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.UserApplicationRequest-update": {
+        "title": "UserApplicationRequest (for update)",
+        "type": "object"
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.Collection": {
+        "title": "Collection",
+        "type": "object",
+        "properties": {
+          "SiteID": {
+            "type": "string"
+          },
+          "CollectionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CollectionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Flags": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ResultTableName": {
+            "type": "string",
+            "nullable": true
+          },
+          "CollectionComment": {
+            "type": "string",
+            "nullable": true
+          },
+          "Schedule": {
+            "type": "string",
+            "nullable": true
+          },
+          "SourceLocaleID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "LastChangeTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastRefreshRequest": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "CollectionType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LimitToCollectionID": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsReferenceCollection": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "BeginDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "EvaluationStartTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastRefreshTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastIncrementalRefreshTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastMemberChangeTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "CurrentStatus": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CurrentStatusTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "LimitToCollectionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ISVData": {
+            "type": "string",
+            "format": "base64url",
+            "nullable": true
+          },
+          "ISVString": {
+            "type": "string",
+            "nullable": true
+          },
+          "ResourceCollectionMembership": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.ResourceCollectionMembership"
+            }
+          },
+          "ResourceCollectionMembership@odata.count": {
+            "type": "json",
+            "$ref": "#/components/schemas/count"
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.Collection-create": {
+        "title": "Collection (for create)",
+        "type": "object",
+        "properties": {
+          "SiteID": {
+            "type": "string"
+          },
+          "CollectionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CollectionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Flags": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ResultTableName": {
+            "type": "string",
+            "nullable": true
+          },
+          "CollectionComment": {
+            "type": "string",
+            "nullable": true
+          },
+          "Schedule": {
+            "type": "string",
+            "nullable": true
+          },
+          "SourceLocaleID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "LastChangeTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastRefreshRequest": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "CollectionType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LimitToCollectionID": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsReferenceCollection": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "BeginDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "EvaluationStartTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastRefreshTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastIncrementalRefreshTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastMemberChangeTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "CurrentStatus": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CurrentStatusTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "LimitToCollectionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ISVData": {
+            "type": "string",
+            "format": "base64url",
+            "nullable": true
+          },
+          "ISVString": {
+            "type": "string",
+            "nullable": true
+          },
+          "ResourceCollectionMembership": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.ResourceCollectionMembership-create"
+            }
+          }
+        },
+        "required": ["SiteID"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.Collection-update": {
+        "title": "Collection (for update)",
+        "type": "object",
+        "properties": {
+          "CollectionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CollectionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Flags": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ResultTableName": {
+            "type": "string",
+            "nullable": true
+          },
+          "CollectionComment": {
+            "type": "string",
+            "nullable": true
+          },
+          "Schedule": {
+            "type": "string",
+            "nullable": true
+          },
+          "SourceLocaleID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "LastChangeTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastRefreshRequest": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "CollectionType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LimitToCollectionID": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsReferenceCollection": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "BeginDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "EvaluationStartTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastRefreshTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastIncrementalRefreshTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastMemberChangeTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "CurrentStatus": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CurrentStatusTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "LimitToCollectionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ISVData": {
+            "type": "string",
+            "format": "base64url",
+            "nullable": true
+          },
+          "ISVString": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.ConsoleUsageData": {
+        "title": "ConsoleUsageData",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "MachineName": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConnectedSiteCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConnectedSiteNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSBuildNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSMajorVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSMinorVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSArchitecture": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConsoleVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "OSLanguage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OperatingSystemSKU": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSProductSuite": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TotalPhysicalMemory": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42"
+          },
+          "NumProcessors": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NumLogicalProcessors": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CMClientVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "CMConsoleInstalledLangPacks": {
+            "type": "string",
+            "nullable": true
+          },
+          "CMConsoleScreenResolution": {
+            "type": "string",
+            "nullable": true
+          },
+          "ExtendedNativeForms": {
+            "type": "string",
+            "nullable": true
+          },
+          "NetFx40InstallationStatus": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NetFx45ReleaseVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IsColocatedWithSiteServer": {
+            "type": "boolean"
+          },
+          "IsColocatedWithProvider": {
+            "type": "boolean"
+          },
+          "ConsoleConnectTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "NumberOfNodeExtensions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NumberOfActionExtensions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NumberOfFormxtensions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NumberOfManagementClassExtensions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CapableAuthLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProcessName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ExtensionInfo": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.ConsoleUsageData-create": {
+        "title": "ConsoleUsageData (for create)",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "MachineName": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConnectedSiteCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConnectedSiteNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSBuildNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSMajorVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSMinorVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSArchitecture": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConsoleVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "OSLanguage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OperatingSystemSKU": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSProductSuite": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TotalPhysicalMemory": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42"
+          },
+          "NumProcessors": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NumLogicalProcessors": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CMClientVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "CMConsoleInstalledLangPacks": {
+            "type": "string",
+            "nullable": true
+          },
+          "CMConsoleScreenResolution": {
+            "type": "string",
+            "nullable": true
+          },
+          "ExtendedNativeForms": {
+            "type": "string",
+            "nullable": true
+          },
+          "NetFx40InstallationStatus": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NetFx45ReleaseVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IsColocatedWithSiteServer": {
+            "type": "boolean"
+          },
+          "IsColocatedWithProvider": {
+            "type": "boolean"
+          },
+          "ConsoleConnectTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "NumberOfNodeExtensions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NumberOfActionExtensions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NumberOfFormxtensions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NumberOfManagementClassExtensions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CapableAuthLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProcessName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ExtensionInfo": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["ID"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.ConsoleUsageData-update": {
+        "title": "ConsoleUsageData (for update)",
+        "type": "object",
+        "properties": {
+          "MachineName": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConnectedSiteCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConnectedSiteNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSBuildNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSMajorVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSMinorVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSArchitecture": {
+            "type": "string",
+            "nullable": true
+          },
+          "ConsoleVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "OSLanguage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OperatingSystemSKU": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OSProductSuite": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TotalPhysicalMemory": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42"
+          },
+          "NumProcessors": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NumLogicalProcessors": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CMClientVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "CMConsoleInstalledLangPacks": {
+            "type": "string",
+            "nullable": true
+          },
+          "CMConsoleScreenResolution": {
+            "type": "string",
+            "nullable": true
+          },
+          "ExtendedNativeForms": {
+            "type": "string",
+            "nullable": true
+          },
+          "NetFx40InstallationStatus": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NetFx45ReleaseVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IsColocatedWithSiteServer": {
+            "type": "boolean"
+          },
+          "IsColocatedWithProvider": {
+            "type": "boolean"
+          },
+          "ConsoleConnectTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z"
+          },
+          "NumberOfNodeExtensions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NumberOfActionExtensions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NumberOfFormxtensions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NumberOfManagementClassExtensions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CapableAuthLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ProcessName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ExtensionInfo": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.Device": {
+        "title": "Device",
+        "type": "object",
+        "properties": {
+          "MachineId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ArchitectureKey": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMSID": {
+            "type": "string",
+            "nullable": true
+          },
+          "SiteCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "Domain": {
+            "type": "string",
+            "nullable": true
+          },
+          "ClientEdition": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ClientType": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ClientVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsClient": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IsObsolete": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsActive": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsVirtualMachine": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "IsAOACCapable": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "DeviceOwner": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DeviceCategory": {
+            "type": "string",
+            "nullable": true
+          },
+          "WipeStatus": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RetireStatus": {
+            "type": "integer",
+            "format": "uint8",
+            "nullable": true
+          },
+          "SyncNowStatus": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "LastSyncNowRequest": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ManagementAuthority": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "AMTStatus": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "AMTFullVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "SuppressAutoProvision": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "IsApproved": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsBlocked": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "IsAlwaysInternet": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "IsInternetEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ClientCertType": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "UserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastClientCheckTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ClientCheckPass": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ADSiteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserDomainName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ADLastLogonTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ClientRemediationSuccess": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ClientActiveStatus": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "LastStatusMessage": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastPolicyRequest": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastDDR": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastHardwareScan": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastSoftwareScan": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastMPServerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastActiveTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "CP_Status": {
+            "type": "string",
+            "nullable": true
+          },
+          "CP_LatestProcessingAttempt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "CP_LastInstallationError": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EAS_DeviceID": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeviceOS": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeviceOSBuild": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeviceType": {
+            "type": "string",
+            "nullable": true
+          },
+          "ExchangeServer": {
+            "type": "string",
+            "nullable": true
+          },
+          "ExchangeOrganization": {
+            "type": "string",
+            "nullable": true
+          },
+          "PolicyApplicationStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastSuccessSyncTimeUTC": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "PhoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeviceAccessState": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_DeploymentState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EP_DeploymentErrorCode": {
+            "type": "json",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42",
+            "nullable": true
+          },
+          "EP_DeploymentDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_PolicyApplicationState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EP_PolicyApplicationErrorCode": {
+            "type": "json",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42",
+            "nullable": true
+          },
+          "EP_PolicyApplicationDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_Enabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_ClientVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_ProductStatus": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EP_EngineVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_AntivirusEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_AntivirusSignatureVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_AntivirusSignatureUpdateDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_AntispywareEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_AntispywareSignatureVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_AntispywareSignatureUpdateDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_LastFullScanDateTimeStart": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_LastFullScanDateTimeEnd": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_LastQuickScanDateTimeStart": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_LastQuickScanDateTimeEnd": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_InfectionStatus": {
+            "type": "integer",
+            "format": "uint8",
+            "nullable": true
+          },
+          "EP_PendingFullScan": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_PendingReboot": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_PendingManualSteps": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_PendingOfflineScan": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_LastInfectionTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_LastThreatName": {
+            "type": "string",
+            "nullable": true
+          },
+          "CNIsOnline": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "CNLastOnlineTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "CNLastOfflineTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "CNAccessMP": {
+            "type": "string",
+            "nullable": true
+          },
+          "CNIsOnInternet": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ClientState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Unknown": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ATP_LastConnected": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ATP_SenseIsRunning": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ATP_OnboardingState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ATP_OrgId": {
+            "type": "string",
+            "nullable": true
+          },
+          "CA_IsCompliant": {
+            "type": "integer",
+            "format": "uint8",
+            "nullable": true
+          },
+          "CA_ComplianceSetTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "CA_ComplianceEvalTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "CA_ErrorDetails": {
+            "type": "string",
+            "nullable": true
+          },
+          "CA_ErrorLocation": {
+            "type": "integer",
+            "format": "uint8",
+            "nullable": true
+          },
+          "AADTenantID": {
+            "type": "string",
+            "nullable": true
+          },
+          "AADDeviceID": {
+            "type": "string",
+            "nullable": true
+          },
+          "PasscodeResetState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "PasscodeResetStateTimeStamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "RemoteLockState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RemoteLockStateTimeStamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ActivationLockBypassState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ActivationLockBypassStateTimeStamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ActivationLockState": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsSupervised": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeviceThreatLevel": {
+            "type": "string",
+            "nullable": true
+          },
+          "SerialNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "IMEI": {
+            "type": "string",
+            "nullable": true
+          },
+          "PrimaryUser": {
+            "type": "string",
+            "nullable": true
+          },
+          "CurrentLogonUser": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastLogonUser": {
+            "type": "string",
+            "nullable": true
+          },
+          "MACAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMBIOSGUID": {
+            "type": "string",
+            "nullable": true
+          },
+          "CoManaged": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsMDMActive": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ResourceCollectionMembership": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.ResourceCollectionMembership"
+            }
+          },
+          "ResourceCollectionMembership@odata.count": {
+            "type": "json",
+            "$ref": "#/components/schemas/count"
+          },
+          "Events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.MachineEventRawData"
+            }
+          },
+          "Events@odata.count": {
+            "type": "json",
+            "$ref": "#/components/schemas/count"
+          },
+          "AvailableApplications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationTargeting"
+            }
+          },
+          "AvailableApplications@odata.count": {
+            "type": "json",
+            "$ref": "#/components/schemas/count"
+          },
+          "BoundaryGroups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.BGB_LiveData_Boundary"
+            }
+          },
+          "BoundaryGroups@odata.count": {
+            "type": "json",
+            "$ref": "#/components/schemas/count"
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.Device-create": {
+        "title": "Device (for create)",
+        "type": "object",
+        "properties": {
+          "MachineId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ArchitectureKey": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMSID": {
+            "type": "string",
+            "nullable": true
+          },
+          "SiteCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "Domain": {
+            "type": "string",
+            "nullable": true
+          },
+          "ClientEdition": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ClientType": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ClientVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsClient": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IsObsolete": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsActive": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsVirtualMachine": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "IsAOACCapable": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "DeviceOwner": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DeviceCategory": {
+            "type": "string",
+            "nullable": true
+          },
+          "WipeStatus": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RetireStatus": {
+            "type": "integer",
+            "format": "uint8",
+            "nullable": true
+          },
+          "SyncNowStatus": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "LastSyncNowRequest": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ManagementAuthority": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "AMTStatus": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "AMTFullVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "SuppressAutoProvision": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "IsApproved": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsBlocked": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "IsAlwaysInternet": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "IsInternetEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ClientCertType": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "UserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastClientCheckTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ClientCheckPass": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ADSiteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserDomainName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ADLastLogonTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ClientRemediationSuccess": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ClientActiveStatus": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "LastStatusMessage": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastPolicyRequest": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastDDR": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastHardwareScan": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastSoftwareScan": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastMPServerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastActiveTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "CP_Status": {
+            "type": "string",
+            "nullable": true
+          },
+          "CP_LatestProcessingAttempt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "CP_LastInstallationError": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EAS_DeviceID": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeviceOS": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeviceOSBuild": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeviceType": {
+            "type": "string",
+            "nullable": true
+          },
+          "ExchangeServer": {
+            "type": "string",
+            "nullable": true
+          },
+          "ExchangeOrganization": {
+            "type": "string",
+            "nullable": true
+          },
+          "PolicyApplicationStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastSuccessSyncTimeUTC": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "PhoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeviceAccessState": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_DeploymentState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EP_DeploymentErrorCode": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42",
+            "nullable": true
+          },
+          "EP_DeploymentDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_PolicyApplicationState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EP_PolicyApplicationErrorCode": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42",
+            "nullable": true
+          },
+          "EP_PolicyApplicationDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_Enabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_ClientVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_ProductStatus": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EP_EngineVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_AntivirusEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_AntivirusSignatureVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_AntivirusSignatureUpdateDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_AntispywareEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_AntispywareSignatureVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_AntispywareSignatureUpdateDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_LastFullScanDateTimeStart": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_LastFullScanDateTimeEnd": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_LastQuickScanDateTimeStart": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_LastQuickScanDateTimeEnd": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_InfectionStatus": {
+            "type": "integer",
+            "format": "uint8",
+            "nullable": true
+          },
+          "EP_PendingFullScan": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_PendingReboot": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_PendingManualSteps": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_PendingOfflineScan": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_LastInfectionTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_LastThreatName": {
+            "type": "string",
+            "nullable": true
+          },
+          "CNIsOnline": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "CNLastOnlineTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "CNLastOfflineTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "CNAccessMP": {
+            "type": "string",
+            "nullable": true
+          },
+          "CNIsOnInternet": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ClientState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Unknown": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ATP_LastConnected": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ATP_SenseIsRunning": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ATP_OnboardingState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ATP_OrgId": {
+            "type": "string",
+            "nullable": true
+          },
+          "CA_IsCompliant": {
+            "type": "integer",
+            "format": "uint8",
+            "nullable": true
+          },
+          "CA_ComplianceSetTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "CA_ComplianceEvalTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "CA_ErrorDetails": {
+            "type": "string",
+            "nullable": true
+          },
+          "CA_ErrorLocation": {
+            "type": "integer",
+            "format": "uint8",
+            "nullable": true
+          },
+          "AADTenantID": {
+            "type": "string",
+            "nullable": true
+          },
+          "AADDeviceID": {
+            "type": "string",
+            "nullable": true
+          },
+          "PasscodeResetState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "PasscodeResetStateTimeStamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "RemoteLockState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RemoteLockStateTimeStamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ActivationLockBypassState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ActivationLockBypassStateTimeStamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ActivationLockState": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsSupervised": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeviceThreatLevel": {
+            "type": "string",
+            "nullable": true
+          },
+          "SerialNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "IMEI": {
+            "type": "string",
+            "nullable": true
+          },
+          "PrimaryUser": {
+            "type": "string",
+            "nullable": true
+          },
+          "CurrentLogonUser": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastLogonUser": {
+            "type": "string",
+            "nullable": true
+          },
+          "MACAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMBIOSGUID": {
+            "type": "string",
+            "nullable": true
+          },
+          "CoManaged": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsMDMActive": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ResourceCollectionMembership": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.ResourceCollectionMembership-create"
+            }
+          },
+          "Events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.MachineEventRawData-create"
+            }
+          },
+          "AvailableApplications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationTargeting-create"
+            }
+          },
+          "BoundaryGroups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.BGB_LiveData_Boundary-create"
+            }
+          }
+        },
+        "required": ["MachineId"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.Device-update": {
+        "title": "Device (for update)",
+        "type": "object",
+        "properties": {
+          "ArchitectureKey": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMSID": {
+            "type": "string",
+            "nullable": true
+          },
+          "SiteCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "Domain": {
+            "type": "string",
+            "nullable": true
+          },
+          "ClientEdition": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ClientType": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ClientVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsClient": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IsObsolete": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsActive": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsVirtualMachine": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "IsAOACCapable": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "DeviceOwner": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DeviceCategory": {
+            "type": "string",
+            "nullable": true
+          },
+          "WipeStatus": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RetireStatus": {
+            "type": "integer",
+            "format": "uint8",
+            "nullable": true
+          },
+          "SyncNowStatus": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "LastSyncNowRequest": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ManagementAuthority": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "AMTStatus": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "AMTFullVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "SuppressAutoProvision": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "IsApproved": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsBlocked": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "IsAlwaysInternet": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "IsInternetEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ClientCertType": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "UserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastClientCheckTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ClientCheckPass": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ADSiteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserDomainName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ADLastLogonTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ClientRemediationSuccess": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ClientActiveStatus": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "LastStatusMessage": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastPolicyRequest": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastDDR": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastHardwareScan": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastSoftwareScan": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "LastMPServerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastActiveTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "CP_Status": {
+            "type": "string",
+            "nullable": true
+          },
+          "CP_LatestProcessingAttempt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "CP_LastInstallationError": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EAS_DeviceID": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeviceOS": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeviceOSBuild": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeviceType": {
+            "type": "string",
+            "nullable": true
+          },
+          "ExchangeServer": {
+            "type": "string",
+            "nullable": true
+          },
+          "ExchangeOrganization": {
+            "type": "string",
+            "nullable": true
+          },
+          "PolicyApplicationStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastSuccessSyncTimeUTC": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "PhoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeviceAccessState": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_DeploymentState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EP_DeploymentErrorCode": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42",
+            "nullable": true
+          },
+          "EP_DeploymentDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_PolicyApplicationState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EP_PolicyApplicationErrorCode": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42",
+            "nullable": true
+          },
+          "EP_PolicyApplicationDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_Enabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_ClientVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_ProductStatus": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EP_EngineVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_AntivirusEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_AntivirusSignatureVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_AntivirusSignatureUpdateDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_AntispywareEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_AntispywareSignatureVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "EP_AntispywareSignatureUpdateDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_LastFullScanDateTimeStart": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_LastFullScanDateTimeEnd": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_LastQuickScanDateTimeStart": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_LastQuickScanDateTimeEnd": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_InfectionStatus": {
+            "type": "integer",
+            "format": "uint8",
+            "nullable": true
+          },
+          "EP_PendingFullScan": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_PendingReboot": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_PendingManualSteps": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_PendingOfflineScan": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "EP_LastInfectionTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EP_LastThreatName": {
+            "type": "string",
+            "nullable": true
+          },
+          "CNIsOnline": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "CNLastOnlineTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "CNLastOfflineTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "CNAccessMP": {
+            "type": "string",
+            "nullable": true
+          },
+          "CNIsOnInternet": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ClientState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Unknown": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ATP_LastConnected": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ATP_SenseIsRunning": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ATP_OnboardingState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ATP_OrgId": {
+            "type": "string",
+            "nullable": true
+          },
+          "CA_IsCompliant": {
+            "type": "integer",
+            "format": "uint8",
+            "nullable": true
+          },
+          "CA_ComplianceSetTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "CA_ComplianceEvalTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "CA_ErrorDetails": {
+            "type": "string",
+            "nullable": true
+          },
+          "CA_ErrorLocation": {
+            "type": "integer",
+            "format": "uint8",
+            "nullable": true
+          },
+          "AADTenantID": {
+            "type": "string",
+            "nullable": true
+          },
+          "AADDeviceID": {
+            "type": "string",
+            "nullable": true
+          },
+          "PasscodeResetState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "PasscodeResetStateTimeStamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "RemoteLockState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RemoteLockStateTimeStamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ActivationLockBypassState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ActivationLockBypassStateTimeStamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "ActivationLockState": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsSupervised": {
+            "type": "string",
+            "nullable": true
+          },
+          "DeviceThreatLevel": {
+            "type": "string",
+            "nullable": true
+          },
+          "SerialNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "IMEI": {
+            "type": "string",
+            "nullable": true
+          },
+          "PrimaryUser": {
+            "type": "string",
+            "nullable": true
+          },
+          "CurrentLogonUser": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastLogonUser": {
+            "type": "string",
+            "nullable": true
+          },
+          "MACAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMBIOSGUID": {
+            "type": "string",
+            "nullable": true
+          },
+          "CoManaged": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsMDMActive": {
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.InventoryClass": {
+        "title": "InventoryClass",
+        "type": "object",
+        "properties": {
+          "ClassID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Namespace": {
+            "type": "string",
+            "nullable": true
+          },
+          "ClassName": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMSClassID": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMSGroupName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Properties": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMSContext": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.InventoryClass-create": {
+        "title": "InventoryClass (for create)",
+        "type": "object",
+        "properties": {
+          "ClassID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Namespace": {
+            "type": "string",
+            "nullable": true
+          },
+          "ClassName": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMSClassID": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMSGroupName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Properties": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMSContext": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["ClassID"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.InventoryClass-update": {
+        "title": "InventoryClass (for update)",
+        "type": "object",
+        "properties": {
+          "Namespace": {
+            "type": "string",
+            "nullable": true
+          },
+          "ClassName": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMSClassID": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMSGroupName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Properties": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMSContext": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.ResourceCollectionMembership": {
+        "title": "ResourceCollectionMembership",
+        "type": "object",
+        "properties": {
+          "SiteID": {
+            "type": "string"
+          },
+          "MachineID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ArchitectureKey": {
+            "type": "integer",
+            "format": "uint8"
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Domain": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMSID": {
+            "type": "string",
+            "nullable": true
+          },
+          "SiteCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsDirect": {
+            "type": "boolean"
+          },
+          "IsAssigned": {
+            "type": "boolean"
+          },
+          "IsClient": {
+            "type": "boolean"
+          },
+          "Priority": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "rowversion": {
+            "type": "string",
+            "format": "base64url",
+            "nullable": true
+          },
+          "Collection": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.Collection"
+          },
+          "Device": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.Device"
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.ResourceCollectionMembership-create": {
+        "title": "ResourceCollectionMembership (for create)",
+        "type": "object",
+        "properties": {
+          "SiteID": {
+            "type": "string"
+          },
+          "MachineID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ArchitectureKey": {
+            "type": "integer",
+            "format": "uint8"
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Domain": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMSID": {
+            "type": "string",
+            "nullable": true
+          },
+          "SiteCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsDirect": {
+            "type": "boolean"
+          },
+          "IsAssigned": {
+            "type": "boolean"
+          },
+          "IsClient": {
+            "type": "boolean"
+          },
+          "Priority": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "rowversion": {
+            "type": "string",
+            "format": "base64url",
+            "nullable": true
+          },
+          "Collection": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.Collection-create"
+          },
+          "Device": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.Device-create"
+          }
+        },
+        "required": ["SiteID", "MachineID"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.ResourceCollectionMembership-update": {
+        "title": "ResourceCollectionMembership (for update)",
+        "type": "object",
+        "properties": {
+          "ArchitectureKey": {
+            "type": "integer",
+            "format": "uint8"
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Domain": {
+            "type": "string",
+            "nullable": true
+          },
+          "SMSID": {
+            "type": "string",
+            "nullable": true
+          },
+          "SiteCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsDirect": {
+            "type": "boolean"
+          },
+          "IsAssigned": {
+            "type": "boolean"
+          },
+          "IsClient": {
+            "type": "boolean"
+          },
+          "Priority": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "rowversion": {
+            "type": "string",
+            "format": "base64url",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.MachineEventRawData": {
+        "title": "MachineEventRawData",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42"
+          },
+          "InternalType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ClientItemKey": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "LogName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ProviderName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ProviderGuid": {
+            "type": "string",
+            "format": "uuid",
+            "example": "01234567-89ab-cdef-0123-456789abcdef",
+            "nullable": true
+          },
+          "EventID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EventIdQualifiers": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Version": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Level": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Task": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Opcode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Keywords": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42",
+            "nullable": true
+          },
+          "TimeCreatedSystemTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EventRecordID": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42",
+            "nullable": true
+          },
+          "ActivityID": {
+            "type": "string",
+            "format": "uuid",
+            "example": "01234567-89ab-cdef-0123-456789abcdef",
+            "nullable": true
+          },
+          "RelatedActivityID": {
+            "type": "string",
+            "format": "uuid",
+            "example": "01234567-89ab-cdef-0123-456789abcdef",
+            "nullable": true
+          },
+          "Channel": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserSID": {
+            "type": "string",
+            "nullable": true
+          },
+          "EventDataXML": {
+            "type": "string",
+            "nullable": true
+          },
+          "Device": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.Device"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.MachineEventRawData-create": {
+        "title": "MachineEventRawData (for create)",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42"
+          },
+          "InternalType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ClientItemKey": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "LogName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ProviderName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ProviderGuid": {
+            "type": "string",
+            "format": "uuid",
+            "example": "01234567-89ab-cdef-0123-456789abcdef",
+            "nullable": true
+          },
+          "EventID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EventIdQualifiers": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Version": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Level": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Task": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Opcode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Keywords": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42",
+            "nullable": true
+          },
+          "TimeCreatedSystemTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EventRecordID": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42",
+            "nullable": true
+          },
+          "ActivityID": {
+            "type": "string",
+            "format": "uuid",
+            "example": "01234567-89ab-cdef-0123-456789abcdef",
+            "nullable": true
+          },
+          "RelatedActivityID": {
+            "type": "string",
+            "format": "uuid",
+            "example": "01234567-89ab-cdef-0123-456789abcdef",
+            "nullable": true
+          },
+          "Channel": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserSID": {
+            "type": "string",
+            "nullable": true
+          },
+          "EventDataXML": {
+            "type": "string",
+            "nullable": true
+          },
+          "Device": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.Device-create"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": ["ID", "InternalType"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.MachineEventRawData-update": {
+        "title": "MachineEventRawData (for update)",
+        "type": "object",
+        "properties": {
+          "ClientItemKey": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "LogName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ProviderName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ProviderGuid": {
+            "type": "string",
+            "format": "uuid",
+            "example": "01234567-89ab-cdef-0123-456789abcdef",
+            "nullable": true
+          },
+          "EventID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EventIdQualifiers": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Version": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Level": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Task": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Opcode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Keywords": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42",
+            "nullable": true
+          },
+          "TimeCreatedSystemTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "EventRecordID": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42",
+            "nullable": true
+          },
+          "ActivityID": {
+            "type": "string",
+            "format": "uuid",
+            "example": "01234567-89ab-cdef-0123-456789abcdef",
+            "nullable": true
+          },
+          "RelatedActivityID": {
+            "type": "string",
+            "format": "uuid",
+            "example": "01234567-89ab-cdef-0123-456789abcdef",
+            "nullable": true
+          },
+          "Channel": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserSID": {
+            "type": "string",
+            "nullable": true
+          },
+          "EventDataXML": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationTargeting": {
+        "title": "DeviceApplicationTargeting",
+        "type": "object",
+        "properties": {
+          "ModelName": {
+            "type": "string"
+          },
+          "ResourceID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Application": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.Application"
+          },
+          "Device": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.Device"
+          },
+          "States": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationState"
+            }
+          },
+          "States@odata.count": {
+            "$ref": "#/components/schemas/count"
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationTargeting-create": {
+        "title": "DeviceApplicationTargeting (for create)",
+        "type": "object",
+        "properties": {
+          "ModelName": {
+            "type": "string"
+          },
+          "ResourceID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Application": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.Application-create"
+          },
+          "Device": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.Device-create"
+          },
+          "States": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationState-create"
+            }
+          }
+        },
+        "required": ["ModelName", "ResourceID"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationTargeting-update": {
+        "title": "DeviceApplicationTargeting (for update)",
+        "type": "object"
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationState": {
+        "title": "DeviceApplicationState",
+        "type": "object",
+        "properties": {
+          "ModelName": {
+            "type": "string"
+          },
+          "ResourceID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Username": {
+            "type": "string"
+          },
+          "AppState": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.ApplicationStateType"
+          },
+          "LastUpdateTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "AvailableActions": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.ApplicationAvailableActions"
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationState-create": {
+        "title": "DeviceApplicationState (for create)",
+        "type": "object",
+        "properties": {
+          "ModelName": {
+            "type": "string"
+          },
+          "ResourceID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Username": {
+            "type": "string"
+          },
+          "AppState": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.ApplicationStateType"
+          },
+          "LastUpdateTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "AvailableActions": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.ApplicationAvailableActions"
+          }
+        },
+        "required": ["ModelName", "ResourceID", "Username"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationState-update": {
+        "title": "DeviceApplicationState (for update)",
+        "type": "object",
+        "properties": {
+          "AppState": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.ApplicationStateType"
+          },
+          "LastUpdateTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2017-04-13T15:51:04Z",
+            "nullable": true
+          },
+          "AvailableActions": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.ApplicationAvailableActions"
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.Application": {
+        "title": "Application",
+        "type": "object",
+        "properties": {
+          "ModelName": {
+            "type": "string"
+          },
+          "DisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "AdminComments": {
+            "type": "string",
+            "nullable": true
+          },
+          "Manufacturer": {
+            "type": "string",
+            "nullable": true
+          },
+          "SoftwareVersion": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.Application-create": {
+        "title": "Application (for create)",
+        "type": "object",
+        "properties": {
+          "ModelName": {
+            "type": "string"
+          },
+          "DisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "AdminComments": {
+            "type": "string",
+            "nullable": true
+          },
+          "Manufacturer": {
+            "type": "string",
+            "nullable": true
+          },
+          "SoftwareVersion": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["ModelName"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.Application-update": {
+        "title": "Application (for update)",
+        "type": "object",
+        "properties": {
+          "DisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "AdminComments": {
+            "type": "string",
+            "nullable": true
+          },
+          "Manufacturer": {
+            "type": "string",
+            "nullable": true
+          },
+          "SoftwareVersion": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.BoundaryGroup": {
+        "title": "BoundaryGroup",
+        "type": "object",
+        "properties": {
+          "GroupID": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42"
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.BoundaryGroup-create": {
+        "title": "BoundaryGroup (for create)",
+        "type": "object",
+        "properties": {
+          "GroupID": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42"
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["GroupID"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.BoundaryGroup-update": {
+        "title": "BoundaryGroup (for update)",
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.BGB_LiveData_Boundary": {
+        "title": "BGB_LiveData_Boundary",
+        "type": "object",
+        "properties": {
+          "ResourceID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "BoundaryGroupID": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42"
+          },
+          "BoundaryGroup": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.BoundaryGroup"
+          },
+          "Device": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.Device"
+          }
+        }
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.BGB_LiveData_Boundary-create": {
+        "title": "BGB_LiveData_Boundary (for create)",
+        "type": "object",
+        "properties": {
+          "ResourceID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "BoundaryGroupID": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "format": "int64",
+            "example": "42"
+          },
+          "BoundaryGroup": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.BoundaryGroup-create"
+          },
+          "Device": {
+            "$ref": "#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.Device-create"
+          }
+        },
+        "required": ["ResourceID", "BoundaryGroupID"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.BGB_LiveData_Boundary-update": {
+        "title": "BGB_LiveData_Boundary (for update)",
+        "type": "object"
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.ApplicationStateType": {
+        "type": "string",
+        "title": "ApplicationStateType",
+        "enum": ["Available", "Installed", "Installing", "RequirementsNotMet", "Unknown", "Error", "InstallRequested"]
+      },
+      "Microsoft.ConfigurationManager.ObjectLibrary.ApplicationAvailableActions": {
+        "type": "string",
+        "title": "ApplicationAvailableActions",
+        "enum": ["None", "Install"]
+      },
+      "count": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          }
+        ],
+        "description": "The number of entities in the collection. Available when using the [$count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount) query option."
+      },
+      "error": {
+        "type": "object",
+        "required": ["error"],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": ["code", "message"],
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "target": {
+                "type": "string"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["code", "message"],
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "target": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "innererror": {
+                "type": "object",
+                "description": "The structure of this object is service-specific"
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "top": {
+        "name": "$top",
+        "in": "query",
+        "description": "Show only the first n items, see [Paging - Top](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptiontop)",
+        "schema": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "example": 50
+      },
+      "skip": {
+        "name": "$skip",
+        "in": "query",
+        "description": "Skip the first n items, see [Paging - Skip](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionskip)",
+        "schema": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "count": {
+        "name": "$count",
+        "in": "query",
+        "description": "Include count of items, see [Count](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncount)",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "search": {
+        "name": "$search",
+        "in": "query",
+        "description": "Search items by search phrases, see [Searching](http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptionsearch)",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "responses": {
+      "error": {
+        "description": "Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          }
+        }
+      }
+    }
+  }
+}

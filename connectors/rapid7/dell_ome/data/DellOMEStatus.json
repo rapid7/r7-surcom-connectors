@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1000",
+    "value": "Normal",
+    "description": "The device is running normal.",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "2000",
+    "value": "Unknown",
+    "description": "Status is not determined.",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "3000",
+    "value": "Warning",
+    "description": "The device has warning state.",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "4000",
+    "value": "Critical",
+    "description": "The device is in critical state.",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "5000",
+    "value": "No Status",
+    "description": "The device/group does not have a valid status.",
+    "map_to": "OperationalStatus: Non-Operational"
+  }
+]

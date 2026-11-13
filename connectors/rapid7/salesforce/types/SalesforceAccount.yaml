@@ -1,0 +1,298 @@
+x-samos-type-name: SalesforceAccount
+x-samos-namespace: salesforce
+title: Salesforce Account
+description: A business entity or customer organization tracked in Salesforce.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Organization
+    subtype-priority: 3
+
+x-samos-keys:
+  - Id
+
+required:
+  - Id
+
+x-samos-table:
+  - name: Name
+  - name: Type
+  - name: Industry
+  - name: ParentId
+  - name: OwnerId
+  - name: Phone
+  - name: BillingCountry
+
+x-samos-detail:
+  - name: Name
+  - name: Type
+  - name: Description
+  - name: Industry
+  - name: SicDesc
+  - name: ParentId
+  - name: Phone
+  - name: Website
+  - name: NumberOfEmployees
+  - name: AccountSource
+  - name: BillingStreet
+  - name: BillingCity
+  - name: BillingLatitude
+  - name: BillingLongitude
+  - name: BillingState
+  - name: BillingPostalCode
+  - name: BillingCountry
+  - name: BillingCountryCode
+  - name: ShippingStreet
+  - name: ShippingCity
+  - name: ShippingLatitude
+  - name: ShippingLongitude
+  - name: ShippingState
+  - name: ShippingPostalCode
+  - name: ShippingCountry
+  - name: ShippingCountryCode
+  - name: OwnerId
+  - name: x_organization_id
+  - name: CreatedById
+  - name: LastModifiedById
+  - name: CreatedDate
+  - name: LastModifiedDate
+  - name: LastActivityDate
+  - name: LastViewedDate
+  - name: SystemModstamp
+
+properties:
+  Id:
+    title: Id
+    description: Salesforce Account ID.
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  Type:
+    title: Type
+    description: Relationship type, e.g. Customer, Partner, Prospect, Competitor.
+    type: string
+
+  ParentId:
+    title: Parent Account
+    description: The parent Account in the account hierarchy.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceAccount
+        key-name: Id
+
+  BillingStreet:
+    title: Billing Street
+    type: string
+
+  BillingCity:
+    title: Billing City
+    type: string
+
+  BillingState:
+    title: Billing State
+    type: string
+
+  BillingPostalCode:
+    title: Billing Postal Code
+    type: string
+
+  BillingCountry:
+    title: Billing Country
+    type: string
+
+  BillingCountryCode:
+    title: Billing Country Code
+    description: >-
+      ISO 3166 alpha-2 country code (e.g. CZ), set when State and Country Picklists are enabled in the org.
+    type: string
+    x-samos-ref-types:
+      - type-name: NoeticEnumCountry
+        key-name: alpha_2_id
+
+  BillingStateCode:
+    title: Billing State Code
+    type: string
+
+  BillingLatitude:
+    title: Billing Latitude
+    type: number
+
+  BillingLongitude:
+    title: Billing Longitude
+    type: number
+
+  BillingGeocodeAccuracy:
+    title: Billing Geocode Accuracy
+    type: string
+
+  ShippingStreet:
+    title: Shipping Street
+    type: string
+
+  ShippingCity:
+    title: Shipping City
+    type: string
+
+  ShippingState:
+    title: Shipping State
+    type: string
+
+  ShippingPostalCode:
+    title: Shipping Postal Code
+    type: string
+
+  ShippingCountry:
+    title: Shipping Country
+    type: string
+
+  ShippingCountryCode:
+    title: Shipping Country Code
+    description: >-
+      ISO 3166 alpha-2 country code (e.g. CZ), set when State and Country Picklists are enabled in the org.
+    type: string
+    x-samos-ref-types:
+      - type-name: NoeticEnumCountry
+        key-name: alpha_2_id
+
+  ShippingStateCode:
+    title: Shipping State Code
+    type: string
+
+  ShippingLatitude:
+    title: Shipping Latitude
+    type: number
+
+  ShippingLongitude:
+    title: Shipping Longitude
+    type: number
+
+  ShippingGeocodeAccuracy:
+    title: Shipping Geocode Accuracy
+    type: string
+
+  Phone:
+    title: Phone
+    type: string
+
+  Website:
+    title: Website
+    type: string
+    format: url
+
+  Industry:
+    title: Industry
+    type: string
+
+  NumberOfEmployees:
+    title: Number Of Employees
+    type: integer
+
+  Description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  OwnerId:
+    title: Owner
+    description: The User who owns this Account record in Salesforce.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: owners
+
+  CreatedDate:
+    title: Created Date
+    type: string
+    format: date-time
+
+  CreatedById:
+    title: Created By
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  LastModifiedDate:
+    title: Last Modified Date
+    type: string
+    format: date-time
+
+  LastModifiedById:
+    title: Last Modified By
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  SystemModstamp:
+    title: System Modstamp
+    type: string
+    format: date-time
+
+  LastActivityDate:
+    title: Last Activity Date
+    type: string
+    format: date
+
+  LastViewedDate:
+    title: Last Viewed Date
+    type: string
+    format: date-time
+
+  LastReferencedDate:
+    title: Last Referenced Date
+    type: string
+    format: date-time
+
+  Jigsaw:
+    title: Jigsaw
+    description: Legacy Data.com identifier; deprecated by Salesforce.
+    type: string
+
+  JigsawCompanyId:
+    title: Jigsaw Company Id
+    description: Legacy Data.com identifier; deprecated by Salesforce.
+    type: string
+
+  AccountSource:
+    title: Account Source
+    type: string
+
+  SicDesc:
+    title: SIC Description
+    type: string
+
+  x_organization_id:
+    title: Salesforce Org
+    description: >-
+      The Salesforce org (tenant) this Account record exists in. Not a native
+      Account field - injected by the connector from the Organization record.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceOrganization
+        key-name: Id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+
+# Fulfill Organization.users with the Contacts that belong to this Account,
+# using the existing Contact.AccountId reference
+x-samos-virtual:
+  users:
+    type-name: SalesforceContact
+    cypher-pattern: '<-[:`e:SalesforceContact:AccountId`]-(:SalesforceContact)'

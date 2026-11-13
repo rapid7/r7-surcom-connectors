@@ -1,0 +1,77 @@
+﻿x-samos-type-name: DNSMadeEasyContact
+x-samos-namespace: dnsmadeeasy
+title: DNS Made Easy Contact
+description: Contact List details from DNS Made Easy
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 5
+
+x-samos-keys:
+  - d_id
+
+required:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: d_email
+
+x-samos-detail:
+  - name: name
+  - name: emails
+  - name: groups
+
+x-samos-derived-properties:
+  d_id:
+    # For fulfilling the User had derived id
+    x-samos-immutable: true
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  d_email:
+    title: Email
+    type: string
+    syntax: jmespath
+    value: 'emails[?confirmed==`true`] | [0].email'
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 1
+
+properties:
+  emails:
+    title: Emails
+    type: array
+    items:
+      type: object
+      properties:
+        email:
+          title: Email
+          type: string
+        confirmed:
+          title: Confirmed?
+          type: boolean
+  groups:
+    title: Groups
+    type: array
+    items:
+      type: integer
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  id:
+    title: ID
+    x-samos-hidden: true
+    type: integer

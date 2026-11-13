@@ -1,12 +1,11 @@
 id: igel.ums
 name: IGEL UMS
 author: Rapid7
-version: 1.3.0
+version: 1.4.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Set asset_class to Workstation for IgelUmsDevice
-  - Mark id as required in the YAML type schemas
+  - Update dependencies
 types:
   - IgelUmsDevice
   - IgelUmsDirectory
@@ -47,11 +46,6 @@ settings:
 
 # Runtime platform for this connector.
 runtime: py311
-
-# Add required Python dependencies here. Pin each dependency to a specific
-# version.
-# python_dependencies:
-#  - "another_dependency==1.0.0"
 
 # Categories for this connector in the Extension Library.
 categories:

@@ -18,6 +18,11 @@ class CyCognitoDomain(dict):
         super().__init__(type=self.__class__.__name__, content=content)
 
 
+class CyCognitoEnumSeverity(dict):
+    def __init__(self, content: dict):
+        super().__init__(type=self.__class__.__name__, content=content)
+
+
 class CyCognitoExposure(dict):
     def __init__(self, content: dict):
         super().__init__(type=self.__class__.__name__, content=content)

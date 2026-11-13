@@ -12,6 +12,9 @@ x-samos-extends-types:
 x-samos-keys:
   - extId
 
+required:
+  - extId
+
 x-samos-derived-properties:
   d_virtual:
     type: boolean

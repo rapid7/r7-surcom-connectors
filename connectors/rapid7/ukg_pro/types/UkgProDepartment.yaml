@@ -1,0 +1,97 @@
+x-samos-type-name: UkgProDepartment
+x-samos-namespace: ukg.pro
+title: UKG Pro Department
+description: >-
+  A department (an organizational level, e.g. department, division or business
+  unit) configured in UKG Pro, returned by the Org Levels. Employees are assigned to
+  up to four org-level codes (levels 1-4).
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: UserGroup
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_group_id
+
+required:
+  - level
+  - code
+
+x-samos-table:
+  - name: description
+  - name: levelDescription
+  - name: code
+  - name: isActive
+
+x-samos-detail:
+  - name: description
+  - name: levelDescription
+  - name: level
+  - name: code
+  - name: isActive
+  - name: glSegment
+  - name: budgetGroup
+  - name: reportingCategory
+
+x-samos-derived-properties:
+  d_group_id:
+    # code + level together are the unique identifier for an org-level.
+    title: Group
+    type: string
+    syntax: expression
+    value: '{level}-{code}'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+
+properties:
+  code:
+    title: Organization Code
+    type: string
+    description: Organization code, one half of the unique identifier (with `level`).
+
+  level:
+    title: Level Number
+    type: integer
+    description: Organization level (1-4), one half of the unique identifier (with `code`).
+
+  description:
+    title: Name
+    type: string
+    description: The name of the org level, for example Engineering.
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: UserGroup.name
+      correlation-type: UserGroup
+      priority: 5
+
+  levelDescription:
+    title: Level
+    type: string
+    description: What this org level represents in UKG Pro, for example Department or Division.
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  budgetGroup:
+    title: Budget Group
+    type: string
+
+  reportingCategory:
+    title: Reporting Category
+    type: string
+
+  isActive:
+    title: Active?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+  glSegment:
+    title: General Ledger Segment
+    type: string

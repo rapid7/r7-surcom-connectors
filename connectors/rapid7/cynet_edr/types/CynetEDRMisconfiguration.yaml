@@ -22,6 +22,7 @@ x-samos-table:
 
 x-samos-detail:
   - name: riskId
+  - name: internalId
   - name: subject
   - name: description
   - name: severity
@@ -83,6 +84,10 @@ properties:
     x-samos-fulfills:
       type-name: Exposure
       property-name: id
+  internalId:
+    type: string
+    title: Internal ID
+    description: Cynet internal identifier used to retrieve affected endpoints.
   severity:
     type: string
     title: Severity

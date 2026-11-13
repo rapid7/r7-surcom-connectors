@@ -1,0 +1,321 @@
+x-samos-type-name: CscGlobalDomainsecDomain
+x-samos-namespace: csc.global.domainsec
+title: CSC Global DomainSec Domain
+description: A domain in the CSC Global DomainSec portfolio.
+x-samos-detail-prefer-type-title: true
+
+x-samos-global-zone: true
+
+x-samos-extends-types:
+  - type-name: Domain
+    subtype-priority: 2
+
+x-samos-keys:
+  - qualifiedDomainName
+
+required:
+  - qualifiedDomainName
+
+x-samos-table:
+  - name: qualifiedDomainName
+  - name: domain
+  - name: managedStatus
+  - name: dnssecActivated
+  - name: criticalDomain
+  - name: x_business_unit_id
+  - name: dnsType
+  - name: registryExpiryDate
+
+x-samos-detail:
+  - name: qualifiedDomainName
+  - name: domain
+  - name: managedStatus
+  - name: x_business_unit_id
+  - name: brandName
+  - name: criticalDomain
+  - name: paidThroughDate
+  - name: dnsType
+  - name: nameServers
+  - name: dnssecActivated
+  - name: whoisPrivacy
+  - name: serverDeleteProhibited
+  - name: serverTransferProhibited
+  - name: serverUpdateProhibited
+  - name: localAgent
+  - name: urlf
+  - name: account
+  - name: customFields
+  - name: lastModifiedReason
+  - name: lastModifiedDescription
+  - name: whoisContacts
+  - name: lastModifiedDate
+  - name: registrationDate
+  - name: registryExpiryDate
+
+x-samos-derived-properties:
+  d_id:
+    type: string
+    syntax: jmespath
+    value: qualifiedDomainName
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_name:
+    type: string
+    syntax: jmespath
+    value: qualifiedDomainName
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_active:
+    type: boolean
+    syntax: jmespath
+    value: 'managedStatus == `"ACTIVE"`'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  # Every entry in the CSC portfolio is a domain registration, never a subdomain or wildcard.
+  d_registered:
+    type: boolean
+    syntax: expression
+    value: 'true'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: registered
+
+  # CSC is the registrar only for domains it actively manages.
+  d_registrar:
+    type: string
+    syntax: jmespath
+    value: 'managedStatus == `"ACTIVE"` && `"CSC Corporate Domains, Inc."` || `null`'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: registrar
+
+  d_public:
+    type: boolean
+    syntax: expression
+    value: 'true'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: public
+
+  d_is_external:
+    type: boolean
+    syntax: expression
+    value: 'false'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_external
+
+properties:
+  qualifiedDomainName:
+    type: string
+    title: Domain Name
+    format: domain-name
+    description: Fully qualified domain name.
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: value
+    x-samos-correlation:
+      correlation-key: Domain.value
+      correlation-type: Domain
+      priority: 4
+
+  domain:
+    type: string
+    title: Second Level Domain
+    description: The domain name without its extension.
+
+  extension:
+    type: string
+    title: Extension
+    description: Top level domain extension, for example `com`.
+
+  newGtld:
+    type: boolean
+    title: New gTLD?
+    description: Registered under a new generic top level domain?
+
+  idn:
+    type: string
+    title: Internationalized Domain Name
+
+  idnReferenceName:
+    type: string
+    title: IDN Reference Name
+
+  managedStatus:
+    type: string
+    title: Managed Status
+    description: Status of the domain within CSC, for example `ACTIVE` or `TRANSFERRED_AWAY`.
+
+  countryCode:
+    type: string
+    title: Country Code
+    description: Country code for country specific extensions.
+
+  criticalDomain:
+    type: boolean
+    title: Critical Domain?
+    description: Flagged as business critical in CSC?
+
+  brandName:
+    type: string
+    title: Brand Name
+
+  businessUnit:
+    type: string
+    title: Business Unit
+    description: Business unit that owns the domain.
+
+  dnsType:
+    type: string
+    title: DNS Type
+    description: CSC DNS hosting product for the domain, for example `CSC_BASIC`.
+
+  dnssecActivated:
+    type: string
+    title: DNSSEC Activated
+    description: Whether DNSSEC is enabled, one of `ENABLED`, `NOT_ENABLED`, or `USAGE_UNKNOWN`.
+
+  nameServers:
+    type: array
+    title: Name Servers
+    items:
+      type: string
+
+  whoisPrivacy:
+    type: boolean
+    title: WHOIS Privacy?
+
+  localAgent:
+    type: boolean
+    title: Local Agent?
+    description: A local presence agent is provided for extensions that require one?
+
+  serverDeleteProhibited:
+    type: boolean
+    title: Delete Prohibited?
+    description: Registry lock preventing deletion is applied?
+
+  serverTransferProhibited:
+    type: boolean
+    title: Transfer Prohibited?
+    description: Registry lock preventing transfer is applied?
+
+  serverUpdateProhibited:
+    type: boolean
+    title: Update Prohibited?
+    description: Registry lock preventing updates is applied?
+
+  urlf:
+    type: object
+    title: URL Forwarding
+    properties:
+      urlForwarding:
+        type: boolean
+        title: URL Forwarding Enabled?
+      redirectType:
+        type: string
+        title: Redirect Type
+
+  customFields:
+    type: array
+    title: Custom Fields
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Name
+        value:
+          type: string
+          title: Value
+
+  whoisContacts:
+    type: array
+    title: WHOIS Contacts
+    items:
+      type: object
+      properties:
+        contactType:
+          type: string
+          title: Contact Type
+          nullable: true
+        organization:
+          type: string
+          title: Organization
+          nullable: true
+        country:
+          type: string
+          title: Country
+          nullable: true
+
+  account:
+    type: object
+    title: Account
+    properties:
+      accountNumber:
+        type: string
+        title: Account Number
+      accountName:
+        type: string
+        title: Account Name
+
+  lastModifiedReason:
+    type: string
+    title: Last Modified Reason
+
+  lastModifiedDescription:
+    type: string
+    title: Last Modified Description
+
+  registrationDate:
+    type: string
+    title: Registration Date
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  registryExpiryDate:
+    type: string
+    title: Registry Expiry Date
+    format: date-time
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: expiry_date
+
+  paidThroughDate:
+    type: string
+    title: Paid Through Date
+    format: date-time
+
+  lastModifiedDate:
+    type: string
+    title: Last Modified Date
+    format: date-time
+
+  x_business_unit_id:
+    type: string
+    title: Business Unit
+    nullable: true
+    x-samos-ref-types:
+      - type-name: CscGlobalDomainsecBusinessUnit
+        key-name: x_business_unit_id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization

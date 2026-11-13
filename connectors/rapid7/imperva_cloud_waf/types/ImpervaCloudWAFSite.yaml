@@ -1,0 +1,459 @@
+x-samos-type-name: ImpervaCloudWAFSite
+x-samos-namespace: imperva.cloud.waf
+title: Imperva Cloud WAF Site
+description: A website protected by Imperva Cloud WAF
+
+x-samos-extends-types:
+  - type-name: WebSite
+    subtype-priority: 3
+
+x-samos-keys:
+  - site_id
+
+required:
+  - site_id
+
+x-samos-table:
+  - name: site_id
+  - name: domain
+  - name: status
+  - name: active
+  - name: account_id
+  - name: acceleration_level
+
+x-samos-detail:
+  - name: site_id
+  - name: domain
+  - name: display_name
+  - name: status
+  - name: active
+  - name: account_id
+  - name: ips
+  - name: acceleration_level
+  - name: dns
+  - name: original_dns
+  - name: warnings
+  - name: additionalErrors
+  - name: ssl
+  - name: support_all_tls_versions
+  - name: use_wildcard_san_instead_of_full_domain_san
+  - name: add_naked_domain_san
+  - name: set_site_cookies_without_domain
+  - name: enable_http_between_Imperva_and_origin
+  - name: restricted_cname_reuse
+  - name: extended_ddos
+  - name: security
+  - name: incap_rules
+  - name: login_protect
+  - name: site_creation_date
+
+x-samos-derived-properties:
+  d_name:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'display_name || domain || site_id'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_url:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: "domain && join('', ['https://', domain]) || null"
+    x-samos-fulfills:
+      type-name: WebSite
+      property-name: url
+    x-samos-correlation:
+      correlation-key: WebSite.url
+      correlation-type: WebSite
+      priority: 3
+
+  d_active:
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: "active == 'active'"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_cloud:
+    x-samos-hidden: true
+    type: boolean
+    syntax: expression
+    value: 'true'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: cloud
+
+  d_public:
+    x-samos-hidden: true
+    type: boolean
+    syntax: expression
+    value: 'true'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: public
+
+  # M1037 (Filter Network Traffic) applies only while Imperva is actively
+  # filtering traffic, so bypassed and paused websites report no mitigation.
+  # M1032 (Multi-Factor Authentication) reflects Imperva Login Protect.
+  d_mitigations:
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Mitigation
+          key-name: id
+    syntax: jmespath
+    value: "[active == 'active' && 'M1037', login_protect.enabled && 'M1032'] | [?@]"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  acceleration_level:
+    title: Acceleration Level
+    type: string
+    description: Effective caching and acceleration level applied to the website
+
+  acceleration_level_raw:
+    title: Acceleration Level (Raw)
+    type: string
+    description: Configured acceleration level before plan defaults are applied
+
+  account_id:
+    title: Account
+    type: string
+    description: Imperva account that owns this website
+    x-samos-ref-types:
+      - type-name: ImpervaCloudWAFAccount
+        key-name: account_id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+
+  active:
+    title: Protection Mode
+    type: string
+    description: Whether traffic is actively protected, bypassed or paused
+
+  add_naked_domain_san:
+    title: Add Naked Domain SAN?
+    type: boolean
+    description: Whether the naked domain is added to the certificate SAN
+
+  additionalErrors:
+    title: Additional Errors
+    type: array
+    description: Numeric error codes reported for the website
+    items:
+      type: integer
+
+  display_name:
+    title: Display Name
+    type: string
+    description: Name shown for the website in the Imperva console
+
+  dns:
+    title: DNS Records
+    type: array
+    description: DNS records required to route traffic through Imperva
+    items:
+      type: object
+      properties:
+        dns_record_name:
+          title: DNS Record Name
+          type: string
+        set_type_to:
+          title: Record Type
+          type: string
+        set_data_to:
+          title: Record Values
+          type: array
+          items:
+            type: string
+
+  domain:
+    title: Domain
+    type: string
+    format: domain-name
+    description: Domain name of the protected website
+
+  enable_http_between_Imperva_and_origin:
+    title: HTTP Port To Origin
+    type: string
+    description: Port used for HTTP traffic between Imperva and the origin server
+
+  extended_ddos:
+    title: Extended DDoS Threshold
+    type: integer
+    description: Extended DDoS protection threshold configured for the website
+
+  incap_rules:
+    title: IncapRules
+    type: array
+    description: Delivery and security rules configured for the website
+    items:
+      type: object
+      properties:
+        id:
+          title: Rule ID
+          type: integer
+        name:
+          title: Rule Name
+          type: string
+        action:
+          title: Action
+          type: string
+        rule:
+          title: Rule Expression
+          type: string
+        comment:
+          title: Comment
+          type: string
+        creation_date:
+          title: Creation Date
+          type: integer
+          format: epoch-millis
+        updated_by:
+          title: Updated By
+          type: string
+        updated_at:
+          title: Updated At
+          type: integer
+          format: epoch-millis
+
+  ips:
+    title: Origin IP Addresses
+    type: array
+    description: IP addresses of the website's origin servers behind Imperva
+    items:
+      type: string
+      format: ip-addr
+      x-samos-ref-types:
+        - type-name: IpAddress
+          key-name: value
+
+  login_protect:
+    title: Login Protect
+    type: object
+    description: Two-factor authentication settings applied to the website
+    properties:
+      enabled:
+        title: Enabled?
+        type: boolean
+      allow_all_users:
+        title: Allow All Users?
+        type: boolean
+      send_lp_notifications:
+        title: Send Notifications?
+        type: boolean
+      authentication_methods:
+        title: Authentication Methods
+        type: array
+        items:
+          type: string
+      urls:
+        title: Protected URLs
+        type: array
+        items:
+          type: string
+      url_patterns:
+        title: URL Patterns
+        type: array
+        items:
+          type: string
+      specific_users_list:
+        title: Specific Users
+        type: array
+        items:
+          type: object
+          properties:
+            email:
+              title: Email
+              type: string
+              format: email
+            name:
+              title: Name
+              type: string
+            status:
+              title: Status
+              type: string
+
+  original_dns:
+    title: Original DNS Records
+    type: array
+    description: DNS records recorded for the website before it was onboarded to Imperva
+    items:
+      type: object
+      properties:
+        dns_record_name:
+          title: DNS Record Name
+          type: string
+          format: domain-name
+        set_type_to:
+          title: Record Type
+          type: string
+        set_data_to:
+          title: Record Values
+          type: array
+          description: Origin hostnames or addresses that served the website directly
+          items:
+            type: string
+
+  restricted_cname_reuse:
+    title: Restricted CNAME Reuse?
+    type: boolean
+    description: Whether reuse of the Imperva CNAME is restricted for this website
+
+  security:
+    title: Security
+    type: object
+    description: WAF threat rules and ACL rules configured for the website
+    properties:
+      waf:
+        title: WAF
+        type: object
+        properties:
+          rules:
+            title: Rules
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  title: Rule ID
+                  type: string
+                name:
+                  title: Rule Name
+                  type: string
+                action:
+                  title: Action
+                  type: string
+                action_text:
+                  title: Action Text
+                  type: string
+                block_bad_bots:
+                  title: Block Bad Bots?
+                  type: boolean
+                challenge_suspected_bots:
+                  title: Challenge Suspected Bots?
+                  type: boolean
+                activation_mode:
+                  title: Activation Mode
+                  type: string
+                activation_mode_text:
+                  title: Activation Mode Text
+                  type: string
+                ddos_traffic_threshold:
+                  title: DDoS Traffic Threshold
+                  type: string
+                ddos_traffic_threshold_text:
+                  title: DDoS Traffic Threshold Text
+                  type: string
+                ddos_adaptive_threshold:
+                  title: DDoS Adaptive Threshold
+                  type: string
+                ddos_adaptive_threshold_last_update_time:
+                  title: DDoS Adaptive Threshold Last Updated
+                  type: string
+      acls:
+        title: ACLs
+        type: object
+        properties:
+          rules:
+            title: Rules
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  title: Rule ID
+                  type: string
+                name:
+                  title: Rule Name
+                  type: string
+                ips:
+                  title: IP Addresses
+                  type: array
+                  items:
+                    type: string
+
+  set_site_cookies_without_domain:
+    title: Set Site Cookies Without Domain?
+    type: boolean
+    description: Whether Imperva cookies are set without an explicit domain attribute
+
+  site_creation_date:
+    title: Site Creation Date
+    type: integer
+    format: epoch-millis
+    description: Date that the website was added to Imperva Cloud WAF
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  site_id:
+    title: Site ID
+    type: string
+    description: Numeric identifier of the website in Imperva Cloud WAF
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  ssl:
+    title: SSL
+    type: object
+    description: SSL configuration and origin server detection results
+    properties:
+      origin_server:
+        title: Origin Server
+        type: object
+        properties:
+          detected:
+            title: Detected
+            type: string
+          detectionStatus:
+            title: Detection Status
+            type: string
+
+  status:
+    title: Status
+    type: string
+    description: Onboarding and DNS configuration status of the website
+
+  statusEnum:
+    title: Status Enum
+    type: string
+    description: Machine-readable form of the website status
+
+  support_all_tls_versions:
+    title: Support All TLS Versions?
+    type: boolean
+    description: Whether the website accepts all TLS versions from visitors
+
+  use_wildcard_san_instead_of_full_domain_san:
+    title: Use Wildcard SAN?
+    type: boolean
+    description: Whether the certificate uses a wildcard SAN instead of the full domain
+
+  warnings:
+    title: Warnings
+    type: array
+    description: Configuration warnings reported for the website
+    items:
+      type: object
+      properties:
+        type:
+          title: Type
+          type: string
+        set_data_to:
+          title: Expected Values
+          type: array
+          items:
+            type: string

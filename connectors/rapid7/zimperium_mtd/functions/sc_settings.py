@@ -13,6 +13,7 @@ Settings = TypedDict('Settings', {
     'url': str,
     'client_id': str,
     'client_secret': str,
+    'use_pit_search': bool,
     'severity_threshold': str,
     'threat_lookback_days': int,
 })

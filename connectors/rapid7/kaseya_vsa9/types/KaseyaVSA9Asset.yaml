@@ -11,6 +11,9 @@ x-samos-extends-types:
 x-samos-keys:
   - AssetId
 
+required:
+  - AssetId
+
 x-samos-table:
   - name: DisplayName
   - name: MachineGroup

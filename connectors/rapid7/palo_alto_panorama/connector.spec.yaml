@@ -1,0 +1,94 @@
+id: palo.alto.panorama
+name: Palo Alto Panorama and PAN-OS
+author: Rapid7
+version: 0.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Initial release
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - PaloAltoPanoramaServer
+  - PaloAltoPanoramaFirewall
+  - PaloAltoPanoramaDeviceGroup
+  - PaloAltoPanoramaVirtualSystem
+  - PaloAltoPanoramaAddress
+  - PaloAltoPanoramaAddressGroup
+  - PaloAltoPanoramaService
+  - PaloAltoPanoramaSecurityRule
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Palo Alto Panorama, Firewalls, Device Groups, Objects, and Security Rules
+    description: Import Panorama, its managed firewalls, device groups, virtual systems, address objects, address groups, services, and security rules from Palo Alto Panorama, or the same data from a single PAN-OS firewall
+    return_types:
+      - PaloAltoPanoramaServer
+      - PaloAltoPanoramaFirewall
+      - PaloAltoPanoramaDeviceGroup
+      - PaloAltoPanoramaVirtualSystem
+      - PaloAltoPanoramaAddress
+      - PaloAltoPanoramaAddressGroup
+      - PaloAltoPanoramaService
+      - PaloAltoPanoramaSecurityRule
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: URL
+    description: >-
+      URL of the Panorama or PAN-OS firewall management interface, for example https://panorama.example.com.
+      If you enter only the IP address or fully qualified domain name (FQDN), the connector uses https://.
+      Only HTTPS is supported.
+    example: https://panorama.example.com
+
+  username:
+    type: string
+    title: Username
+    description: >-
+      Username of the Panorama or PAN-OS administrator the connector uses. The administrator needs either a
+      custom admin role with the XML API Configuration and Operational Requests permissions, or the
+      Superuser (read-only) role. SAML and multi-factor authentication (MFA) administrators are not supported.
+
+  password:
+    type: string
+    title: Password
+    format: password
+    description: Password of the administrator in Username.
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: >-
+      If enabled, verify the TLS certificate of the management interface. Panorama and PAN-OS firewalls use a
+      self-signed certificate by default, so disable this only if the management interface is on a
+      trusted network and its certificate has not been replaced.
+    default: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# OpenAPI reference schema for the PAN-OS REST API (exported from /restapi-doc on PAN-OS 10.1).
+# The connector reads the XML API and converts entries to this REST API JSON shape,
+# so types use $ref to inherit properties from this schema.
+reference-schemas:
+  - url: https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-panorama-api/get-started-with-the-pan-os-rest-api
+    file: refdocs/openapi_panos_10_1.json
+
+# Categories for this connector in the Extension Library.
+categories:
+  - network_firewall
+  - asset_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: true

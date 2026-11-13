@@ -1,0 +1,68 @@
+id: xenserver
+name: XenServer
+author: Rapid7
+version: 0.2.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Update dependencies
+
+types:
+  - XenServerEnumPowerState
+  - XenServerPool
+  - XenServerHost
+  - XenServerVM
+  - XenServerNetwork
+  - XenServerStorageRepository
+  - XenServerSourceTag
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: XenServer Pools, Hosts, VMs, Networks and Storage
+    description: Import pools, hosts, virtual machines, networks, storage repositories and their tags from XenServer.
+    return_types:
+      - XenServerPool
+      - XenServerHost
+      - XenServerVM
+      - XenServerNetwork
+      - XenServerStorageRepository
+      - XenServerSourceTag
+
+settings:
+  url:
+    type: string
+    title: URL
+    description: >-
+      The URL of the XenServer pool coordinator (master) host.
+    example: https://xenserver.example.com
+
+  username:
+    type: string
+    title: Username
+    description: >-
+      An Active Directory account with at least the Read Only role, for example EXAMPLE\svc-rapid7.
+      The local root account also works, but has full administrative permissions.
+    example: EXAMPLE\svc-rapid7
+
+  password:
+    type: string
+    title: Password
+    description: The password of the XenServer account.
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: >-
+      If enabled, verify the TLS certificate of the pool coordinator.
+      XenServer hosts use a self-signed certificate by default.
+    default: true
+
+runtime: py311
+
+categories:
+  - cloud_service_provider
+
+show_orchestrator_ui: true

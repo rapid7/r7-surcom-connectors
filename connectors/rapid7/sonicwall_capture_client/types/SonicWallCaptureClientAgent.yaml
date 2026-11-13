@@ -11,6 +11,9 @@ x-samos-keys:
   - id
   - uuid
 
+required:
+  - id
+
 x-samos-table:
   - name: computerName
   - name: osName

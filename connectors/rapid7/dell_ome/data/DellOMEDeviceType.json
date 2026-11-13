@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1000",
+    "value": "SERVER",
+    "description": "Server Device",
+    "map_to": "MachineAssetClass: Server"
+  },
+  {
+    "id": "2000",
+    "value": "CHASSIS",
+    "description": "Chassis Device",
+    "map_to": "MachineAssetClass: Other"
+  },
+  {
+    "id": "3000",
+    "value": "STORAGE",
+    "description": "Storage Device",
+    "map_to": "MachineAssetClass: Storage"
+  },
+  {
+    "id": "4000",
+    "value": "NETWORK_IOM",
+    "description": "NETWORK IO Module Device",
+    "map_to": "MachineAssetClass: Network"
+  },
+  {
+    "id": "8000",
+    "value": "STORAGE_IOM",
+    "description": "Storage IOM Device",
+    "map_to": "MachineAssetClass: Storage"
+  },
+  {
+    "id": "9000",
+    "value": "NETWORK_CONTROLLER",
+    "description": "NETWORK CONTROLLER Device",
+    "map_to": "MachineAssetClass: Network"
+  }
+]

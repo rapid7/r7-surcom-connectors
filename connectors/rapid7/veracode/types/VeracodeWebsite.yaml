@@ -9,6 +9,9 @@ x-samos-extends-types:
 x-samos-keys:
   - target_id # used by Dynamic Findings to fulfill Finding:applies_to
 
+required:
+  - target_id
+
 x-samos-table:
   - name: url
   - name: name

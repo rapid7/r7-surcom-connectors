@@ -11,6 +11,10 @@ $ref: https://example.nautobot.com/api/swagger#/components/schemas/PaginatedTagL
 
 x-samos-keys:
   - id
+
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: tagged_items

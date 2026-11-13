@@ -1,0 +1,69 @@
+x-samos-type-name: DellOMEStatus
+x-samos-namespace: dell.ome
+title: Dell OME Device Status
+description: Maps Dell OME GlobalStatus/Status codes to the standard EnumOperationalStatus.
+type: object
+x-samos-hidden: true
+x-samos-default-hide-from-graph: true
+x-samos-global-zone: true
+x-samos-extends-types:
+  - type-name: EnumOperationalStatus
+    subtype-priority: 1
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: value
+
+x-samos-detail:
+  - name: id
+  - name: value
+  - name: description
+  - name: map_to
+
+x-samos-derived-properties:
+  name:
+    title: Name
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: '{value}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  id:
+    title: Status Code
+    x-samos-immutable: true
+    type: string
+    x-samos-fulfills:
+      type-name: Enum
+      property-name: id
+    x-samos-correlation:
+      correlation-key: EnumId
+      correlation-type: Enum
+      priority: 1
+
+  value:
+    title: Status
+    type: string
+    x-samos-fulfills:
+      type-name: Enum
+      property-name: value
+
+  description:
+    title: Description
+    type: string
+
+  map_to:
+    title: Map To Id
+    type: string
+    x-samos-correlation:
+      correlation-key: EnumId
+      correlation-type: Enum
+      priority: 1

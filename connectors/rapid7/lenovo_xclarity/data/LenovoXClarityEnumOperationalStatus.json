@@ -1,0 +1,42 @@
+[
+  {
+    "id": "Normal",
+    "value": "Normal",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "Non-Critical",
+    "value": "Non-Critical",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "Warning",
+    "value": "Warning",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "Minor-Failure",
+    "value": "Minor-Failure",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "Major-Failure",
+    "value": "Major-Failure",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "Critical",
+    "value": "Critical",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "Non-Recoverable",
+    "value": "Non-Recoverable",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "Unknown",
+    "value": "Unknown",
+    "map_to": "OperationalStatus: Non-Operational"
+  }
+]

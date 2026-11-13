@@ -1,0 +1,142 @@
+x-samos-type-name: MicrosoftSccmCollection
+x-samos-namespace: microsoft.sccm
+title: Microsoft SCCM Collection
+
+$ref: 'https://localhost/adminservice/v1.0/metadata#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.Collection'
+
+x-samos-extends-types:
+  - type-name: core.component-group
+
+x-samos-keys: # TODO - these are not guids, and would not be unique across profiles
+  - s_CollectionId
+  - SiteID
+
+required:
+  - SiteID
+
+x-samos-table:
+  - name: CollectionName
+  - name: CollectionComment
+
+x-samos-derived-properties:
+  s_CollectionId: # convert to string so it can fulfill core.component.id
+    type: string
+    syntax: jsonpath
+    value: '$.CollectionID'
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+properties:
+  SiteID: # while this says "SiteID" it is actually the Collection's ID in the site
+    x-samos-immutable: true
+    title: Collection Site ID
+    type: string
+  CollectionID:
+    type: number
+    title: Collection Numeric ID
+  CollectionName:
+    type: string
+    title: Collection Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  Flags:
+    type: number
+  ResultTableName:
+    type: string
+  CollectionComment:
+    type: string
+    title: Collection Comment
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  Schedule:
+    type: string
+    title: Schedule
+  SourceLocaleID:
+    type: integer
+  LastChangeTime:
+    type: string
+    format: date-time
+  LastRefreshRequest:
+    type: string
+    format: date-time
+  CollectionType:
+    type: number
+  LimitToCollectionID:
+    type: string
+  IsReferenceCollection:
+    type: number
+  BeginDate:
+    type: string
+    format: date-time
+  EvaluationStartTime:
+    type: string
+    format: date-time
+  LastRefreshTime:
+    type: string
+    format: date-time
+  LastIncrementalRefreshTime:
+    type: string
+    format: date-time
+  LastMemberChangeTime:
+    type: string
+    format: date-time
+  CurrentStatus:
+    type: number
+  CurrentStatusTime:
+    type: string
+    format: date-time
+  LimitToCollectionName:
+    type: string
+  ISVData:
+    type: string
+  ISVString:
+    type: string
+
+  ResourceCollectionMembership@odata.count:
+    x-samos-hidden: true
+    x-samos-exclude: true
+
+# For Recursions
+components:
+  schemas:
+    Microsoft.ConfigurationManager.ObjectLibrary.BGB_LiveData_Boundary:
+      properties:
+        Device:
+          type: object
+          $ref: null # to bypass recursive reference
+    Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationTargeting:
+      properties:
+        Device:
+          type: object
+          $ref: null
+    Microsoft.ConfigurationManager.ObjectLibrary.MachineEventRawData:
+      properties:
+        Device:
+          type: object
+          anyOf:
+            - $ref: null
+    Microsoft.ConfigurationManager.ObjectLibrary.ResourceCollectionMembership:
+      properties:
+        Device:
+          type: object
+          $ref: null
+    Microsoft.ConfigurationManager.ObjectLibrary.Collection:
+      properties:
+        ResourceCollectionMembership:
+          type: array
+          items:
+            type: object
+            $ref: null
+
+x-samos-virtual:
+  members:
+    type-name: MicrosoftSccmDevice
+    cypher-pattern: >-
+      <-[:`e:MicrosoftSccmCollectionMember:CollectionID`]-
+      (:MicrosoftSccmCollectionMember)
+      -[:`e:MicrosoftSccmCollectionMember:ResourceID`]->
+      (:MicrosoftSccmDevice)

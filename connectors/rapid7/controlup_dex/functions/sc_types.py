@@ -13,11 +13,11 @@ class ControlUpDEXDevice(dict):
         super().__init__(type=self.__class__.__name__, content=content)
 
 
-class ControlUpDEXUser(dict):
+class ControlUpDEXOSFamilyEnum(dict):
     def __init__(self, content: dict):
         super().__init__(type=self.__class__.__name__, content=content)
 
 
-class ControlUpDEXOSFamilyEnum(dict):
+class ControlUpDEXUser(dict):
     def __init__(self, content: dict):
         super().__init__(type=self.__class__.__name__, content=content)

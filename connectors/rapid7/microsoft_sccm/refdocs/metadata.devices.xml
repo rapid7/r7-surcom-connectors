@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:DataServices>
+        <Schema Namespace="Microsoft.ConfigurationManager.ObjectLibrary" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityType Name="SensorEventUpdateTime">
+                <Key>
+                    <PropertyRef Name="ClientItemKey" />
+                </Key>
+                <Property Name="ClientItemKey" Type="Edm.Int32" Nullable="false" />
+                <Property Name="LastUpdatedTime" Type="Edm.DateTimeOffset" Nullable="false" />
+            </EntityType>
+            <EntityType Name="ConsoleAdminsData">
+                <Key>
+                    <PropertyRef Name="ID" />
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false" />
+                <Property Name="MachineName" Type="Edm.String" />
+                <Property Name="UserName" Type="Edm.String" />
+                <Property Name="ConnectedSiteCode" Type="Edm.String" />
+                <Property Name="ConsoleVersion" Type="Edm.String" />
+                <Property Name="ConsoleConnectTime" Type="Edm.DateTimeOffset" Nullable="false" />
+                <Property Name="LatestConsoleStartUpDuration" Type="Edm.Int32" />
+                <Property Name="Source" Type="Edm.String" />
+                <Property Name="UserPrincipalName" Type="Edm.String" />
+            </EntityType>
+            <EntityType Name="HubItems">
+                <Key>
+                    <PropertyRef Name="HubId" />
+                </Key>
+                <Property Name="CreatedBy" Type="Edm.String" />
+                <Property Name="DateCreated" Type="Edm.DateTimeOffset" Nullable="false" />
+                <Property Name="DateHubMetadata" Type="Edm.DateTimeOffset" />
+                <Property Name="Disposition" Type="Edm.Int32" />
+                <Property Name="HubContentId" Type="Edm.String" Nullable="false" />
+                <Property Name="HubId" Type="Edm.String" Nullable="false" />
+                <Property Name="ItemType" Type="Edm.Int32" Nullable="false" />
+                <Property Name="LastModifiedBy" Type="Edm.String" />
+                <Property Name="OnPremId" Type="Edm.String" />
+            </EntityType>
+            <EntityType Name="Report">
+                <Key>
+                    <PropertyRef Name="ReportGuid" />
+                </Key>
+                <Property Name="ReportGuid" Type="Edm.String" Nullable="false" />
+                <Property Name="DisplayName" Type="Edm.String" Nullable="false" />
+                <Property Name="Description" Type="Edm.String" Nullable="false" />
+                <Property Name="RDL" Type="Edm.String" Nullable="false" />
+                <Property Name="Folder" Type="Edm.String" Nullable="false" />
+            </EntityType>
+            <EntityType Name="PowerBIReport">
+                <Key>
+                    <PropertyRef Name="ReportGuid" />
+                </Key>
+                <Property Name="ReportGuid" Type="Edm.String" Nullable="false" />
+                <Property Name="DisplayName" Type="Edm.String" Nullable="false" />
+                <Property Name="Description" Type="Edm.String" Nullable="false" />
+                <Property Name="PBIX" Type="Edm.String" Nullable="false" />
+                <Property Name="Folder" Type="Edm.String" Nullable="false" />
+            </EntityType>
+            <EntityType Name="SMS_CMPivotStatus">
+                <Key>
+                    <PropertyRef Name="ScriptGuid" />
+                    <PropertyRef Name="ResourceId" />
+                    <PropertyRef Name="ClientOperationId" />
+                </Key>
+                <Property Name="ScriptGuid" Type="Edm.String" Nullable="false" />
+                <Property Name="TaskID" Type="Edm.String" />
+                <Property Name="ScriptVersion" Type="Edm.String" />
+                <Property Name="ScriptName" Type="Edm.String" />
+                <Property Name="ScriptLastModifiedDate" Type="Edm.DateTimeOffset" Nullable="false" />
+                <Property Name="ResourceId" Type="Edm.Int32" Nullable="false" />
+                <Property Name="SiteNumber" Type="Edm.Int32" Nullable="false" />
+                <Property Name="DeviceName" Type="Edm.String" />
+                <Property Name="ClientOperationId" Type="Edm.Int32" Nullable="false" />
+                <Property Name="CollectionId" Type="Edm.String" />
+                <Property Name="LastUpdateTime" Type="Edm.DateTimeOffset" Nullable="false" />
+                <Property Name="ScriptExecutionState" Type="Edm.Int32" />
+                <Property Name="ReturnCode" Type="Edm.Int32" />
+                <Property Name="ErrorMessage" Type="Edm.String" />
+                <Property Name="ScriptExitCode" Type="Edm.Int32" />
+                <Property Name="ScriptOutput" Type="Edm.String" />
+                <Property Name="State" Type="Edm.Int32" Nullable="false" />
+                <Property Name="TotalClients" Type="Edm.Int32" />
+                <Property Name="UnknownClients" Type="Edm.Int32" />
+                <Property Name="NotApplicableClients" Type="Edm.Int32" />
+                <Property Name="FailedClients" Type="Edm.Int32" />
+                <Property Name="CompletedClients" Type="Edm.Int32" />
+                <Property Name="OfflineClients" Type="Edm.Int32" />
+                <Property Name="OutputLength" Type="Edm.Int64" />
+            </EntityType>
+            <EntityType Name="UserApplicationRequest">
+                <Key>
+                    <PropertyRef Name="RequestID" />
+                </Key>
+                <Property Name="RequestID" Type="Edm.Int32" Nullable="false" />
+            </EntityType>
+            <EntityType Name="Collection">
+                <Key>
+                    <PropertyRef Name="SiteID" />
+                </Key>
+                <Property Name="SiteID" Type="Edm.String" Nullable="false" />
+                <Property Name="CollectionID" Type="Edm.Int32" Nullable="false" />
+                <Property Name="CollectionName" Type="Edm.String" />
+                <Property Name="Flags" Type="Edm.Int32" Nullable="false" />
+                <Property Name="ResultTableName" Type="Edm.String" />
+                <Property Name="CollectionComment" Type="Edm.String" />
+                <Property Name="Schedule" Type="Edm.String" />
+                <Property Name="SourceLocaleID" Type="Edm.Int32" />
+                <Property Name="LastChangeTime" Type="Edm.DateTimeOffset" />
+                <Property Name="LastRefreshRequest" Type="Edm.DateTimeOffset" Nullable="false" />
+                <Property Name="CollectionType" Type="Edm.Int32" Nullable="false" />
+                <Property Name="LimitToCollectionID" Type="Edm.String" />
+                <Property Name="IsReferenceCollection" Type="Edm.Int32" Nullable="false" />
+                <Property Name="BeginDate" Type="Edm.DateTimeOffset" Nullable="false" />
+                <Property Name="EvaluationStartTime" Type="Edm.DateTimeOffset" />
+                <Property Name="LastRefreshTime" Type="Edm.DateTimeOffset" />
+                <Property Name="LastIncrementalRefreshTime" Type="Edm.DateTimeOffset" />
+                <Property Name="LastMemberChangeTime" Type="Edm.DateTimeOffset" />
+                <Property Name="CurrentStatus" Type="Edm.Int32" Nullable="false" />
+                <Property Name="CurrentStatusTime" Type="Edm.DateTimeOffset" Nullable="false" />
+                <Property Name="LimitToCollectionName" Type="Edm.String" />
+                <Property Name="ISVData" Type="Edm.Binary" />
+                <Property Name="ISVString" Type="Edm.String" />
+                <NavigationProperty Name="ResourceCollectionMembership" Type="Collection(Microsoft.ConfigurationManager.ObjectLibrary.ResourceCollectionMembership)" />
+            </EntityType>
+            <EntityType Name="ConsoleUsageData">
+                <Key>
+                    <PropertyRef Name="ID" />
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false" />
+                <Property Name="MachineName" Type="Edm.String" />
+                <Property Name="UserName" Type="Edm.String" />
+                <Property Name="ConnectedSiteCode" Type="Edm.String" />
+                <Property Name="ConnectedSiteNumber" Type="Edm.Int32" Nullable="false" />
+                <Property Name="OSBuildNumber" Type="Edm.Int32" Nullable="false" />
+                <Property Name="OSMajorVersion" Type="Edm.Int32" Nullable="false" />
+                <Property Name="OSMinorVersion" Type="Edm.Int32" Nullable="false" />
+                <Property Name="OSArchitecture" Type="Edm.String" />
+                <Property Name="ConsoleVersion" Type="Edm.String" />
+                <Property Name="OSLanguage" Type="Edm.Int32" Nullable="false" />
+                <Property Name="OSType" Type="Edm.Int32" Nullable="false" />
+                <Property Name="OperatingSystemSKU" Type="Edm.Int32" Nullable="false" />
+                <Property Name="OSProductSuite" Type="Edm.Int32" Nullable="false" />
+                <Property Name="TotalPhysicalMemory" Type="Edm.Int64" Nullable="false" />
+                <Property Name="NumProcessors" Type="Edm.Int32" Nullable="false" />
+                <Property Name="NumLogicalProcessors" Type="Edm.Int32" Nullable="false" />
+                <Property Name="CMClientVersion" Type="Edm.String" />
+                <Property Name="CMConsoleInstalledLangPacks" Type="Edm.String" />
+                <Property Name="CMConsoleScreenResolution" Type="Edm.String" />
+                <Property Name="ExtendedNativeForms" Type="Edm.String" />
+                <Property Name="NetFx40InstallationStatus" Type="Edm.Int32" Nullable="false" />
+                <Property Name="NetFx45ReleaseVersion" Type="Edm.Int32" Nullable="false" />
+                <Property Name="IsColocatedWithSiteServer" Type="Edm.Boolean" Nullable="false" />
+                <Property Name="IsColocatedWithProvider" Type="Edm.Boolean" Nullable="false" />
+                <Property Name="ConsoleConnectTime" Type="Edm.DateTimeOffset" Nullable="false" />
+                <Property Name="NumberOfNodeExtensions" Type="Edm.Int32" Nullable="false" />
+                <Property Name="NumberOfActionExtensions" Type="Edm.Int32" Nullable="false" />
+                <Property Name="NumberOfFormxtensions" Type="Edm.Int32" Nullable="false" />
+                <Property Name="NumberOfManagementClassExtensions" Type="Edm.Int32" Nullable="false" />
+                <Property Name="CapableAuthLevel" Type="Edm.Int32" Nullable="false" />
+                <Property Name="ProcessName" Type="Edm.String" />
+                <Property Name="ExtensionInfo" Type="Edm.String" />
+            </EntityType>
+            <EntityType Name="Device">
+                <Key>
+                    <PropertyRef Name="MachineId" />
+                </Key>
+                <Property Name="MachineId" Type="Edm.Int32" Nullable="false" />
+                <Property Name="ArchitectureKey" Type="Edm.Int32" Nullable="false" />
+                <Property Name="Name" Type="Edm.String" />
+                <Property Name="SMSID" Type="Edm.String" />
+                <Property Name="SiteCode" Type="Edm.String" />
+                <Property Name="Domain" Type="Edm.String" />
+                <Property Name="ClientEdition" Type="Edm.Int32" />
+                <Property Name="ClientType" Type="Edm.Int32" />
+                <Property Name="ClientVersion" Type="Edm.String" />
+                <Property Name="IsClient" Type="Edm.Int32" Nullable="false" />
+                <Property Name="IsObsolete" Type="Edm.Int32" />
+                <Property Name="IsActive" Type="Edm.Int32" />
+                <Property Name="IsVirtualMachine" Type="Edm.Boolean" />
+                <Property Name="IsAOACCapable" Type="Edm.Boolean" />
+                <Property Name="DeviceOwner" Type="Edm.Int32" />
+                <Property Name="DeviceCategory" Type="Edm.String" />
+                <Property Name="WipeStatus" Type="Edm.Int32" />
+                <Property Name="RetireStatus" Type="Edm.Byte" />
+                <Property Name="SyncNowStatus" Type="Edm.Int32" />
+                <Property Name="LastSyncNowRequest" Type="Edm.DateTimeOffset" />
+                <Property Name="ManagementAuthority" Type="Edm.Int32" />
+                <Property Name="AMTStatus" Type="Edm.Int32" />
+                <Property Name="AMTFullVersion" Type="Edm.String" />
+                <Property Name="SuppressAutoProvision" Type="Edm.Boolean" />
+                <Property Name="IsApproved" Type="Edm.Int32" />
+                <Property Name="IsBlocked" Type="Edm.Boolean" />
+                <Property Name="IsAlwaysInternet" Type="Edm.Boolean" />
+                <Property Name="IsInternetEnabled" Type="Edm.Boolean" />
+                <Property Name="ClientCertType" Type="Edm.Int32" />
+                <Property Name="UserName" Type="Edm.String" />
+                <Property Name="LastClientCheckTime" Type="Edm.DateTimeOffset" />
+                <Property Name="ClientCheckPass" Type="Edm.Int32" />
+                <Property Name="ADSiteName" Type="Edm.String" />
+                <Property Name="UserDomainName" Type="Edm.String" />
+                <Property Name="ADLastLogonTime" Type="Edm.DateTimeOffset" />
+                <Property Name="ClientRemediationSuccess" Type="Edm.Int32" />
+                <Property Name="ClientActiveStatus" Type="Edm.Int32" />
+                <Property Name="LastStatusMessage" Type="Edm.DateTimeOffset" />
+                <Property Name="LastPolicyRequest" Type="Edm.DateTimeOffset" />
+                <Property Name="LastDDR" Type="Edm.DateTimeOffset" />
+                <Property Name="LastHardwareScan" Type="Edm.DateTimeOffset" />
+                <Property Name="LastSoftwareScan" Type="Edm.DateTimeOffset" />
+                <Property Name="LastMPServerName" Type="Edm.String" />
+                <Property Name="LastActiveTime" Type="Edm.DateTimeOffset" />
+                <Property Name="CP_Status" Type="Edm.String" />
+                <Property Name="CP_LatestProcessingAttempt" Type="Edm.DateTimeOffset" />
+                <Property Name="CP_LastInstallationError" Type="Edm.Int32" />
+                <Property Name="EAS_DeviceID" Type="Edm.String" />
+                <Property Name="DeviceOS" Type="Edm.String" />
+                <Property Name="DeviceOSBuild" Type="Edm.String" />
+                <Property Name="DeviceType" Type="Edm.String" />
+                <Property Name="ExchangeServer" Type="Edm.String" />
+                <Property Name="ExchangeOrganization" Type="Edm.String" />
+                <Property Name="PolicyApplicationStatus" Type="Edm.String" />
+                <Property Name="LastSuccessSyncTimeUTC" Type="Edm.DateTimeOffset" />
+                <Property Name="PhoneNumber" Type="Edm.String" />
+                <Property Name="DeviceAccessState" Type="Edm.String" />
+                <Property Name="EP_DeploymentState" Type="Edm.Int32" />
+                <Property Name="EP_DeploymentErrorCode" Type="Edm.Int64" />
+                <Property Name="EP_DeploymentDescription" Type="Edm.String" />
+                <Property Name="EP_PolicyApplicationState" Type="Edm.Int32" />
+                <Property Name="EP_PolicyApplicationErrorCode" Type="Edm.Int64" />
+                <Property Name="EP_PolicyApplicationDescription" Type="Edm.String" />
+                <Property Name="EP_Enabled" Type="Edm.Boolean" />
+                <Property Name="EP_ClientVersion" Type="Edm.String" />
+                <Property Name="EP_ProductStatus" Type="Edm.Int32" />
+                <Property Name="EP_EngineVersion" Type="Edm.String" />
+                <Property Name="EP_AntivirusEnabled" Type="Edm.Boolean" />
+                <Property Name="EP_AntivirusSignatureVersion" Type="Edm.String" />
+                <Property Name="EP_AntivirusSignatureUpdateDateTime" Type="Edm.DateTimeOffset" />
+                <Property Name="EP_AntispywareEnabled" Type="Edm.Boolean" />
+                <Property Name="EP_AntispywareSignatureVersion" Type="Edm.String" />
+                <Property Name="EP_AntispywareSignatureUpdateDateTime" Type="Edm.DateTimeOffset" />
+                <Property Name="EP_LastFullScanDateTimeStart" Type="Edm.DateTimeOffset" />
+                <Property Name="EP_LastFullScanDateTimeEnd" Type="Edm.DateTimeOffset" />
+                <Property Name="EP_LastQuickScanDateTimeStart" Type="Edm.DateTimeOffset" />
+                <Property Name="EP_LastQuickScanDateTimeEnd" Type="Edm.DateTimeOffset" />
+                <Property Name="EP_InfectionStatus" Type="Edm.Byte" />
+                <Property Name="EP_PendingFullScan" Type="Edm.Boolean" />
+                <Property Name="EP_PendingReboot" Type="Edm.Boolean" />
+                <Property Name="EP_PendingManualSteps" Type="Edm.Boolean" />
+                <Property Name="EP_PendingOfflineScan" Type="Edm.Boolean" />
+                <Property Name="EP_LastInfectionTime" Type="Edm.DateTimeOffset" />
+                <Property Name="EP_LastThreatName" Type="Edm.String" />
+                <Property Name="CNIsOnline" Type="Edm.Boolean" />
+                <Property Name="CNLastOnlineTime" Type="Edm.DateTimeOffset" />
+                <Property Name="CNLastOfflineTime" Type="Edm.DateTimeOffset" />
+                <Property Name="CNAccessMP" Type="Edm.String" />
+                <Property Name="CNIsOnInternet" Type="Edm.Boolean" />
+                <Property Name="ClientState" Type="Edm.Int32" />
+                <Property Name="Unknown" Type="Edm.Boolean" />
+                <Property Name="ATP_LastConnected" Type="Edm.DateTimeOffset" />
+                <Property Name="ATP_SenseIsRunning" Type="Edm.Boolean" />
+                <Property Name="ATP_OnboardingState" Type="Edm.Int32" />
+                <Property Name="ATP_OrgId" Type="Edm.String" />
+                <Property Name="CA_IsCompliant" Type="Edm.Byte" />
+                <Property Name="CA_ComplianceSetTime" Type="Edm.String" />
+                <Property Name="CA_ComplianceEvalTime" Type="Edm.String" />
+                <Property Name="CA_ErrorDetails" Type="Edm.String" />
+                <Property Name="CA_ErrorLocation" Type="Edm.Byte" />
+                <Property Name="AADTenantID" Type="Edm.String" />
+                <Property Name="AADDeviceID" Type="Edm.String" />
+                <Property Name="PasscodeResetState" Type="Edm.Int32" />
+                <Property Name="PasscodeResetStateTimeStamp" Type="Edm.DateTimeOffset" />
+                <Property Name="RemoteLockState" Type="Edm.Int32" />
+                <Property Name="RemoteLockStateTimeStamp" Type="Edm.DateTimeOffset" />
+                <Property Name="ActivationLockBypassState" Type="Edm.Int32" />
+                <Property Name="ActivationLockBypassStateTimeStamp" Type="Edm.DateTimeOffset" />
+                <Property Name="ActivationLockState" Type="Edm.String" />
+                <Property Name="IsSupervised" Type="Edm.String" />
+                <Property Name="DeviceThreatLevel" Type="Edm.String" />
+                <Property Name="SerialNumber" Type="Edm.String" />
+                <Property Name="IMEI" Type="Edm.String" />
+                <Property Name="PrimaryUser" Type="Edm.String" />
+                <Property Name="CurrentLogonUser" Type="Edm.String" />
+                <Property Name="LastLogonUser" Type="Edm.String" />
+                <Property Name="MACAddress" Type="Edm.String" />
+                <Property Name="SMBIOSGUID" Type="Edm.String" />
+                <Property Name="CoManaged" Type="Edm.Int32" />
+                <Property Name="IsMDMActive" Type="Edm.Boolean" />
+                <NavigationProperty Name="ResourceCollectionMembership" Type="Collection(Microsoft.ConfigurationManager.ObjectLibrary.ResourceCollectionMembership)" />
+                <NavigationProperty Name="Events" Type="Collection(Microsoft.ConfigurationManager.ObjectLibrary.MachineEventRawData)" />
+                <NavigationProperty Name="AvailableApplications" Type="Collection(Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationTargeting)" />
+                <NavigationProperty Name="BoundaryGroups" Type="Collection(Microsoft.ConfigurationManager.ObjectLibrary.BGB_LiveData_Boundary)" />
+            </EntityType>
+            <EntityType Name="InventoryClass">
+                <Key>
+                    <PropertyRef Name="ClassID" />
+                </Key>
+                <Property Name="ClassID" Type="Edm.Int32" Nullable="false" />
+                <Property Name="Namespace" Type="Edm.String" />
+                <Property Name="ClassName" Type="Edm.String" />
+                <Property Name="SMSClassID" Type="Edm.String" />
+                <Property Name="SMSGroupName" Type="Edm.String" />
+                <Property Name="Properties" Type="Edm.String" />
+                <Property Name="SMSContext" Type="Edm.String" />
+            </EntityType>
+            <EntityType Name="ResourceCollectionMembership">
+                <Key>
+                    <PropertyRef Name="SiteID" />
+                    <PropertyRef Name="MachineID" />
+                </Key>
+                <Property Name="SiteID" Type="Edm.String" Nullable="false" />
+                <Property Name="MachineID" Type="Edm.Int32" Nullable="false" />
+                <Property Name="ArchitectureKey" Type="Edm.Byte" Nullable="false" />
+                <Property Name="Name" Type="Edm.String" />
+                <Property Name="Domain" Type="Edm.String" />
+                <Property Name="SMSID" Type="Edm.String" />
+                <Property Name="SiteCode" Type="Edm.String" />
+                <Property Name="IsDirect" Type="Edm.Boolean" Nullable="false" />
+                <Property Name="IsAssigned" Type="Edm.Boolean" Nullable="false" />
+                <Property Name="IsClient" Type="Edm.Boolean" Nullable="false" />
+                <Property Name="Priority" Type="Edm.Int32" />
+                <Property Name="rowversion" Type="Edm.Binary" />
+                <NavigationProperty Name="Collection" Type="Microsoft.ConfigurationManager.ObjectLibrary.Collection" Nullable="false">
+                    <ReferentialConstraint Property="SiteID" ReferencedProperty="SiteID" />
+                </NavigationProperty>
+                <NavigationProperty Name="Device" Type="Microsoft.ConfigurationManager.ObjectLibrary.Device" Nullable="false">
+                    <ReferentialConstraint Property="MachineID" ReferencedProperty="MachineId" />
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="MachineEventRawData">
+                <Key>
+                    <PropertyRef Name="ID" />
+                    <PropertyRef Name="InternalType" />
+                </Key>
+                <Property Name="ID" Type="Edm.Int64" Nullable="false" />
+                <Property Name="InternalType" Type="Edm.Int32" Nullable="false" />
+                <Property Name="ClientItemKey" Type="Edm.Int32" />
+                <Property Name="LogName" Type="Edm.String" />
+                <Property Name="ProviderName" Type="Edm.String" />
+                <Property Name="ProviderGuid" Type="Edm.Guid" />
+                <Property Name="EventID" Type="Edm.Int32" />
+                <Property Name="EventIdQualifiers" Type="Edm.Int32" />
+                <Property Name="Version" Type="Edm.Int32" />
+                <Property Name="Level" Type="Edm.Int32" />
+                <Property Name="Task" Type="Edm.Int32" />
+                <Property Name="Opcode" Type="Edm.Int32" />
+                <Property Name="Keywords" Type="Edm.Int64" />
+                <Property Name="TimeCreatedSystemTime" Type="Edm.DateTimeOffset" />
+                <Property Name="EventRecordID" Type="Edm.Int64" />
+                <Property Name="ActivityID" Type="Edm.Guid" />
+                <Property Name="RelatedActivityID" Type="Edm.Guid" />
+                <Property Name="Channel" Type="Edm.String" />
+                <Property Name="UserSID" Type="Edm.String" />
+                <Property Name="EventDataXML" Type="Edm.String" />
+                <NavigationProperty Name="Device" Type="Microsoft.ConfigurationManager.ObjectLibrary.Device">
+                    <ReferentialConstraint Property="ClientItemKey" ReferencedProperty="MachineId" />
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="DeviceApplicationTargeting">
+                <Key>
+                    <PropertyRef Name="ModelName" />
+                    <PropertyRef Name="ResourceID" />
+                </Key>
+                <Property Name="ModelName" Type="Edm.String" Nullable="false" />
+                <Property Name="ResourceID" Type="Edm.Int32" Nullable="false" />
+                <NavigationProperty Name="Application" Type="Microsoft.ConfigurationManager.ObjectLibrary.Application" Nullable="false">
+                    <ReferentialConstraint Property="ModelName" ReferencedProperty="ModelName" />
+                </NavigationProperty>
+                <NavigationProperty Name="Device" Type="Microsoft.ConfigurationManager.ObjectLibrary.Device" Nullable="false">
+                    <ReferentialConstraint Property="ResourceID" ReferencedProperty="MachineId" />
+                </NavigationProperty>
+                <NavigationProperty Name="States" Type="Collection(Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationState)" />
+            </EntityType>
+            <EntityType Name="DeviceApplicationState">
+                <Key>
+                    <PropertyRef Name="ModelName" />
+                    <PropertyRef Name="ResourceID" />
+                    <PropertyRef Name="Username" />
+                </Key>
+                <Property Name="ModelName" Type="Edm.String" Nullable="false" />
+                <Property Name="ResourceID" Type="Edm.Int32" Nullable="false" />
+                <Property Name="Username" Type="Edm.String" Nullable="false" />
+                <Property Name="AppState" Type="Microsoft.ConfigurationManager.ObjectLibrary.ApplicationStateType" Nullable="false" />
+                <Property Name="LastUpdateTime" Type="Edm.DateTimeOffset" />
+                <Property Name="AvailableActions" Type="Microsoft.ConfigurationManager.ObjectLibrary.ApplicationAvailableActions" Nullable="false" />
+            </EntityType>
+            <EntityType Name="Application">
+                <Key>
+                    <PropertyRef Name="ModelName" />
+                </Key>
+                <Property Name="ModelName" Type="Edm.String" Nullable="false" />
+                <Property Name="DisplayName" Type="Edm.String" />
+                <Property Name="AdminComments" Type="Edm.String" />
+                <Property Name="Manufacturer" Type="Edm.String" />
+                <Property Name="SoftwareVersion" Type="Edm.String" />
+            </EntityType>
+            <EntityType Name="BoundaryGroup">
+                <Key>
+                    <PropertyRef Name="GroupID" />
+                </Key>
+                <Property Name="GroupID" Type="Edm.Int64" Nullable="false" />
+                <Property Name="Name" Type="Edm.String" />
+            </EntityType>
+            <EntityType Name="BGB_LiveData_Boundary">
+                <Key>
+                    <PropertyRef Name="ResourceID" />
+                    <PropertyRef Name="BoundaryGroupID" />
+                </Key>
+                <Property Name="ResourceID" Type="Edm.Int32" Nullable="false" />
+                <Property Name="BoundaryGroupID" Type="Edm.Int64" Nullable="false" />
+                <NavigationProperty Name="BoundaryGroup" Type="Microsoft.ConfigurationManager.ObjectLibrary.BoundaryGroup" Nullable="false">
+                    <ReferentialConstraint Property="BoundaryGroupID" ReferencedProperty="GroupID" />
+                </NavigationProperty>
+                <NavigationProperty Name="Device" Type="Microsoft.ConfigurationManager.ObjectLibrary.Device" Nullable="false">
+                    <ReferentialConstraint Property="ResourceID" ReferencedProperty="MachineId" />
+                </NavigationProperty>
+            </EntityType>
+            <EnumType Name="ApplicationStateType">
+                <Member Name="Available" Value="0" />
+                <Member Name="Installed" Value="1" />
+                <Member Name="Installing" Value="2" />
+                <Member Name="RequirementsNotMet" Value="3" />
+                <Member Name="Unknown" Value="4" />
+                <Member Name="Error" Value="5" />
+                <Member Name="InstallRequested" Value="6" />
+            </EnumType>
+            <EnumType Name="ApplicationAvailableActions" IsFlags="true">
+                <Member Name="None" Value="0" />
+                <Member Name="Install" Value="1" />
+            </EnumType>
+        </Schema>
+        <Schema Namespace="AdminService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <Function Name="ApproveRequest" IsBound="true">
+                <Parameter Name="bindingParameter" Type="Collection(Microsoft.ConfigurationManager.ObjectLibrary.UserApplicationRequest)" />
+                <Parameter Name="Guid" Type="Edm.String" Unicode="false" />
+                <ReturnType Type="Edm.Int32" Nullable="false" />
+            </Function>
+            <Function Name="DenyRequest" IsBound="true">
+                <Parameter Name="bindingParameter" Type="Collection(Microsoft.ConfigurationManager.ObjectLibrary.UserApplicationRequest)" />
+                <Parameter Name="Guid" Type="Edm.String" Unicode="false" />
+                <ReturnType Type="Edm.Int32" Nullable="false" />
+            </Function>
+            <Action Name="RunCmpivot" IsBound="true">
+                <Parameter Name="bindingParameter" Type="Microsoft.ConfigurationManager.ObjectLibrary.Collection" />
+                <Parameter Name="InputQuery" Type="Edm.String" Unicode="false" />
+            </Action>
+            <Action Name="AddServicePartnersScope" IsBound="true">
+                <Parameter Name="bindingParameter" Type="Microsoft.ConfigurationManager.ObjectLibrary.Collection" />
+                <Parameter Name="ServicePartners" Type="Edm.Int32" Nullable="false" />
+            </Action>
+            <Action Name="RemoveServicePartnersScope" IsBound="true">
+                <Parameter Name="bindingParameter" Type="Microsoft.ConfigurationManager.ObjectLibrary.Collection" />
+                <Parameter Name="ServicePartners" Type="Edm.Int32" Nullable="false" />
+            </Action>
+            <Function Name="IsScopedToServicePartners" IsBound="true">
+                <Parameter Name="bindingParameter" Type="Microsoft.ConfigurationManager.ObjectLibrary.Collection" />
+                <Parameter Name="ServicePartners" Type="Edm.Int32" Nullable="false" />
+                <ReturnType Type="Edm.Boolean" Nullable="false" />
+            </Function>
+            <Action Name="UpdateConsoleHeartbeat" IsBound="true">
+                <Parameter Name="bindingParameter" Type="Collection(Microsoft.ConfigurationManager.ObjectLibrary.ConsoleUsageData)" />
+            </Action>
+            <Action Name="RunCMPivot" IsBound="true">
+                <Parameter Name="bindingParameter" Type="Microsoft.ConfigurationManager.ObjectLibrary.Device" />
+                <Parameter Name="InputQuery" Type="Edm.String" Unicode="false" />
+            </Action>
+            <Function Name="CMPivotResult" IsBound="true">
+                <Parameter Name="bindingParameter" Type="Microsoft.ConfigurationManager.ObjectLibrary.Device" />
+                <Parameter Name="OperationId" Type="Edm.Int32" Nullable="false" />
+                <ReturnType Type="Edm.Boolean" Nullable="false" />
+            </Function>
+            <Function Name="ListCMPivotEntity" IsBound="true">
+                <Parameter Name="bindingParameter" Type="Collection(Microsoft.ConfigurationManager.ObjectLibrary.InventoryClass)" />
+                <ReturnType Type="Edm.Int32" Nullable="false" />
+            </Function>
+            <EntityContainer Name="Container">
+                <EntitySet Name="SensorEventUpdateTime" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.SensorEventUpdateTime" />
+                <EntitySet Name="ConsoleAdminsData" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.ConsoleAdminsData" />
+                <EntitySet Name="HubItems" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.HubItems" />
+                <EntitySet Name="Reports" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.Report" />
+                <EntitySet Name="PowerBIReport" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.PowerBIReport" />
+                <EntitySet Name="SMS_CMPivotStatus" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.SMS_CMPivotStatus" />
+                <EntitySet Name="UserApplicationRequest" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.UserApplicationRequest" />
+                <EntitySet Name="Collections" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.Collection">
+                    <NavigationPropertyBinding Path="ResourceCollectionMembership" Target="ResourceCollectionMembership" />
+                </EntitySet>
+                <EntitySet Name="ConsoleUsageData" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.ConsoleUsageData" />
+                <EntitySet Name="Device" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.Device">
+                    <NavigationPropertyBinding Path="ResourceCollectionMembership" Target="ResourceCollectionMembership" />
+                    <NavigationPropertyBinding Path="Events" Target="MachineEventRawData" />
+                    <NavigationPropertyBinding Path="AvailableApplications" Target="DeviceApplicationTargeting" />
+                    <NavigationPropertyBinding Path="BoundaryGroups" Target="BGB_LiveData_Boundary" />
+                </EntitySet>
+                <EntitySet Name="InventoryClass" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.InventoryClass" />
+                <EntitySet Name="ResourceCollectionMembership" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.ResourceCollectionMembership">
+                    <NavigationPropertyBinding Path="Collection" Target="Collections" />
+                    <NavigationPropertyBinding Path="Device" Target="Device" />
+                </EntitySet>
+                <EntitySet Name="MachineEventRawData" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.MachineEventRawData">
+                    <NavigationPropertyBinding Path="Device" Target="Device" />
+                </EntitySet>
+                <EntitySet Name="DeviceApplicationTargeting" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationTargeting">
+                    <NavigationPropertyBinding Path="Application" Target="Application" />
+                    <NavigationPropertyBinding Path="Device" Target="Device" />
+                    <NavigationPropertyBinding Path="States" Target="DeviceApplicationState" />
+                </EntitySet>
+                <EntitySet Name="DeviceApplicationState" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationState" />
+                <EntitySet Name="Application" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.Application" />
+                <EntitySet Name="BoundaryGroup" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.BoundaryGroup" />
+                <EntitySet Name="BGB_LiveData_Boundary" EntityType="Microsoft.ConfigurationManager.ObjectLibrary.BGB_LiveData_Boundary">
+                    <NavigationPropertyBinding Path="BoundaryGroup" Target="BoundaryGroup" />
+                    <NavigationPropertyBinding Path="Device" Target="Device" />
+                </EntitySet>
+            </EntityContainer>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

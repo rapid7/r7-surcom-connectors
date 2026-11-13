@@ -12,6 +12,9 @@ x-samos-extends-types:
 x-samos-keys:
   - name
 
+required:
+  - name
+
 x-samos-table:
   - name: name
   - name: clusterName

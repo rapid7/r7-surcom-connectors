@@ -7,7 +7,8 @@ x-samos-extends-types:
     subtype-priority: 3
 
 x-samos-keys:
-  - d_id # derived from ClientDbId; unique integer user id, also fulfills User.id
+  - d_id # stringified ClientDbId; fulfills User.id (string)
+  - ClientDbId # int key so CynetEDRHost.users[].ClientDbId can ref directly
 
 required:
   - ClientDbId
@@ -50,11 +51,11 @@ x-samos-detail:
   - name: rdp_to_machines_total
 
 x-samos-derived-properties:
-  d_id: # ClientDbId is integer; derived as string to satisfy User.id
+  d_id: # ClientDbId is integer but User.id and x-samos-keys expect a string
     title: ID
     type: string
     syntax: jmespath
-    value: ClientDbId
+    value: to_string(ClientDbId)
     x-samos-hidden: true
     x-samos-immutable: true
     x-samos-fulfills:
@@ -100,8 +101,9 @@ x-samos-derived-properties:
       property-name: telephone
 
 # Fields sourced from the Cynet Unified API V3 OpenAPI export
-# (https://help.api.cynet.com/docs/API-V3),
-# Users area → GET /api/full/user response schema.
+# (https://help.api.cynet.com/docs/API-V3). Shape matches GET /api/full/user,
+# extended with UserDTO2 PascalCase fields from GET /api/users that are absent
+# from /api/full/user — see fn_import_all.get_users().
 properties:
   username:
     type: string
@@ -154,36 +156,6 @@ properties:
   rdp_to_machines_total:
     type: integer
     title: RDP To Machines (Total)
-  domains:
-    type: array
-    title: Domains
-    description: Domains observed in connection with this user.
-    items:
-      type: object
-      properties:
-        domain_name:
-          type: string
-          title: Domain Name
-        remote_ips:
-          type: array
-          title: Remote IPs
-          items:
-            type: string
-            format: ip-addr
-        first_seen:
-          type: string
-          format: date-time
-          title: First Seen
-        last_seen:
-          type: string
-          format: date-time
-          title: Last Seen
-        av_detections:
-          type: integer
-          title: AV Detections
-        classification:
-          type: string
-          title: Classification
   hosts:
     type: array
     title: Hosts
@@ -198,71 +170,11 @@ properties:
           x-samos-ref-types:
             - type-name: CynetEDRHost
               key-name: d_id
-        risk_level:
-          type: integer
-          title: Risk Level
-        operating_system:
-          type: string
-          title: Operating System
-        last_ms_update:
-          type: string
-          format: date-time
-          title: Last OS Update
-        hd_serial:
-          type: integer
-          title: Disk Serial Number
-        last_scan:
-          type: string
-          format: date-time
-          title: Last Scan
-        last_ip:
-          type: string
-          format: ip-addr
-          title: Last IP
-        last_mask:
-          type: string
-          title: Last Subnet Mask
-        number_of_processes:
-          type: integer
-          title: Process Count
-        number_of_logged_users:
-          type: integer
-          title: Logged-in User Count
-        total_cpu_percentage:
-          type: integer
-          title: CPU Usage (%)
-        system_partition_size:
-          type: integer
-          title: System Partition Size (bytes)
-        system_partition_free_space:
-          type: integer
-          title: System Partition Free Space (bytes)
-        total_memory:
-          type: integer
-          title: Total Memory (bytes)
-        total_free_memory:
-          type: integer
-          title: Free Memory (bytes)
-        memory_percentage:
-          type: integer
-          title: Memory Usage (%)
-        scanGroup:
-          type: object
-          title: Scan Group
-          properties:
-            ScanGroupName:
-              type: string
-              title: Scan Group Name
-            DistributionType:
-              type: string
-              title: Distribution Type
-            PlatformType:
-              type: string
-              title: Platform Type
   ClientDbId:
     type: integer
     title: Client DB ID
     description: Internal Cynet user database identifier (from UserDTO2).
+    x-samos-immutable: true
   DateIn:
     type: string
     format: date-time

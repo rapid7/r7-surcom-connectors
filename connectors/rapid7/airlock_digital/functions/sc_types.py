@@ -13,11 +13,6 @@ class AirlockDigitalAgent(dict):
         super().__init__(type=self.__class__.__name__, content=content)
 
 
-class AirlockDigitalApplication(dict):
-    def __init__(self, content: dict):
-        super().__init__(type=self.__class__.__name__, content=content)
-
-
 class AirlockDigitalGroup(dict):
     def __init__(self, content: dict):
         super().__init__(type=self.__class__.__name__, content=content)

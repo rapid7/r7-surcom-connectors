@@ -3,6 +3,7 @@ SolarWinds Orion API Client
 This module provides a client for interacting with the SolarWinds Orion API.
 """
 
+import base64
 from datetime import datetime
 from logging import Logger
 import orionsdk
@@ -129,14 +130,27 @@ class SolarWindsOrionClient:
         # SWIS queries against large Orion installations can take several minutes
         # to respond. Use a generous read timeout (30 min) to avoid aborting
         # queries that are still processing server-side.
-        self.swis = orionsdk.SwisClient(
+        session = HttpSession(timeout=(30, 2000))
+        # requests' built-in Basic auth uses Latin-1; encode credentials as UTF-8
+        # so usernames or passwords containing characters such as Euro are supported.
+        credentials = (
+            f"{self.settings.get('username')}:{self.settings.get('password')}"
+        ).encode("utf-8")
+        session.headers["Authorization"] = (
+            f"Basic {base64.b64encode(credentials).decode('ascii')}"
+        )
+        # Pass empty strings to SwisClient to prevent it from assigning non-ASCII
+        # credentials to _session.auth, which would trigger requests' Latin-1 codec.
+        self.swis = orionsdk.SwisClient(  # nosec B106 - intentional empty auth
             self.base_url,
-            self.settings.get("username"),
-            self.settings.get("password"),
+            username="",
+            password="",
             verify=self.settings.get("verify_tls"),
-            session=HttpSession(timeout=(30, 2000)),
+            session=session,
             port=self.port,
         )
+        # Ensure _session.auth is None so requests uses the explicit Authorization header.
+        self.swis._session.auth = None
 
     def _swis_query(self, query: str, **params) -> dict:
         """Execute a SWQL query, converting transport/HTTP failures into ValueError.

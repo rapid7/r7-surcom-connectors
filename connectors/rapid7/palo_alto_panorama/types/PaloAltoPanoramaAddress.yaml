@@ -1,0 +1,174 @@
+x-samos-type-name: PaloAltoPanoramaAddress
+x-samos-namespace: palo.alto.panorama
+
+title: Palo Alto Address Object
+description: An address object (IP address, subnet, range, wildcard or FQDN) used in security rules
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.component
+    subtype-priority: 3
+
+$ref: https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-panorama-api/get-started-with-the-pan-os-rest-api#/components/schemas/objects-addresses
+
+x-samos-keys:
+  - x_id
+
+required:
+  - x_id
+
+x-samos-table:
+  - name: '@name'
+  - name: d_address
+  - name: d_address_type
+  - name: description
+  - name: d_scope
+
+x-samos-detail:
+  - name: '@name'
+  - name: d_address_type
+  - name: ip-netmask
+  - name: ip-range
+  - name: ip-wildcard
+  - name: fqdn
+  - name: description
+  - name: d_tags
+  - name: d_scope
+  - name: '@location'
+  - name: x_vsys_id
+  - name: x_device_group_id
+  - name: x_panorama_id
+  - name: x_firewall_id
+
+x-samos-derived-properties:
+  # Table column: shows whichever of netmask, range, wildcard or FQDN the object uses
+  d_address:
+    type: string
+    title: Address
+    syntax: jmespath
+    value: >-
+      "ip-netmask" || "ip-range" || "ip-wildcard" || fqdn || null
+  # Table column: which of the four mutually exclusive address fields the object uses
+  d_address_type:
+    type: string
+    title: Type
+    syntax: jmespath
+    value: >-
+      "ip-netmask" && 'IP Netmask' || "ip-range" && 'IP Range' || "ip-wildcard" && 'IP Wildcard' || fqdn && 'FQDN' || null
+  # Where the object lives: device group, virtual system, or "shared". One column instead of three @-prefixed properties
+  d_scope:
+    type: string
+    title: Scope
+    syntax: jmespath
+    value: >-
+      "@device-group" || "@vsys" || "@location"
+  # Detail view: the tag names as one string, instead of the raw "tag" object
+  d_tags:
+    type: string
+    title: Tags
+    syntax: jmespath
+    value: >-
+      join(', ', tag.member[:10] || `[]`) || null
+
+properties:
+  x_id:
+    type: string
+    title: ID
+    description: Firewall ID, vsys name and object name
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  '@name':
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  # The reference schema only defines these inside a oneOf (one per address type)
+  ip-netmask:
+    type: string
+    title: IP Netmask
+  ip-range:
+    type: string
+    title: IP Range
+  ip-wildcard:
+    type: string
+    title: IP Wildcard
+  fqdn:
+    type: string
+    title: FQDN
+    x-samos-ref-types:
+      - type-name: Domain
+        key-name: value
+  # Set by the connector when ip-netmask holds a single host (no mask, /32 or /128)
+  x_ip_address:
+    type: string
+    format: ip-addr
+    title: IP Address
+    x-samos-hidden: true
+    x-samos-ref-types:
+      - type-name: IpAddress
+        key-name: value
+  x_vsys_id:
+    type: string
+    title: Virtual System
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaVirtualSystem
+        key-name: x_id
+  x_device_group_id:
+    type: string
+    title: Device Group
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaDeviceGroup
+        key-name: x_id
+  # The vsys or device group that holds the object, or for "shared", Panorama or the firewall
+  x_parent_id:
+    type: string
+    title: Parent
+    x-samos-hidden: true
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaVirtualSystem
+        key-name: x_id
+      - type-name: PaloAltoPanoramaDeviceGroup
+        key-name: x_id
+      - type-name: PaloAltoPanoramaServer
+        key-name: x_id
+      - type-name: PaloAltoPanoramaFirewall
+        key-name: x_id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+  # Set for objects in "shared" on Panorama
+  x_panorama_id:
+    type: string
+    title: Panorama
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaServer
+        key-name: x_id
+  # Set for objects in "shared" on a firewall read directly
+  x_firewall_id:
+    type: string
+    title: Firewall
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaFirewall
+        key-name: x_id
+  '@location':
+    type: string
+    title: Location
+  '@vsys':
+    type: string
+    title: Virtual System Name
+  '@device-group':
+    type: string
+    title: Device Group Name
+  tag:
+    type: object
+    title: Tags (raw)
+    x-samos-hidden: true

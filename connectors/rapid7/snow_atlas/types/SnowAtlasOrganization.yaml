@@ -12,6 +12,9 @@ $ref: https://example4.githubusercontent.com/SnowSoftware/snowatlas-integrations
 x-samos-keys:
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: isLegal

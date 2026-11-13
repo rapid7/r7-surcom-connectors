@@ -1,0 +1,31 @@
+[
+  {
+    "id": "0",
+    "value": "Unknown"
+  },
+  {
+    "id": "1",
+    "value": "Normal",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "2",
+    "value": "Unreachable",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "3",
+    "value": "Unsupported Version",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "4",
+    "value": "Out of Synchronization",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "5",
+    "value": "Synchronization in Progress",
+    "map_to": "OperationalStatus: Operational"
+  }
+]

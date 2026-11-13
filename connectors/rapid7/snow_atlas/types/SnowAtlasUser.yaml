@@ -12,6 +12,9 @@ $ref: https://example3.githubusercontent.com/SnowSoftware/snowatlas-integrations
 x-samos-keys:
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: userName
   - name: fullName

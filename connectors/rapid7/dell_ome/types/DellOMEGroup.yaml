@@ -1,0 +1,167 @@
+x-samos-type-name: DellOMEGroup
+x-samos-namespace: dell.ome
+title: Dell OpenManage Enterprise Group
+description: A structural group in Dell OpenManage Enterprise that organizes devices, modeling root and nested groups as the same resource via a self-referencing ParentId edge.
+
+x-samos-extends-types:
+  - type-name: core.component-group
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id
+
+required:
+  - Id
+
+x-samos-table:
+  - name: Name
+  - name: Description
+  - name: CreatedBy
+  - name: UpdatedBy
+  - name: CreationTime
+  - name: UpdatedTime
+
+x-samos-detail:
+  - name: Name
+  - name: Description
+  - name: TypeId
+  - name: MembershipTypeId
+  - name: GlobalStatus
+  - name: DefinitionId
+  - name: DefinitionDescription
+  - name: Visible
+  - name: x_member_device_ids
+  - name: CreatedBy
+  - name: UpdatedBy
+  - name: CreationTime
+  - name: UpdatedTime
+
+x-samos-derived-properties:
+  d_id:
+    title: Object ID
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: 'Id'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_parent_id:
+    # ParentId is 0 for root groups; returns null so no parent edge is created.
+    title: Parent Group
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'ParentId != `0` && ParentId || null'
+    x-samos-ref-types:
+      - type-name: DellOMEGroup
+        key-name: d_id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+properties:
+  Id:
+    title: Id
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+
+  Name:
+    title: Group Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  Description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  GlobalStatus:
+    title: Global Status Code
+    type: string
+    description: >-
+      Rollup health of the group. From GET /api/DeviceService/DeviceStatuses:
+      1000 = Normal, 2000 = Unknown, 3000 = Warning, 4000 = Critical,
+      5000 = No Status (device/group has no valid status).
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: operational_status
+    x-samos-ref-types:
+      - type-name: DellOMEStatus
+        key-name: id
+
+  ParentId:
+    title: Parent Group ID
+    type: integer
+    x-samos-hidden: true
+
+  CreationTime:
+    title: Creation Time
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  UpdatedTime:
+    title: Updated Time
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  CreatedBy:
+    title: Created By
+    type: string
+
+  UpdatedBy:
+    title: Updated By
+    type: string
+
+  Visible:
+    title: Visible?
+    type: boolean
+
+  DefinitionId:
+    title: Definition ID
+    type: integer
+
+  DefinitionDescription:
+    title: Definition Description
+    type: string
+
+  TypeId:
+    title: Group Type Code
+    type: integer
+    description: >-
+      Vendor-defined group type code: 1000 = Internal, 2000 = Predefined,
+      3000 = User defined, 4000 = Discovery defined, 5000 = MCM group.
+
+  MembershipTypeId:
+    title: Membership Type Code
+    type: integer
+    description: >-
+      Vendor-defined group membership type code: 12 = Static, 24 = Dynamic.
+
+  x_member_device_ids:
+    # Injected in fn_import_all.py from `/GroupService/Groups(Id)/Devices`.
+    # Dell OME devices don't carry a reverse group-id field, so group
+    # membership can only be resolved from the group side.
+    title: Device Members
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: DellOMEDevice
+          key-name: d_id
+    x-samos-fulfills:
+      type-name: core.component-group
+      property-name: members

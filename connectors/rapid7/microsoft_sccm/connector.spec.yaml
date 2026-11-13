@@ -1,0 +1,147 @@
+id: microsoft.sccm
+name: Microsoft SCCM
+author: Rapid7
+version: 2.2.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Update dependencies
+
+reference-schemas:
+  - url: https://localhost/adminservice/v1.0/metadata
+    file: refdocs/devices.json
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - MicrosoftSccmDevice
+  - MicrosoftSccmCollection
+  - MicrosoftSccmSite # deprecated, replaced by MicrosoftSccmSite2
+  - MicrosoftSccmSite2
+  - MicrosoftSccmCollectionMember
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+    # We set this for legacy reasons. It must be the same as the original function id
+    legacy_id: microsoft.sccm.test
+
+  - id: import_all
+    # We set this for legacy reasons. When migrating a connector to this framework, the function id
+    # must match the old import workflow id
+    legacy_id: microsoft.sccm.ingest.all
+    title: Microsoft SCCM Inventory
+    description: Imports Microsoft SCCM Sites, Collections, Devices, and Collection Members
+    return_types:
+      - MicrosoftSccmSite2
+      - MicrosoftSccmCollection
+      - MicrosoftSccmDevice
+      - MicrosoftSccmCollectionMember
+
+# Configuration settings for this connector.
+settings:
+  host:
+    title: Hostname or IP Address
+    type: string
+    example: sccm-host.corp.example.com
+    description: >-
+      Hostname or IP Address of the SCCM instance (not a URL).
+    nullable: false
+
+  username:
+    title: Username
+    type: string
+    description: >-
+      The username to use during authentication. This will be combined with the Windows Domain setting to
+      from a domain\user login.
+    example: jsmith
+    nullable: false
+
+  password:
+    title: Password
+    type: string
+    format: password
+    description: The password for the provided username.
+    nullable: false
+
+  domain:
+    title: Windows Domain
+    type: string
+    description: The NETBIOS name of the Windows Domain for the provided username.
+    example: CORP
+    nullable: false
+
+  auth_method:
+    title: Authentication Method
+    type: string
+    description: >-
+      The method used to authenticate with SCCM. Kerberos is only supported when running
+      the connector on a Rapid7 Orchestrator. Defaults to NTLM.
+    enum:
+      - NTLM
+      - Kerberos
+    default: NTLM
+    nullable: true
+
+  kerberos_realm:
+    title: Kerberos Realm
+    type: string
+    description: >-
+      Required when using Kerberos. The DNS name of the Active Directory domain for the provided username.
+    example: CORP.EXAMPLE.COM
+    nullable: true
+
+  kdc:
+    title: Kerberos KDC
+    type: string
+    description: >-
+      Optional when using Kerberos. The hostname or IP Address of a Domain Controller to use as the Kerberos
+      Key Distribution Center (KDC). If not set, the KDC is discovered using DNS.
+    example: dc1.corp.example.com
+    nullable: true
+
+  device_last_seen_days:
+    title: Device Last Seen Days
+    type: integer
+    description: >-
+      Only import Devices whose Last Active Time is within this many days. Leave blank to import all Devices.
+      Devices without a Last Active Time are not imported when this is set.
+    example: 30
+    nullable: true
+
+  verify:
+    title: Verify TLS?
+    type: boolean
+    description: >-
+      If enabled, verify the server's identity
+    default: true
+    nullable: false
+
+# Runtime platform for this connector.
+runtime: py311
+
+# List any Python dependencies available on PyPI that are required by this connector.
+# `codegen` will generate a `requirements.txt` file with pinned versions of these dependencies.
+python_dependencies:
+  - requests-ntlm
+
+# Categories for this connector in the Extension Library.
+categories:
+  - endpoint_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: true
+
+# These are pip dependencies that are only installed on the Orchestrator and not in SaaS
+orchestrator_python_dependencies:
+  - requests_gssapi
+
+orchestrator_os_level_dependencies:
+  - gcc # gssapi has no Linux wheel, so pip compiles it from source
+  - libkrb5-dev # provides the `krb5-config` script and MIT Kerberos headers the gssapi build needs
+  - krb5-user # provides kinit / klist / kdestroy

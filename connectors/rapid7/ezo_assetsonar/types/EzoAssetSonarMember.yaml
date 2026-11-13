@@ -9,6 +9,9 @@ x-samos-keys:
   - id
   - email # To reference assigned_to_user_email in AssetSonarAsset type
 
+required:
+  - id
+
 x-samos-table:
   - name: email
   - name: full_name

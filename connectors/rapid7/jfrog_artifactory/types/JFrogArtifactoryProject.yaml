@@ -11,6 +11,9 @@ x-samos-extends-types:
 x-samos-keys:
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: display_name
   - name: project_key

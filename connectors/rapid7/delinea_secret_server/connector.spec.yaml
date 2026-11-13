@@ -1,11 +1,12 @@
 id: delinea.secret.server
 name: Delinea Secret Server
 author: Rapid7
-version: 1.2.0
+version: 1.3.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Implemented on-prem and cloud authentication for Delinea Secret Server API
+  - Update dependencies
+  - Mark key properties as required in the type schemas
 
 types:
   - DelineaSecretServerUser

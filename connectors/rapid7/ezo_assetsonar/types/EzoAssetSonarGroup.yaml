@@ -10,6 +10,9 @@ x-samos-keys:
   - d_id # derived property to string type as id is of integer type in response to fulfill core.component.id
   - id # To use it for reference in EzoAssetSonarAsset type
 
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: description

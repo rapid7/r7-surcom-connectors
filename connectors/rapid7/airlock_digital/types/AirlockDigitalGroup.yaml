@@ -8,6 +8,9 @@ x-samos-extends-types:
 x-samos-keys:
   - groupid
 
+required:
+  - groupid
+
 x-samos-supernode: true
 
 x-samos-table:

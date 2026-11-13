@@ -1,0 +1,62 @@
+x-samos-type-name: CscGlobalDomainsecBusinessUnit
+x-samos-namespace: csc.global.domainsec
+title: CSC Global DomainSec Business Unit
+description: A business unit defined on a CSC Global DomainSec account, used to attribute domains and certificates to the part of the organization that owns them.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Organization
+    subtype-priority: 2
+
+x-samos-keys:
+  - x_business_unit_id
+
+required:
+  - x_business_unit_id
+  - businessUnitName
+
+x-samos-table:
+  - name: businessUnitName
+  - name: usage
+  - name: account.accountName
+
+x-samos-detail:
+  - name: businessUnitName
+  - name: usage
+  - name: account
+
+properties:
+  x_business_unit_id:
+    type: string
+    title: Business Unit ID
+    description: The account number and business unit name, which together identify the business unit.
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+
+  businessUnitName:
+    type: string
+    title: Business Unit Name
+    description: Name of the business unit, unique within the CSC account.
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  usage:
+    type: array
+    title: Usage
+    description: The CSC services this business unit is used for.
+    items:
+      type: string
+
+  account:
+    type: object
+    title: Account
+    properties:
+      accountNumber:
+        type: string
+        title: Account Number
+      accountName:
+        type: string
+        title: Account Name

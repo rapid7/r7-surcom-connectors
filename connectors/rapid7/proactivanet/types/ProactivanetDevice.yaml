@@ -12,6 +12,9 @@ x-samos-extends-types:
 x-samos-keys:
   - Id
 
+required:
+  - Id
+
 x-samos-table:
   - name: Hostname
   - name: Code

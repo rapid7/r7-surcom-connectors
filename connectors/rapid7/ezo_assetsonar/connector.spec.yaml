@@ -1,13 +1,12 @@
 id: ezo.assetsonar
 name: EZO AssetSonar
 author: Rapid7
-version: 1.1.0
+version: 1.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Fix schema type mismatches in EzoAssetSonarMember
-  - Add undeclared API fields to EzoAssetSonarAsset
-  - Pin dependencies
+  - Update dependencies
+  - Mark key properties as required in the type schemas
 
 types:
   - EzoAssetSonarAsset
@@ -45,10 +44,6 @@ settings:
 
 # Runtime platform for this connector.
 runtime: py311
-
-python_dependencies:
-  # Pin certifi to match insightconnect-plugin-runtime (orchestrator) constraint.
-  - certifi==2026.4.22
 
 # Categories for this connector in the Extension Library.
 categories:

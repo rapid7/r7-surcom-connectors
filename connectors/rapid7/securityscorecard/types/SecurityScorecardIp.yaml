@@ -11,6 +11,9 @@ x-samos-extends-types:
 x-samos-keys:
   - ip
 
+required:
+  - ip
+
 x-samos-table:
   - name: ip
   - name: status

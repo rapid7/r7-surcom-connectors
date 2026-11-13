@@ -1,13 +1,14 @@
 id: cribl
 name: Cribl
 author: Rapid7
-version: 1.3.0
+version: 1.4.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Update `test` function to return "error" status instead of "failure"
+  - Update dependencies
+  - Mark key properties as required in the type schemas
 
 # IDs of Surface Command types in this connector.
 # Type IDs must be unique across all connectors. Prefix each with a SnakeCaked

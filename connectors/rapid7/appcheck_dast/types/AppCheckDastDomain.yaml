@@ -12,6 +12,9 @@ x-samos-keys:
   - domain
   - d_id
 
+required:
+  - domain
+
 x-samos-table:
   - name: domain
 

@@ -1,0 +1,412 @@
+x-samos-type-name: PaloAltoPanoramaFirewall
+x-samos-namespace: palo.alto.panorama
+
+title: Palo Alto Firewall
+description: A Palo Alto Networks next-generation firewall running PAN-OS, read directly or from Panorama
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 5
+
+x-samos-keys:
+  - x_id
+
+required:
+  - x_id
+
+x-samos-table:
+  - name: hostname
+  - name: ip-address
+  - name: model
+  - name: sw-version
+  - name: x_id
+    label: Serial Number / VM UUID
+  - name: connected
+  - name: x_device_group_ids
+
+x-samos-detail:
+  - name: hostname
+  - name: devicename
+  - name: ip-address
+  - name: ipv6-address
+  - name: public-ip-address
+  - name: d_mac_addresses
+  - name: connected
+  - name: x_panorama_id
+  - name: x_device_group_ids
+  - name: model
+  - name: family
+  - name: serial
+  - name: sw-version
+  - name: operational-mode
+  - name: multi-vsys
+  - name: app-version
+  - name: threat-version
+  - name: av-version
+  - name: wildfire-version
+  - name: url-filtering-version
+  - name: device-certificate-status
+  - name: vm-mode
+  - name: vm-license
+  - name: plugin_versions
+  - name: uptime
+  - name: connected-at
+
+x-samos-derived-properties:
+  # Combines the management IPv4, IPv6 and public addresses into the single list Machine:ips needs ("unknown" is dropped)
+  d_ips:
+    type: array
+    items:
+      type: string
+      format: ip-addr
+    syntax: jmespath
+    value: '["ip-address", "ipv6-address", "public-ip-address"][?@ && @ != ''unknown'']'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  # Panorama reports the MAC as "mac-addr" and a firewall read directly as "mac-address", so one list covers both
+  d_mac_addresses:
+    type: array
+    items:
+      type: string
+      format: mac-addr
+    syntax: jmespath
+    value: '["mac-address", "mac-addr"][?@]'
+    title: Management MAC Address
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+
+  # "connected" is only reported by Panorama; a firewall read directly is reachable
+  d_active:
+    type: boolean
+    syntax: jmespath
+    value: "!connected || connected == 'yes'"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  # "devicename" is only reported when reading the firewall directly
+  d_name:
+    type: string
+    syntax: jmespath
+    value: 'devicename || hostname || x_id'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  # Unlicensed VM-Series report serial "unknown", which must not be used for correlation
+  d_serial_number:
+    type: string
+    syntax: jmespath
+    value: "serial != 'unknown' && serial || null"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+
+  # Firewalls that keep their default hostname (the model, e.g. "PA-VM") must not correlate on it
+  d_qualified_hostname:
+    type: string
+    syntax: jmespath
+    value: "hostname && contains(hostname, '.') && hostname != model && hostname || null"
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  # Counterpart of d_qualified_hostname for hostnames without a domain part
+  d_unqualified_hostname:
+    type: string
+    syntax: jmespath
+    value: "hostname && !contains(hostname, '.') && hostname != model && hostname || null"
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  # Constant: every device imported by this connector is made by Palo Alto Networks
+  d_make:
+    type: string
+    syntax: expression
+    value: 'Palo Alto Networks'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+
+  # Constant: the source has no type field, and a plain string constant cannot be fulfilled from a property
+  d_asset_type:
+    type: string
+    syntax: expression
+    value: 'Firewall'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  # Constant: asset class is an enum reference, so the value must carry the enum prefix
+  d_asset_class:
+    type: string
+    syntax: expression
+    value: 'MachineAssetClass: Network'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_class
+    x-samos-ref-types:
+      - key-name: id
+        type-name: NoeticEnumMachineAssetClass
+
+  # Constant: the operating system of every device is PAN-OS
+  d_os_product:
+    type: string
+    syntax: expression
+    value: 'PAN-OS'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_product
+
+  # Constant enum reference for the OS family, so the firewall groups with other PAN-OS devices
+  d_os_family:
+    type: string
+    syntax: jmespath
+    value: '`OSFamily: PAN-OS`'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_family
+    x-samos-ref-types:
+      - key-name: id
+        type-name: NoeticEnumOSFamily
+
+  # Display name of the operating system, "PAN-OS <version>" (e.g. "PAN-OS 10.1.0")
+  d_operating_system:
+    type: string
+    syntax: jmespath
+    value: 'join('' '', [''PAN-OS'', "sw-version"][?@])'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  # VM-Series firewalls report family "vm"; Machine:virtual needs a boolean
+  d_virtual:
+    type: boolean
+    syntax: jmespath
+    value: "family == 'vm'"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: virtual
+
+properties:
+  x_id:
+    type: string
+    title: ID
+    description: Serial number, or the VM UUID when the serial number is unknown
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  hostname:
+    type: string
+    title: Hostname
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+  devicename:
+    type: string
+    title: Device Name
+  ip-address:
+    type: string
+    title: Management IP Address
+  netmask:
+    type: string
+    title: Management Netmask
+  default-gateway:
+    type: string
+    title: Management Default Gateway
+  is-dhcp:
+    type: string
+    title: DHCP
+  public-ip-address:
+    type: string
+    title: Public IP Address
+  ipv6-address:
+    type: string
+    title: Management IPv6 Address
+  ipv6-link-local-address:
+    type: string
+    title: Management IPv6 Link Local Address
+  mac-address:
+    type: string
+    title: Management MAC Address
+    x-samos-hidden: true
+  # Properties below are reported by Panorama ("show devices all") for its managed firewalls
+  mac-addr:
+    type: string
+    title: Management MAC Address
+    x-samos-hidden: true
+  connected:
+    type: string
+    title: Connected to Panorama
+  connected-at:
+    type: string
+    title: Connected to Panorama At
+  deactivated:
+    type: string
+    title: Deactivated
+  unsupported-version:
+    type: string
+    title: Unsupported Version
+  ha:
+    type: object
+    title: High Availability
+  certificate-expiry:
+    type: string
+    title: Certificate Expiry
+  # Set when the firewall is read from Panorama
+  x_panorama_id:
+    type: string
+    title: Managed By
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaServer
+        key-name: x_id
+  x_device_group_ids:
+    type: array
+    title: Device Groups
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: PaloAltoPanoramaDeviceGroup
+          key-name: x_id
+  uptime:
+    type: string
+    title: Uptime
+  family:
+    type: string
+    title: Family
+  platform-family:
+    type: string
+    title: Platform Family
+  model:
+    type: string
+    title: Model
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+  serial:
+    type: string
+    title: Serial Number
+  sw-version:
+    type: string
+    title: PAN-OS Version
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+  operational-mode:
+    type: string
+    title: Operational Mode
+  multi-vsys:
+    type: string
+    title: Multi-VSYS
+  cloud-mode:
+    type: string
+    title: Cloud Mode
+  vpn-disable-mode:
+    type: string
+    title: VPN Disable Mode
+  device-certificate-status:
+    type: string
+    title: Device Certificate Status
+  vm-uuid:
+    type: string
+    title: VM UUID
+    x-samos-correlation:
+      correlation-key: Machine.hardware-id
+      correlation-type: Machine
+      priority: 3
+  vm-license:
+    type: string
+    title: VM License
+  vm-cap-tier:
+    type: string
+    title: VM Capacity Tier
+  vm-cores:
+    type: string
+    title: VM Cores
+  vm-mem:
+    type: string
+    title: VM Memory
+  vm-mode:
+    type: string
+    title: VM Mode
+  app-version:
+    type: string
+    title: Application Version
+  threat-version:
+    type: string
+    title: Threat Version
+  av-version:
+    type: string
+    title: Antivirus Version
+  wildfire-version:
+    type: string
+    title: WildFire Version
+  wildfire-rt:
+    type: string
+    title: WildFire Real-Time
+  wf-private-version:
+    type: string
+    title: WildFire Private Version
+  wf-private-release-date:
+    type: string
+    title: WildFire Private Release Date
+  url-db:
+    type: string
+    title: URL Database
+  url-filtering-version:
+    type: string
+    title: URL Filtering Version
+  device-dictionary-version:
+    type: string
+    title: Device Dictionary Version
+  device-dictionary-release-date:
+    type: string
+    title: Device Dictionary Release Date
+  global-protect-client-package-version:
+    type: string
+    title: GlobalProtect Client Package Version
+  global-protect-datafile-version:
+    type: string
+    title: GlobalProtect Data File Version
+  global-protect-datafile-release-date:
+    type: string
+    title: GlobalProtect Data File Release Date
+  global-protect-clientless-vpn-version:
+    type: string
+    title: GlobalProtect Clientless VPN Version
+  logdb-version:
+    type: string
+    title: Log Database Version
+  # "entry" is a list, or a single object when only one plugin is installed (XML conversion)
+  plugin_versions:
+    type: object
+    title: Plugin Versions

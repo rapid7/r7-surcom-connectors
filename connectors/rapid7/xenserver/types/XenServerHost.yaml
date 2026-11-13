@@ -1,0 +1,450 @@
+x-samos-type-name: XenServerHost
+x-samos-namespace: xenserver
+title: XenServer Host
+description: A physical server running the XenServer hypervisor.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - uuid
+
+required:
+  - uuid
+
+x-samos-table:
+  - name: name_label
+  - name: address
+  - name: software_version.product_version
+  - name: enabled
+  - name: latest_synced_updates_applied
+
+x-samos-detail:
+  - name: name_label
+  - name: name_description
+  - name: tags
+  - name: hostname
+  - name: address
+  - name: x_hostnames
+  - name: x_ips
+  - name: x_mac_addresses
+  - name: x_pool_uuid
+  - name: software_version
+  - name: API_version_major
+  - name: API_version_minor
+  - name: edition
+  - name: cpu_info
+  - name: x_cpu_count
+  - name: x_memory_total
+  - name: bios_strings
+  - name: x_serial_number
+  - name: x_asset_type
+  - name: x_virtual
+  - name: x_network_interfaces
+  - name: x_network_uuids
+  - name: x_storage_repository_uuids
+  - name: enabled
+  - name: x_live
+  - name: ssh_enabled
+  - name: https_only
+  - name: secure_boot
+  - name: tls_verification_enabled
+  - name: latest_synced_updates_applied
+  - name: last_software_update
+  - name: x_pending_reboot
+  - name: uuid
+
+x-samos-derived-properties:
+  # Machine.operating_system needs the product brand and version in one string, e.g. "XenServer 9.0.0"
+  d_operating_system:
+    type: string
+    value: "join(' ', [software_version.product_brand, software_version.product_version] | [?@])"
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  # M1046 - Boot Integrity: the host booted in UEFI Secure Boot mode (host.secure_boot)
+  # M1051 - Update Software: host is up to date with the updates synced from the XenServer CDN
+  d_mitigations:
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    value: >-
+      [
+        secure_boot == `true` && 'M1046' || null,
+        latest_synced_updates_applied == 'yes' && 'M1051' || null
+      ] | [?@]
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  uuid:
+    title: UUID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name_label:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  name_description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  hostname:
+    title: Hostname
+    type: string
+
+  address:
+    title: Management Address
+    description: The address other pool hosts use to reach this host. It can be an IP address or a hostname.
+    type: string
+
+  enabled:
+    title: Enabled?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  edition:
+    title: Edition
+    type: string
+
+  tags:
+    title: Tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: XenServerSourceTag
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+
+  API_version_major:
+    title: API Version Major
+    type: integer
+
+  API_version_minor:
+    title: API Version Minor
+    type: integer
+
+  software_version:
+    title: Software Version
+    type: object
+    properties:
+      product_brand:
+        title: Product Brand
+        type: string
+      product_version:
+        title: Product Version
+        type: string
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: os_version
+      product_version_text:
+        title: Product Version Text
+        type: string
+      build_number:
+        title: Build Number
+        type: string
+      platform_name:
+        title: Platform Name
+        type: string
+      platform_version:
+        title: Platform Version
+        type: string
+      xapi:
+        title: XAPI Version
+        type: string
+      xen:
+        title: Xen Version
+        type: string
+
+  cpu_info:
+    title: CPU Info
+    type: object
+    properties:
+      cpu_count:
+        title: CPU Count
+        type: string
+      socket_count:
+        title: Socket Count
+        type: string
+      vendor:
+        title: Vendor
+        type: string
+      modelname:
+        title: Model Name
+        type: string
+      speed:
+        title: Speed (MHz)
+        type: string
+
+  bios_strings:
+    title: BIOS Strings
+    type: object
+    properties:
+      bios-vendor:
+        title: BIOS Vendor
+        type: string
+      bios-version:
+        title: BIOS Version
+        type: string
+      system-manufacturer:
+        title: System Manufacturer
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: make
+      system-product-name:
+        title: System Product Name
+        type: string
+        x-samos-fulfills:
+          type-name: core.managed.asset
+          property-name: model
+      system-serial-number:
+        title: System Serial Number
+        type: string
+
+  ssh_enabled:
+    title: SSH Enabled?
+    type: boolean
+
+  https_only:
+    title: HTTPS Only?
+    type: boolean
+
+  secure_boot:
+    title: Secure Boot?
+    type: boolean
+
+  tls_verification_enabled:
+    title: TLS Verification Enabled?
+    type: boolean
+
+  latest_synced_updates_applied:
+    title: Latest Updates Applied
+    type: string
+    enum:
+      - 'yes'
+      - 'no'
+      - unknown
+
+  x_pending_reboot:
+    title: Pending Reboot?
+    description: >-
+      True if the mandatory or recommended guidance after applying updates says to reboot the host
+      (pending_guidances or pending_guidances_recommended contains a reboot_host value).
+    type: boolean
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: pending_reboot
+
+  last_software_update:
+    title: Last Software Update
+    type: string
+    format: date-time
+
+  x_cpu_count:
+    title: CPU Count
+    description: Number of physical CPUs (cpu_info.cpu_count as a number).
+    type: integer
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: cpus
+
+  x_network_uuids:
+    title: Networks
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: XenServerNetwork
+          key-name: uuid
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: network
+
+  x_virtual:
+    title: Virtual?
+    description: Always false; a host is a bare-metal hypervisor.
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: virtual
+
+  x_asset_type:
+    title: Asset Type
+    description: Always Hypervisor.
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  x_memory_total:
+    title: Total Memory (bytes)
+    type: integer
+
+  x_live:
+    title: Live?
+    type: boolean
+
+  x_pool_uuid:
+    title: Pool
+    type: string
+    x-samos-ref-types:
+      - type-name: XenServerPool
+        key-name: uuid
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+  x_storage_repository_uuids:
+    title: Storage Repositories
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: XenServerStorageRepository
+          key-name: uuid
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: storage
+
+  x_hostnames:
+    title: Hostnames
+    description: The host's hostname, and its management address when that address is not an IP address.
+    type: array
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  x_unqualified_hostnames:
+    title: Unqualified Hostnames
+    description: Short names, including the first label of each fully qualified name.
+    type: array
+    x-samos-hidden: true
+    items:
+      type: string
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  x_fqdns:
+    title: Fully Qualified Names
+    description: Names that contain a dot.
+    type: array
+    x-samos-hidden: true
+    items:
+      type: string
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 4
+
+  x_serial_number:
+    title: Serial Number
+    description: The system serial number from SMBIOS, omitted when it is empty or an OEM placeholder.
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+
+  x_ips:
+    title: IP Addresses
+    description: The management address when it is an IP address, and the addresses of the physical interfaces.
+    type: array
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  x_mac_addresses:
+    title: MAC Addresses
+    type: array
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+
+  x_network_interfaces:
+    title: Physical Interfaces
+    type: array
+    items:
+      type: object
+      properties:
+        device:
+          title: Device
+          type: string
+        MAC:
+          title: MAC
+          type: string
+          format: mac-addr
+        IP:
+          title: IP
+          type: string
+          format: ip-addr
+        netmask:
+          title: Netmask
+          type: string
+        gateway:
+          title: Gateway
+          type: string
+          format: ip-addr
+        IPv6:
+          title: IPv6
+          type: array
+          items:
+            type: string
+        VLAN:
+          title: VLAN
+          type: integer
+        management:
+          title: Management?
+          type: boolean
+        physical:
+          title: Physical?
+          type: boolean
+        currently_attached:
+          title: Currently Attached?
+          type: boolean
+        x_network_uuid:
+          title: Network
+          type: string

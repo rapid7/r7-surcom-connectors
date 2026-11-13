@@ -1,11 +1,11 @@
 id: upguard
 name: UpGuard
 author: Rapid7
-version: 1.0.0
+version: 1.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Initial release
+  - Update dependencies
 
 reference-schemas:
   - url: https://demo.upguard.com/api/docs
@@ -58,10 +58,18 @@ functions:
 
 # Configuration settings for this connector.
 settings:
+  url:
+    type: string
+    title: Base URL
+    description: Base URL for the UpGuard CyberRisk API. Use your regional endpoint if UpGuard routes your tenant to a regional host.
+    example: https://au.cyber-risk.upguard.com/api/public
+    default: https://cyber-risk.upguard.com/api/public
+    nullable: true
+
   api_key:
     type: string
     title: API Key
-    description: API key for authenticating with the UpGuard CyberRisk API at cyber-risk.upguard.com
+    description: API key for authenticating with the UpGuard CyberRisk API
     format: password
 
   min_risk_severity:

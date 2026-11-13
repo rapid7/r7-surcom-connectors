@@ -10,6 +10,9 @@ x-samos-extends-types:
 x-samos-keys:
   - id
 
+required:
+  - id
+
 x-samos-global-zone: true
 x-samos-default-hide-from-graph: true
 x-samos-hidden: true

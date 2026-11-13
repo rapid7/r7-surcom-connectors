@@ -13,7 +13,7 @@ Settings = TypedDict('Settings', {
     'url': str,
     'jwt_token': str,
     'verify': bool,
-    'username': str,
-    'password': str,
+    'username': Optional[str],
+    'password': Optional[str],
     'page_size': Optional[int],
 })

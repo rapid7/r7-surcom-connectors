@@ -11,6 +11,9 @@ x-samos-extends-types:
 x-samos-keys:
   - Id
 
+required:
+  - Id
+
 x-samos-table:
   - name: Name
   - name: Path

@@ -1,0 +1,162 @@
+x-samos-type-name: UkgProCompany
+x-samos-namespace: ukg.pro
+title: UKG Pro Company
+description: >-
+  A master or component company configured in UKG Pro, returned by the
+  Company Details.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Organization
+    subtype-priority: 3
+
+x-samos-keys:
+  - companyID
+
+required:
+  - companyID
+
+x-samos-table:
+  - name: companyName
+  - name: companyCode
+  - name: isMasterCompany
+  - name: addressCity
+  - name: addressState
+  - name: addressZipCode
+  - name: addressCountry
+
+x-samos-detail:
+  - name: companyName
+  - name: companyCode
+  - name: isMasterCompany
+  - name: masterCompanyId
+  - name: d_org_level_refs
+  - name: addressLine1
+  - name: addressLine2
+  - name: addressCity
+  - name: addressState
+  - name: addressZipCode
+  - name: addressCountry
+  - name: addressCounty
+  - name: phoneNumber
+  - name: phoneNumberExtension
+
+x-samos-derived-properties:
+  d_org_level_refs:
+    # UKG returns up to four separate org-level codes, while UkgProDepartment is keyed
+    # by "{level}-{code}". One array (skipping empty levels) links the company to the org levels
+    # it sits in, replacing four reference properties. It does not fulfill core.owned-entity:owners or
+    # technical_owners because an org level is where a company sits in the hierarchy, not who is
+    # responsible for it.
+    title: Org Level Groups
+    type: array
+    description: This company includes org level references for the company.
+    syntax: jmespath
+    value: "[orgLevel1Code && join('-', ['1', orgLevel1Code]), orgLevel2Code && join('-', ['2', orgLevel2Code]), orgLevel3Code && join('-', ['3', orgLevel3Code]), orgLevel4Code && join('-', ['4', orgLevel4Code])][?@]"
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: UkgProDepartment
+          key-name: d_group_id
+
+properties:
+  companyID:
+    title: Company ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+
+  companyCode:
+    title: Company Code
+    type: string
+
+  companyName:
+    title: Company Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  isMasterCompany:
+    title: Master Company?
+    type: boolean
+    description: Whether this is a UKG Pro Master Company.
+
+  masterCompanyId:
+    title: Master Company
+    type: string
+    x-samos-ref-types:
+      - type-name: UkgProCompany
+        key-name: companyID
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+
+  addressLine1:
+    title: Address Line 1
+    type: string
+
+  addressLine2:
+    title: Address Line 2
+    type: string
+
+  addressCity:
+    title: City
+    type: string
+
+  addressState:
+    title: State
+    type: string
+
+  addressZipCode:
+    title: Postal Code
+    type: string
+
+  addressCountry:
+    title: Country
+    type: string
+    x-samos-ref-types:
+      - type-name: NoeticEnumCountry
+        key-name: alpha_3_id
+
+  addressCounty:
+    title: County
+    type: string
+
+  phoneNumber:
+    title: Phone Number
+    type: string
+
+  phoneNumberExtension:
+    title: Phone Number Extension
+    type: string
+
+  federalTaxId:
+    title: Federal Tax ID
+    type: string
+    # The company's FEIN is a tax identifier with no use in Surface Command, so it is excluded
+    x-samos-exclude: true
+
+  orgLevel1Code:
+    title: Org Level 1 Code
+    type: string
+
+  orgLevel2Code:
+    title: Org Level 2 Code
+    type: string
+
+  orgLevel3Code:
+    title: Org Level 3 Code
+    type: string
+
+  orgLevel4Code:
+    title: Org Level 4 Code
+    type: string
+
+x-samos-virtual:
+  # Fulfills the `users` property (core.owned-entity) with the employees of this company
+  users:
+    type-name: UkgProIdentity
+    cypher-pattern: >
+      <-[:`e:UkgProIdentity:companyId`]-(:UkgProIdentity)

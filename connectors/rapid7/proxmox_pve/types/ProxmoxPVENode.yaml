@@ -11,6 +11,9 @@ x-samos-keys:
   - id
   - node
 
+required:
+  - id
+
 x-samos-table:
   - name: type
   - name: node

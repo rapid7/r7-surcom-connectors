@@ -9,6 +9,9 @@ x-samos-extends-types:
 x-samos-keys:
   - id
 
+required:
+  - id
+
 $ref: https://community.workday.com/restapi/common/supervisory_organization#/definitions/supervisoryOrganizationSummary_3a94b57f042a4ebb95027e09d6192992
 
 x-samos-table:

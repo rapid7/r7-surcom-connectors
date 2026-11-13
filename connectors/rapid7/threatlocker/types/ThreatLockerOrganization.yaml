@@ -9,6 +9,9 @@ x-samos-extends-types:
 x-samos-keys:
   - organizationId
 
+required:
+  - organizationId
+
 x-samos-table:
   - name: name
   - name: displayName

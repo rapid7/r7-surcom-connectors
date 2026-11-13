@@ -10,6 +10,9 @@ x-samos-keys:
   - d_id # For the unique identifier derived property and to fulfill core.location.id
   - id # To use it for reference in EzoAssetSonarAssetMember type
 
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: description

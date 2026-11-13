@@ -1,0 +1,79 @@
+x-samos-type-name: PaloAltoPanoramaVirtualSystem
+x-samos-namespace: palo.alto.panorama
+
+title: Palo Alto Virtual System
+description: A virtual system (vsys), a logical firewall instance within a PAN-OS firewall
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.component
+    subtype-priority: 3
+
+$ref: https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-panorama-api/get-started-with-the-pan-os-rest-api#/components/schemas/device-virtual-systems
+
+x-samos-keys:
+  - x_id
+
+required:
+  - x_id
+
+x-samos-table:
+  - name: '@name'
+  - name: display-name
+  - name: d_interfaces
+  - name: x_firewall_id
+  - name: x_device_group_id
+
+x-samos-detail:
+  - name: '@name'
+  - name: display-name
+  - name: d_interfaces
+  - name: x_firewall_id
+  - name: x_device_group_id
+  - name: import
+
+x-samos-derived-properties:
+  # Table column: the interfaces assigned to the vsys, flattened from the nested import object
+  d_interfaces:
+    type: string
+    title: Interfaces
+    syntax: jmespath
+    value: >-
+      join(', ', import.network.interface.member || `[]`) || null
+
+properties:
+  x_id:
+    type: string
+    title: ID
+    description: Firewall ID and vsys name
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  '@name':
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  x_firewall_id:
+    type: string
+    title: Firewall
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaFirewall
+        key-name: x_id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+  display-name:
+    type: string
+    title: Display Name
+  import:
+    type: object
+    title: Imported Resources
+  x_device_group_id:
+    type: string
+    title: Device Group
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaDeviceGroup
+        key-name: x_id

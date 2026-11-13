@@ -11,6 +11,9 @@ x-samos-keys:
   - d_group_id # It is used for reference in OneLoginUser type
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: reference

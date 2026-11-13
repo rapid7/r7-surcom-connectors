@@ -16,3 +16,13 @@ class NableNcentralCustomer(dict):
 class NableNcentralDevice(dict):
     def __init__(self, content: dict):
         super().__init__(type=self.__class__.__name__, content=content)
+
+
+class NcentralCustomer(dict):
+    def __init__(self, content: dict):
+        super().__init__(type=self.__class__.__name__, content=content)
+
+
+class NcentralDevice(dict):
+    def __init__(self, content: dict):
+        super().__init__(type=self.__class__.__name__, content=content)

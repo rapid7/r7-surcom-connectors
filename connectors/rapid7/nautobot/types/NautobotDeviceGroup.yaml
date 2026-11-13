@@ -13,6 +13,9 @@ $ref: https://example.nautobot.com/api/swagger#/components/schemas/PaginatedCont
 x-samos-keys:
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: description

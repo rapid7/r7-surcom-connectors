@@ -9,6 +9,9 @@ x-samos-extends-types:
 x-samos-keys:
   - _id
 
+required:
+  - _id
+
 x-samos-table:
   - name: name
   - name: description

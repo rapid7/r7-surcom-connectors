@@ -1,0 +1,266 @@
+x-samos-type-name: SalesforceCase
+x-samos-namespace: salesforce
+title: Salesforce Case
+description: A support case or ticket in Salesforce.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Case
+    subtype-priority: 3
+
+x-samos-keys:
+  - Id
+
+required:
+  - Id
+
+x-samos-table:
+  - name: CaseNumber
+  - name: Subject
+  - name: Status
+  - name: Priority
+  - name: Type
+  - name: Origin
+  - name: CreatedDate
+
+x-samos-detail:
+  - name: CaseNumber
+  - name: Subject
+  - name: Status
+  - name: Description
+  - name: Reason
+  - name: Comments
+  - name: Priority
+  - name: Origin
+  - name: Type
+  - name: IsClosed
+  - name: ClosedDate
+  - name: IsEscalated
+  - name: OwnerId
+  - name: AccountId
+  - name: ContactId
+  - name: SuppliedName
+  - name: SuppliedEmail
+  - name: SuppliedPhone
+  - name: SuppliedCompany
+  - name: ParentId
+  - name: SourceId
+  - name: x_url
+  - name: CreatedById
+  - name: LastModifiedById
+  - name: CreatedDate
+  - name: LastModifiedDate
+  - name: SystemModstamp
+
+x-samos-derived-properties:
+  # Calculated value: Case.affected_components is a list, and Salesforce
+  # links a Case to at most one Asset, so the single AssetId is wrapped
+  # in a list.
+  d_affected_components:
+    title: Affected Components
+    type: array
+    syntax: jmespath
+    value: '[AssetId] | [?@]'
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: SalesforceAsset
+          key-name: Id
+    x-samos-fulfills:
+      type-name: Case
+      property-name: affected_components
+
+properties:
+  Id:
+    title: Id
+    description: Salesforce Case ID.
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Case
+      property-name: id
+
+  AssetId:
+    title: Asset
+    description: The Asset this case is about, e.g. a product or device the customer reported a problem with.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceAsset
+        key-name: Id
+
+  CaseNumber:
+    title: Case Number
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  ContactId:
+    title: Contact
+    description: The Contact who filed or is associated with this case.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceContact
+        key-name: Id
+
+  AccountId:
+    title: Account
+    description: The Account associated with this case.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceAccount
+        key-name: Id
+
+  SourceId:
+    title: Source
+    description: ID of the social post or chat transcript this case was created from, if any.
+    type: string
+
+  ParentId:
+    title: Parent Case
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceCase
+        key-name: Id
+    x-samos-fulfills:
+      type-name: Case
+      property-name: is_part_of_ref
+
+  SuppliedName:
+    title: Supplied Name
+    description: Name entered by a customer submitting a case through a self-service channel (Web/Email).
+    type: string
+
+  SuppliedEmail:
+    title: Supplied Email
+    type: string
+
+  SuppliedPhone:
+    title: Supplied Phone
+    type: string
+
+  SuppliedCompany:
+    title: Supplied Company
+    type: string
+
+  Type:
+    title: Type
+    type: string
+
+  Status:
+    title: Status
+    description: Salesforce Case Status picklist value (customizable per org).
+    type: string
+
+  Reason:
+    title: Reason
+    type: string
+
+  Origin:
+    title: Origin
+    description: Channel the case was submitted through, e.g. Web, Phone, Email.
+    type: string
+
+  Subject:
+    title: Subject
+    type: string
+
+  Priority:
+    title: Priority
+    type: string
+
+  Description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  IsClosed:
+    title: Closed?
+    type: boolean
+
+  ClosedDate:
+    title: Closed Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: Case
+      property-name: closed_date
+
+  IsEscalated:
+    title: Escalated?
+    type: boolean
+
+  OwnerId:
+    title: Owner
+    description: The User or Queue currently assigned to work this case.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+      - type-name: SalesforceGroup
+        key-name: Id
+    x-samos-fulfills:
+      type-name: Case
+      property-name: assigned_to_user
+
+  CreatedDate:
+    title: Created Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: Case
+      property-name: created_date
+
+  CreatedById:
+    title: Created By
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+    x-samos-fulfills:
+      type-name: Case
+      property-name: created_by_user
+
+  LastModifiedDate:
+    title: Last Modified Date
+    type: string
+    format: date-time
+
+  LastModifiedById:
+    title: Last Modified By
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  SystemModstamp:
+    title: System Modstamp
+    type: string
+    format: date-time
+
+  Comments:
+    title: Comments
+    type: string
+
+  LastViewedDate:
+    title: Last Viewed Date
+    type: string
+    format: date-time
+
+  LastReferencedDate:
+    title: Last Referenced Date
+    type: string
+    format: date-time
+
+  x_url:
+    title: URL
+    description: >-
+      Link to the Case in Salesforce. Not a native Case field - injected by
+      the connector.
+    type: string
+    format: url
+    x-samos-fulfills:
+      type-name: Case
+      property-name: url

@@ -9,6 +9,9 @@ x-samos-extends-types:
 x-samos-keys:
   - scan_id
 
+required:
+  - scan_id
+
 x-samos-table:
   - name: name
   - name: user_name

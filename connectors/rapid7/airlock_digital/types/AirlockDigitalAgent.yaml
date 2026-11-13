@@ -9,6 +9,9 @@ x-samos-extends-types:
 x-samos-keys:
   - agentid
 
+required:
+  - agentid
+
 x-samos-table:
   - name: hostname
   - name: ip

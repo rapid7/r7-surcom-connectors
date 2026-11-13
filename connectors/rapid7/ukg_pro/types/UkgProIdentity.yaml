@@ -1,0 +1,313 @@
+x-samos-type-name: UkgProIdentity
+x-samos-namespace: ukg.pro
+title: UKG Pro Identity
+description: >-
+  An employee in UKG Pro. Combines the person (name, email), returned by Person
+  Details, with the employee's job, company, department and status, returned by
+  Employment Details. Personal data such as government IDs, date of birth, gender,
+  health, military details and the home street address and phone is not imported.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_employee_key
+
+required:
+  - employeeId
+  - companyId
+
+x-samos-table:
+  - name: userName
+  - name: emailAddress
+  - name: x_is_active
+  - name: companyName
+  - name: jobTitle
+  - name: x_department
+  - name: lastHireDate
+
+x-samos-detail:
+  - name: userName
+  - name: preferredName
+  - name: firstName
+  - name: lastName
+  - name: emailAddress
+  - name: x_is_active
+  - name: employeeNumber
+  - name: companyId
+  - name: d_org_level_refs
+  - name: d_supervisor_key
+  - name: primaryWorkLocationCode
+  - name: employeeId
+  - name: jobTitle
+  - name: x_department
+  - name: jobDescription
+  - name: employeeStatusCode
+  - name: employeeTypeCode
+  - name: primaryJobCode
+  - name: primaryProjectCode
+  - name: orgLevel1Code
+  - name: orgLevel2Code
+  - name: orgLevel3Code
+  - name: orgLevel4Code
+  - name: workPhoneNumber
+  - name: supervisorCOID
+  - name: addressCity
+  - name: addressCountry
+  - name: dateOfTermination
+  - name: dateLastWorked
+  - name: lastHireDate
+  - name: originalHireDate
+
+x-samos-derived-properties:
+  d_employee_key:
+    # Employee IDs are only unique within a company, so the company ID is combined with
+    # the employee ID to uniquely identify an employee.
+    title: Employee Key
+    type: string
+    syntax: expression
+    value: '{companyId}_{employeeId}'
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  d_name:
+    # The employee's display name is made up of the first and last name.
+    title: Name
+    type: string
+    syntax: expression
+    value: '{firstName} {lastName}'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_supervisor_key:
+    # Same company + employee ID format as d_employee_key, so the supervisor is linked to the
+    # supervisor's own UkgProIdentity. Empty if the employee has no supervisor.
+    title: Supervisor
+    type: string
+    syntax: jmespath
+    value: "supervisorID && supervisorCOID && join('_', [supervisorCOID, supervisorID])"
+    x-samos-ref-types:
+      - type-name: UkgProIdentity
+        key-name: d_employee_key
+
+  d_org_level_refs:
+    # UKG returns up to four separate org-level codes, while UkgProDepartment is keyed by
+    # "{level}-{code}". One array (skipping empty levels) links the employee to their org levels
+    # and fulfills core.principal:groups, replacing four reference properties.
+    title: Org Level Groups
+    type: array
+    syntax: jmespath
+    value: "[orgLevel1Code && join('-', ['1', orgLevel1Code]), orgLevel2Code && join('-', ['2', orgLevel2Code]), orgLevel3Code && join('-', ['3', orgLevel3Code]), orgLevel4Code && join('-', ['4', orgLevel4Code])][?@]"
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: UkgProDepartment
+          key-name: d_group_id
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups
+
+properties:
+  companyId:
+    x-samos-immutable: true
+    title: Company
+    type: string
+    x-samos-ref-types:
+      - type-name: UkgProCompany
+        key-name: companyID
+
+  employeeId:
+    x-samos-immutable: true
+    title: Employee ID
+    type: string
+
+  emailAddress:
+    title: Work Email
+    type: string
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 5
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+
+  firstName:
+    title: First Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+
+  lastName:
+    title: Last Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+
+  preferredName:
+    title: Preferred Name
+    type: string
+
+  userName:
+    title: Username
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+
+  workPhoneNumber:
+    title: Work Phone Number
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+
+  companyName:
+    title: Company Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: company
+
+  employeeNumber:
+    title: Employee Number
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: employee_id
+
+  employeeTypeCode:
+    title: Employee Type Code
+    type: string
+
+  jobDescription:
+    title: Job Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  jobTitle:
+    title: Job Title
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: title
+
+  primaryJobCode:
+    title: Primary Job Code
+    type: string
+
+  primaryProjectCode:
+    title: Primary Project Code
+    type: string
+
+  orgLevel1Code:
+    title: Org Level 1 Code (Department)
+    type: string
+
+  orgLevel2Code:
+    title: Org Level2 Code
+    type: string
+
+  orgLevel3Code:
+    title: Org Level3 Code
+    type: string
+
+  orgLevel4Code:
+    title: Org Level4 Code
+    type: string
+
+  primaryWorkLocationCode:
+    title: Primary Work Location
+    type: string
+    x-samos-ref-types:
+      - type-name: UkgProLocation
+        key-name: locationCode
+
+  supervisorCOID:
+    title: Supervisor Company ID
+    type: string
+
+  supervisorID:
+    title: Supervisor ID
+    x-samos-hidden: true
+    type: string
+
+  dateLastWorked:
+    title: Date Last Worked
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+
+  dateOfTermination:
+    title: Date of Termination
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: end_date
+
+  employeeStatusCode:
+    title: Employee Status Code
+    type: string
+
+  lastHireDate:
+    title: Last Hire Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date
+
+  originalHireDate:
+    title: Original Hire Date
+    type: string
+    format: date-time
+
+  addressCity:
+    title: City
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: city
+
+  addressCountry:
+    title: Country
+    type: string
+    x-samos-ref-types:
+      - type-name: NoeticEnumCountry
+        key-name: alpha_3_id
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: country
+
+  x_is_active:
+    title: Active?
+    type: boolean
+    description: >-
+      False when the employee has been terminated: the status is terminated or retired, or the termination
+      date has passed. A termination date in the future does not make the employee inactive yet.
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+  x_department:
+    title: Department
+    type: string
+    description: >-
+      The name of the employee's department: the name of their org-level code at the level set by
+      the Department Org Level setting.
+    x-samos-fulfills:
+      type-name: User
+      property-name: department

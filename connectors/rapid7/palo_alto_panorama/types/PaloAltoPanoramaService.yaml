@@ -1,0 +1,134 @@
+x-samos-type-name: PaloAltoPanoramaService
+x-samos-namespace: palo.alto.panorama
+
+title: Palo Alto Service Object
+description: A service object (protocol and ports) used in security rules
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.component
+    subtype-priority: 3
+
+$ref: https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-panorama-api/get-started-with-the-pan-os-rest-api#/components/schemas/objects-services
+
+x-samos-keys:
+  - x_id
+
+required:
+  - x_id
+
+x-samos-table:
+  - name: '@name'
+  - name: d_ports
+  - name: description
+  - name: d_scope
+
+x-samos-detail:
+  - name: '@name'
+  - name: d_ports
+  - name: protocol
+  - name: description
+  - name: d_scope
+  - name: '@location'
+  - name: '@vsys'
+  - name: x_vsys_id
+  - name: x_device_group_id
+  - name: x_panorama_id
+  - name: x_firewall_id
+
+x-samos-derived-properties:
+  # Table column: protocol and port (e.g. "tcp/8443") flattened from the nested protocol object
+  d_ports:
+    type: string
+    title: Ports
+    syntax: jmespath
+    value: "protocol.tcp.port && join('', ['tcp/', protocol.tcp.port]) || protocol.udp.port && join('', ['udp/', protocol.udp.port]) || protocol.sctp.port && join('', ['sctp/', protocol.sctp.port]) || null"
+
+  # Where the object lives: device group, virtual system, or "shared". One column instead of three @-prefixed properties
+  d_scope:
+    type: string
+    title: Scope
+    syntax: jmespath
+    value: >-
+      "@device-group" || "@vsys" || "@location"
+
+properties:
+  x_id:
+    type: string
+    title: ID
+    description: Firewall ID, vsys name and service name
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  '@name':
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  x_vsys_id:
+    type: string
+    title: Virtual System
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaVirtualSystem
+        key-name: x_id
+  x_device_group_id:
+    type: string
+    title: Device Group
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaDeviceGroup
+        key-name: x_id
+  # The vsys or device group that holds the object, or for "shared", Panorama or the firewall
+  x_parent_id:
+    type: string
+    title: Parent
+    x-samos-hidden: true
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaVirtualSystem
+        key-name: x_id
+      - type-name: PaloAltoPanoramaDeviceGroup
+        key-name: x_id
+      - type-name: PaloAltoPanoramaServer
+        key-name: x_id
+      - type-name: PaloAltoPanoramaFirewall
+        key-name: x_id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+  # Set for objects in "shared" on Panorama
+  x_panorama_id:
+    type: string
+    title: Panorama
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaServer
+        key-name: x_id
+  # Set for objects in "shared" on a firewall read directly
+  x_firewall_id:
+    type: string
+    title: Firewall
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaFirewall
+        key-name: x_id
+  '@location':
+    type: string
+    title: Location
+  '@vsys':
+    type: string
+    title: Virtual System Name
+  '@device-group':
+    type: string
+    title: Device Group Name
+  protocol:
+    type: object
+    title: Protocol
+  tag:
+    type: object
+    title: Tags (raw)
+    x-samos-hidden: true

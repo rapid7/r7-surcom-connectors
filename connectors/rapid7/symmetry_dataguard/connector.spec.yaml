@@ -1,13 +1,14 @@
 id: symmetry.dataguard
 name: Symmetry DataGuard DSPM
 author: Rapid7
-version: 0.2.0
+version: 0.3.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Fix a data duplication problem with classified object import
+  - Update dependencies
+  - Mark key properties as required in the type schemas
 
 restricted-licenses:
   - DSPM

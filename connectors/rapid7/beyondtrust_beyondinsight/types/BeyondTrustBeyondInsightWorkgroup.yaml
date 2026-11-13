@@ -11,6 +11,9 @@ x-samos-keys:
   - d_id # unique derived property
   - ID # reference id for other types
 
+required:
+  - ID
+
 x-samos-table:
   - name: Name
   - name: OrganizationID

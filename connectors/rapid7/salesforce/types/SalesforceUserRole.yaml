@@ -1,0 +1,164 @@
+x-samos-type-name: SalesforceUserRole
+x-samos-namespace: salesforce
+title: Salesforce User Role
+description: >-
+  A node in the Salesforce role hierarchy, used to control data visibility
+  and record access for Users assigned to it.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: UserGroup
+    subtype-priority: 3
+
+x-samos-keys:
+  - Id
+
+required:
+  - Id
+
+x-samos-table:
+  - name: Name
+  - name: DeveloperName
+  - name: ParentRoleId
+  - name: RollupDescription
+  - name: LastModifiedDate
+
+x-samos-detail:
+  - name: Name
+  - name: DeveloperName
+  - name: ParentRoleId
+  - name: groups
+  - name: RollupDescription
+  - name: CaseAccessForAccountOwner
+  - name: ContactAccessForAccountOwner
+  - name: OpportunityAccessForAccountOwner
+  - name: ForecastUserId
+  - name: MayForecastManagerShare
+  - name: PortalType
+  - name: PortalRole
+  - name: PortalAccountId
+  - name: LastModifiedDate
+  - name: LastModifiedById
+  - name: SystemModstamp
+
+properties:
+  Id:
+    title: Id
+    description: Salesforce UserRole ID.
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  DeveloperName:
+    title: Developer Name
+    description: Unique, unchangeable API name for the role.
+    type: string
+
+  ParentRoleId:
+    title: Parent Role
+    description: The role directly above this one in the role hierarchy.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUserRole
+        key-name: Id
+
+  RollupDescription:
+    title: Rollup Description
+    description: Description of the role's purpose in the hierarchy.
+    type: string
+
+  CaseAccessForAccountOwner:
+    title: Case Access For Account Owner
+    description: Level of Case access this role grants over records owned by the Account owner, e.g. Edit, Read.
+    type: string
+
+  ContactAccessForAccountOwner:
+    title: Contact Access For Account Owner
+    description: Level of Contact access this role grants over records owned by the Account owner, e.g. Edit, Read.
+    type: string
+
+  OpportunityAccessForAccountOwner:
+    title: Opportunity Access For Account Owner
+    description: Level of Opportunity access this role grants over records owned by the Account owner, e.g. Edit, Read, None.
+    type: string
+
+  ForecastUserId:
+    title: Forecast User
+    description: The user whose forecast this role rolls up to, for forecast management.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  MayForecastManagerShare:
+    title: May Forecast Manager Share
+    type: boolean
+
+  PortalType:
+    title: Portal Type
+    description: Type of portal this role belongs to, e.g. None, Partner, or CustomerPortal.
+    type: string
+
+  PortalRole:
+    title: Portal Role
+    description: Level of the role within a portal account hierarchy, e.g. Executive, Manager, Worker.
+    type: string
+
+  PortalAccountId:
+    title: Portal Account
+    description: For portal roles, the Account the role belongs to.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceAccount
+        key-name: Id
+
+  PortalAccountOwnerId:
+    title: Portal Account Owner
+    description: For portal roles, the User who owns the associated Account.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  LastModifiedDate:
+    title: Last Modified Date
+    type: string
+    format: date-time
+
+  LastModifiedById:
+    title: Last Modified By
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  SystemModstamp:
+    title: System Modstamp
+    type: string
+    format: date-time
+
+  groups:
+    title: Groups
+    description: >-
+      The Public Groups and Queues this role was added to, through its
+      Salesforce-generated Role Groups. Does not include the parent role; see
+      Parent Role for the role hierarchy. Not a native UserRole field -
+      injected by the connector.
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: SalesforceGroup
+          key-name: Id
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups

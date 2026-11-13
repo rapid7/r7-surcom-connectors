@@ -12,6 +12,9 @@ x-samos-extends-types:
 x-samos-keys:
   - x_storage_id
 
+required:
+  - x_storage_id
+
 x-samos-table:
   - name: d_name
   - name: backendType

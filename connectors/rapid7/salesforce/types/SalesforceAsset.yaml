@@ -1,0 +1,342 @@
+x-samos-type-name: SalesforceAsset
+x-samos-namespace: salesforce
+title: Salesforce Asset
+description: >-
+  A purchased or installed product/asset associated with an Account in
+  Salesforce.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  # Salesforce Assets are often products installed at a customer, so they
+  # are non-normative catalog data relative to Machine sources such as EDR/MDM.
+  - type-name: Machine
+    subtype-priority: 2
+
+x-samos-keys:
+  - Id
+
+required:
+  - Id
+
+x-samos-table:
+  - name: Name
+  - name: Status
+  - name: d_active
+  - name: SerialNumber
+  - name: ProductCode
+  - name: AccountId
+  - name: InstallDate
+
+x-samos-detail:
+  - name: Name
+  - name: Status
+  - name: d_active
+  - name: d_external
+  - name: SerialNumber
+  - name: StockKeepingUnit
+  - name: AccountId
+  - name: ContactId
+  - name: AssetLevel
+  - name: ProductCode
+  - name: Product2Id
+  - name: IsCompetitorProduct
+  - name: Price
+  - name: Quantity
+  - name: ParentId
+  - name: RootAssetId
+  - name: AssetProvidedById
+  - name: AssetServicedById
+  - name: Description
+  - name: OwnerId
+  - name: Street
+  - name: City
+  - name: Latitude
+  - name: Longitude
+  - name: State
+  - name: PostalCode
+  - name: Country
+  - name: CountryCode
+  - name: InstallDate
+  - name: PurchaseDate
+  - name: UsageEndDate
+  - name: LastViewedDate
+  - name: SystemModstamp
+  - name: CreatedById
+  - name: CreatedDate
+  - name: LastModifiedById
+  - name: LastModifiedDate
+
+x-samos-derived-properties:
+  # Calculated value: Salesforce has no boolean "active" flag for Assets, so
+  # it is derived from the Status picklist.
+  d_active:
+    title: Active?
+    description: >-
+      Derived as true unless the asset's Status is "Obsolete". Asset.Status
+      is a customizable picklist in Salesforce.
+    type: boolean
+    syntax: jmespath
+    value: "Status != 'Obsolete'"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+  # Calculated value: core.component.is_external is the inverse of IsInternal.
+  d_external:
+    title: External?
+    description: >-
+      Derived as true if the asset is not marked as internal in Salesforce.
+    type: boolean
+    syntax: jmespath
+    value: 'IsInternal == `false`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_external
+
+properties:
+  Id:
+    title: Id
+    description: Salesforce Asset ID.
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  ContactId:
+    title: Contact
+    description: The Contact associated with this asset.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceContact
+        key-name: Id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: users
+
+  AccountId:
+    title: Account
+    description: The Account that owns this asset.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceAccount
+        key-name: Id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+
+  ParentId:
+    title: Parent Asset
+    description: The parent asset this asset is a component of.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceAsset
+        key-name: Id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+  RootAssetId:
+    title: Root Asset
+    description: The top-level asset in this asset's hierarchy.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceAsset
+        key-name: Id
+
+  Product2Id:
+    title: Product
+    description: >-
+      The Salesforce Product2 (catalog product) this asset was created from.
+      Product2 records are not imported by this connector, so this ID is
+      informational only.
+    type: string
+
+  ProductCode:
+    title: Product Code
+    type: string
+
+  IsCompetitorProduct:
+    title: Competitor Product?
+    type: boolean
+
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  SerialNumber:
+    title: Serial Number
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 1
+
+  InstallDate:
+    title: Install Date
+    type: string
+    format: date
+
+  PurchaseDate:
+    title: Purchase Date
+    type: string
+    format: date
+
+  UsageEndDate:
+    title: Usage End Date
+    type: string
+    format: date
+
+  Status:
+    title: Status
+    description: >-
+      Lifecycle status of the asset, e.g. Purchased, Shipped, Installed,
+      Registered, Obsolete.
+    type: string
+
+  Price:
+    title: Price
+    type: number
+
+  Quantity:
+    title: Quantity
+    type: number
+
+  Description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  OwnerId:
+    title: Owner
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: owners
+
+  AssetProvidedById:
+    title: Asset Provided By
+    description: The Account that provided this asset (e.g. a distributor), if different from AccountId.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceAccount
+        key-name: Id
+
+  AssetServicedById:
+    title: Asset Serviced By
+    description: The Account that services this asset, if different from AccountId.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceAccount
+        key-name: Id
+
+  IsInternal:
+    title: Internal?
+    description: Whether this is an internal asset (not visible to customers).
+    type: boolean
+
+  AssetLevel:
+    title: Asset Level
+    description: Depth of this asset within its asset hierarchy (root assets are level 1).
+    type: integer
+
+  StockKeepingUnit:
+    title: Stock Keeping Unit
+    type: string
+
+  Street:
+    title: Street
+    type: string
+
+  City:
+    title: City
+    type: string
+
+  State:
+    title: State
+    type: string
+
+  PostalCode:
+    title: Postal Code
+    type: string
+
+  Country:
+    title: Country
+    type: string
+
+  CountryCode:
+    title: Country Code
+    description: >-
+      ISO 3166 alpha-2 country code (e.g. CZ), set when State and Country Picklists are enabled in the org.
+    type: string
+    x-samos-ref-types:
+      - type-name: NoeticEnumCountry
+        key-name: alpha_2_id
+
+  StateCode:
+    title: State Code
+    type: string
+
+  Latitude:
+    title: Latitude
+    type: number
+
+  Longitude:
+    title: Longitude
+    type: number
+
+  GeocodeAccuracy:
+    title: Geocode Accuracy
+    type: string
+
+  CreatedDate:
+    title: Created Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+
+  CreatedById:
+    title: Created By
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  LastModifiedDate:
+    title: Last Modified Date
+    type: string
+    format: date-time
+
+  LastModifiedById:
+    title: Last Modified By
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  SystemModstamp:
+    title: System Modstamp
+    type: string
+    format: date-time
+
+  LastViewedDate:
+    title: Last Viewed Date
+    type: string
+    format: date-time
+
+  LastReferencedDate:
+    title: Last Referenced Date
+    type: string
+    format: date-time

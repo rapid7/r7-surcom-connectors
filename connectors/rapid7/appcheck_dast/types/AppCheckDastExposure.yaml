@@ -9,6 +9,9 @@ x-samos-global-zone: true
 x-samos-keys:
   - exposure_id
 
+required:
+  - exposure_id
+
 x-samos-table:
   - name: title
   - name: cves

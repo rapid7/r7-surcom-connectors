@@ -42,6 +42,12 @@ class UpGuardClient:
     def __init__(self, user_log: Logger, settings: Settings):
         self.logger = user_log
         self.settings = settings
+        raw = (settings.get("url") or "").strip().rstrip("/")
+        if not raw:
+            raw = BASE_URL
+        elif not raw.startswith(("http://", "https://")):
+            raw = f"https://{raw}"
+        self.base_url = raw
 
         # Setup HTTP session with API key auth
         self.session = HttpSession()
@@ -71,7 +77,7 @@ class UpGuardClient:
                 # Skip vendor-specific endpoints for the test connection
                 # it will check vendors endpoint for vendor-level access
                 continue
-            url = furl(BASE_URL).add(path=path).url
+            url = furl(self.base_url).add(path=path).url
             response = self.session.get(url, params=params)
             if response.status_code == 200:
                 # Endpoint is accessible
@@ -79,7 +85,7 @@ class UpGuardClient:
             if response.status_code == 403:
                 # Missing permission for this endpoint to show in the user UI
                 raise ValueError(
-                    f"API key is missing permissions. "
+                    f"UpGuard returned 403 on {url}: {_safe_body(response)}. "
                     f"Required permissions: {', '.join(REQUIRED_PERMISSIONS)}"
                 )
             if response.status_code >= 400 and response.status_code != 403:
@@ -103,14 +109,19 @@ class UpGuardClient:
         Returns:
             dict: JSON response from the API
         """
-        url = furl(BASE_URL).add(path=endpoint).url
+        url = furl(self.base_url).add(path=endpoint).url
         response = self.session.get(url, params=params)
         if response.status_code == 403:
             raise ValueError(
-                "API key is missing required permissions. "
+                f"UpGuard returned 403 on {url}: {_safe_body(response)}. "
                 f"Required permissions: {', '.join(REQUIRED_PERMISSIONS)}"
             )
         response.raise_for_status()
+        content_type = response.headers.get("Content-Type", "")
+        if "application/json" not in content_type.lower():
+            raise ValueError(
+                f"Expected JSON response from {url}, got Content-Type={content_type!r}: {_safe_body(response)}"
+            )
         return response.json()
 
     def get_paginate(self, params: dict, endpoint_key: str, data_key: str):
@@ -133,8 +144,8 @@ class UpGuardClient:
         if not path:
             raise ValueError(f"Unknown endpoint key: {endpoint_key}")
         while True:
-            if (endpoint_key == "domains" or endpoint_key == "v_domains") and \
-               (self.settings.get("active_domains_only", True)):
+            if endpoint_key in ("domains", "v_domains") and \
+               self.settings.get("active_domains_only", True):
                 # if active_domains_only is set to True,
                 # then we need set inactive to False and active to True to only get active domains
                 params["active"] = True
@@ -197,15 +208,25 @@ class UpGuardClient:
         Returns:
             dict: Organization details
         """
-        url = furl(BASE_URL).add(path="/organisation").url
+        url = furl(self.base_url).add(path="/organisation").url
         response = self.session.get(url)
         if response.status_code == 403:
             raise ValueError(
-                "API key is missing or does not exist. "
-                f"Please check your API key and permissions: {REQUIRED_PERMISSIONS}"
+                f"UpGuard returned 403 on {url}: {_safe_body(response)}. "
+                f"Verify the API key and the Platform permission required for the connection test."
             )
         response.raise_for_status()
+        content_type = response.headers.get("Content-Type", "")
+        if "application/json" not in content_type.lower():
+            raise ValueError(
+                f"Expected JSON response from {url}, got Content-Type={content_type!r}: {_safe_body(response)}"
+            )
         return response.json()
+
+
+def _safe_body(response) -> str:
+    """Collapse whitespace, cap length — safe for UI/log rendering."""
+    return " ".join((response.text or "")[:200].split())
 
 
 def get_severity_level(severity: str = "high") -> list[str]:

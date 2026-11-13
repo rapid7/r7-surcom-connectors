@@ -12,6 +12,9 @@ $ref: https://example.nautobot.com/api/swagger#/components/schemas/PaginatedTena
 x-samos-keys:
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: tenant_group.name

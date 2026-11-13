@@ -39,7 +39,6 @@ x-samos-detail:
   - name: memory_percentage
   - name: scanGroup
   - name: Antivirus
-  - name: domains
   - name: users
 
 x-samos-derived-properties:
@@ -126,17 +125,6 @@ x-samos-derived-properties:
     x-samos-fulfills:
       type-name: core.managed.endpoint
       property-name: endpoint_protection_active
-
-  d_users: # links host to its observed users via injected x_client_db_id (matches CynetEDRUser.d_id)
-    x-samos-hidden: true
-    type: array
-    syntax: jmespath
-    value: 'users[].x_client_db_id | [?@]'
-    items:
-      type: string
-      x-samos-ref-types:
-        - type-name: CynetEDRUser
-          key-name: d_id
 
 # Fields sourced from the Cynet Unified API V3 OpenAPI export
 # (https://help.api.cynet.com/docs/API-V3),
@@ -237,36 +225,6 @@ properties:
       DatabaseVersion:
         type: string
         title: AV Database Version
-  domains:
-    type: array
-    title: Domains
-    description: Domains contacted from this host.
-    items:
-      type: object
-      properties:
-        domain_name:
-          type: string
-          title: Domain Name
-        remote_ips:
-          type: array
-          title: Remote IPs
-          items:
-            type: string
-            format: ip-addr
-        first_seen:
-          type: string
-          format: date-time
-          title: First Seen
-        last_seen:
-          type: string
-          format: date-time
-          title: Last Seen
-        av_detections:
-          type: integer
-          title: AV Detections
-        classification:
-          type: string
-          title: Classification
   users:
     type: array
     title: Users
@@ -277,43 +235,12 @@ properties:
         username:
           type: string
           title: Username
-        risk_level:
+        ClientDbId:
           type: integer
-          title: Risk Level
-        first_seen:
-          type: string
-          format: date-time
-          title: First Seen
-        last_seen:
-          type: string
-          format: date-time
-          title: Last Seen
-        last_login:
-          type: string
-          format: date-time
-          title: Last Login
-        logged_to_machines_last_month:
-          type: integer
-          title: Logged To Machines (Last Month)
-        logged_to_machines_last_3_months:
-          type: integer
-          title: Logged To Machines (Last 3 Months)
-        logged_to_machines_total:
-          type: integer
-          title: Logged To Machines (Total)
-        rdp_to_machines_last_month:
-          type: integer
-          title: RDP To Machines (Last Month)
-        rdp_to_machines_last_3_month:
-          type: integer
-          title: RDP To Machines (Last 3 Months)
-        rdp_to_machines_total:
-          type: integer
-          title: RDP To Machines (Total)
-        x_client_db_id:
-          type: string
-          title: Client DB ID
-          description: Injected by connector from UserDTO2.ClientDbId (coerced to string); used by d_users to link this host to its CynetEDRUser records.
+          title: User
+          x-samos-ref-types:
+            - type-name: CynetEDRUser
+              key-name: ClientDbId
 
 x-samos-virtual:
   vulnerabilities:

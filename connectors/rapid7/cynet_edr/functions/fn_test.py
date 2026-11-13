@@ -31,9 +31,9 @@ def test(
     hosts_response = client.make_http_request("hosts_list", params={"LastSeen": last_seen_cutoff})
     users_response = client.make_http_request("users_list", params={"LastSeen": last_seen_cutoff})
 
-    # If the list endpoints returned any records, probe the corresponding detail
-    # endpoints to validate that /api/full/host and /api/full/user are reachable
-    # (these are the canonical endpoints used during import_all).
+    # If the inventory list endpoints returned any records, probe /api/full/host
+    # and /api/full/user to validate the detail endpoints used during import_all
+    # are reachable.
     host_entities = hosts_response.get("Entities") or []
     user_entities = users_response.get("Entities") or []
 
@@ -45,10 +45,9 @@ def test(
     if first_username:
         client.make_http_request("user_detail", params={"name": first_username})
 
-    # Warn when the inventory lists are empty so the user knows that the
-    # detail endpoints (/api/full/host and /api/full/user) were not exercised.
-    # Most likely cause: the API Key lacks read access to hosts/users, or the
-    # look-back window (1 day) found no recent activity.
+    # Warn when the inventory lists are empty so the user knows why host/user
+    # data may be missing. Most likely cause: the API Key lacks read access to
+    # hosts/users, or the look-back window (1 day) found no recent activity.
     inventory_warnings = []
     if not host_entities:
         inventory_warnings.append(

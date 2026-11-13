@@ -1,12 +1,11 @@
 id: zimperium.mtd
 name: Zimperium MTD
 author: Rapid7
-version: 0.2.0
+version: 0.6.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Removed zScan scope
-  - Added import feed for CVEs and Threats
+  - Update dependencies
 
 types:
   - ZimperiumMTDApp
@@ -60,6 +59,15 @@ settings:
     title: Client Secret
     description: The API client secret used for authentication with the Zimperium MTD API.
     format: password
+
+  use_pit_search:
+    title: Use Point in Time Search?
+    description: >-
+      If enabled, use Zimperium's Point in Time Search APIs for the app, device and threat imports,
+      for tenants with large data sets. Requires the Enable Large Dataset Retrievals option on the Zimperium account;
+      if the account does not have it, the connection test and imports fail.
+    type: boolean
+    default: false
 
   severity_threshold:
     title: Threat Severity Threshold

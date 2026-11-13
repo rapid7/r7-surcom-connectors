@@ -1,0 +1,53 @@
+x-samos-type-name: MicrosoftSccmCollectionMember
+x-samos-namespace: microsoft.sccm
+title: Microsoft SCCM Collection Member
+description: Collection membership from Microsoft Endpoint Configuration Manager (SCCM)
+# from wmi/SMS_FullCollectionMembership
+
+x-samos-default-hide-from-graph: true
+
+x-samos-extends-types:
+  - type-name: core.named-object
+
+x-samos-keys: # TODO - these are not guids, and would not be unique across profiles
+  - s_CollectionMemberId
+
+x-samos-table:
+  - name: Name
+  - name: CollectionID
+  - name: ResourceID
+
+x-samos-derived-properties:
+  s_CollectionMemberId:
+    type: string
+    syntax: expression
+    value: '{CollectionID}-{ResourceID}'
+    x-samos-immutable: true
+    x-samos-hidden: true
+  d_name:
+    type: string
+    syntax: expression
+    value: '{CollectionID}-{Name}'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  CollectionID:
+    type: string
+    title: Collection ID
+    description: The unique identifier of the collection
+    x-samos-ref-types:
+      - type-name: MicrosoftSccmCollection
+        key-name: SiteID
+  ResourceID:
+    type: integer
+    title: Resource ID
+    description: The unique identifier of the resource (device)
+    x-samos-ref-types:
+      - type-name: MicrosoftSccmDevice
+        key-name: MachineId
+  Name:
+    type: string
+    title: Name
+    description: The name of the device or resource

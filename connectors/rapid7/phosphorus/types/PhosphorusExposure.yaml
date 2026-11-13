@@ -12,6 +12,9 @@ x-samos-global-zone: true
 x-samos-keys:
   - x_id
 
+required:
+  - x_id
+
 x-samos-table:
   - name: alert_name
   - name: severity

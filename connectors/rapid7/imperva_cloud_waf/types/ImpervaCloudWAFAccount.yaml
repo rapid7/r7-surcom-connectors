@@ -1,0 +1,171 @@
+x-samos-type-name: ImpervaCloudWAFAccount
+x-samos-namespace: imperva.cloud.waf
+title: Imperva Cloud WAF Account
+description: An account or subaccount in Imperva Cloud WAF that owns protected websites
+
+x-samos-extends-types:
+  - type-name: Organization
+    subtype-priority: 5
+
+x-samos-keys:
+  - account_id
+
+required:
+  - account_id
+
+x-samos-table:
+  - name: account_id
+  - name: account_name
+  - name: plan_name
+  - name: support_level
+  - name: parent_id
+  - name: email
+
+x-samos-detail:
+  - name: account_id
+  - name: account_name
+  - name: user_name
+  - name: email
+  - name: parent_id
+  - name: plan_id
+  - name: plan_name
+  - name: support_level
+  - name: log_level
+  - name: trial_end_date
+  - name: logins
+  - name: support_all_tls_versions
+  - name: allow_ssl_validation_delegation
+  - name: domains_for_ssl_validation_delegation
+  - name: cname_value_for_ssl_validation_delegation
+  - name: wildcard_san_for_new_sites
+  - name: naked_domain_san_for_new_www_sites
+  - name: enable_http2_for_new_sites
+  - name: enable_http2_to_origin_for_new_sites
+
+properties:
+  account_id:
+    title: Account ID
+    type: string
+    description: Numeric identifier of the Imperva account
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+
+  account_name:
+    title: Account Name
+    type: string
+    description: Display name of the account
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  allow_ssl_validation_delegation:
+    title: Allow SSL Validation Delegation?
+    type: boolean
+    description: Whether SSL domain validation may be delegated to Imperva
+
+  cname_value_for_ssl_validation_delegation:
+    title: CNAME For SSL Validation Delegation
+    type: string
+    description: CNAME record value used for delegated SSL validation
+
+  domains_for_ssl_validation_delegation:
+    title: Domains For SSL Validation Delegation
+    type: array
+    description: Domains for which SSL validation is delegated to Imperva
+    items:
+      type: string
+      format: domain-name
+
+  email:
+    title: Email
+    type: string
+    format: email
+    description: Email address associated with the account owner
+
+  enable_http2_for_new_sites:
+    title: HTTP/2 Enabled For New Sites?
+    type: boolean
+    description: Whether HTTP/2 is enabled for newly created sites
+
+  enable_http2_to_origin_for_new_sites:
+    title: HTTP/2 To Origin Enabled For New Sites?
+    type: boolean
+    description: Whether HTTP/2 to the origin server is enabled for newly created sites
+
+  log_level:
+    title: Log Level
+    type: string
+    description: Log reporting level configured for the account
+
+  logins:
+    title: Logins
+    type: array
+    description: Console logins associated with the account
+    items:
+      type: object
+      properties:
+        login_id:
+          title: Login ID
+          type: integer
+        email:
+          title: Email
+          type: string
+        email_verified:
+          title: Email Verified?
+          type: boolean
+
+  naked_domain_san_for_new_www_sites:
+    title: Naked Domain SAN For New WWW Sites?
+    type: boolean
+    description: Whether new www sites add the naked domain to the certificate SAN
+
+  parent_id:
+    title: Parent Account
+    type: string
+    nullable: true
+    description: Account that manages this account, set for subaccounts only
+    x-samos-ref-types:
+      - type-name: ImpervaCloudWAFAccount
+        key-name: account_id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization
+
+  plan_id:
+    title: Plan ID
+    type: string
+    description: Identifier of the plan assigned to the account, for example ent100
+
+  plan_name:
+    title: Plan Name
+    type: string
+    description: Display name of the plan assigned to the account
+
+  support_all_tls_versions:
+    title: Support All TLS Versions?
+    type: boolean
+    description: Whether sites in the account may support all TLS versions
+
+  support_level:
+    title: Support Level
+    type: string
+    description: Support level purchased for the account
+
+  trial_end_date:
+    title: Trial End Date
+    type: string
+    format: date-time
+    nullable: true
+    description: Date that the account's trial period ends
+
+  user_name:
+    title: Account Owner
+    type: string
+    description: Name of the account owner
+
+  wildcard_san_for_new_sites:
+    title: Wildcard SAN For New Sites
+    type: string
+    description: Whether new sites use a wildcard SAN on the generated certificate

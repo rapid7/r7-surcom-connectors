@@ -1,13 +1,14 @@
 id: sonicwall.capture.client
 name: SonicWall Capture Client
 author: Rapid7
-version: 0.1.0
+version: 0.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Initial release
+  - Update dependencies
+  - Mark key properties as required in the type schemas
 
 # IDs of Surface Command types in this connector.
 # Type IDs must be unique across all connectors. Prefix each with a SnakeCased
@@ -57,11 +58,6 @@ settings:
     example: 12345678-abcd-1234-efgh-123456789012
 
 runtime: py311
-
-# List any Python dependencies available on PyPI that are required by this connector.
-# `codegen` will generate a `requirements.txt` file with pinned versions of these dependencies.
-# python_dependencies:
-#  - another_dependency
 
 # Categories for this connector in the Extension Library.
 categories:

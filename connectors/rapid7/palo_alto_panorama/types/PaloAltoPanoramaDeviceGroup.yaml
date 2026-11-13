@@ -1,0 +1,90 @@
+x-samos-type-name: PaloAltoPanoramaDeviceGroup
+x-samos-namespace: palo.alto.panorama
+
+title: Palo Alto Device Group
+description: A Panorama device group, a set of managed firewalls that share objects and security rules
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.component-group
+    subtype-priority: 3
+
+x-samos-keys:
+  - x_id
+
+required:
+  - x_id
+
+x-samos-table:
+  - name: '@name'
+  - name: description
+  - name: d_firewall_count
+  - name: x_parent_id
+
+x-samos-detail:
+  - name: '@name'
+  - name: description
+  - name: d_firewall_count
+  - name: x_firewall_ids
+  - name: x_parent_id
+  - name: x_panorama_id
+
+x-samos-derived-properties:
+  # Table column: number of firewalls in the group, without listing every firewall ID
+  d_firewall_count:
+    type: integer
+    title: Firewall Count
+    syntax: jmespath
+    value: >-
+      length(x_firewall_ids || `[]`)
+
+properties:
+  x_id:
+    type: string
+    title: ID
+    description: Panorama serial number and device group name
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  '@name':
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  # The parent device group, or Panorama for a top-level device group
+  x_parent_id:
+    type: string
+    title: Parent
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaDeviceGroup
+        key-name: x_id
+      - type-name: PaloAltoPanoramaServer
+        key-name: x_id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+  x_panorama_id:
+    type: string
+    title: Panorama
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaServer
+        key-name: x_id
+  x_firewall_ids:
+    type: array
+    title: Firewalls
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: PaloAltoPanoramaFirewall
+          key-name: x_id
+    x-samos-fulfills:
+      type-name: core.component-group
+      property-name: members

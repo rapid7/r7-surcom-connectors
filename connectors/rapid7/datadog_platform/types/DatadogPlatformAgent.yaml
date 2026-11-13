@@ -11,6 +11,9 @@ x-samos-extends-types:
 x-samos-keys:
   - datadog_agent_key
 
+required:
+  - datadog_agent_key
+
 x-samos-table:
   - name: hostname
   - name: os

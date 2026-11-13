@@ -1,0 +1,196 @@
+x-samos-type-name: AssetPandaPerson
+x-samos-namespace: asset.panda
+title: Asset Panda Person
+description: A person or employee record from the Asset Panda People collection,
+  sourced from POST /collection-records/search.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: d_name
+  - name: email_address
+  - name: location
+  - name: lastupdated
+
+x-samos-derived-properties:
+  d_name:
+    title: Name
+    type: string
+    syntax: jmespath
+    value: >-
+      customFields."Full Name" ||
+      (customFields."First Name" && join(' ', [customFields."First Name", customFields."Last Name"][?@])) ||
+      email_address
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+x-samos-detail:
+  - name: accountid
+  - name: moduleid
+  - name: collectiontype
+  - name: dateadded
+  - name: lastupdated
+  - name: addedby
+  - name: lastupdatedby
+  - name: locked
+  - name: email_address
+  - name: location
+  - name: customFields
+
+properties:
+  id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  addedby:
+    type: string
+    title: Added By
+
+  accountid:
+    type: string
+    title: Account
+    x-samos-ref-types:
+      - type-name: AssetPandaAccount
+        key-name: id
+
+  moduleid:
+    type: string
+    title: Module
+    x-samos-ref-types:
+      - type-name: AssetPandaModule
+        key-name: id
+
+  orgid:
+    type: string
+    title: Org ID
+
+  collectionid:
+    type: string
+    title: Collection ID
+
+  collectiontype:
+    type: string
+    title: Collection Type
+
+  dateadded:
+    type: string
+    title: Date Added
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+
+  lastupdated:
+    type: string
+    title: Last Updated
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+
+  lastupdatedby:
+    type: string
+    title: Last Updated By
+
+  locked:
+    type: string
+    title: Locked
+
+  typeprimary:
+    type: string
+    title: Type Primary
+    x-samos-hidden: true
+
+  system_id_numericautoincrement:
+    type: object
+    title: System ID
+    x-samos-hidden: true
+    properties:
+      incrValue:
+        type: integer
+        title: Increment Value
+      value:
+        type: string
+        title: Value
+
+  email_address:
+    type: string
+    title: Email Address
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 4
+
+  location:
+    type: string
+    title: Location
+    x-samos-ref-types:
+      - type-name: AssetPandaLocation
+        key-name: id
+
+  customFields:
+    type: object
+    title: Custom Fields
+    description: >-
+      Custom field values keyed by display name, sourced from /collection-records/search.
+      Fields mapped to top-level properties via Settings are not repeated here.
+    properties:
+      Full Name:
+        type: string
+        title: Full Name
+      Employee ID:
+        type: string
+        title: Employee ID
+        x-samos-fulfills:
+          type-name: User
+          property-name: employee_id
+      First Name:
+        type: string
+        title: First Name
+        x-samos-fulfills:
+          type-name: User
+          property-name: first_name
+      Last Name:
+        type: string
+        title: Last Name
+        x-samos-fulfills:
+          type-name: User
+          property-name: last_name
+      Mobile Phone:
+        type: string
+        title: Mobile Phone
+        x-samos-fulfills:
+          type-name: User
+          property-name: telephone
+      Job Title:
+        type: string
+        title: Job Title
+        x-samos-fulfills:
+          type-name: User
+          property-name: title
+      Department:
+        type: string
+        title: Department
+        x-samos-fulfills:
+          type-name: User
+          property-name: department
+    additionalProperties:
+      type: string

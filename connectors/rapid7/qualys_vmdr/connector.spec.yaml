@@ -1,14 +1,14 @@
 id: qualys.vmdr
 name: Qualys VMDR
 author: Rapid7
-version: 3.1.0
+version: 3.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Fix SchemaValidationErrors with new QualysQidDetail2 type
-  - Increase timeout for Qualys API calls to 10 minutes
+  - Update dependencies
+  - Mark key properties as required in the type schemas
 
 # IDs of Surface Command types in this connector.
 # Type IDs must be unique across all connectors. Prefix each with a SnakeCased

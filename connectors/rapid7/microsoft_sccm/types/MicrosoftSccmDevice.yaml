@@ -1,0 +1,311 @@
+x-samos-type-name: MicrosoftSccmDevice
+x-samos-namespace: microsoft.sccm
+title: Microsoft SCCM Device
+description: Device description from Microsoft Endpoint Configuration Manager (SCCM)
+
+$ref: 'https://localhost/adminservice/v1.0/metadata#/components/schemas/Microsoft.ConfigurationManager.ObjectLibrary.Device'
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 4
+
+x-samos-keys: # TODO - these are not guids, and would not be unique across profiles
+  - s_MachineId
+  - MachineId
+
+required:
+  - MachineId
+
+x-samos-table:
+  - name: Name
+  - name: Domain
+  - name: DeviceOS
+  - name: DeviceOSBuild
+  - name: LastClientCheckTime
+
+x-samos-detail:
+  - name: Name
+  - name: Domain
+  - name: SiteCode
+  - name: DeviceOS
+  - name: DeviceOSBuild
+  - name: MacAddresses
+  - name: d_users
+  - name: LastLogonUser
+  - name: LastClientCheckTime
+
+x-samos-derived-properties:
+  s_MachineId:
+    type: string
+    syntax: jsonpath
+    value: '$.MachineId'
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+    x-samos-correlation:
+      correlation-key: CloudInstanceId
+      correlation-type: Machine
+      priority: 3
+  MacAddresses:
+    title: MAC Address
+    syntax: jsonpath
+    # Yucky jsonpath - the separator is "comma space"
+    value: '$.MACAddress.`splitlist(,, string)`.`splitlist( , string)`'
+    type: array
+    items:
+      type: string
+      format: mac-addr
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+  d_users:
+    title: Primary User(s)
+    syntax: jsonpath
+    value: '$.PrimaryUser.`splitlist(,, string)`'
+    type: array
+    items:
+      type: string
+      # Generic 'user' reference: this is DOMAIN\\userid, which is the key format in Microsoft Defender,
+      # but we don't want a hard dependency on Defender.
+      x-samos-ref-types:
+        - type-name: User
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: users
+  d_hostnames:
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: '{Name}'
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+  d_mac_addresses:
+    x-samos-hidden: true
+    type: array
+    syntax: jsonpath
+    # Yucky jsonpath - the separator is "comma space"
+    value: '$.MACAddress.`splitlist(,, string)`.`splitlist( , string)`'
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+  d_mitigations:
+    # SCCM provides software-update/patching mitigation
+    # If `EP_Enabled` is true, we might assume the device has endpoint protection (M1049),
+    # but that flag only reports the management status not the ground truth, so in this case we
+    # need to rely on Defender to report the actual mitigation status.
+    x-samos-hidden: true
+    title: Mitigations
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    syntax: jmespath
+    value: >-
+      [`M1051`]
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+  d_disk_encryption_enabled:
+    x-samos-hidden: true
+    title: Disk Encryption Enabled
+    type: boolean
+    syntax: jmespath
+    # Check if any volume has protection status != 0 (unprotected)
+    value: 'EncryptionVolumes && length(EncryptionVolumes[?ProtectionStatus != `0`]) > `0`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_encrypted
+
+properties:
+  AADDeviceID:
+    title: AzureAD Device ID
+    type: string
+    x-samos-correlation:
+      correlation-key: Machine.MicrosoftAzureAdDeviceId
+      correlation-type: Machine
+      priority: 4
+      exclude:
+        - '00000000-0000-0000-0000-000000000000'
+  AADTenantID:
+    title: AzureAD Tenant ID
+    type: string
+    x-samos-ref-types:
+      - type-name: CloudOrganization
+        key-name: id
+  MachineId:
+    x-samos-immutable: true
+    title: Machine Id
+    type: integer
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+      exclude:
+        - 'Unknown'
+  SiteCode:
+    title: SiteCode
+    type: string
+    x-samos-ref-types:
+      - type-name: MicrosoftSccmSite2
+        key-name: SiteCode
+  MACAddress:
+    # Hidden because we derive an array (this string can contain commas)
+    type: string
+    x-samos-hidden: true
+  IsVirtualMachine:
+    type: boolean
+    title: Virtual
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: virtual
+  SerialNumber:
+    title: Serial Number
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+  EP_Enabled:
+    type: boolean
+    title: Endpoint Protection
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_protection_active
+  EP_PendingReboot:
+    type: boolean
+    title: Endpoint Protection Pending Reboot
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: pending_reboot
+  LastActiveTime:
+    title: Last Seen
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+  EP_AntivirusSignatureUpdateDateTime:
+    title: Endpoint Def Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_definitions_date
+  DeviceOS:
+    title: Operating System
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+  Domain:
+    title: Domain
+    type: string
+
+  # Hidden odata internals
+  'AvailableApplications@odata.count':
+    x-samos-hidden: true
+  'BoundaryGroups@odata.count':
+    x-samos-hidden: true
+  'Events@odata.count':
+    x-samos-hidden: true
+  'ResourceCollectionMembership@odata.count':
+    x-samos-hidden: true
+
+  EncryptionVolumes:
+    title: Encryption Volumes
+    type: array
+    description: BitLocker encryption status for device volumes
+    items:
+      type: object
+      properties:
+        ResourceID:
+          title: Resource ID
+          type: number
+          description: SCCM Resource ID that corresponds to the device
+        DriveLetter:
+          title: Drive Letter
+          type: string
+          description: Drive letter of the encrypted volume
+        ProtectionStatus:
+          title: Protection Status
+          type: number
+          description: BitLocker protection status (0=Unprotected, 1=Protected, 2=Unknown)
+        EncryptionMethod:
+          title: Encryption Method
+          type: number
+          description: Encryption method used (0=None, 1=AES_128_WITH_DIFFUSER, 2=AES_256_WITH_DIFFUSER, 3=AES_128, 4=AES_256, 5=HARDWARE_ENCRYPTION, 6=XTS_AES_128, 7=XTS_AES_256)
+        ConversionStatus:
+          title: Conversion Status
+          type: number
+          description: Encryption conversion status (0=FullyDecrypted, 1=FullyEncrypted, 2=EncryptionInProgress, 3=DecryptionInProgress, 4=EncryptionPaused, 5=DecryptionPaused)
+        EncryptionPercentage:
+          title: Encryption Percentage
+          type: number
+          description: Percentage of drive that is encrypted
+        MbpsDecryptionSpeed:
+          title: Decryption Speed (Mbps)
+          type: number
+          description: Decryption speed in megabits per second
+        MbpsEncryptionSpeed:
+          title: Encryption Speed (Mbps)
+          type: number
+          description: Encryption speed in megabits per second
+
+components:
+  schemas:
+    Microsoft.ConfigurationManager.ObjectLibrary.BGB_LiveData_Boundary:
+      properties:
+        Device:
+          type: object
+          $ref: null # to bypass recursive reference
+    Microsoft.ConfigurationManager.ObjectLibrary.DeviceApplicationTargeting:
+      properties:
+        Device:
+          type: object
+          $ref: null
+    Microsoft.ConfigurationManager.ObjectLibrary.MachineEventRawData:
+      properties:
+        Device:
+          type: object
+          anyOf:
+            - $ref: null
+    Microsoft.ConfigurationManager.ObjectLibrary.ResourceCollectionMembership:
+      properties:
+        Device:
+          type: object
+          $ref: null
+    Microsoft.ConfigurationManager.ObjectLibrary.Collection:
+      properties:
+        ResourceCollectionMembership:
+          type: array
+          items:
+            type: object
+            $ref: null
+
+x-samos-virtual:
+  is_part_of_ref:
+    type-name: MicrosoftSccmCollection
+    cypher-pattern: >-
+      <-[:`e:MicrosoftSccmCollectionMember:ResourceID`]-
+      (:MicrosoftSccmCollectionMember)
+      -[:`e:MicrosoftSccmCollectionMember:CollectionID`]->
+      (:MicrosoftSccmCollection)
