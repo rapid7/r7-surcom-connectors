@@ -1,13 +1,12 @@
 id: nable.ncentral
 name: N-able N-central
 author: Rapid7
-version: 2.0.0
+version: 2.1.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 # Replaces the old nable.ncentral.app connector (SOAP-based, now deprecated)
 
 current_changes:
-  - Migrated the connector from SOAP to REST framework
-  - Add a new JWT Token setting
+  - Update dependencies
 
 types:
   - NableNcentralCustomer

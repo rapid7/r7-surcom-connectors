@@ -12,6 +12,9 @@ x-samos-global-zone: true
 x-samos-keys:
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: category

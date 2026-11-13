@@ -13,6 +13,9 @@ x-samos-keys:
   - id
   - zeventId
 
+required:
+  - id
+
 x-samos-table:
   - name: threatTypeName
   - name: severityName

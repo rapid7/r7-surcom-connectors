@@ -1,11 +1,11 @@
 id: controlup.dex
 name: ControlUp DEX
 author: Rapid7
-version: 1.0.0
+version: 1.1.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Initial release
+  - Update dependencies
 
 reference-schemas:
   - url: https://developer.controlup.com/docs/edge-dx-api

@@ -1,0 +1,137 @@
+﻿x-samos-type-name: DNSMadeEasyDomain
+x-samos-namespace: dnsmadeeasy
+title: DNS Made Easy Domain
+description: Managed Domain details from DNS Made Easy
+
+# These entities are in the global zone
+x-samos-global-zone: true
+
+x-samos-extends-types:
+  - type-name: Domain
+
+x-samos-keys:
+  - d_id
+  - id
+  - d_name
+
+required:
+  - id
+
+x-samos-table:
+  - name: d_name
+  - name: gtdEnabled
+  - name: created
+  - name: updated
+
+x-samos-detail:
+  - name: d_name
+  - name: created
+  - name: updated
+  - name: gtdEnabled
+  - name: processMulti
+  - name: activeThirdParties
+
+x-samos-derived-properties:
+  d_id:
+    # For fulfilling the core.component had derived id
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  #  d_resolves_to:
+  #    # name already a fulfilled component:name in the properties
+  #    # for fulfillment Domain.value derived the name property
+  #    title: Resolves To
+  #    syntax: jmespath
+  #    value: "x_records"
+  #    type: array
+  #    items:
+  #      type: string
+
+  d_name:
+    # name already a fulfilled component:name in the properties
+    # for fulfillment Domain.value derived the name property
+    title: Name
+    type: string
+    syntax: jmespath
+    value: 'name'
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: value
+
+  d_public:
+    x-samos-hidden: true
+    type: boolean
+    syntax: expression
+    value: 'true'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: public
+
+properties:
+  processMulti:
+    title: Process Multi?
+    type: boolean
+  activeThirdParties:
+    title: Active Third Parties
+    type: array
+    items:
+      type: string
+  folderId:
+    title: Folder ID
+    type: integer
+  pendingActionId:
+    title: Pending Action ID
+    type: integer
+  gtdEnabled:
+    title: GTD Enabled?
+    type: boolean
+  updated:
+    title: Updated
+    type: integer
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+  created:
+    title: Created
+    type: integer
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Domain.value
+      correlation-type: Domain
+      priority: 4
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+  x_records:
+    title: Domain Records
+    x-samos-hidden: true
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: DNSMadeEasyAAAARecord
+          key-name: value
+        - type-name: DNSMadeEasyARecord
+          key-name: value
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: resolves_to_refs

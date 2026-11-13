@@ -1,0 +1,182 @@
+id: asset.panda
+name: Asset Panda
+author: Rapid7
+version: 0.2.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Update dependencies
+
+types:
+  - AssetPandaAsset
+  - AssetPandaPerson
+  - AssetPandaLocation
+  - AssetPandaAccount
+  - AssetPandaModule
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Asset Panda Assets, People, Locations, Accounts, Modules
+    description: Import Assets, People, Locations, Accounts, and Modules from Asset Panda.
+    return_types:
+      - AssetPandaAsset
+      - AssetPandaPerson
+      - AssetPandaLocation
+      - AssetPandaAccount
+      - AssetPandaModule
+
+settings:
+  access_key_id:
+    type: string
+    title: Access Key ID
+    description: Access Key ID from the Asset Panda API credentials.
+
+  access_key_secret:
+    type: string
+    title: Access Key Secret
+    description: Access Key Secret from the Asset Panda API credentials.
+    format: password
+
+  asset_collections:
+    type: string
+    title: Asset Collections
+    description: >-
+      Comma-separated names of the collections to import as Assets. Defaults to "Assets".
+    example: Servers, Workstations
+    default: Assets
+    nullable: true
+
+  people_collections:
+    type: string
+    title: People Collections
+    description: >-
+      Comma-separated names of the collections to import as People. Defaults to "People".
+    example: Employees, Contractors
+    default: People
+    nullable: true
+
+  location_collections:
+    type: string
+    title: Location Collections
+    description: >-
+      Comma-separated names of the collections to import as Locations. Defaults to "Location".
+    example: Location
+    default: Location
+    nullable: true
+
+  asset_hostname_field:
+    type: string
+    title: Asset Hostname Field
+    description: >-
+      Required. Display name of the Asset field that contains the hostname.
+      Used for Machine correlation in Surface Command.
+    example: Hostname
+    nullable: false
+
+  asset_type_field:
+    type: string
+    title: Asset Type Field
+    description: Display name of the Asset field that describes the asset type.
+    example: Asset Type
+    nullable: true
+
+  asset_assigned_to_field:
+    type: string
+    title: Asset Assigned-To Field
+    description: Display name of the Asset field that references the person the asset is assigned to.
+    example: Assigned To
+    nullable: true
+
+  asset_location_field:
+    type: string
+    title: Asset Location Field
+    description: Display name of the Asset field that references the asset's location.
+    example: Location
+    nullable: true
+
+  asset_ip_field:
+    type: string
+    title: Asset IP Address Field
+    description: >-
+      Display name of the Asset field that contains the IP address(es).
+      Multiple values may be comma-separated.
+    example: IP Address
+    nullable: true
+
+  asset_mac_field:
+    type: string
+    title: Asset MAC Address Field
+    description: >-
+      Display name of the Asset field that contains the MAC address(es).
+      Multiple values may be comma-separated. Used for Machine correlation in Surface Command.
+    example: MAC Address
+    nullable: true
+
+  asset_serial_number_field:
+    type: string
+    title: Asset Serial Number Field
+    description: Display name of the Asset field that contains the serial number.
+    example: Serial Number
+    nullable: true
+
+  asset_make_field:
+    type: string
+    title: Asset Manufacturer Field
+    description: Display name of the Asset field that contains the manufacturer/make.
+    example: Manufacturer
+    nullable: true
+
+  asset_model_field:
+    type: string
+    title: Asset Model Field
+    description: Display name of the Asset field that contains the model name.
+    example: Model
+    nullable: true
+
+  asset_os_field:
+    type: string
+    title: Asset Operating System Field
+    description: Display name of the Asset field that contains the operating system.
+    example: Operating System
+    nullable: true
+
+  people_email_field:
+    type: string
+    title: People Email Field
+    description: >-
+      Required. Display name of the People field that contains the person's email address.
+      Used for User correlation in Surface Command.
+    example: Work Email
+    nullable: false
+
+  people_location_field:
+    type: string
+    title: People Location Field
+    description: Display name of the People field that references the person's location.
+    example: Location
+    nullable: true
+
+  location_name_field:
+    type: string
+    title: Location Name Field
+    description: >-
+      Required. Display name of the Location field that contains the location name.
+      Used for Location correlation in Surface Command.
+    example: Location Name
+    nullable: false
+
+  location_parent_field:
+    type: string
+    title: Location Parent Field
+    description: >-
+      Display name of the Location field that references the parent location.
+      Used to build the location hierarchy in Surface Command.
+    example: Parent Location
+    nullable: true
+
+runtime: py311
+
+categories:
+  - asset_management

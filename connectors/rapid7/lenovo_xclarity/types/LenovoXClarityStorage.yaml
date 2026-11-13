@@ -1,0 +1,287 @@
+x-samos-type-name: LenovoXClarityStorage
+x-samos-namespace: lenovo.xclarity
+title: Lenovo XClarity Storage
+description: A managed storage system or enclosure managed by Lenovo XClarity Administrator,
+  providing storage capacity and hardware status information.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Storage
+    subtype-priority: 2
+
+x-samos-keys:
+  - uuid
+
+required:
+  - uuid
+
+x-samos-table:
+  - name: name
+  - name: type
+  - name: model
+  - name: serialNumber
+  - name: mgmtProcIPaddress
+  - name: overallHealthState
+  - name: accessState
+
+x-samos-detail:
+  - name: name
+  - name: overallHealthState
+  - name: accessState
+  - name: healthReason
+  - name: type
+  - name: machineType
+  - name: model
+  - name: productName
+  - name: productBrand
+  - name: serialNumber
+  - name: vendorName
+  - name: mgmtProcIPaddress
+  - name: ipv4Addresses
+  - name: wwnn
+  - name: enclosureCount
+  - name: driveBays
+  - name: diskGroups
+  - name: virtualPools
+  - name: storageNodeCapacityList
+  - name: location
+  - name: systemLocation
+  - name: parent
+  - name: description
+  - name: userDescription
+
+x-samos-derived-properties:
+  d_is_part_of:
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    # Storage systems expose their parent chassis UUID under parent.uuid (empty when standalone)
+    value: 'parent.uuid || `null`'
+    x-samos-ref-types:
+      - key-name: uuid
+        type-name: LenovoXClarityChassis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+  d_active:
+    type: boolean
+    x-samos-hidden: true
+    syntax: jmespath
+    # Storage system is considered active when the appliance reports it reachable
+    value: "accessState == 'Online'"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  uuid:
+    type: string
+    title: UUID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  overallHealthState:
+    type: string
+    title: Overall Health State
+    x-samos-ref-types:
+      - key-name: id
+        type-name: LenovoXClarityEnumOperationalStatus
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: operational_status
+  accessState:
+    type: string
+    title: Access State
+  canisterSlots:
+    type: integer
+    title: Canister Slots
+  cmmHealthState:
+    type: string
+    title: CMM Health State
+  contact:
+    type: string
+    title: Contact
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  diskGroups:
+    type: integer
+    title: Disk Groups
+  driveBays:
+    type: integer
+    title: Drive Bays
+  enclosureCount:
+    type: integer
+    title: Enclosure Count
+  excludedHealthState:
+    type: string
+    title: Excluded Health State
+  healthReason:
+    type: string
+    title: Health Reason
+  ipv4Addresses:
+    type: array
+    title: IPv4 Addresses
+    items:
+      type: string
+  isConnectionTrusted:
+    type: string
+    title: Connection Trusted
+  location:
+    type: object
+    title: Location
+    properties:
+      location:
+        type: string
+        title: Location
+      lowestRackUnit:
+        type: integer
+        title: Lowest Rack Unit
+      rack:
+        type: string
+        title: Rack
+      room:
+        type: string
+        title: Room
+  machineType:
+    type: string
+    title: Machine Type
+  mgmtProcIPaddress:
+    type: string
+    title: Management IP Address
+    format: ip-addr
+  model:
+    type: string
+    title: Model
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+  otherMcStatus:
+    type: string
+    title: Other MC Status
+  parent:
+    type: object
+    title: Parent
+    description: Parent chassis enclosure, if this storage system is chassis-mounted.
+    properties:
+      uri:
+        type: string
+        title: URI
+      uuid:
+        type: string
+        title: UUID
+  pfu:
+    type: string
+    title: PFU
+  productBrand:
+    type: string
+    title: Product Brand
+  productName:
+    type: string
+    title: Product Name
+  scsiProductId:
+    type: string
+    title: SCSI Product ID
+  scsiVendorId:
+    type: string
+    title: SCSI Vendor ID
+  securityDescriptor:
+    type: object
+    title: Security Descriptor
+    properties:
+      managedAuthEnabled:
+        type: boolean
+        title: Managed Auth Enabled?
+      managedAuthSupported:
+        type: boolean
+        title: Managed Auth Supported?
+      publicAccess:
+        type: boolean
+        title: Public Access?
+      roleGroups:
+        type: array
+        title: Role Groups
+        items:
+          type: string
+      storedCredentials:
+        type: string
+        title: Stored Credentials
+      uri:
+        type: string
+        title: URI
+  serialNumber:
+    type: string
+    title: Serial Number
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+  storageNodeCapacityList:
+    type: array
+    title: Storage Node Capacity List
+    items:
+      type: object
+      properties:
+        blockStorage:
+          type: object
+          title: Block Storage
+          properties:
+            available:
+              type: string
+              title: Available
+            fullThresholdPercent:
+              type: string
+              title: Full Threshold Percent
+            size:
+              type: string
+              title: Size
+            used:
+              type: string
+              title: Used
+        nodeName:
+          type: string
+          title: Node Name
+  supportedLocales:
+    type: string
+    title: Supported Locales
+  systemLocation:
+    type: string
+    title: System Location
+  type:
+    type: string
+    title: Type
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  userDefinedName:
+    type: string
+    title: User Defined Name
+  userDescription:
+    type: string
+    title: User Description
+  uri:
+    type: string
+    title: URI
+  vendorName:
+    type: string
+    title: Vendor Name
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+  virtualPools:
+    type: integer
+    title: Virtual Pools
+  wwnn:
+    type: string
+    title: WWNN

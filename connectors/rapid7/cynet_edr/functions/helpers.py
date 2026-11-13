@@ -26,7 +26,7 @@ def get_last_seen_cutoff(days: int) -> str:
 # Cynet Unified API V3 endpoints.
 # Docs: https://help.api.cynet.com/docs/API-V3
 # - hosts_list / users_list (GET): thin PascalCase inventory.
-# - host_detail / user_detail (GET): canonical snake-case record.
+# - host_detail / user_detail (GET): canonical snake-case detail record.
 # - vulnerabilities / misconfigurations (POST): per-rule list.
 # - vulnerability_endpoints / misconfiguration_endpoints (GET): per-host
 #   instances of one rule (rule x host join).

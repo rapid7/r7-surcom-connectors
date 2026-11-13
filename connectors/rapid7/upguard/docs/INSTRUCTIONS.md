@@ -12,6 +12,7 @@
   This connector requires an `API Key` to connect to the UpGuard CyberRisk API.
 
   ### Additional Settings
+  - `Base URL` — Leave at the default. Change only if UpGuard routes your tenant to a regional host (e.g. `https://au.cyber-risk.upguard.com/api/public`).
   - `Minimum Risk Severity` — Lowest severity level of risks to import (imports this level and higher).
   - `Active Domains Only?` — If enabled, only domains that are currently active will be imported.
   - `Import Vendor Assets?` -  If enabled, vendor assets will be imported. Vendor assets are the domains and IP addresses that belong to your vendors. If disabled, imports vendor questionnaires.

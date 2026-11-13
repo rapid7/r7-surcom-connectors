@@ -11,6 +11,9 @@ x-samos-keys:
   - d_id
   - Email # To allow referencing ContactEmail from KaseyaVSA9Agent to this user
 
+required:
+  - Email
+
 x-samos-table:
   - name: d_name
   - name: Email

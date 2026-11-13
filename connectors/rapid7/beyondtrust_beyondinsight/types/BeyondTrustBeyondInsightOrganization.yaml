@@ -9,6 +9,9 @@ x-samos-extends-types:
 x-samos-keys:
   - OrganizationID
 
+required:
+  - OrganizationID
+
 x-samos-table:
   - name: Name
   - name: IsActive

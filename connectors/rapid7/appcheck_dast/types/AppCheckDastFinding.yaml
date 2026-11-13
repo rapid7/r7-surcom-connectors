@@ -9,6 +9,9 @@ x-samos-extends-types:
 x-samos-keys:
   - vul_id
 
+required:
+  - vul_id
+
 x-samos-table:
   - name: host
   - name: plugin

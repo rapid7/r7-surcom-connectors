@@ -11,6 +11,9 @@ x-samos-extends-types:
 x-samos-keys:
   - AgentId
 
+required:
+  - AgentId
+
 x-samos-table:
   - name: ComputerName
   - name: d_active

@@ -9,6 +9,9 @@ x-samos-extends-types:
 x-samos-keys:
   - applicationId
 
+required:
+  - applicationId
+
 x-samos-table:
   - name: name
   - name: description

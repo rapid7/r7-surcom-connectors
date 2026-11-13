@@ -11,6 +11,9 @@ x-samos-keys:
   - id
   - email
 
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: email

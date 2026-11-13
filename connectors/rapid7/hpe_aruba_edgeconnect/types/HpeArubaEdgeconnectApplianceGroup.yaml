@@ -1,0 +1,68 @@
+x-samos-type-name: HpeArubaEdgeconnectApplianceGroup
+x-samos-namespace: hpe.aruba.edgeconnect
+title: HPE Aruba Networking EdgeConnect Appliance Group
+description: A group in HPE Aruba Networking Orchestrator used to organize appliances
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.component-group
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-supernode: true
+
+x-samos-table:
+  - name: name
+  - name: id
+  - name: parentId
+  - name: subType
+
+x-samos-detail:
+  - name: name
+  - name: id
+  - name: parentId
+  - name: subType
+
+properties:
+  id:
+    title: ID
+    description: Group identifier, e.g. 0.Network for the root group
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  parentId:
+    title: Parent Group
+    type: string
+    nullable: true
+    x-samos-ref-types:
+      - type-name: HpeArubaEdgeconnectApplianceGroup
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+  subType:
+    title: Sub Type
+    type: integer
+
+x-samos-virtual:
+  # Fulfill core.component-group:members with the appliances in this group.
+  # groupId fulfills is_part_of_ref, so its edge is stored under that label
+  members:
+    type-name: HpeArubaEdgeconnectAppliance
+    cypher-pattern: >
+      <-[:`e:core.component:is_part_of_ref`]-(:HpeArubaEdgeconnectAppliance)

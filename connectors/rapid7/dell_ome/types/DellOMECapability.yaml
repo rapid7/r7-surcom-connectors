@@ -1,0 +1,60 @@
+x-samos-type-name: DellOMECapability
+x-samos-namespace: dell.ome
+title: Dell OME Device Capability
+description: A named capability code supported by a Dell OME managed device.
+x-samos-hidden: true
+x-samos-default-hide-from-graph: true
+x-samos-global-zone: true
+
+x-samos-extends-types:
+  - type-name: Enum
+    subtype-priority: 1
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: value
+  - name: description
+
+x-samos-detail:
+  - name: id
+  - name: value
+  - name: description
+
+x-samos-derived-properties:
+  name:
+    title: Name
+    type: string
+    syntax: expression
+    value: '{value}'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  id:
+    title: Capability ID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Enum
+      property-name: id
+
+  value:
+    title: Capability Name
+    type: string
+    x-samos-fulfills:
+      type-name: Enum
+      property-name: value
+
+  description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description

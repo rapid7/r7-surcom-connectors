@@ -12,6 +12,9 @@ x-samos-keys:
   - Id
   - Hostname
 
+required:
+  - Id
+
 x-samos-table:
   - name: Name
   - name: Code

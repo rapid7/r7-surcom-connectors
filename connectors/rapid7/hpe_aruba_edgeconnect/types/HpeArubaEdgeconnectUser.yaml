@@ -1,0 +1,203 @@
+x-samos-type-name: HpeArubaEdgeconnectUser
+x-samos-namespace: hpe.aruba.edgeconnect
+title: HPE Aruba Networking EdgeConnect User
+description: A user account that can sign in to HPE Aruba Networking Orchestrator
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - userPk
+
+required:
+  - userPk
+
+x-samos-table:
+  - name: username
+  - name: firstName
+  - name: lastName
+  - name: email
+  - name: role
+  - name: status
+  - name: lastLoginS
+
+x-samos-detail:
+  - name: username
+  - name: userPk
+  - name: firstName
+  - name: lastName
+  - name: email
+  - name: phone
+  - name: role
+  - name: status
+  - name: isTwoFactorEmail
+  - name: isTwoFactorTime
+  - name: isCurrentlyLoggedIn
+  - name: passwordInit
+  - name: createTime
+  - name: lastLoginS
+  - name: expireTime
+
+x-samos-derived-properties:
+  # Use "firstName lastName" when either is set, otherwise fall back to the username
+  d_name:
+    type: string
+    syntax: jmespath
+    value: "join(' ', [firstName, lastName]|[?@]) || username"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  # Orchestrator reports account status as the string 'Active' or 'Inactive'
+  d_active:
+    type: boolean
+    syntax: jmespath
+    value: "status == 'Active'"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+  # Email and app (TOTP) two-factor authentication are reported as separate flags
+  d_has_mfa:
+    type: boolean
+    syntax: jmespath
+    value: 'isTwoFactorEmail || isTwoFactorTime || `false`'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: has_mfa
+
+  # Orchestrator returns the role as a name; "Admin Manager" is the built-in role with
+  # full administrative access (the role of the default admin account)
+  d_is_administrator:
+    type: boolean
+    syntax: jmespath
+    value: "role == 'Admin Manager'"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_administrator
+
+  # M1032 Multi-Factor Authentication: email or app (TOTP) two-factor enabled
+  d_mitigations:
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Mitigation
+          key-name: id
+    syntax: jmespath
+    value: |
+      [
+        (isTwoFactorEmail || isTwoFactorTime) && `M1032` || null
+      ] | [?@]
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: mitigations
+
+properties:
+  userPk:
+    title: User ID
+    description: Primary key of the user in Orchestrator, e.g. 0.User
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  username:
+    title: Username
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+
+  firstName:
+    title: First Name
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+
+  lastName:
+    title: Last Name
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+
+  email:
+    title: Email
+    type: string
+    format: email
+    nullable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 3
+
+  phone:
+    title: Phone
+    type: string
+    nullable: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+
+  role:
+    title: Role
+    description: Orchestrator role, e.g. Admin Manager or Network Monitor
+    type: string
+
+  status:
+    title: Status
+    type: string
+
+  isTwoFactorEmail:
+    title: Email Two-Factor Authentication?
+    type: boolean
+
+  isTwoFactorTime:
+    title: App Two-Factor Authentication?
+    type: boolean
+
+  isCurrentlyLoggedIn:
+    title: Currently Logged In?
+    type: boolean
+
+  passwordInit:
+    title: Password Init?
+    type: boolean
+    nullable: true
+
+  createTime:
+    title: Created
+    type: integer
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: first_seen
+
+  lastLoginS:
+    title: Last Login
+    type: integer
+    format: epoch
+    nullable: true
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+
+  expireTime:
+    title: Expire Time
+    type: integer
+    x-samos-hidden: true

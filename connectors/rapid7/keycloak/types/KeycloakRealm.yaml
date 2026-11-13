@@ -12,6 +12,9 @@ $ref: https://keycloak.org/docs-api/latest/rest-api#/components/schemas/RealmRep
 x-samos-keys:
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: realm
   - name: displayName

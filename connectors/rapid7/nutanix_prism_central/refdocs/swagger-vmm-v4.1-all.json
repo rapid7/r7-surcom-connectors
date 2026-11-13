@@ -43326,7 +43326,7 @@
           },
           {
             "title": "Virtual disk image.",
-            "required": ["name", "type"],
+            "required": ["name"],
             "type": "object",
             "properties": {
               "name": {

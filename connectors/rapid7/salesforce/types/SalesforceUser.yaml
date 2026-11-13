@@ -1,0 +1,580 @@
+x-samos-type-name: SalesforceUser
+x-samos-namespace: salesforce
+title: Salesforce User
+description: >-
+  A licensed User in a Salesforce org (has login access). Users are correlated
+  to other sources by email. Salesforce does not enforce unique email
+  addresses, so Users that share an address (for example, shared or
+  integration mailboxes) can be grouped into a single User.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: User
+    subtype-priority: 3
+
+x-samos-keys:
+  - Id
+
+required:
+  - Id
+
+x-samos-table:
+  - name: Username
+  - name: Name
+  - name: Email
+  - name: IsActive
+  - name: Title
+  - name: Department
+  - name: LastLoginDate
+
+x-samos-detail:
+  - name: Name
+  - name: Username
+  - name: FirstName
+  - name: MiddleName
+  - name: LastName
+  - name: Suffix
+  - name: Alias
+  - name: Email
+  - name: HasUserVerifiedEmail
+  - name: HasUserVerifiedPhone
+  - name: IsActive
+  - name: UserType
+  - name: d_is_service_account
+  - name: Department
+  - name: Title
+  - name: CompanyName
+  - name: Division
+  - name: EmployeeNumber
+  - name: Phone
+  - name: MobilePhone
+  - name: Extension
+  - name: Fax
+  - name: UserRoleId
+  - name: ProfileId
+  - name: ManagerId
+  - name: DelegatedApproverId
+  - name: FederationIdentifier
+  - name: CallCenterId
+  - name: ContactId
+  - name: AccountId
+  - name: IndividualId
+  - name: x_organization_id
+  - name: UserPermissionsMarketingUser
+  - name: UserPermissionsOfflineUser
+  - name: UserPermissionsCallCenterAutoLogin
+  - name: UserPermissionsSFContentUser
+  - name: UserPermissionsKnowledgeUser
+  - name: UserPermissionsInteractionUser
+  - name: UserPermissionsSupportUser
+  - name: UserPermissionsLiveAgentUser
+  - name: Street
+  - name: City
+  - name: State
+  - name: PostalCode
+  - name: Country
+  - name: CountryCode
+  - name: TimeZoneSidKey
+  - name: LocaleSidKey
+  - name: LanguageLocaleKey
+  - name: groups
+  - name: LastLoginDate
+  - name: NumberOfFailedLogins
+  - name: LastPasswordChangeDate
+  - name: PasswordExpirationDate
+  - name: SuAccessExpirationDate
+  - name: CreatedById
+  - name: LastModifiedById
+  - name: CreatedDate
+  - name: LastModifiedDate
+  - name: LastViewedDate
+  - name: SystemModstamp
+
+x-samos-derived-properties:
+  # Calculated value: only human user types take part in email correlation.
+  # Automated/integration users (e.g. AutomatedProcess, CloudIntegrationUser)
+  # share noreply@ addresses and would otherwise be merged into one User.
+  d_email:
+    x-samos-hidden: true
+    title: Email
+    type: string
+    syntax: jmespath
+    value: "contains(['Standard', 'PowerPartner', 'CspLitePortal', 'CustomerSuccess', 'PowerCustomerSuccess', 'CsnOnly'], UserType) && Email || `null`"
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 3
+
+  # Salesforce automation/integration user types are
+  # service accounts rather than people.
+  d_is_service_account:
+    title: Service Account?
+    type: boolean
+    syntax: jmespath
+    value: "contains(['AutomatedProcess', 'CloudIntegrationUser'], UserType)"
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_service_account
+
+  # portal, community, and public-site guest users are
+  # people outside the org who have a Salesforce login.
+  d_is_external:
+    title: External?
+    type: boolean
+    syntax: jmespath
+    value: "contains(['PowerPartner', 'PowerCustomerSuccess', 'CustomerSuccess', 'CspLitePortal', 'Guest'], UserType)"
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_external
+
+properties:
+  Id:
+    title: Id
+    description: Salesforce User ID.
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  Username:
+    title: Username
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: username
+
+  LastName:
+    title: Last Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+
+  FirstName:
+    title: First Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+
+  MiddleName:
+    title: Middle Name
+    type: string
+
+  Suffix:
+    title: Suffix
+    type: string
+
+  Name:
+    title: Full Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  CompanyName:
+    title: Company Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: company
+
+  Division:
+    title: Division
+    type: string
+
+  Department:
+    title: Department
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: department
+
+  Title:
+    title: Title
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: title
+
+  Street:
+    title: Street
+    type: string
+
+  City:
+    title: City
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: city
+
+  State:
+    title: State
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: state
+
+  PostalCode:
+    title: Postal Code
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: postal_code
+
+  Country:
+    title: Country
+    description: Country as entered on the user record, e.g. Czech Republic or UK.
+    type: string
+
+  CountryCode:
+    title: Country Code
+    description: >-
+      ISO 3166 alpha-2 country code (e.g. CZ), set when State and Country Picklists are enabled in the org.
+    type: string
+    x-samos-ref-types:
+      - type-name: NoeticEnumCountry
+        key-name: alpha_2_id
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: country
+
+  StateCode:
+    title: State Code
+    type: string
+
+  Latitude:
+    x-samos-hidden: true
+    type: number
+    title: Latitude
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: latitude
+
+  Longitude:
+    x-samos-hidden: true
+    type: number
+    title: Longitude
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: longitude
+
+  GeocodeAccuracy:
+    title: Geocode Accuracy
+    type: string
+
+  Email:
+    title: Email
+    type: string
+
+  SenderEmail:
+    title: Sender Email
+    type: string
+
+  SenderName:
+    title: Sender Name
+    type: string
+
+  Phone:
+    title: Phone
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+
+  Fax:
+    title: Fax
+    type: string
+
+  MobilePhone:
+    title: Mobile Phone
+    type: string
+
+  Alias:
+    title: Alias
+    type: string
+
+  CommunityNickname:
+    title: Community Nickname
+    type: string
+
+  BadgeText:
+    title: Badge Text
+    type: string
+
+  IsActive:
+    title: Active?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: active
+
+  TimeZoneSidKey:
+    title: Time Zone Sid Key
+    type: string
+
+  UserRoleId:
+    title: User Role
+    description: The UserRole this user is assigned to.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUserRole
+        key-name: Id
+
+  LocaleSidKey:
+    title: Locale Sid Key
+    type: string
+
+  ReceivesInfoEmails:
+    title: Receives Info Emails
+    type: boolean
+
+  ReceivesAdminInfoEmails:
+    title: Receives Admin Info Emails
+    type: boolean
+
+  EmailEncodingKey:
+    x-samos-hidden: true
+    title: Email Encoding Key
+    type: string
+
+  ProfileId:
+    title: Profile Id
+    description: The Salesforce Profile assigned to this user, controlling object and field-level permissions.
+      Profile records are not imported by this connector, so this ID is informational only.
+    type: string
+
+  UserType:
+    title: User Type
+    description: Standard, PowerPartner, CspLitePortal, CustomerSuccess, etc.
+    type: string
+
+  StartDay:
+    title: Start Day
+    type: string
+
+  EndDay:
+    title: End Day
+    type: string
+
+  LanguageLocaleKey:
+    title: Language Locale Key
+    type: string
+
+  EmployeeNumber:
+    title: Employee Number
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: employee_id
+
+  DelegatedApproverId:
+    title: Delegated Approver
+    description: The User or Group that approves requests on behalf of this user.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+      - type-name: SalesforceGroup
+        key-name: Id
+
+  ManagerId:
+    title: Manager
+    description: This user's manager.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  LastLoginDate:
+    title: Last Login Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: last_seen
+
+  LastPasswordChangeDate:
+    title: Last Password Change Date
+    type: string
+    format: date-time
+
+  CreatedDate:
+    title: Created Date
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: start_date
+
+  CreatedById:
+    title: Created By
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  LastModifiedDate:
+    title: Last Modified Date
+    type: string
+    format: date-time
+
+  LastModifiedById:
+    title: Last Modified By
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  SystemModstamp:
+    title: System Modstamp
+    type: string
+    format: date-time
+
+  PasswordExpirationDate:
+    title: Password Expiration Date
+    type: string
+    format: date-time
+
+  NumberOfFailedLogins:
+    title: Number Of Failed Logins
+    type: integer
+
+  SuAccessExpirationDate:
+    title: Su Access Expiration Date
+    type: string
+
+  UserPermissionsMarketingUser:
+    title: User Permissions Marketing User
+    type: boolean
+
+  UserPermissionsOfflineUser:
+    title: User Permissions Offline User
+    type: boolean
+
+  UserPermissionsAvantgoUser:
+    title: User Permissions Avantgo User
+    type: boolean
+
+  UserPermissionsCallCenterAutoLogin:
+    title: User Permissions Call Center Auto Login
+    type: boolean
+
+  UserPermissionsSFContentUser:
+    title: User Permissions SF Content User
+    type: boolean
+
+  UserPermissionsKnowledgeUser:
+    title: User Permissions Knowledge User
+    type: boolean
+
+  UserPermissionsInteractionUser:
+    title: User Permissions Interaction User
+    type: boolean
+
+  UserPermissionsSupportUser:
+    title: User Permissions Support User
+    type: boolean
+
+  UserPermissionsLiveAgentUser:
+    title: User Permissions Live Agent User
+    type: boolean
+
+  ForecastEnabled:
+    title: Forecast Enabled
+    type: boolean
+
+  HasUserVerifiedPhone:
+    title: Has User Verified Phone
+    type: boolean
+
+  HasUserVerifiedEmail:
+    title: Has User Verified Email
+    type: boolean
+
+  ContactId:
+    title: Contact
+    description: For Customer/Partner community users, the Contact record this user is based on.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceContact
+        key-name: Id
+
+  AccountId:
+    title: Account
+    description: For Customer/Partner community users, the Account record this user is based on.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceAccount
+        key-name: Id
+
+  CallCenterId:
+    title: Call Center
+    type: string
+
+  Extension:
+    title: Extension
+    type: string
+
+  FederationIdentifier:
+    title: Federation Identifier
+    type: string
+
+  IsExtIndicatorVisible:
+    title: Ext Indicator Visible?
+    type: boolean
+
+  DigestFrequency:
+    title: Digest Frequency
+    type: string
+
+  DefaultGroupNotificationFrequency:
+    title: Default Group Notification Frequency
+    type: string
+
+  LastViewedDate:
+    title: Last Viewed Date
+    type: string
+    format: date-time
+
+  LastReferencedDate:
+    title: Last Referenced Date
+    type: string
+    format: date-time
+
+  IndividualId:
+    title: Individual Id
+    type: string
+
+  x_organization_id:
+    title: Salesforce Org
+    description: >-
+      The Salesforce org (tenant) this User account exists in. This is not
+      the User's employer; for partner and customer portal users, see Account.
+      Not a native User field - injected by the connector from the
+      Organization record.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceOrganization
+        key-name: Id
+
+  groups:
+    title: Groups
+    description: >-
+      The Public Groups and Queues the user was
+      added to directly (Salesforce GroupMember records). Groups gained
+      through the role are reached via the UserRole, not listed here. Not a
+      native User field - injected by the connector.
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: SalesforceGroup
+          key-name: Id
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups

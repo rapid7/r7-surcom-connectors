@@ -10,6 +10,9 @@ x-samos-keys:
   - AssetID
   - d_id
 
+required:
+  - AssetID
+
 x-samos-table:
   - name: AssetName
   - name: FQDN

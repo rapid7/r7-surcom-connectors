@@ -1,0 +1,121 @@
+x-samos-type-name: XenServerNetwork
+x-samos-namespace: xenserver
+title: XenServer Network
+description: A XenServer virtual network that connects host physical interfaces and VM virtual interfaces.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Network
+    subtype-priority: 3
+
+x-samos-keys:
+  - uuid
+
+required:
+  - uuid
+
+x-samos-table:
+  - name: name_label
+  - name: bridge
+  - name: x_vlans
+  - name: MTU
+
+x-samos-detail:
+  - name: name_label
+  - name: name_description
+  - name: tags
+  - name: bridge
+  - name: x_vlans
+  - name: x_cidrs
+  - name: MTU
+  - name: managed
+  - name: purpose
+  - name: x_pool_uuid
+  - name: x_virtual
+  - name: uuid
+
+properties:
+  uuid:
+    title: UUID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name_label:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  name_description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  bridge:
+    title: Bridge
+    type: string
+
+  MTU:
+    title: MTU
+    type: integer
+
+  managed:
+    title: Managed?
+    type: boolean
+
+  purpose:
+    title: Purpose
+    type: array
+    items:
+      type: string
+
+  tags:
+    title: Tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: XenServerSourceTag
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+
+  x_virtual:
+    title: Virtual?
+    description: Always true; a XenServer network is a software switch (bridge) on the hosts.
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: virtual
+
+  x_vlans:
+    title: VLANs
+    type: array
+    items:
+      type: integer
+
+  x_cidrs:
+    title: CIDRs
+    type: array
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Network
+      property-name: cidr
+
+  x_pool_uuid:
+    title: Pool
+    type: string
+    x-samos-ref-types:
+      - type-name: XenServerPool
+        key-name: uuid
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref

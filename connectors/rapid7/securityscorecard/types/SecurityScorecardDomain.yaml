@@ -11,6 +11,9 @@ x-samos-extends-types:
 x-samos-keys:
   - domain
 
+required:
+  - domain
+
 x-samos-table:
   - name: domain
   - name: status

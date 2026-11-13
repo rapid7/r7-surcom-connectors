@@ -9,6 +9,9 @@ x-samos-extends-types:
 x-samos-keys:
   - team_id
 
+required:
+  - team_id
+
 x-samos-table:
   - name: team_name
   - name: business_unit.bu_name

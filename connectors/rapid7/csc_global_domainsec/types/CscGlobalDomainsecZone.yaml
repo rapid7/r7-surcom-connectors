@@ -1,0 +1,270 @@
+x-samos-type-name: CscGlobalDomainsecZone
+x-samos-namespace: csc.global.domainsec
+title: CSC Global DomainSec Zone
+description: A DNS zone hosted by CSC Global DomainSec, with its resource records.
+x-samos-detail-prefer-type-title: true
+
+x-samos-global-zone: true
+
+x-samos-extends-types:
+  - type-name: Domain
+    subtype-priority: 3
+
+x-samos-keys:
+  - zoneName
+
+required:
+  - zoneName
+
+x-samos-table:
+  - name: zoneName
+  - name: hostingType
+
+x-samos-detail:
+  - name: zoneName
+  - name: hostingType
+  - name: a
+  - name: aaaa
+  - name: cname
+  - name: mx
+  - name: txt
+  - name: srv
+  - name: caa
+  - name: soa
+
+x-samos-derived-properties:
+  d_id:
+    type: string
+    syntax: jmespath
+    value: zoneName
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_name:
+    type: string
+    syntax: jmespath
+    value: zoneName
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  d_public:
+    type: boolean
+    syntax: expression
+    value: 'true'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: public
+
+  d_is_external:
+    type: boolean
+    syntax: expression
+    value: 'false'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_external
+
+properties:
+  zoneName:
+    type: string
+    title: Zone Name
+    format: domain-name
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: value
+    x-samos-correlation:
+      correlation-key: Domain.value
+      correlation-type: Domain
+      priority: 3
+
+  hostingType:
+    type: string
+    title: Hosting Type
+    description: CSC DNS hosting product for the zone, for example `CSC_BASIC`.
+
+  a:
+    type: array
+    title: A Records
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+          title: Host
+        value:
+          type: string
+          title: Address
+        ttl:
+          type: integer
+          title: TTL
+        status:
+          type: string
+          title: Status
+
+  aaaa:
+    type: array
+    title: AAAA Records
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+          title: Host
+        value:
+          type: string
+          title: Address
+        ttl:
+          type: integer
+          title: TTL
+        status:
+          type: string
+          title: Status
+
+  cname:
+    type: array
+    title: CNAME Records
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+          title: Host
+        value:
+          type: string
+          title: Target
+        ttl:
+          type: integer
+          title: TTL
+        status:
+          type: string
+          title: Status
+
+  txt:
+    type: array
+    title: TXT Records
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+          title: Host
+        value:
+          type: string
+          title: Text
+        ttl:
+          type: integer
+          title: TTL
+        status:
+          type: string
+          title: Status
+
+  mx:
+    type: array
+    title: MX Records
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+          title: Host
+        value:
+          type: string
+          title: Mail Server
+        priority:
+          type: integer
+          title: Priority
+        ttl:
+          type: integer
+          title: TTL
+        status:
+          type: string
+          title: Status
+
+  srv:
+    type: array
+    title: SRV Records
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+          title: Service
+        value:
+          type: string
+          title: Target
+        priority:
+          type: integer
+          title: Priority
+        weight:
+          type: integer
+          title: Weight
+        ttl:
+          type: integer
+          title: TTL
+        status:
+          type: string
+          title: Status
+
+  caa:
+    type: array
+    title: CAA Records
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+          title: Host
+        value:
+          type: string
+          title: Value
+        tag:
+          type: string
+          title: Tag
+        flag:
+          type: integer
+          title: Flag
+        ttl:
+          type: integer
+          title: TTL
+        status:
+          type: string
+          title: Status
+
+  soa:
+    type: object
+    title: SOA Record
+    properties:
+      serial:
+        type: integer
+        title: Serial
+      refresh:
+        type: integer
+        title: Refresh
+      retry:
+        type: integer
+        title: Retry
+      expire:
+        type: integer
+        title: Expire
+      ttlMin:
+        type: integer
+        title: Minimum TTL
+      ttlNeg:
+        type: integer
+        title: Negative Cache TTL
+      ttlZone:
+        type: integer
+        title: Zone TTL
+      techEmail:
+        type: string
+        title: Technical Contact
+      masterHost:
+        type: string
+        title: Master Host

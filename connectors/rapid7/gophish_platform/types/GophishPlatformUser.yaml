@@ -10,6 +10,9 @@ x-samos-extends-types:
 x-samos-keys:
   - email
 
+required:
+  - email
+
 x-samos-table:
   - name: email
   - name: first_name

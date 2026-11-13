@@ -11,6 +11,9 @@ x-samos-keys:
   - d_sys_id
   - ManagedSystemID
 
+required:
+  - ManagedSystemID
+
 x-samos-table:
   - name: SystemName
   - name: Description

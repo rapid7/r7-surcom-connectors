@@ -1,0 +1,313 @@
+x-samos-type-name: SalesforceOrganization
+x-samos-namespace: salesforce
+title: Salesforce Organization
+description: A Salesforce tenant and its organization-wide configuration.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Organization
+    subtype-priority: 3
+
+x-samos-keys:
+  - Id
+
+required:
+  - Id
+
+x-samos-table:
+  - name: Name
+  - name: OrganizationType
+  - name: InstanceName
+  - name: IsSandbox
+  - name: Country
+  - name: PrimaryContact
+  - name: TrialExpirationDate
+
+x-samos-detail:
+  - name: Name
+  - name: OrganizationType
+  - name: InstanceName
+  - name: NamespacePrefix
+  - name: IsSandbox
+  - name: IsReadOnly
+  - name: PrimaryContact
+  - name: Phone
+  - name: Fax
+  - name: Division
+  - name: Street
+  - name: City
+  - name: State
+  - name: PostalCode
+  - name: Country
+  - name: CountryCode
+  - name: DefaultAccountAccess
+  - name: DefaultContactAccess
+  - name: DefaultOpportunityAccess
+  - name: DefaultLeadAccess
+  - name: DefaultCaseAccess
+  - name: DefaultCalendarAccess
+  - name: DefaultPricebookAccess
+  - name: DefaultCampaignAccess
+  - name: ComplianceBccEmail
+  - name: WebToCaseDefaultOrigin
+  - name: DefaultLocaleSidKey
+  - name: TimeZoneSidKey
+  - name: LanguageLocaleKey
+  - name: SignupCountryIsoCode
+  - name: FiscalYearStartMonth
+  - name: MonthlyPageViewsUsed
+  - name: MonthlyPageViewsEntitlement
+  - name: TrialExpirationDate
+  - name: CreatedDate
+  - name: CreatedById
+  - name: LastModifiedDate
+  - name: LastModifiedById
+  - name: SystemModstamp
+
+properties:
+  Id:
+    title: Id
+    description: Salesforce Organization ID.
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Organization
+      property-name: id
+
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  Division:
+    title: Division
+    type: string
+
+  Street:
+    title: Street
+    type: string
+
+  City:
+    title: City
+    type: string
+
+  State:
+    title: State
+    type: string
+
+  PostalCode:
+    title: Postal Code
+    type: string
+
+  Country:
+    title: Country
+    type: string
+
+  CountryCode:
+    title: Country Code
+    description: >-
+      ISO 3166 alpha-2 country code (e.g. CZ), set when State and Country Picklists are enabled in the org.
+    type: string
+    x-samos-ref-types:
+      - type-name: NoeticEnumCountry
+        key-name: alpha_2_id
+
+  StateCode:
+    title: State Code
+    type: string
+
+  Latitude:
+    title: Latitude
+    type: number
+
+  Longitude:
+    title: Longitude
+    type: number
+
+  GeocodeAccuracy:
+    title: Geocode Accuracy
+    type: string
+
+  Phone:
+    title: Phone
+    type: string
+
+  Fax:
+    title: Fax
+    type: string
+
+  PrimaryContact:
+    title: Primary Contact
+    type: string
+
+  DefaultLocaleSidKey:
+    title: Default Locale
+    type: string
+
+  TimeZoneSidKey:
+    title: Time Zone
+    type: string
+
+  LanguageLocaleKey:
+    title: Language Locale
+    type: string
+
+  ReceivesInfoEmails:
+    title: Receives Information Emails?
+    type: boolean
+
+  ReceivesAdminInfoEmails:
+    title: Receives Administrator Information Emails?
+    type: boolean
+
+  PreferencesRequireOpportunityProducts:
+    title: Require Opportunity Products?
+    type: boolean
+
+  PreferencesConsentManagementEnabled:
+    title: Consent Management Enabled?
+    type: boolean
+
+  PreferencesAutoSelectIndividualOnMerge:
+    title: Auto-select Individual on Merge?
+    type: boolean
+
+  PreferencesLightningLoginEnabled:
+    title: Lightning Login Enabled?
+    type: boolean
+
+  PreferencesOnlyLLPermUserAllowed:
+    title: Only Lightning Login Permission Users Allowed?
+    type: boolean
+
+  FiscalYearStartMonth:
+    title: Fiscal Year Start Month
+    type: integer
+
+  UsesStartDateAsFiscalYearName:
+    title: Uses Start Date as Fiscal Year Name?
+    type: boolean
+
+  DefaultAccountAccess:
+    title: Default Account Access
+    type: string
+
+  DefaultContactAccess:
+    title: Default Contact Access
+    type: string
+
+  DefaultOpportunityAccess:
+    title: Default Opportunity Access
+    type: string
+
+  DefaultLeadAccess:
+    title: Default Lead Access
+    type: string
+
+  DefaultCaseAccess:
+    title: Default Case Access
+    type: string
+
+  DefaultCalendarAccess:
+    title: Default Calendar Access
+    type: string
+
+  DefaultPricebookAccess:
+    title: Default Price Book Access
+    type: string
+
+  DefaultCampaignAccess:
+    title: Default Campaign Access
+    type: string
+
+  SystemModstamp:
+    title: System Modstamp
+    type: string
+    format: date-time
+
+  ComplianceBccEmail:
+    title: Compliance BCC Email
+    type: string
+
+  UiSkin:
+    title: UI Theme
+    type: string
+
+  SignupCountryIsoCode:
+    title: Signup Country ISO Code
+    type: string
+
+  TrialExpirationDate:
+    title: Trial Expiration Date
+    type: string
+    format: date-time
+
+  NumKnowledgeService:
+    title: Knowledge Service Licenses
+    type: integer
+
+  OrganizationType:
+    title: Organization Type
+    type: string
+
+  NamespacePrefix:
+    title: Namespace Prefix
+    type: string
+
+  InstanceName:
+    title: Instance Name
+    type: string
+
+  IsSandbox:
+    title: Sandbox?
+    type: boolean
+
+  WebToCaseDefaultOrigin:
+    title: Web-to-Case Default Origin
+    type: string
+
+  MonthlyPageViewsUsed:
+    title: Monthly Page Views Used
+    type: integer
+
+  MonthlyPageViewsEntitlement:
+    title: Monthly Page Views Entitlement
+    type: integer
+
+  IsReadOnly:
+    title: Read Only?
+    type: boolean
+
+  CreatedDate:
+    title: Created Date
+    type: string
+    format: date-time
+
+  CreatedById:
+    title: Created By
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  LastModifiedDate:
+    title: Last Modified Date
+    type: string
+    format: date-time
+
+  LastModifiedById:
+    title: Last Modified By
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+# Fulfill Organization.users with the Users of this Salesforce org, using the
+# x_organization_id reference the connector adds to each User
+x-samos-virtual:
+  users:
+    type-name: SalesforceUser
+    cypher-pattern: '<-[:`e:SalesforceUser:x_organization_id`]-(:SalesforceUser)'

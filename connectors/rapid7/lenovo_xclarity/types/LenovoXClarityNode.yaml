@@ -1,0 +1,864 @@
+x-samos-type-name: LenovoXClarityNode
+x-samos-namespace: lenovo.xclarity
+title: Lenovo XClarity Node
+description: A bare-metal server or compute node managed by Lenovo XClarity Administrator,
+  including hardware details, firmware levels, and network configuration.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 4
+
+x-samos-keys:
+  - uuid
+
+required:
+  - uuid
+
+x-samos-table:
+  - name: name
+  - name: type
+  - name: model
+  - name: serialNumber
+  - name: mgmtProcIPaddress
+  - name: overallHealthState
+  - name: powerStatus
+
+x-samos-detail:
+  - name: name
+  - name: overallHealthState
+  - name: accessState
+  - name: status
+  - name: powerStatus
+  - name: type
+  - name: subType
+  - name: machineType
+  - name: model
+  - name: productName
+  - name: serialNumber
+  - name: assetTag
+  - name: manufacturer
+  - name: hostname
+  - name: FQDN
+  - name: mgmtProcIPaddress
+  - name: ipv4Addresses
+  - name: ipv6Addresses
+  - name: x_mac_addresses
+  - name: arch
+  - name: osInfo
+  - name: firmware
+  - name: secureBootMode
+  - name: securityMode
+  - name: tlsVersion
+  - name: nist
+  - name: isRemotePresenceEnabled
+  - name: lanOverUsb
+  - name: location
+  - name: parent
+  - name: description
+  - name: userDescription
+
+x-samos-derived-properties:
+  d_ips:
+    type: array
+    x-samos-hidden: true
+    syntax: jmespath
+    # Fulfills Machine.ips for the unified view; IPs correlate as IpAddress, not Machine
+    value: '[ipv4Addresses || `[]`, ipv6Addresses || `[]`][]'
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  d_active:
+    type: boolean
+    x-samos-hidden: true
+    syntax: jmespath
+    # Node is considered active when the appliance reports it reachable
+    value: "accessState == 'Online'"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_is_part_of:
+    type: string
+    x-samos-hidden: true
+    syntax: jmespath
+    # Blade nodes expose their parent chassis UUID under parent.uuid (empty for rack servers)
+    value: 'parent.uuid || `null`'
+    x-samos-ref-types:
+      - key-name: uuid
+        type-name: LenovoXClarityChassis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+  d_mitigations:
+    type: array
+    x-samos-hidden: true
+    syntax: jmespath
+    # M1046 (Boot Integrity): UEFI Secure Boot is enabled on the server
+    value: "[secureBootMode.currentValue == 'Enabled' && `M1046`] | [?@]"
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  uuid:
+    type: string
+    title: UUID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  accessState:
+    type: string
+    title: Access State
+  accountLockoutPeriod:
+    type: integer
+    title: Account Lockout Period
+  activationKeys:
+    type: array
+    title: Activation Keys
+    items:
+      type: object
+      properties:
+        description:
+          type: string
+          title: Description
+        keyExpirationDate:
+          type: string
+          title: Key Expiration Date
+        keyFeatureType:
+          type: integer
+          title: Key Feature Type
+        keyIdentiferList:
+          type: array
+          title: Key IDentifer List
+          items:
+            type: object
+            properties:
+              keyIdentifierType:
+                type: string
+                title: Key IDentifier Type
+              keyIdentifier:
+                type: string
+                title: Key IDentifier
+        keyStatus:
+          type: string
+          title: Key Status
+        keyUseCount:
+          type: integer
+          title: Key Use Count
+        keyUseLimit:
+          type: integer
+          title: Key Use Limit
+        uuid:
+          type: string
+          title: UUID
+  addinCardSlots:
+    type: integer
+    title: Add-in Card Slots
+  arch:
+    type: string
+    title: Arch
+  assetTag:
+    type: string
+    title: Asset Tag
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_tag
+  backedBy:
+    type: string
+    title: Backed By
+  bladeState:
+    type: integer
+    title: Blade State
+  bmuParamObject:
+    type: string
+    title: BMU Param Object
+  bootOrder:
+    type: object
+    title: Boot Order
+  bundleRepoAvailableSpaceInKB:
+    type: integer
+    title: Bundle Repo Available Space (KB)
+  cimEnabled:
+    type: boolean
+    title: CIM Enabled?
+  cmmDisplayName:
+    type: string
+    title: CMM Display Name
+  cmmHealthState:
+    type: string
+    title: CMM Health State
+  complexID:
+    type: integer
+    title: Complex ID
+  contact:
+    type: string
+    title: Contact
+  dataHandle:
+    type: integer
+    title: Data Handle
+    format: epoch-millis
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  domainName:
+    type: string
+    title: Domain Name
+  driveBays:
+    type: integer
+    title: Drive Bays
+  drives:
+    type: array
+    title: Drives
+    items:
+      type: string
+  embeddedHypervisorPresence:
+    type: boolean
+    title: Embedded Hypervisor Presence?
+  encapsulation:
+    type: object
+    title: Encapsulation
+    properties:
+      encapsulationMode:
+        type: string
+        title: Encapsulation Mode
+  errorFields:
+    type: array
+    title: Error Fields
+    items:
+      type: string
+  excludedHealthState:
+    type: string
+    title: Excluded Health State
+  expansionCards:
+    type: array
+    title: Expansion Cards
+    items:
+      type: string
+  expansionCardSlots:
+    type: integer
+    title: Expansion Card Slots
+  expansionProducts:
+    type: array
+    title: Expansion Products
+    items:
+      type: string
+  expansionProductType:
+    type: string
+    title: Expansion Product Type
+  faceplateIDs:
+    type: array
+    title: Faceplate IDs
+    items:
+      type: object
+      properties:
+        deviceId:
+          type: integer
+          title: Device ID
+        entityId:
+          type: integer
+          title: Entity ID
+        fruNumber:
+          type: string
+          title: Fru Number
+        firmware:
+          type: array
+          title: Firmware
+          items:
+            type: object
+            properties:
+              build:
+                type: string
+                title: Build
+              classifications:
+                type: array
+                title: Classifications
+                items:
+                  type: integer
+              date:
+                type: string
+                title: Date
+              name:
+                type: string
+                title: Name
+              role:
+                type: string
+                title: Role
+              revision:
+                type: string
+                title: Revision
+              softwareID:
+                type: string
+                title: Software ID
+              status:
+                type: string
+                title: Status
+              type:
+                type: string
+                title: Type
+              version:
+                type: string
+                title: Version
+        name:
+          type: string
+          title: Name
+        partNumber:
+          type: string
+          title: Part Number
+        posID:
+          type: integer
+          title: Position ID
+        productId:
+          type: integer
+          title: Product ID
+        serialNumber:
+          type: string
+          title: Serial Number
+        vpdID:
+          type: integer
+          title: VPD ID
+  FeaturesOnDemand:
+    type: object
+    title: Features On Demand
+    properties:
+      features:
+        type: array
+        title: Features
+        items:
+          type: string
+      tierLevel:
+        type: integer
+        title: Tier Level
+  firmware:
+    type: array
+    title: Firmware
+    items:
+      type: object
+      properties:
+        build:
+          type: string
+          title: Build
+        classifications:
+          type: array
+          title: Classifications
+          items:
+            type: string
+        date:
+          type: string
+          title: Date
+        name:
+          type: string
+          title: Name
+        revision:
+          type: string
+          title: Revision
+        role:
+          type: string
+          title: Role
+        status:
+          type: string
+          title: Status
+        type:
+          type: string
+          title: Type
+        version:
+          type: string
+          title: Version
+  flashStorage:
+    type: array
+    title: Flash Storage
+    items:
+      type: string
+  FQDN:
+    type: string
+    title: FQDN
+  FRU:
+    type: string
+    title: FRU
+  fruSerialNumber:
+    type: string
+    title: FRU Serial Number
+  hasOS:
+    type: boolean
+    title: Has OS?
+  height:
+    type: integer
+    title: Height
+  hostMacAddresses:
+    type: string
+    title: Host MAC Addresses
+  hostname:
+    type: string
+    title: Hostname
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+  inventoryState:
+    type: string
+    title: Inventory State
+  ipInterfaces:
+    type: array
+    title: IP Interfaces
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Name
+        label:
+          type: string
+          title: Label
+        IPv4assignments:
+          type: array
+          title: I Pv Assignments
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                title: ID
+              subnet:
+                type: string
+                title: Subnet
+                format: ip-addr
+              gateway:
+                type: string
+                title: Gateway
+                format: ip-addr
+              address:
+                type: string
+                title: Address
+                format: ip-addr
+              type:
+                type: string
+                title: Type
+        IPv4DHCPmode:
+          type: string
+          title: I Pv Dhc Pmode
+        IPv4enabled:
+          type: boolean
+          title: I Pv Enabled?
+        IPv6assignments:
+          type: array
+          title: I Pv Assignments
+          items:
+            type: object
+            properties:
+              address:
+                type: string
+                title: Address
+              id:
+                type: integer
+                title: ID
+              gateway:
+                type: string
+                title: Gateway
+              prefix:
+                type: integer
+                title: Prefix
+              scope:
+                type: string
+                title: Scope
+              source:
+                type: string
+                title: Source
+              type:
+                type: string
+                title: Type
+        IPv6DHCPenabled:
+          type: boolean
+          title: I Pv Dhc Penabled?
+        IPv6enabled:
+          type: boolean
+          title: I Pv Enabled?
+        IPv6statelessEnabled:
+          type: boolean
+          title: I Pv Stateless Enabled?
+        IPv6staticEnabled:
+          type: boolean
+          title: I Pv Static Enabled?
+  isConnectionTrusted:
+    type: string
+    title: Connection Trusted
+  isITME:
+    type: boolean
+    title: ITME?
+  isScalable:
+    type: boolean
+    title: Scalable?
+  ipv4Addresses:
+    type: array
+    title: IPv4 Addresses
+    items:
+      type: string
+  ipv6Addresses:
+    type: array
+    title: IPv6 Addresses
+    items:
+      type: string
+  isRemotePresenceEnabled:
+    type: boolean
+    title: Remote Presence Enabled?
+  lanOverUsb:
+    type: string
+    title: LAN over USB
+  lanOverUsbPortForwardingModes:
+    type: array
+    title: LAN over USB Port Forwarding Modes
+    items:
+      type: object
+      properties:
+        externalIPAddress:
+          type: string
+          title: External Ip Address
+        state:
+          type: string
+          title: State
+        type:
+          type: string
+          title: Type
+  lastOfflineTimestamp:
+    type: integer
+    title: Last Offline Timestamp
+  location:
+    type: object
+    title: Location
+    properties:
+      lowestRackUnit:
+        type: integer
+        title: Lowest Rack Unit
+      location:
+        type: string
+        title: Location
+      rack:
+        type: string
+        title: Rack
+      room:
+        type: string
+        title: Room
+  logicalID:
+    type: integer
+    title: Logical ID
+  m2Presence:
+    type: boolean
+    title: M.2 Present?
+  macAddress:
+    type: string
+    title: MAC Address
+  x_mac_addresses:
+    type: array
+    title: MAC Addresses
+    description: Combined, de-duplicated management and host MAC addresses (generated by the connector).
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 3
+  machineType:
+    type: string
+    title: Machine Type
+  manufacturer:
+    type: string
+    title: Manufacturer
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+  manufacturerId:
+    type: string
+    title: Manufacturer ID
+  memorySlots:
+    type: integer
+    title: Memory Slots
+  mgmtProcIPaddress:
+    type: string
+    title: Management IP Address
+    format: ip-addr
+  mgmtProcType:
+    type: string
+    title: Mgmt Proc Type
+  model:
+    type: string
+    title: Model
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+  mpfahealthStatus:
+    type: boolean
+    title: MPFA Health Status?
+  nist:
+    type: object
+    title: NIST
+    properties:
+      currentValue:
+        type: string
+        title: Current Value
+      possibleValues:
+        type: array
+        title: Possible Values
+        items:
+          type: string
+  osInfo:
+    type: object
+    title: OS Info
+    properties:
+      description:
+        type: string
+        title: Description
+        x-samos-fulfills:
+          type-name: Machine
+          property-name: operating_system
+      hostname:
+        type: string
+        title: Hostname
+      storedCredential:
+        type: string
+        title: Stored Credential
+  overallHealthState:
+    type: string
+    title: Overall Health State
+    x-samos-ref-types:
+      - key-name: id
+        type-name: LenovoXClarityEnumOperationalStatus
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: operational_status
+  parent:
+    type: object
+    title: Parent
+    properties:
+      uri:
+        type: string
+        title: URI
+      uuid:
+        type: string
+        title: UUID
+  partitionID:
+    type: integer
+    title: Partition ID
+  partNumber:
+    type: string
+    title: Part Number
+  pciCapabilities:
+    type: array
+    title: PCI Capabilities
+    items:
+      type: string
+  physicalID:
+    type: integer
+    title: Physical ID
+  posID:
+    type: string
+    title: Position ID
+  powerAllocation:
+    type: object
+    title: Power Allocation
+    properties:
+      maximumAllocatedPower:
+        type: integer
+        title: Maximum Allocated Power
+      minimumAllocatedPower:
+        type: integer
+        title: Minimum Allocated Power
+  powerCappingPolicy:
+    type: object
+    title: Power Capping Policy
+    properties:
+      cappingACorDCMode:
+        type: string
+        title: Capping A Cor Dc Mode
+      minimumHardCapLevel:
+        type: integer
+        title: Minimum Hard Cap Level
+      cappingPolicy:
+        type: string
+        title: Capping Policy
+      maxPowerCap:
+        type: integer
+        title: Max Power Cap
+      minimumPowerCappingHotPlugLevel:
+        type: integer
+        title: Minimum Power Capping Hot Plug Level
+      powerCappingAllocUnit:
+        type: string
+        title: Power Capping Alloc Unit
+      maximumPowerCappingHotPlugLevel:
+        type: integer
+        title: Maximum Power Capping Hot Plug Level
+      currentPowerCap:
+        type: integer
+        title: Current Power Cap
+      minPowerCap:
+        type: integer
+        title: Min Power Cap
+  powerStatus:
+    type: integer
+    title: Power Status
+  primary:
+    type: boolean
+    title: Primary?
+  processorIntelSpeedSelect:
+    type: object
+    title: Processor Intel Speed Select
+    properties:
+      currentValue:
+        type: string
+        title: Current Value
+      possibleValues:
+        type: array
+        title: Possible Values
+        items:
+          type: string
+  processorSlots:
+    type: integer
+    title: Processor Slots
+  productId:
+    type: string
+    title: Product ID
+  productName:
+    type: string
+    title: Product Name
+  releaseName:
+    type: string
+    title: Release Name
+  secureBootMode:
+    type: object
+    title: Secure Boot Mode
+    properties:
+      currentValue:
+        type: string
+        title: Current Value
+      possibleValues:
+        type: array
+        title: Possible Values
+        items:
+          type: string
+  securityMode:
+    type: string
+    title: Security Mode
+  securityModePossibleValues:
+    type: array
+    title: Security Mode Possible Values
+    items:
+      type: string
+  selLog:
+    type: boolean
+    title: SEL Log?
+  serialNumber:
+    type: string
+    title: Serial Number
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+  slotLabels:
+    type: array
+    title: Slot Labels
+    items:
+      type: string
+  slots:
+    type: array
+    title: Slots
+    items:
+      type: string
+  ssoEnabled:
+    type: boolean
+    title: SSO Enabled?
+  ssdWearThreshold:
+    type: integer
+    title: SSD Wear Threshold
+  status:
+    type: object
+    title: Status
+    properties:
+      message:
+        type: string
+        title: Message
+      name:
+        type: string
+        title: Name
+  subSlots:
+    type: array
+    title: Sub Slots
+    items:
+      type: string
+  subType:
+    type: string
+    title: Sub Type
+  systemGuardSetting:
+    type: object
+    title: System Guard Setting
+    properties:
+      lockDownPolicy:
+        type: string
+        title: Lock Down Policy
+      osBootPreventing:
+        type: boolean
+        title: Os Boot Preventing?
+      status:
+        type: string
+        title: Status
+      systemGuardEnabled:
+        type: boolean
+        title: System Guard Enabled?
+  userDefinedName:
+    type: string
+    title: User Defined Name
+  tlsVersion:
+    type: object
+    title: TLS Version
+    properties:
+      currentValue:
+        type: string
+        title: Current Value
+      possibleValues:
+        type: array
+        title: Possible Values
+        items:
+          type: string
+  type:
+    type: string
+    title: Type
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  uri:
+    type: string
+    title: URI
+  userDescription:
+    type: string
+    title: User Description
+  vnicMode:
+    type: string
+    title: vNIC Mode
+  vpdID:
+    type: string
+    title: VPD ID

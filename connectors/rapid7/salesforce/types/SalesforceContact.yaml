@@ -1,0 +1,366 @@
+x-samos-type-name: SalesforceContact
+x-samos-namespace: salesforce
+title: Salesforce Contact
+description: >-
+  A person associated with an Account in Salesforce (e.g. a customer contact).
+  Unlike SalesforceUser, a Contact does not have Salesforce login access.
+  Contacts are correlated to other sources by email. Salesforce does not
+  enforce unique email addresses, so Contacts that share an address can be
+  grouped into a single User.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  # Contacts are CRM records about external people, so they rank below
+  # SalesforceUser and identity providers.
+  - type-name: User
+    subtype-priority: 1
+
+x-samos-keys:
+  - Id
+
+required:
+  - Id
+
+x-samos-table:
+  - name: Name
+  - name: Email
+  - name: Title
+  - name: Department
+  - name: AccountId
+  - name: Phone
+  - name: MobilePhone
+
+x-samos-detail:
+  - name: Name
+  - name: Salutation
+  - name: FirstName
+  - name: MiddleName
+  - name: LastName
+  - name: Suffix
+  - name: Email
+  - name: IsEmailBounced
+  - name: EmailBouncedReason
+  - name: EmailBouncedDate
+  - name: Title
+  - name: TitleType
+  - name: Department
+  - name: DepartmentGroup
+  - name: AccountId
+  - name: Phone
+  - name: MobilePhone
+  - name: HomePhone
+  - name: OtherPhone
+  - name: AssistantPhone
+  - name: Fax
+  - name: ReportsToId
+  - name: MailingStreet
+  - name: MailingCity
+  - name: MailingState
+  - name: MailingPostalCode
+  - name: MailingCountry
+  - name: MailingCountryCode
+  - name: ContactSource
+  - name: IsPriorityRecord
+  - name: OwnerId
+  - name: CreatedDate
+  - name: CreatedById
+  - name: LastModifiedById
+  - name: LastModifiedDate
+  - name: LastActivityDate
+  - name: LastViewedDate
+  - name: SystemModstamp
+
+x-samos-derived-properties:
+  # Contact is a record about a person outside the org
+  # with no Salesforce login, so it is always external.
+  d_is_external:
+    title: External?
+    type: boolean
+    syntax: jmespath
+    value: '`true`'
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: is_external
+
+properties:
+  Id:
+    title: Id
+    description: Salesforce Contact ID.
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: User
+      property-name: id
+
+  AccountId:
+    title: Account
+    description: The Account this Contact belongs to.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceAccount
+        key-name: Id
+
+  LastName:
+    title: Last Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: last_name
+
+  FirstName:
+    title: First Name
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: first_name
+
+  Salutation:
+    title: Salutation
+    type: string
+
+  MiddleName:
+    title: Middle Name
+    type: string
+
+  Suffix:
+    title: Suffix
+    type: string
+
+  Name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  MailingStreet:
+    title: Mailing Street
+    type: string
+
+  MailingCity:
+    title: Mailing City
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: city
+
+  MailingState:
+    title: Mailing State
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: state
+
+  MailingPostalCode:
+    title: Mailing Postal Code
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: postal_code
+
+  MailingCountry:
+    title: Mailing Country
+    type: string
+
+  MailingCountryCode:
+    title: Mailing Country Code
+    description: >-
+      ISO 3166 alpha-2 country code (e.g. CZ), set when State and Country Picklists are enabled in the org.
+    type: string
+    x-samos-ref-types:
+      - type-name: NoeticEnumCountry
+        key-name: alpha_2_id
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: country
+
+  MailingStateCode:
+    title: Mailing State Code
+    type: string
+
+  MailingLatitude:
+    title: Mailing Latitude
+    type: number
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: latitude
+
+  MailingLongitude:
+    title: Mailing Longitude
+    type: number
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: longitude
+
+  MailingGeocodeAccuracy:
+    title: Mailing Geocode Accuracy
+    type: string
+
+  Phone:
+    title: Phone
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: telephone
+
+  Fax:
+    title: Fax
+    type: string
+
+  MobilePhone:
+    title: Mobile Phone
+    type: string
+
+  HomePhone:
+    title: Home Phone
+    type: string
+
+  OtherPhone:
+    title: Other Phone
+    type: string
+
+  AssistantPhone:
+    title: Assistant Phone
+    type: string
+
+  ReportsToId:
+    title: Reports To
+    description: The Contact this Contact reports to.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceContact
+        key-name: Id
+
+  Email:
+    title: Email
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: email
+    x-samos-correlation:
+      correlation-key: User.email
+      correlation-type: User
+      priority: 3
+
+  Title:
+    title: Title
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: title
+
+  Department:
+    title: Department
+    type: string
+    x-samos-fulfills:
+      type-name: User
+      property-name: department
+
+  OwnerId:
+    title: Owner
+    description: The User who owns this Contact record in Salesforce.
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  CreatedDate:
+    title: Created Date
+    type: string
+    format: date-time
+
+  CreatedById:
+    title: Created By
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  LastModifiedDate:
+    title: Last Modified Date
+    type: string
+    format: date-time
+
+  LastModifiedById:
+    title: Last Modified By
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  SystemModstamp:
+    title: System Modstamp
+    type: string
+    format: date-time
+
+  LastActivityDate:
+    title: Last Activity Date
+    type: string
+    format: date
+
+  LastCURequestDate:
+    title: Last CU Request Date
+    type: string
+    format: date-time
+
+  LastCUUpdateDate:
+    title: Last CU Update Date
+    type: string
+    format: date-time
+
+  LastViewedDate:
+    title: Last Viewed Date
+    type: string
+    format: date-time
+
+  LastReferencedDate:
+    title: Last Referenced Date
+    type: string
+    format: date-time
+
+  EmailBouncedReason:
+    title: Email Bounced Reason
+    type: string
+
+  EmailBouncedDate:
+    title: Email Bounced Date
+    type: string
+    format: date-time
+
+  IsEmailBounced:
+    title: Email Bounced?
+    type: boolean
+
+  Jigsaw:
+    title: Jigsaw
+    description: Legacy Data.com identifier; deprecated by Salesforce.
+    type: string
+
+  JigsawContactId:
+    title: Jigsaw Contact Id
+    description: Legacy Data.com identifier; deprecated by Salesforce.
+    type: string
+
+  IndividualId:
+    title: Individual Id
+    type: string
+
+  IsPriorityRecord:
+    title: Is Priority Record
+    type: boolean
+
+  ContactSource:
+    title: Contact Source
+    type: string
+
+  TitleType:
+    title: Title Type
+    type: string
+
+  DepartmentGroup:
+    title: Department Group
+    type: string
+
+  BuyerAttributes:
+    title: Buyer Attributes
+    type: string

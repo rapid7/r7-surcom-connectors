@@ -1,0 +1,26 @@
+[
+  {
+    "id": "Running",
+    "value": "Running",
+    "description": "Running.",
+    "map_to": "OperationalStatus: Operational"
+  },
+  {
+    "id": "Paused",
+    "value": "Paused",
+    "description": "All resources have been allocated but the VM itself is paused and its vCPUs are not running.",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "Suspended",
+    "value": "Suspended",
+    "description": "VM state has been saved to disk and it is no longer running. Disks remain in use while the VM is suspended.",
+    "map_to": "OperationalStatus: Non-Operational"
+  },
+  {
+    "id": "Halted",
+    "value": "Halted",
+    "description": "VM is offline and not using any resources.",
+    "map_to": "OperationalStatus: Non-Operational"
+  }
+]

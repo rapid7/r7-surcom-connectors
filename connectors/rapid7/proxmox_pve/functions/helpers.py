@@ -118,6 +118,10 @@ class ProxmoxPVEClient():
             config_data.update({"mac_address": mac_address})
             vm_detail.update(config_data)
             vm_detail.update(vm)
+            # Some Proxmox versions return "memory" as an integer while the schema
+            # expects a string, so normalise it to avoid schema validation errors.
+            if vm_detail.get("memory") is not None:
+                vm_detail["memory"] = str(vm_detail["memory"])
             yield vm_detail
 
     def get_storage(self, q_params: dict = None) -> Generator[ProxmoxPVEStorage, None, None]:

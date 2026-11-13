@@ -1,11 +1,12 @@
 id: nudge.security
 name: Nudge Security
 author: Rapid7
-version: 0.1.0
+version: 0.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Initial Beta release
+  - Update dependencies
+  - Mark key properties as required in the type schemas
 
 types:
   - NudgeSecurityApp

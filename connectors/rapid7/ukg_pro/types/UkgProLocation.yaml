@@ -1,0 +1,112 @@
+x-samos-type-name: UkgProLocation
+x-samos-namespace: ukg.pro
+title: UKG Pro Location
+description: >-
+  A physical work location configured in UKG Pro, returned by the
+  Locations endpoint.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: Location
+    subtype-priority: 3
+
+x-samos-keys:
+  - locationCode
+
+required:
+  - locationCode
+
+x-samos-table:
+  - name: description
+  - name: city
+  - name: state
+  - name: countryCode
+
+x-samos-detail:
+  - name: description
+  - name: isActive
+  - name: addressLine1
+  - name: addressLine2
+  - name: city
+  - name: state
+  - name: zipOrPostalCode
+  - name: countryCode
+  - name: locationGLSegment
+
+properties:
+  locationCode:
+    title: Location Code
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Location
+      property-name: id
+
+  description:
+    title: Name
+    type: string
+    description: The name of the work location, for example Boston Headquarters.
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Location.name
+      correlation-type: Location
+      priority: 5
+
+  isActive:
+    title: Active?
+    type: boolean
+
+  addressLine1:
+    title: Address Line 1
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: address
+
+  addressLine2:
+    title: Address Line 2
+    type: string
+
+  city:
+    title: City
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: city
+
+  state:
+    title: State
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: state
+
+  zipOrPostalCode:
+    title: Postal Code
+    type: string
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: postal_code
+
+  countryCode:
+    title: Country
+    type: string
+    x-samos-ref-types:
+      - type-name: NoeticEnumCountry
+        key-name: alpha_3_id
+    x-samos-fulfills:
+      type-name: core.location
+      property-name: country
+
+  locationGLSegment:
+    title: General Ledger Segment
+    type: string
+
+x-samos-virtual:
+  # Fulfills the `users` property (core.owned-entity) with the employees whose
+  # primary work location is this location
+  users:
+    type-name: UkgProIdentity
+    cypher-pattern: >
+      <-[:`e:UkgProIdentity:primaryWorkLocationCode`]-(:UkgProIdentity)

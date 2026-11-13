@@ -1,0 +1,102 @@
+x-samos-type-name: CscGlobalDomainsecHost
+x-samos-namespace: csc.global.domainsec
+title: CSC Global DomainSec Host
+description: A hostname in a CSC-hosted DNS zone, with the IP addresses and hostnames its A, AAAA, and CNAME records resolve to.
+x-samos-detail-prefer-type-title: true
+
+# DNS names are globally unique.
+x-samos-global-zone: true
+
+x-samos-extends-types:
+  - type-name: Domain
+    subtype-priority: 3
+
+x-samos-keys:
+  - fqdn
+
+required:
+  - fqdn
+
+x-samos-table:
+  - name: fqdn
+  - name: zoneName
+  - name: x_resolves_to
+
+x-samos-detail:
+  - name: fqdn
+  - name: zoneName
+  - name: x_resolves_to
+
+x-samos-derived-properties:
+  # The hostname already fulfills Domain.value; a property fulfills only one target, so it is mapped to the ID here.
+  d_id:
+    type: string
+    syntax: jmespath
+    value: fqdn
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  # The hostname is also the display name.
+  d_name:
+    type: string
+    syntax: jmespath
+    value: fqdn
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  # A CNAME target outside every CSC zone has no zone, and may belong to a third party such as a CDN.
+  d_is_external:
+    type: boolean
+    syntax: jmespath
+    value: 'zoneName == null'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_external
+
+properties:
+  fqdn:
+    type: string
+    title: Hostname
+    format: domain-name
+    description: Fully qualified hostname, built from the record key and its zone.
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: value
+    x-samos-correlation:
+      correlation-key: Domain.value
+      correlation-type: Domain
+      priority: 3
+
+  zoneName:
+    type: string
+    title: Zone
+    description: The CSC DNS zone that holds the host's records.
+    x-samos-ref-types:
+      - type-name: CscGlobalDomainsecZone
+        key-name: zoneName
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+  x_resolves_to:
+    type: array
+    title: Resolves To
+    description: IP addresses from A and AAAA records, and hostnames from CNAME records.
+    items:
+      type: string
+      # Every target is imported as a CSC IP address or host (a placeholder host if no record defines it).
+      x-samos-ref-types:
+        - type-name: CscGlobalDomainsecIpAddress
+          key-name: value
+        - type-name: CscGlobalDomainsecHost
+          key-name: fqdn
+    x-samos-fulfills:
+      type-name: Domain
+      property-name: resolves_to_refs

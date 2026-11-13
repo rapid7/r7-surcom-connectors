@@ -1,13 +1,13 @@
 id: halcyon
 name: Halcyon
 author: Rapid7
-version: 1.1.0
+version: 1.4.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Fix a data issue with HalcyonDeploymentGroup
+  - Update dependencies
 
 # IDs of the Surface Command types that are part of this connector.
 # Type IDs must be unique across all Connectors.
@@ -33,6 +33,20 @@ functions:
 
 # Configuration settings for this connector.
 settings:
+  region:
+    type: string
+    title: Region
+    description: >-
+      Halcyon platform region that hosts your tenant. Use "us" for the United
+      States (api.halcyon.ai) or "eu" for Europe (api.eu.halcyon.ai). This must
+      match the region your Halcyon credentials were created in — you can tell
+      from the console URL you sign in to (for example console.eu.halcyon.ai is
+      the "eu" region). See the connector documentation for details.
+    enum:
+      - us
+      - eu
+    default: us
+
   username:
     type: string
     title: Username

@@ -10,6 +10,9 @@ x-samos-keys:
   - guid # to be referenced by Static Finding type file to fulfill applies_to
   - id # to be referenced by website type file for application_id
 
+required:
+  - guid
+
 x-samos-table:
   - name: profile.name
   - name: profile.description

@@ -12,6 +12,9 @@ x-samos-keys:
   - id #unique identifier
   - serial # for reference by other types (e.g. machine-token mapping)
 
+required:
+  - id
+
 x-samos-table:
   - name: serial
   - name: tokentype

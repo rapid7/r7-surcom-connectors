@@ -11,6 +11,9 @@ x-samos-keys:
   - d_user_id # It is used for reference in other types
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: d_name
   - name: email

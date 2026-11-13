@@ -10,6 +10,9 @@ x-samos-keys:
   - SoftwareUnique
   - SoftID
 
+required:
+  - SoftwareUnique
+
 x-samos-table:
   - name: softwareName
   - name: SoftwareVersion

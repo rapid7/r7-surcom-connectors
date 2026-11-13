@@ -12,6 +12,9 @@ x-samos-default-hide-from-graph: true
 x-samos-keys:
   - PlatformID
 
+required:
+  - PlatformID
+
 x-samos-table:
   - name: Name
   - name: ShortName

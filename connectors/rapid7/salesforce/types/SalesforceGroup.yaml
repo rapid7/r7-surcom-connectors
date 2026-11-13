@@ -1,0 +1,176 @@
+x-samos-type-name: SalesforceGroup
+x-samos-namespace: salesforce
+title: Salesforce Group
+description: >-
+  A Salesforce Public Group, Queue, or other system-managed group used to
+  assign record access or route work items (e.g. Cases) to a set of Users.
+  Groups that Salesforce generates for another record (Role, Territory, and
+  guest-user groups) are not imported; Role group memberships appear on the
+  related SalesforceUserRole instead.
+x-samos-detail-prefer-type-title: true
+x-samos-extends-types:
+  - type-name: UserGroup
+    subtype-priority: 3
+
+x-samos-keys:
+  - Id
+
+required:
+  - Id
+
+x-samos-table:
+  - name: Name
+  - name: Type
+  - name: DeveloperName
+  - name: Email
+  - name: OwnerId
+  - name: CreatedDate
+
+x-samos-detail:
+  - name: Name
+  - name: Type
+  - name: DeveloperName
+  - name: Description
+  - name: Email
+  - name: OwnerId
+  - name: RelatedId
+  - name: groups
+  - name: DoesSendEmailToMembers
+  - name: DoesIncludeBosses
+  - name: QueueRoutingConfigId
+  - name: CreatedById
+  - name: CreatedDate
+  - name: LastModifiedById
+  - name: LastModifiedDate
+
+x-samos-derived-properties:
+  # Calculated value: system groups such as AllInternalUsers have no Name,
+  # so fall back to the DeveloperName for display.
+  d_name:
+    x-samos-hidden: true
+    title: Name
+    type: string
+    syntax: jmespath
+    value: 'Name || DeveloperName'
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+properties:
+  Id:
+    title: Id
+    description: Salesforce Group ID.
+    type: string
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: UserGroup
+      property-name: id
+
+  Name:
+    title: Name
+    description: >-
+      Display name of the group. Not populated for some system-managed
+      groups (e.g. "AllInternalUsers"), which are identified by
+      DeveloperName instead.
+    type: string
+
+  DeveloperName:
+    title: Developer Name
+    description: Unique, unchangeable API name for the group.
+    type: string
+
+  RelatedId:
+    title: Related Id
+    description: >-
+      ID of the entity this group is automatically derived from, e.g. a Role
+      or Territory ID, for system-managed group types.
+    type: string
+
+  Type:
+    title: Type
+    description: >-
+      Salesforce group type, e.g. Regular (public group), Queue, Role,
+      RoleAndSubordinates, Organization (all internal users), or
+      ManagedContentSpaceRole.
+    type: string
+
+  Email:
+    title: Email
+    type: string
+
+  QueueRoutingConfigId:
+    title: Queue Routing Config Id
+    description: Omni-Channel routing configuration used to assign work to this queue's members.
+    type: string
+
+  OwnerId:
+    title: Owner
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+      - type-name: SalesforceOrganization
+        key-name: Id
+
+  DoesSendEmailToMembers:
+    title: Does Send Email To Members?
+    type: boolean
+
+  DoesIncludeBosses:
+    title: Does Include Bosses?
+    description: Whether managers of members are included in the group.
+    type: boolean
+
+  CreatedDate:
+    title: Created Date
+    type: string
+    format: date-time
+
+  CreatedById:
+    title: Created By
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  LastModifiedDate:
+    title: Last Modified Date
+    type: string
+    format: date-time
+
+  LastModifiedById:
+    title: Last Modified By
+    type: string
+    x-samos-ref-types:
+      - type-name: SalesforceUser
+        key-name: Id
+
+  SystemModstamp:
+    title: System MOD Stamp
+    type: string
+    format: date-time
+    x-samos-hidden: true
+
+  Description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  groups:
+    title: Groups
+    description: >-
+      IDs of the parent Groups this group is a direct member of, derived from
+      Salesforce GroupMember records. Not a native Group field - injected by
+      the connector.
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: SalesforceGroup
+          key-name: Id
+    x-samos-fulfills:
+      type-name: core.principal
+      property-name: groups

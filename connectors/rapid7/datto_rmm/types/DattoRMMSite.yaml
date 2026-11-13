@@ -11,6 +11,9 @@ $ref: https://example_swagger.centrastage.net/api/v3/api-docs/Datto-RMM#/compone
 x-samos-keys:
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: description

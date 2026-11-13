@@ -1,0 +1,482 @@
+x-samos-type-name: XenServerVM
+x-samos-namespace: xenserver
+title: XenServer VM
+description: A guest virtual machine running on XenServer. Templates, snapshots and control domains are excluded.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - uuid
+
+required:
+  - uuid
+
+x-samos-table:
+  - name: name_label
+  - name: power_state
+  - name: x_os_name
+  - name: x_ips
+  - name: x_vcpus
+  - name: x_host_uuid
+  - name: x_last_seen
+
+x-samos-detail:
+  - name: name_label
+  - name: name_description
+  - name: tags
+  - name: x_os_name
+  - name: x_os_distro
+  - name: x_os_major
+  - name: x_os_minor
+  - name: x_os_uname
+  - name: x_host_uuid
+  - name: x_pool_uuid
+  - name: power_state
+  - name: domain_type
+  - name: x_boot_mode
+  - name: x_secure_boot
+  - name: x_pv_drivers_detected
+  - name: x_pv_drivers_version
+  - name: x_guest_agent_live
+  - name: x_vcpus
+  - name: VCPUs_at_startup
+  - name: VCPUs_max
+  - name: memory_static_max
+  - name: ha_restart_priority
+  - name: x_guest_hostname
+  - name: x_hostnames
+  - name: x_ips
+  - name: x_mac_addresses
+  - name: x_network_interfaces
+  - name: x_network_uuids
+  - name: x_disks
+  - name: x_storage_repository_uuids
+  - name: x_snapshot_schedule
+  - name: x_asset_type
+  - name: x_virtual
+  - name: uuid
+  - name: x_install_time
+  - name: x_start_time
+  - name: x_last_seen
+
+x-samos-derived-properties:
+  # A VM is active only while running; power_state is an enum, not a boolean (core.component.active)
+  d_active:
+    type: boolean
+    value: "power_state == 'Running'"
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  # The guest agent reports the major and minor versions separately; Machine.os_version needs e.g. "22.04"
+  d_os_version:
+    type: string
+    value: "join('.', [x_os_major, x_os_minor] | [?@])"
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+
+  # M1046 - Boot Integrity: the VM boots with UEFI Secure Boot (x_secure_boot, computed at import the way
+  # XAPI does: HVM_boot_params.firmware == "uefi" and platform.secureboot "true" or "1")
+  # M1053 - Data Backup: the VM has an enabled snapshot schedule (VMSS) and a retained snapshot created by
+  # that schedule within the last two schedule intervals (x_snapshot_recent, computed at import).
+  # XAPI only creates a snapshot VM once the snapshot completes, so this is evidence of a recent successful
+  # snapshot rather than of configuration alone. Snapshots are usually on the same storage repository as the
+  # VM disks, so this is weaker evidence than an off-host backup.
+  d_mitigations:
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    value: >-
+      [
+        x_secure_boot == `true` && 'M1046' || null,
+        x_snapshot_schedule.enabled == `true` && x_snapshot_schedule.x_snapshot_recent == `true` && 'M1053' || null
+      ] | [?@]
+    syntax: jmespath
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  uuid:
+    title: UUID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name_label:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  name_description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  power_state:
+    title: Power State
+    description: Current power state of the VM (vm_power_state), mapped to the standard operational status.
+    type: string
+    x-samos-ref-types:
+      - type-name: XenServerEnumPowerState
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: operational_status
+
+  domain_type:
+    title: Domain Type
+    type: string
+
+  x_boot_mode:
+    title: Boot Mode
+    description: Firmware the VM boots with (HVM_boot_params firmware), bios or uefi. Not set means BIOS.
+    type: string
+
+  x_secure_boot:
+    title: Secure Boot?
+    description: True if the VM boots in UEFI mode with Secure Boot enabled (platform secureboot true).
+    type: boolean
+
+  VCPUs_max:
+    title: Max vCPUs
+    type: integer
+
+  VCPUs_at_startup:
+    title: vCPUs at Startup
+    type: integer
+
+  x_vcpus:
+    title: vCPUs
+    description: Current number of vCPUs, or the number at startup when the VM is not running.
+    type: integer
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: cpus
+
+  memory_static_max:
+    title: Max Memory (bytes)
+    description: Statically set (absolute) maximum memory of the VM.
+    type: integer
+
+  ha_restart_priority:
+    title: HA Restart Priority
+    type: string
+
+  tags:
+    title: Tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: XenServerSourceTag
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+
+  x_virtual:
+    title: Virtual?
+    description: Always true; every imported record is a guest virtual machine.
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: virtual
+
+  x_asset_type:
+    title: Asset Type
+    description: Always Virtual Machine.
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+
+  x_pool_uuid:
+    title: Pool
+    type: string
+    x-samos-ref-types:
+      - type-name: XenServerPool
+        key-name: uuid
+
+  x_host_uuid:
+    title: Resident Host
+    type: string
+    x-samos-ref-types:
+      - type-name: XenServerHost
+        key-name: uuid
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+  x_os_name:
+    title: Operating System
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  x_os_distro:
+    title: OS Distribution
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_product
+
+  x_os_major:
+    title: OS Major Version
+    type: string
+
+  x_os_minor:
+    title: OS Minor Version
+    type: string
+
+  x_os_uname:
+    title: Kernel
+    type: string
+
+  x_guest_hostname:
+    title: Guest Hostname
+    type: string
+
+  # The guest agent only reports a hostname for Windows guests (netbios_name), so the VM name is also used, as
+  # the vCenter, Proxmox, Nutanix and Scale Computing connectors do. XAPI does not require VM names to be
+  # unique (VM.get_by_name_label returns a set), so two VMs with the same name can correlate to one Machine.
+  x_hostnames:
+    title: Hostnames
+    description: The guest hostname reported by the guest agent and the VM name, without case-only duplicates.
+    type: array
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  x_unqualified_hostnames:
+    title: Unqualified Hostnames
+    description: Short names, including the first label of each fully qualified name.
+    type: array
+    x-samos-hidden: true
+    items:
+      type: string
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  x_fqdns:
+    title: Fully Qualified Names
+    description: Names that contain a dot.
+    type: array
+    x-samos-hidden: true
+    items:
+      type: string
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 4
+
+  x_guest_agent_live:
+    title: Guest Agent Live?
+    type: boolean
+
+  x_pv_drivers_detected:
+    title: VM Tools Detected?
+    type: boolean
+
+  x_pv_drivers_version:
+    title: VM Tools Version
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: agent_version
+
+  x_start_time:
+    title: Start Time
+    description: Time at which the VM was last booted.
+    type: string
+    format: date-time
+
+  x_install_time:
+    title: Install Time
+    description: Time at which the VM was installed.
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_first_seen
+
+  x_last_seen:
+    title: Last Seen
+    description: >-
+      The import time while the VM is running, otherwise the time it was last booted.
+      Changes on every import while the VM is running.
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.managed.endpoint
+      property-name: endpoint_last_seen
+
+  x_ips:
+    title: IP Addresses
+    type: array
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  x_mac_addresses:
+    title: MAC Addresses
+    type: array
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+
+  x_network_uuids:
+    title: Networks
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: XenServerNetwork
+          key-name: uuid
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: network
+
+  x_storage_repository_uuids:
+    title: Storage Repositories
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: XenServerStorageRepository
+          key-name: uuid
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: storage
+
+  x_network_interfaces:
+    title: Virtual Interfaces
+    type: array
+    items:
+      type: object
+      properties:
+        device:
+          title: Interface Position
+          description: Order in which xapi creates the VIF backends (0, 1, 2, ...).
+          type: string
+        MAC:
+          title: MAC
+          type: string
+          format: mac-addr
+        ipv4_addresses:
+          title: IPv4 Addresses
+          type: array
+          items:
+            type: string
+        ipv6_addresses:
+          title: IPv6 Addresses
+          type: array
+          items:
+            type: string
+        currently_attached:
+          title: Currently Attached?
+          type: boolean
+        locking_mode:
+          title: Locking Mode
+          type: string
+        x_network_uuid:
+          title: Network
+          type: string
+
+  x_disks:
+    title: Disks
+    type: array
+    items:
+      type: object
+      properties:
+        userdevice:
+          title: Device Position
+          type: string
+        mode:
+          title: Mode
+          type: string
+        bootable:
+          title: Bootable?
+          type: boolean
+        currently_attached:
+          title: Currently Attached?
+          type: boolean
+        x_vdi_uuid:
+          title: Virtual Disk UUID
+          type: string
+        x_vdi_name_label:
+          title: Virtual Disk Name
+          type: string
+        x_virtual_size:
+          title: Virtual Size (bytes)
+          type: integer
+        x_storage_repository_uuid:
+          title: Storage Repository
+          type: string
+
+  x_snapshot_schedule:
+    title: Snapshot Schedule
+    type: object
+    properties:
+      name_label:
+        title: Name
+        type: string
+      enabled:
+        title: Enabled?
+        type: boolean
+      frequency:
+        title: Frequency
+        type: string
+      retained_snapshots:
+        title: Retained Snapshots
+        type: integer
+      last_run_time:
+        title: Last Run Time
+        type: string
+        format: date-time
+      x_snapshot_count:
+        title: Retained Schedule Snapshots
+        type: integer
+      x_latest_snapshot_time:
+        title: Latest Schedule Snapshot
+        type: string
+        format: date-time
+      x_snapshot_recent:
+        title: Recent Schedule Snapshot?
+        description: >-
+          True when the latest schedule snapshot is younger than two schedule intervals
+          (2 hours, 2 days or 2 weeks for hourly, daily or weekly schedules).
+        type: boolean

@@ -24,6 +24,8 @@ x-samos-detail:
   - name: hostName
   - name: riskId
   - name: hostIp
+  - name: osVersion
+  - name: misconfigurationsAmount
   - name: firstSeen
   - name: lastSeen
 
@@ -78,6 +80,13 @@ properties:
     type: string
     format: ip-addr
     title: Host IP
+
+  osVersion:
+    type: string
+    title: Operating System Version
+  misconfigurationsAmount:
+    type: integer
+    title: Misconfiguration Count
   firstSeen:
     type: string
     format: date-time

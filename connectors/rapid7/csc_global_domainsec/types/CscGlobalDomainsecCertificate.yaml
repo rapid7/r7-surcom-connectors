@@ -1,0 +1,238 @@
+x-samos-type-name: CscGlobalDomainsecCertificate
+x-samos-namespace: csc.global.domainsec
+title: CSC Global DomainSec Certificate
+description: A TLS certificate ordered through CSC Global DomainSec.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Certificate
+    subtype-priority: 2
+
+x-samos-keys:
+  - uuid
+
+required:
+  - uuid
+
+x-samos-table:
+  - name: commonName
+  - name: certificateType
+  - name: status
+  - name: x_issuer
+  - name: expirationDate
+  - name: x_business_unit_id
+
+x-samos-detail:
+  - name: commonName
+  - name: x_domain
+  - name: additionalNames
+  - name: certificateType
+  - name: status
+  - name: effectiveDate
+  - name: expirationDate
+  - name: isRenewed
+  - name: x_business_unit_id
+  - name: orderedBy
+  - name: orderDate
+  - name: serverSoftware
+  - name: x_issuer
+  - name: x_serial_number
+  - name: x_signature_hash_algorithm
+  - name: x_thumbprint
+  - name: x_is_wildcard
+  - name: x_subject
+  - name: account
+  - name: customFields
+
+x-samos-derived-properties:
+  d_active:
+    type: boolean
+    syntax: jmespath
+    value: 'status == `"ACTIVE"`'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  uuid:
+    type: string
+    title: Certificate ID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  commonName:
+    type: string
+    title: Common Name
+    description: Primary domain the certificate is issued for.
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  additionalNames:
+    type: array
+    title: Additional Names
+    description: Subject alternative names covered by the certificate.
+    items:
+      type: string
+
+  certificateType:
+    type: string
+    title: Certificate Type
+    description: CSC certificate product, for example `CSC TrustedSecure OV`.
+
+  status:
+    type: string
+    title: Status
+    description: Certificate status, for example `ACTIVE`, `PENDING`, or `IMPORTED`.
+
+  isRenewed:
+    type: boolean
+    title: Renewed?
+
+  businessUnit:
+    type: string
+    title: Business Unit
+    x-samos-hidden: true
+    description: Business unit that owns the certificate.
+
+  orderedBy:
+    type: string
+    title: Ordered By
+
+  serverSoftware:
+    type: string
+    title: Server Software
+    nullable: true
+
+  account:
+    type: object
+    title: Account
+    x-samos-hidden: true
+    properties:
+      accountNumber:
+        type: string
+        title: Account Number
+      accountName:
+        type: string
+        title: Account Name
+
+  customFields:
+    type: array
+    title: Custom Fields
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Name
+        value:
+          type: string
+          title: Value
+
+  effectiveDate:
+    type: string
+    title: Effective Date
+    format: date-time
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: not_valid_before
+
+  expirationDate:
+    type: string
+    title: Expiration Date
+    format: date-time
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: not_valid_after
+
+  orderDate:
+    type: string
+    title: Order Date
+    format: date-time
+
+  x_subject:
+    type: array
+    title: Subject
+    description: The common name together with any subject alternative names.
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: subject
+
+  x_is_wildcard:
+    type: boolean
+    title: Wildcard?
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: is_wildcard
+
+  x_domain:
+    type: string
+    title: Domain
+    description: Domain the certificate secures, from its common name without any wildcard label.
+    nullable: true
+    # The common name is a registered CSC domain or a hostname in a CSC zone, so it can resolve to either.
+    x-samos-ref-types:
+      - type-name: CscGlobalDomainsecDomain
+        key-name: qualifiedDomainName
+      - type-name: CscGlobalDomainsecHost
+        key-name: fqdn
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: domain
+
+  x_issuer:
+    type: string
+    title: Issuer
+    description: Distinguished name of the certificate authority that issued the certificate.
+    nullable: true
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: issuer
+
+  x_serial_number:
+    type: string
+    title: Serial Number
+    description: Serial number assigned by the certificate authority, in lowercase hex.
+    nullable: true
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: Certificate.serial_number
+      correlation-type: Certificate
+      priority: 3
+
+  x_signature_hash_algorithm:
+    type: string
+    title: Signature Hash Algorithm
+    description: Hash algorithm used in the certificate's signature, for example `sha256`.
+    nullable: true
+
+  x_thumbprint:
+    type: string
+    title: Thumbprint
+    description: SHA-256 thumbprint calculated from the issued certificate.
+    nullable: true
+    x-samos-fulfills:
+      type-name: Certificate
+      property-name: hashes
+    x-samos-correlation:
+      correlation-key: Certificate.thumbprint
+      correlation-type: Certificate
+      priority: 4
+
+  x_business_unit_id:
+    type: string
+    title: Business Unit
+    nullable: true
+    x-samos-ref-types:
+      - type-name: CscGlobalDomainsecBusinessUnit
+        key-name: x_business_unit_id
+    x-samos-fulfills:
+      type-name: core.owned-entity
+      property-name: organization

@@ -1,11 +1,12 @@
 id: iru
 name: Iru
 author: Community
-version: 0.1.0
+version: 0.2.0
 notice: Copyright © 2026 Rapid7 and contributors.
 
 current_changes:
-  - Initial release
+  - Update dependencies
+  - Mark key properties as required in the type schemas
 
 types:
   - IruDevice

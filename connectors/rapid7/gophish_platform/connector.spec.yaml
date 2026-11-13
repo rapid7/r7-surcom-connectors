@@ -1,12 +1,13 @@
 id: gophish.platform
 name: Gophish
 author: Rapid7
-version: 0.1.0
+version: 0.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 current_changes:
-  - Initial release of Gophish connector for phishing campaigns and groups
+  - Update dependencies
+  - Mark key properties as required in the type schemas
 
 types:
   - GophishPlatformCampaign

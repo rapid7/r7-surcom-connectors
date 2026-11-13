@@ -1,0 +1,410 @@
+x-samos-type-name: LenovoXClarityChassis
+x-samos-namespace: lenovo.xclarity
+title: Lenovo XClarity Chassis
+description: A physical chassis enclosure managed by Lenovo XClarity Administrator
+  that houses compute nodes and switches.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - uuid
+
+required:
+  - uuid
+
+x-samos-table:
+  - name: name
+  - name: type
+  - name: model
+  - name: serialNumber
+  - name: mgmtProcIPaddress
+  - name: overallHealthState
+  - name: accessState
+
+x-samos-detail:
+  - name: name
+  - name: overallHealthState
+  - name: accessState
+  - name: status
+  - name: type
+  - name: machineType
+  - name: model
+  - name: productName
+  - name: serialNumber
+  - name: manufacturer
+  - name: hostname
+  - name: FQDN
+  - name: mgmtProcIPaddress
+  - name: nodes
+  - name: switches
+  - name: cmmHealthState
+  - name: cmmDisplayName
+  - name: tlsVersion
+  - name: nist
+  - name: SecurityPolicy
+  - name: location
+  - name: parent
+  - name: description
+  - name: userDescription
+
+x-samos-derived-properties:
+  d_active:
+    type: boolean
+    x-samos-hidden: true
+    syntax: jmespath
+    # Chassis is considered active when the appliance reports it reachable
+    value: "accessState == 'Online'"
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+properties:
+  uuid:
+    type: string
+    title: UUID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  overallHealthState:
+    type: string
+    title: Overall Health State
+    x-samos-ref-types:
+      - key-name: id
+        type-name: LenovoXClarityEnumOperationalStatus
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: operational_status
+  accessState:
+    type: string
+    title: Access State
+  accountLockoutPeriod:
+    type: integer
+    title: Account Lockout Period
+  activationKeys:
+    type: array
+    title: Activation Keys
+    items:
+      type: string
+  backedBy:
+    type: string
+    title: Backed By
+  bladeSlotsLabels:
+    type: array
+    title: Blade Slots Labels
+    items:
+      type: string
+  chassisTypeLocalID:
+    type: string
+    title: Chassis Type Local ID
+  complex:
+    type: array
+    title: Complex
+    items:
+      type: object
+      properties:
+        complexID:
+          type: string
+          title: Complex ID
+        nodeCount:
+          type: integer
+          title: Node Count
+        partition:
+          type: array
+          title: Partition
+          items:
+            type: string
+        partitionCount:
+          type: integer
+          title: Partition Count
+        slots:
+          type: array
+          title: Slots
+          items:
+            type: integer
+        uuid:
+          type: string
+          title: UUID
+  cmmDisplayName:
+    type: string
+    title: CMM Display Name
+  cmmHealthState:
+    type: string
+    title: CMM Health State
+  cmms:
+    type: array
+    title: CMMs
+    items:
+      type: string
+  bladeSlots:
+    type: integer
+    title: Blade Slots
+  contact:
+    type: string
+    title: Contact
+  dataHandle:
+    type: integer
+    title: Data Handle
+    format: epoch-millis
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  displayName:
+    type: string
+    title: Display Name
+  domainName:
+    type: string
+    title: Domain Name
+  encapsulation:
+    type: object
+    title: Encapsulation
+    properties:
+      encapsulationMode:
+        type: string
+        title: Encapsulation Mode
+  errorFields:
+    type: array
+    title: Error Fields
+    items:
+      type: string
+  excludedHealthState:
+    type: string
+    title: Excluded Health State
+  fanSlots:
+    type: integer
+    title: Fan Slots
+  fanMuxSlots:
+    type: integer
+    title: Fan Mux Slots
+  FQDN:
+    type: string
+    title: FQDN
+  height:
+    type: integer
+    title: Height
+  hostname:
+    type: string
+    title: Hostname
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+  isConnectionTrusted:
+    type: string
+    title: Connection Trusted
+  lastOfflineTimestamp:
+    type: integer
+    title: Last Offline Timestamp
+  ledCardSlots:
+    type: integer
+    title: LED Card Slots
+  location:
+    type: object
+    title: Location
+    properties:
+      location:
+        type: string
+        title: Location
+      lowestRackUnit:
+        type: integer
+        title: Lowest Rack Unit
+      rack:
+        type: string
+        title: Rack
+      room:
+        type: string
+        title: Room
+  machineType:
+    type: string
+    title: Machine Type
+  managedChassis:
+    type: boolean
+    title: Managed Chassis?
+  managerName:
+    type: string
+    title: Manager Name
+  managerUuid:
+    type: string
+    title: Manager UUID
+  manufacturer:
+    type: string
+    title: Manufacturer
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+  manufacturerId:
+    type: string
+    title: Manufacturer ID
+  mgmtProcIPaddress:
+    type: string
+    title: Management IP Address
+    format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+  mmSlots:
+    type: integer
+    title: MM Slots
+  model:
+    type: string
+    title: Model
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+  nist:
+    type: object
+    title: NIST
+    properties:
+      currentValue:
+        type: string
+        title: Current Value
+      possibleValues:
+        type: array
+        title: Possible Values
+        items:
+          type: string
+  nodes:
+    type: array
+    title: Nodes
+    description: UUIDs of compute nodes housed in this chassis.
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: uuid
+          type-name: LenovoXClarityNode
+  parent:
+    type: object
+    title: Parent
+    properties:
+      uri:
+        type: string
+        title: URI
+      uuid:
+        type: string
+        title: UUID
+  partNumber:
+    type: string
+    title: Part Number
+  passThroughModules:
+    type: array
+    title: Pass Through Modules
+    items:
+      type: string
+  posID:
+    type: string
+    title: Position ID
+  powerAllocation:
+    type: object
+    title: Power Allocation
+    properties:
+      allocatedOutputPower:
+        type: integer
+        title: Allocated Output Power
+      midPlaneCardMaximumAllocatedPower:
+        type: integer
+        title: Mid Plane Card Maximum Allocated Power
+      midPlaneCardMinimumAllocatedPower:
+        type: integer
+        title: Mid Plane Card Minimum Allocated Power
+      remainingOutputPower:
+        type: integer
+        title: Remaining Output Power
+      totalInputPower:
+        type: integer
+        title: Total Input Power
+      totalOutputPower:
+        type: integer
+        title: Total Output Power
+  powerSupplySlots:
+    type: integer
+    title: Power Supply Slots
+  productId:
+    type: string
+    title: Product ID
+  productName:
+    type: string
+    title: Product Name
+  SecurityPolicy:
+    type: object
+    title: Security Policy
+    properties:
+      cmmPolicyLevel:
+        type: string
+        title: Cmm Policy Level
+      cmmPolicyState:
+        type: string
+        title: Cmm Policy State
+  serialNumber:
+    type: string
+    title: Serial Number
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+  status:
+    type: object
+    title: Status
+    properties:
+      message:
+        type: string
+        title: Message
+      name:
+        type: string
+        title: Name
+  switches:
+    type: array
+    title: Switches
+    description: UUIDs of network switches housed in this chassis.
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: uuid
+          type-name: LenovoXClaritySwitch
+  switchSlots:
+    type: integer
+    title: Switch Slots
+  tlsVersion:
+    type: object
+    title: TLS Version
+    properties:
+      currentValue:
+        type: string
+        title: Current Value
+      possibleValues:
+        type: array
+        title: Possible Values
+        items:
+          type: string
+  type:
+    type: string
+    title: Type
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_type
+  uri:
+    type: string
+    title: URI
+  userDefinedName:
+    type: string
+    title: User Defined Name
+  userDescription:
+    type: string
+    title: User Description
+  vpdID:
+    type: string
+    title: VPD ID

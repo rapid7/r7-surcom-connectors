@@ -1,0 +1,312 @@
+x-samos-type-name: HpeArubaEdgeconnectAppliance
+x-samos-namespace: hpe.aruba.edgeconnect
+title: HPE Aruba Networking EdgeConnect Appliance
+description: A physical or virtual EdgeConnect SD-WAN appliance managed by HPE Aruba Networking Orchestrator
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - nePk
+
+required:
+  - nePk
+
+x-samos-table:
+  - name: hostName
+  - name: IP
+  - name: model
+  - name: softwareVersion
+  - name: site
+  - name: groupId
+  - name: state
+
+x-samos-detail:
+  - name: hostName
+  - name: nePk
+  - name: IP
+  - name: serial
+  - name: model
+  - name: groupId
+  - name: site
+  - name: hardwareRevision
+  - name: softwareVersion
+  - name: sitePriority
+  - name: networkRole
+  - name: mode
+  - name: state
+  - name: reachabilityChannel
+  - name: discoveredFrom
+  - name: bypass
+  - name: hasUnsavedChanges
+  - name: rebootRequired
+  - name: systemBandwidth
+  - name: webProtocol
+  - name: startupTime
+  - name: x_security_policy_rule_count
+  - name: uuid
+  - name: applianceId
+  - name: portalObjectId
+
+x-samos-derived-properties:
+  # hostName can be empty while an appliance is being added, so fall back to IP, then nePk
+  d_name:
+    type: string
+    syntax: jmespath
+    value: 'hostName || IP || nePk'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  # Virtual appliances (EC-V) report an all-zero serial number, which must not
+  # be used for correlation because every EC-V would merge into one Machine.
+  d_serial_number:
+    type: string
+    syntax: jmespath
+    value: "serial && serial != '00-00-00-00-00-00' && serial || null"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+
+  # EdgeConnect hostnames are usually short names but can be FQDNs, so both
+  # hostname correlations are needed; each only applies to its own form
+  d_qualified_hostname:
+    type: string
+    syntax: jmespath
+    value: 'hostName && contains(hostName, `.`) && hostName || null'
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  d_unqualified_hostname:
+    type: string
+    syntax: jmespath
+    value: 'hostName && !contains(hostName, `.`) && hostName || null'
+    x-samos-hidden: true
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 3
+
+  # The vendor is not in the API response; every appliance is from the same vendor
+  d_make:
+    type: string
+    syntax: expression
+    value: 'HPE Aruba Networking'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+
+  # ECOS is the appliance OS; the API only returns its version
+  d_operating_system:
+    type: string
+    syntax: expression
+    value: 'ECOS {softwareVersion}'
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: operating_system
+
+  # The API has no virtual flag; EdgeConnect virtual appliance models start with "EC-V"
+  d_virtual:
+    type: boolean
+    syntax: jmespath
+    value: "model && starts_with(model, 'EC-V') || `false`"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: virtual
+
+  # M1037 Filter Network Traffic: the appliance enforces user-configured
+  # zone-based firewall (security policy) rules.
+  d_mitigations:
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: Mitigation
+          key-name: id
+    syntax: jmespath
+    value: |
+      [
+        x_security_policy_rule_count > `0` && `M1037` || null
+      ] | [?@]
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+properties:
+  nePk:
+    title: Network Element Primary Key
+    description: Primary key of the appliance in Orchestrator, e.g. 3.NE
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  hostName:
+    title: Hostname
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  IP:
+    title: IP Address
+    type: string
+    format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  serial:
+    title: Serial Number
+    type: string
+
+  model:
+    title: Model
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+
+  hardwareRevision:
+    title: Hardware Revision
+    type: string
+    nullable: true
+
+  softwareVersion:
+    title: Software Version
+    description: ECOS software version running on the appliance
+    type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: os_version
+
+  uuid:
+    title: UUID
+    description: Unique identifier generated and self-assigned by the appliance
+    type: string
+
+  applianceId:
+    title: Appliance ID
+    description: Identifier the appliance uses to identify its peers
+    type: integer
+
+  portalObjectId:
+    title: Cloud Portal Object ID
+    type: string
+    nullable: true
+
+  groupId:
+    title: Appliance Group
+    type: string
+    x-samos-ref-types:
+      - type-name: HpeArubaEdgeconnectApplianceGroup
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+
+  site:
+    title: Site
+    description: Site name tagged on the appliance
+    type: string
+    nullable: true
+
+  sitePriority:
+    title: Site Priority
+    type: integer
+
+  networkRole:
+    title: Network Role
+    description: 0 = Spoke, 1 = Hub, 2 = Mesh, 3 = Non-routing hub
+    type: string
+
+  mode:
+    title: Deployment Mode
+    type: string
+
+  state:
+    title: State
+    description: >-
+      0 = Unknown, 1 = Normal, 2 = Unreachable, 3 = Unsupported Version,
+      4 = Out of Synchronization, 5 = Synchronization in Progress
+    type: string
+    x-samos-ref-types:
+      - type-name: HpeArubaEdgeconnectEnumApplianceState
+        key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: operational_status
+
+  reachabilityChannel:
+    title: Reachability Channel
+    description: >-
+      0 = Unknown, 1 = HTTP/HTTPS from Orchestrator, 2 = WebSocket from appliance,
+      4 = Relayed through Cloud Portal
+    type: integer
+
+  discoveredFrom:
+    title: Discovered From
+    description: 1 = Manual, 2 = Cloud Portal, 3 = Appliance
+    type: integer
+
+  bypass:
+    title: Bypass?
+    type: boolean
+
+  hasUnsavedChanges:
+    title: Unsaved Changes?
+    type: boolean
+
+  rebootRequired:
+    title: Reboot Required?
+    type: boolean
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: pending_reboot
+
+  startupTime:
+    title: Last Startup
+    type: integer
+    format: epoch-millis
+
+  systemBandwidth:
+    title: System Bandwidth (Kbps)
+    type: integer
+
+  webProtocol:
+    title: Web Protocol
+    type: string
+
+  webProtocolType:
+    title: Web Protocol Type
+    description: 1 = HTTP, 2 = HTTPS, 3 = Both
+    type: integer
+    x-samos-hidden: true
+
+  tagsList:
+    title: Tags
+    type: array
+    nullable: true
+    items:
+      type: string
+
+  x_security_policy_rule_count:
+    title: Security Policy Rules
+    description: Number of enabled, user-configured firewall rules across all zone pairs
+    type: integer

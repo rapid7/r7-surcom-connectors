@@ -11,6 +11,9 @@ x-samos-keys:
   - urn
   - objectId
 
+required:
+  - urn
+
 x-samos-table:
   - name: name
   - name: type

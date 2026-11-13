@@ -1,0 +1,61 @@
+x-samos-type-name: AssetPandaAccount
+x-samos-namespace: asset.panda
+title: Asset Panda Account
+description: An account managed in Asset Panda, sourced from GET /accounts.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.named-object
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: description
+  - name: createdAt
+
+x-samos-detail:
+  - name: name
+  - name: description
+  - name: orgId
+  - name: deleted
+  - name: createdAt
+
+properties:
+  id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  orgId:
+    type: string
+    title: Org ID
+
+  deleted:
+    type: boolean
+    title: Deleted?
+
+  createdAt:
+    type: integer
+    title: Created At
+    format: epoch-millis

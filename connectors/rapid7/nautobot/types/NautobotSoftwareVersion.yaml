@@ -12,6 +12,9 @@ $ref: https://example.nautobot.com/api/swagger#/components/schemas/PaginatedSoft
 x-samos-keys:
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: version
   - name: alias

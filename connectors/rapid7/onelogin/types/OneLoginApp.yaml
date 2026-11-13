@@ -10,6 +10,9 @@ x-samos-keys:
   - d_id # It is used for referencing in other types
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: description

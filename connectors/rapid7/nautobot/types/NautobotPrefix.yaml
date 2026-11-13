@@ -12,6 +12,9 @@ $ref: https://example.nautobot.com/api/swagger#/components/schemas/PaginatedPref
 x-samos-keys:
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: prefix
   - name: namespace.name

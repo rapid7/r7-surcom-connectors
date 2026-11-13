@@ -1,0 +1,111 @@
+x-samos-type-name: XenServerPool
+x-samos-namespace: xenserver
+title: XenServer Pool
+description: A XenServer resource pool of hypervisor hosts that share networks and storage.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.cluster
+    subtype-priority: 3
+
+x-samos-keys:
+  - uuid
+
+required:
+  - uuid
+
+x-samos-table:
+  - name: name_label
+  - name: x_master_host_uuid
+  - name: ha_enabled
+  - name: tls_verification_enabled
+
+x-samos-detail:
+  - name: name_label
+  - name: name_description
+  - name: tags
+  - name: x_master_host_uuid
+  - name: x_host_uuids
+  - name: x_default_sr_uuid
+  - name: ha_enabled
+  - name: tls_verification_enabled
+  - name: client_certificate_auth_enabled
+  - name: wlb_enabled
+  - name: uuid
+
+properties:
+  uuid:
+    title: UUID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name_label:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  name_description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  tags:
+    title: Tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: XenServerSourceTag
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+
+  ha_enabled:
+    title: HA Enabled?
+    type: boolean
+
+  tls_verification_enabled:
+    title: TLS Verification Enabled?
+    type: boolean
+
+  client_certificate_auth_enabled:
+    title: Client Certificate Auth Enabled?
+    type: boolean
+
+  wlb_enabled:
+    title: Workload Balancing Enabled?
+    type: boolean
+
+  x_master_host_uuid:
+    title: Coordinator Host
+    type: string
+    x-samos-ref-types:
+      - type-name: XenServerHost
+        key-name: uuid
+
+  x_default_sr_uuid:
+    title: Default Storage Repository
+    type: string
+    x-samos-ref-types:
+      - type-name: XenServerStorageRepository
+        key-name: uuid
+
+  x_host_uuids:
+    title: Hosts
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: XenServerHost
+          key-name: uuid
+    x-samos-fulfills:
+      type-name: core.component-group
+      property-name: members

@@ -1,0 +1,87 @@
+id: teamdynamix
+name: TeamDynamix
+author: Rapid7
+version: 0.2.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Update dependencies
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Web API URL
+    description: >-
+      URL of the TeamDynamix Web API, which is your TeamDynamix URL followed by /TDWebApi.
+    example: https://example.teamdynamix.com/TDWebApi
+
+  auth_method:
+    type: string
+    title: Authentication Method
+    description: >-
+      How the connector signs in to TeamDynamix. User and Password is recommended, as the
+      user's access can be limited to read-only. Admin Service Account has full admin access.
+    enum:
+      - User and Password
+      - Admin Service Account
+    default: User and Password
+
+  username:
+    type: string
+    title: Username
+    description: >-
+      Username of a TeamDynamix user that signs in with a TeamDynamix password.
+      Users that sign in with single sign-on (SSO) cannot be used.
+      Only used by the User and Password method.
+    nullable: true
+
+  password:
+    type: string
+    format: password
+    title: Password
+    description: >-
+      Password of the TeamDynamix user.
+      Only used by the User and Password method.
+    nullable: true
+
+  beid:
+    type: string
+    title: BEID
+    description: >-
+      BEID of the admin service account, from the organization details page in TDAdmin.
+      Only used by the Admin Service Account method.
+    nullable: true
+
+  web_services_key:
+    type: string
+    format: password
+    title: Web Services Key
+    description: >-
+      Web Services Key of the admin service account, from the organization details page in TDAdmin.
+      Only used by the Admin Service Account method.
+    nullable: true
+
+  asset_applications:
+    type: string
+    title: Assets/CIs Applications
+    description: >-
+      Comma-separated names of the TeamDynamix Assets/CIs applications to import from.
+      Leave empty to import from every active Assets/CIs application the connector can see.
+      Test Connection lists the applications it finds.
+    example: IT Assets, Lab Assets
+    nullable: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - asset_management

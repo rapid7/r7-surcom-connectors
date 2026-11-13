@@ -1,0 +1,167 @@
+x-samos-type-name: AssetPandaLocation
+x-samos-namespace: asset.panda
+title: Asset Panda Location
+description: A location record from the Asset Panda Location collection,
+  sourced from POST /collection-records/search.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Location
+    subtype-priority: 3
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: location_name
+  - name: core.location:city
+  - name: core.location:country
+  - name: parent_location
+  - name: lastupdated
+
+x-samos-detail:
+  - name: accountid
+  - name: moduleid
+  - name: collectiontype
+  - name: dateadded
+  - name: lastupdated
+  - name: addedby
+  - name: lastupdatedby
+  - name: locked
+  - name: location_name
+  - name: parent_location
+  - name: customFields
+
+properties:
+  id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: Location
+      property-name: id
+
+  accountid:
+    type: string
+    title: Account
+    x-samos-ref-types:
+      - type-name: AssetPandaAccount
+        key-name: id
+
+  moduleid:
+    type: string
+    title: Module
+    x-samos-ref-types:
+      - type-name: AssetPandaModule
+        key-name: id
+
+  orgid:
+    type: string
+    title: Org ID
+
+  collectionid:
+    type: string
+    title: Collection ID
+
+  collectiontype:
+    type: string
+    title: Collection Type
+
+  dateadded:
+    type: string
+    title: Date Added
+    format: date-time
+
+  lastupdated:
+    type: string
+    title: Last Updated
+    format: date-time
+
+  addedby:
+    type: string
+    title: Added By
+
+  lastupdatedby:
+    type: string
+    title: Last Updated By
+
+  locked:
+    type: string
+    title: Locked
+
+  typeprimary:
+    type: string
+    title: Type Primary
+    x-samos-hidden: true
+
+  system_id_numericautoincrement:
+    type: object
+    title: System ID
+    x-samos-hidden: true
+    properties:
+      incrValue:
+        type: integer
+        title: Increment Value
+      value:
+        type: string
+        title: Value
+
+  location_name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+    x-samos-correlation:
+      correlation-key: Location.name
+      correlation-type: Location
+      priority: 5
+
+  parent_location:
+    type: string
+    title: Parent Location
+    x-samos-ref-types:
+      - type-name: AssetPandaLocation
+        key-name: id
+    x-samos-fulfills:
+      type-name: Location
+      property-name: is_part_of_ref
+
+  customFields:
+    type: object
+    title: Custom Fields
+    description: >-
+      Custom field values keyed by display name, sourced from /collection-records/search.
+      Fields mapped to top-level properties via Settings are not repeated here.
+    properties:
+      Location Type:
+        type: string
+        title: Location Type
+      Address:
+        type: string
+        title: Address
+        x-samos-fulfills:
+          type-name: core.location
+          property-name: address
+      City:
+        type: string
+        title: City
+        x-samos-fulfills:
+          type-name: core.location
+          property-name: city
+      Contact Email:
+        type: string
+        title: Contact Email
+      Country:
+        type: string
+        title: Country
+      State:
+        type: string
+        title: State
+        x-samos-fulfills:
+          type-name: core.location
+          property-name: state

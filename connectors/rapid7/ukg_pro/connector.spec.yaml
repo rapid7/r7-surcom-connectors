@@ -1,0 +1,107 @@
+id: ukg.pro
+name: UKG Pro
+author: Rapid7
+version: 1.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Update dependencies
+
+types:
+  - UkgProIdentity
+  - UkgProDepartment
+  - UkgProCompany
+  - UkgProLocation
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: UKG Pro Identities, Companies, Departments, Locations
+    description: >-
+      Imports employee identities, companies, departments (organizational levels),
+      and work locations from UKG Pro.
+    return_types:
+      - UkgProIdentity
+      - UkgProDepartment
+      - UkgProCompany
+      - UkgProLocation
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: >-
+      The base service URL of your UKG Pro HCM tenant, starting with https://.
+      This is the part of the Service Endpoint before the resource path, found
+      under System Configuration > Security > Web Services.
+    example: https://service4.ultipro.com
+
+  customer_api_key:
+    type: string
+    title: Customer API Key
+    description: >-
+      The Customer API Key for your UKG Pro HCM tenant, found under
+      System Configuration > Security > Web Services.
+    format: password
+
+  username:
+    type: string
+    title: Web Service Account Username
+    description: >-
+      The username of the UKG Pro HCM Web Service Account used to authenticate
+      with the API.
+
+  password:
+    type: string
+    title: Web Service Account Password
+    description: >-
+      The password of the UKG Pro HCM Web Service Account used to authenticate
+      with the API.
+    format: password
+
+  active_employees:
+    type: boolean
+    title: Only Active Employees?
+    description: >-
+      If enabled, only active employees are imported. If disabled, all employees
+      (including terminated and retired employees) are imported.
+    default: true
+
+  active_locations:
+    type: boolean
+    title: Only Active Locations?
+    description: >-
+      If enabled, only active work locations are imported. If disabled, all work
+      locations (including inactive locations) are imported.
+    default: true
+
+  active_departments:
+    type: boolean
+    title: Only Active Org Levels?
+    description: >-
+      If enabled, only active departments (organizational levels) are imported. If
+      disabled, all departments (including inactive departments) are imported.
+      Employees in an inactive department still get its name as their department.
+    default: true
+
+  department_org_level:
+    type: integer
+    title: Department Org Level
+    description: >-
+      The UKG Pro organization level (1 to 4) whose name is used as the department of each
+      employee. The name is taken from the employee's org-level code at that level.
+    enum:
+      - 1
+      - 2
+      - 3
+      - 4
+    default: 1
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - iam

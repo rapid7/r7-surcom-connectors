@@ -1,11 +1,11 @@
 id: nutanix.prism.central
 name: Nutanix Prism Central
 author: Rapid7
-version: 1.0.0
+version: 1.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Adding into Extension Library
+  - Update dependencies
 
 reference-schemas:
   - url: https://developers.nutanix.com/api-reference?namespace=clustermgmt&version=v4.1&modified=1

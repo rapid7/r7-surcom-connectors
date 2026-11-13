@@ -1,13 +1,13 @@
 id: cynet.edr
 name: Cynet EDR
 author: Rapid7
-version: 0.3.0
+version: 0.2.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 # Add one or two entries that describe changes in this version.
 # The publishing process maintains prior changelog entries.
 current_changes:
-  - Skip hosts/users with malformed names instead of failing the import
+  - Update dependencies
 
 types:
   - CynetEDRHost
@@ -76,11 +76,6 @@ settings:
 
 # Runtime platform for this connector.
 runtime: py311
-
-# List any Python dependencies available on PyPI that are required by this connector.
-# `codegen` will generate a `requirements.txt` file with pinned versions of these dependencies.
-# python_dependencies:
-#  - another_dependency
 
 # Connectors whose types are referenced by this connector's type YAML files.
 depends-on:

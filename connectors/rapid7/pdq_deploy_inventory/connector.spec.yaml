@@ -1,11 +1,11 @@
 id: pdq.deploy.inventory
 name: PDQ Deploy and Inventory
 author: Rapid7
-version: 0.4.0
+version: 0.5.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Require SMB message signing and negotiate SMB3 encryption when connecting to the PDQ Inventory server
+  - Update dependencies
 
 types:
   - PdqDeployInventoryComputer

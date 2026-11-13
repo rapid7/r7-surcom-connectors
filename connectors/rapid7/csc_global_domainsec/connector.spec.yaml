@@ -1,0 +1,89 @@
+id: csc.global.domainsec
+name: CSC Global DomainSec
+author: Rapid7
+version: 1.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Update dependencies
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - CscGlobalDomainsecBusinessUnit
+  - CscGlobalDomainsecCertificate
+  - CscGlobalDomainsecDomain
+  - CscGlobalDomainsecHost
+  - CscGlobalDomainsecIpAddress
+  - CscGlobalDomainsecZone
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: CSC Global DomainSec Domains, Zones, Certificates, and Business Units
+    description: >-
+      Import all domains, DNS zones, TLS certificates, and business units from
+      CSC Global DomainSec
+    return_types:
+      - CscGlobalDomainsecBusinessUnit
+      - CscGlobalDomainsecCertificate
+      - CscGlobalDomainsecDomain
+      - CscGlobalDomainsecHost
+      - CscGlobalDomainsecIpAddress
+      - CscGlobalDomainsecZone
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: >-
+      Base URL of the CSC Global DomainManager API. Select the demo (OTE)
+      endpoint to test against a non-production account.
+    enum:
+      - https://apis.cscglobal.com/dbs/api/v2
+      - https://apis-ote.cscglobal.com/dbs/api/v2
+    default: https://apis.cscglobal.com/dbs/api/v2
+
+  api_key:
+    type: string
+    title: API Key
+    description: >-
+      API key for the CSC API service account, retrieved in CSCDomainManager
+    format: password
+
+  bearer_token:
+    type: string
+    title: Bearer Token
+    description: >-
+      Bearer token generated for the CSC API service account in CSCDomainManager
+    format: password
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# List any Python dependencies available on PyPI that are required by this connector.
+# `codegen` will generate a `requirements.txt` file with pinned versions of these dependencies.
+python_dependencies:
+  - cryptography
+
+# Categories for this connector in the Extension Library.
+categories:
+  - external_attack_surface
+  - asset_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

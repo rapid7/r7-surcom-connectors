@@ -37467,7 +37467,6 @@ components:
         - title: Virtual disk image.
           required:
             - name
-            - type
           type: object
           properties:
             name:

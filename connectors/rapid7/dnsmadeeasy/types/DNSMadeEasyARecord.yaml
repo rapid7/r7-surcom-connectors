@@ -1,0 +1,108 @@
+﻿x-samos-type-name: DNSMadeEasyARecord
+x-samos-namespace: dnsmadeeasy
+title: DNS Made Easy A Record
+description: A Record details from DNS Made Easy
+
+# These entities are in the global zone
+x-samos-global-zone: true
+
+x-samos-extends-types:
+  - type-name: IpAddress
+    subtype-priority: 2
+
+x-samos-keys:
+  - d_id
+
+required:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: value
+  - name: dynamicDns
+  - name: ttl
+  - name: source
+
+x-samos-detail:
+  - name: name
+  - name: value
+  - name: dynamicDns
+  - name: sourceId
+  - name: ttl
+  - name: source
+  - name: gtdLocation
+  - name: failed
+  - name: monitor
+  - name: failover
+  - name: hardLink
+  - name: type
+
+x-samos-derived-properties:
+  d_id:
+    # For fulfilling the core.component had derived id
+    type: string
+    syntax: jmespath
+    value: id
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+properties:
+  gtdLocation:
+    title: GTD Location
+    type: string
+  failed:
+    title: Failed?
+    type: boolean
+  monitor:
+    title: Monitor?
+    type: boolean
+  failover:
+    title: Failover?
+    type: boolean
+  sourceId:
+    title: Source ID
+    type: integer
+    x-samos-immutable: true
+    x-samos-ref-types:
+      - type-name: DNSMadeEasyDomain
+        key-name: id
+  dynamicDns:
+    title: Dynamic DNS?
+    type: boolean
+  hardLink:
+    title: Hard Link?
+    type: boolean
+  ttl:
+    title: TTL
+    type: integer
+  source:
+    title: Source
+    type: integer
+  name:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  value:
+    title: IP
+    type: string
+    format: ip-addr
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: IpAddress
+      property-name: value
+    x-samos-correlation:
+      correlation-key: IpAddress.value
+      correlation-type: IpAddress
+      priority: 4
+  id:
+    title: ID
+    type: integer
+    x-samos-hidden: true
+  type:
+    title: Type
+    type: string

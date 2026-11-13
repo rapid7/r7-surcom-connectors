@@ -1,0 +1,74 @@
+id: lenovo.xclarity
+name: Lenovo XClarity Administrator
+author: Rapid7
+version: 1.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Update dependencies
+
+types:
+  - LenovoXClarityNode
+  - LenovoXClarityChassis
+  - LenovoXClaritySwitch
+  - LenovoXClarityStorage
+  - LenovoXClarityWarranty
+  - LenovoXClarityEnumOperationalStatus
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Lenovo XClarity Hardware Inventory
+    description: Import servers, chassis, switches, storage systems, and warranty records from Lenovo XClarity Administrator.
+    return_types:
+      - LenovoXClarityNode
+      - LenovoXClarityChassis
+      - LenovoXClaritySwitch
+      - LenovoXClarityStorage
+      - LenovoXClarityWarranty
+
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: HTTPS address of the Lenovo XClarity Administrator appliance.
+    example: https://lxca.example.com
+
+  username:
+    type: string
+    title: Username
+    description: Username of a Lenovo XClarity Administrator user with the lxc-operator role group.
+
+  password:
+    type: string
+    title: Password
+    format: password
+    description: Password for the Lenovo XClarity Administrator user.
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+  managed_status:
+    type: string
+    title: Node Status Filter
+    description: Which servers to import, by management status. Does not affect other device types.
+    enum:
+      - all
+      - managed
+      - unmanaged
+    default: managed
+
+runtime: py311
+
+# LenovoXClarityNode references the MITRE ATT&CK Mitigation M1046.
+depends-on:
+  - mitre.attack.app
+
+categories:
+  - asset_management
+
+show_orchestrator_ui: true

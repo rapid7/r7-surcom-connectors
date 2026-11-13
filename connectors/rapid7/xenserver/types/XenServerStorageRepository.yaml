@@ -1,0 +1,128 @@
+x-samos-type-name: XenServerStorageRepository
+x-samos-namespace: xenserver
+title: XenServer Storage Repository
+description: A XenServer storage repository (SR) that holds virtual disk images.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: Storage
+    subtype-priority: 3
+
+x-samos-keys:
+  - uuid
+
+required:
+  - uuid
+
+x-samos-table:
+  - name: name_label
+  - name: type
+  - name: shared
+  - name: physical_size
+  - name: physical_utilisation
+
+x-samos-detail:
+  - name: name_label
+  - name: name_description
+  - name: tags
+  - name: type
+  - name: content_type
+  - name: shared
+  - name: clustered
+  - name: is_tools_sr
+  - name: physical_size
+  - name: physical_utilisation
+  - name: virtual_allocation
+  - name: x_vdi_count
+  - name: x_attached
+  - name: x_pool_uuid
+  - name: uuid
+
+properties:
+  uuid:
+    title: UUID
+    type: string
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  name_label:
+    title: Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  name_description:
+    title: Description
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+
+  type:
+    title: Type
+    type: string
+
+  content_type:
+    title: Content Type
+    type: string
+
+  shared:
+    title: Shared?
+    type: boolean
+
+  clustered:
+    title: Aggregated Local Storage?
+    description: True if the SR is using aggregated local storage.
+    type: boolean
+
+  is_tools_sr:
+    title: Tools SR?
+    type: boolean
+
+  physical_size:
+    title: Physical Size (bytes)
+    type: integer
+
+  physical_utilisation:
+    title: Physical Utilisation (bytes)
+    type: integer
+
+  virtual_allocation:
+    title: Virtual Allocation (bytes)
+    type: integer
+
+  tags:
+    title: Tags
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: XenServerSourceTag
+          key-name: id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: source_tags
+
+  x_attached:
+    title: Attached?
+    type: boolean
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  x_vdi_count:
+    title: Virtual Disk Count
+    type: integer
+
+  x_pool_uuid:
+    title: Pool
+    type: string
+    x-samos-ref-types:
+      - type-name: XenServerPool
+        key-name: uuid
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref

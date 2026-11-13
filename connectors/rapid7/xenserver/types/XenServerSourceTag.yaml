@@ -1,0 +1,46 @@
+x-samos-type-name: XenServerSourceTag
+x-samos-namespace: xenserver
+title: XenServer Tag
+description: A tag applied to a XenServer pool, host, VM, network or storage repository.
+x-samos-detail-prefer-type-title: true
+x-samos-global-zone: true
+
+x-samos-extends-types:
+  - type-name: SourceTag
+    subtype-priority: 1
+
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: name
+
+x-samos-detail:
+  - name: name
+  - name: id
+
+properties:
+  id:
+    title: Id
+    type: string
+    x-samos-hidden: true
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: id
+  key:
+    title: Key
+    type: string
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: SourceTag
+      property-name: key
+  name:
+    title: Tag
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name

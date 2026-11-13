@@ -13,6 +13,9 @@ x-samos-keys:
   - id
   - primary_email
 
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: external_id

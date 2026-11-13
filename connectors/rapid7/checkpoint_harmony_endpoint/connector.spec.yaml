@@ -1,11 +1,11 @@
 id: checkpoint.harmony.endpoint
 name: Check Point Harmony Endpoint
 author: Rapid7
-version: 0.8.0
+version: 0.9.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Fix 401 authentication error by re-authenticating when the session token expires.
+  - Update dependencies
 
 types:
   - CheckPointHarmonyEndpointAsset

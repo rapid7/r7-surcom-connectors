@@ -1,11 +1,11 @@
 id: mimecast
 name: Mimecast
 author: Rapid7
-version: 1.3.0
+version: 1.4.0
 notice: Copyright © 2026 Rapid7. All rights reserved.
 
 current_changes:
-  - Fix packaging issue
+  - Update dependencies
 
 types:
   - MimecastGatewayDetail

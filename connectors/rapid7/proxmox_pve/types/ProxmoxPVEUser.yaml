@@ -9,6 +9,9 @@ x-samos-extends-types:
 x-samos-keys:
   - userid
 
+required:
+  - userid
+
 x-samos-table:
   - name: userid
   - name: realm-type

@@ -1,0 +1,287 @@
+x-samos-type-name: PaloAltoPanoramaSecurityRule
+x-samos-namespace: palo.alto.panorama
+
+title: Palo Alto Security Rule
+description: A security policy rule that allows or blocks traffic between zones
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.component
+    subtype-priority: 3
+
+$ref: https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-panorama-api/get-started-with-the-pan-os-rest-api#/components/schemas/policies-security-rules
+
+x-samos-keys:
+  - x_id
+
+required:
+  - x_id
+
+x-samos-table:
+  - name: '@name'
+  - name: action
+  - name: x_rulebase
+  - name: d_source
+  - name: d_destination
+  - name: d_service
+  - name: d_scope
+
+x-samos-detail:
+  - name: '@name'
+  - name: action
+  - name: disabled
+  - name: x_rulebase
+  - name: from
+  - name: to
+  - name: d_source
+  - name: x_source_ids
+  - name: d_destination
+  - name: x_destination_ids
+  - name: source-user
+  - name: application
+  - name: d_service
+  - name: x_service_ids
+  - name: category
+  - name: profile-setting
+  - name: description
+  - name: d_tags
+  - name: d_scope
+  - name: '@location'
+  - name: x_vsys_id
+  - name: x_device_group_id
+  - name: x_panorama_id
+  - name: x_target_firewall_ids
+  - name: x_excluded_firewall_ids
+
+x-samos-derived-properties:
+  # PAN-OS reports "disabled: yes" only for disabled rules, while core.component:active needs a boolean
+  d_active:
+    type: boolean
+    syntax: jmespath
+    value: "disabled != 'yes'"
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  # MITRE ATT&CK mitigations evidenced by an enabled rule:
+  #   M1037 Filter Network Traffic: any enabled rule, except an allow rule whose source,
+  #         destination and application are all "any" (it lets all traffic through)
+  #   M1035 Limit Access to Resource Over Network: a blocking action on specific traffic
+  #         (source or destination is not "any"), not the any/any cleanup rule
+  #   M1021 Restrict Web-Based Content: URL Filtering profile
+  #   M1050 Exploit Protection: Vulnerability Protection and Anti-Spyware profiles
+  #   M1049 Antivirus/Antimalware: Antivirus profile
+  # Profiles are either attached individually ("profile-setting".profiles) or through a
+  # security profile group, which the connector embeds as x_security_profile_group.
+  d_mitigations:
+    type: array
+    items:
+      type: string
+      x-samos-ref-types:
+        - key-name: id
+          type-name: Mitigation
+    syntax: jmespath
+    value: >-
+      disabled != 'yes' && [
+      !(action == 'allow' && contains(source.member || `[]`, 'any') && contains(destination.member || `[]`, 'any')
+      && contains(application.member || `[]`, 'any')) && `M1037` || null,
+      contains(`["deny", "drop", "reset-client", "reset-server", "reset-both"]`, action)
+      && !(contains(source.member || `[]`, 'any') && contains(destination.member || `[]`, 'any')) && `M1035` || null,
+      ("profile-setting".profiles."url-filtering" || x_security_profile_group."url-filtering") && `M1021` || null,
+      ("profile-setting".profiles.vulnerability || x_security_profile_group.vulnerability)
+      && ("profile-setting".profiles.spyware || x_security_profile_group.spyware) && `M1050` || null,
+      ("profile-setting".profiles.virus || x_security_profile_group.virus) && `M1049` || null][?@] || `[]`
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: mitigations
+
+  # Table column: the source member names as one string (first 10 only, so a rule with a very large source list stays small)
+  d_source:
+    type: string
+    title: Source
+    syntax: jmespath
+    value: >-
+      join(', ', source.member[:10] || `[]`) || null
+  # Table column: the destination member names as one string (first 10 only)
+  d_destination:
+    type: string
+    title: Destination
+    syntax: jmespath
+    value: >-
+      join(', ', destination.member[:10] || `[]`) || null
+  # Table column: the service member names as one string (first 10 only)
+  d_service:
+    type: string
+    title: Services
+    syntax: jmespath
+    value: >-
+      join(', ', service.member[:10] || `[]`) || null
+  # Where the object lives: device group, virtual system, or "shared". One column instead of three @-prefixed properties
+  d_scope:
+    type: string
+    title: Scope
+    syntax: jmespath
+    value: >-
+      "@device-group" || "@vsys" || "@location"
+  # Detail view: the tag names as one string, instead of the raw "tag" object
+  d_tags:
+    type: string
+    title: Tags
+    syntax: jmespath
+    value: >-
+      join(', ', tag.member[:10] || `[]`) || null
+
+properties:
+  x_id:
+    type: string
+    title: ID
+    description: Virtual system or Panorama scope ID and rule UUID
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  # Present in live responses, but not in the 10.1 reference schema
+  '@uuid':
+    type: string
+    title: UUID
+  '@name':
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  x_vsys_id:
+    type: string
+    title: Virtual System
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaVirtualSystem
+        key-name: x_id
+  x_device_group_id:
+    type: string
+    title: Device Group
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaDeviceGroup
+        key-name: x_id
+  # A firewall rule belongs to its vsys, a Panorama rule to its device group, or for "shared", to Panorama
+  x_parent_id:
+    type: string
+    title: Parent
+    x-samos-hidden: true
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaVirtualSystem
+        key-name: x_id
+      - type-name: PaloAltoPanoramaDeviceGroup
+        key-name: x_id
+      - type-name: PaloAltoPanoramaServer
+        key-name: x_id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+  # Set for rules in "shared" on Panorama
+  x_panorama_id:
+    type: string
+    title: Panorama
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaServer
+        key-name: x_id
+  # Panorama Target tab: the firewalls the rule is installed on (empty = every firewall in the device group)
+  x_target_firewall_ids:
+    type: array
+    title: Target Firewalls
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: PaloAltoPanoramaFirewall
+          key-name: x_id
+  # Panorama Target tab with "Install on all but specified devices": the firewalls the rule is NOT installed on
+  x_excluded_firewall_ids:
+    type: array
+    title: Excluded Firewalls
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: PaloAltoPanoramaFirewall
+          key-name: x_id
+  # Imported address objects, address groups and services named in source, destination and service
+  x_source_ids:
+    type: array
+    title: Source Objects
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: PaloAltoPanoramaAddress
+          key-name: x_id
+        - type-name: PaloAltoPanoramaAddressGroup
+          key-name: x_id
+  x_destination_ids:
+    type: array
+    title: Destination Objects
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: PaloAltoPanoramaAddress
+          key-name: x_id
+        - type-name: PaloAltoPanoramaAddressGroup
+          key-name: x_id
+  x_service_ids:
+    type: array
+    title: Service Objects
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: PaloAltoPanoramaService
+          key-name: x_id
+  x_rulebase:
+    type: string
+    title: Rulebase
+    description: Panorama pre or post rulebase (pre rules are evaluated before the firewall's local rules, post rules after)
+    enum:
+      - pre
+      - post
+  # Profile types in the security profile group referenced by profile-setting.group,
+  # e.g. {"virus": true, "spyware": true}
+  x_security_profile_group:
+    type: object
+    title: Security Profile Group Profiles
+    x-samos-hidden: true
+  '@location':
+    type: string
+    title: Location
+  '@vsys':
+    type: string
+    title: Virtual System Name
+  '@device-group':
+    type: string
+    title: Device Group Name
+  action:
+    type: string
+    title: Action
+  disabled:
+    type: string
+    title: Disabled
+  profile-setting:
+    type: object
+    title: Security Profiles
+  tag:
+    type: object
+    title: Tags (raw)
+    x-samos-hidden: true
+  # The following reference-schema properties are not useful in Surface Command
+  hip-profiles:
+    x-samos-exclude: true
+  source-hip:
+    x-samos-exclude: true
+  destination-hip:
+    x-samos-exclude: true
+  saas-user-list:
+    x-samos-exclude: true
+  saas-tenant-list:
+    x-samos-exclude: true

@@ -1,0 +1,105 @@
+id: salesforce
+name: Salesforce
+author: Rapid7
+version: 0.2.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Update dependencies
+
+# IDs of Surface Command types in this connector.
+# Type IDs must be unique across all connectors. Prefix each with a SnakeCased
+# version of the connector ID.
+types:
+  - SalesforceOrganization
+  - SalesforceCase
+  - SalesforceContact
+  - SalesforceUser
+  - SalesforceUserRole
+  - SalesforceGroup
+  - SalesforceAccount
+  - SalesforceAsset
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+  - id: import_all
+    title: Salesforce Organization, Cases, Contacts, Users, Roles, Groups, Accounts and Assets
+    description: >-
+      Import Organization, Case, Contact, User, UserRole, Group, Account, and
+      Asset records from Salesforce.
+    return_types:
+      - SalesforceOrganization
+      - SalesforceCase
+      - SalesforceContact
+      - SalesforceUser
+      - SalesforceUserRole
+      - SalesforceGroup
+      - SalesforceAccount
+      - SalesforceAsset
+
+# Configuration settings for this connector.
+settings:
+  base_url:
+    type: string
+    title: Base URL
+    description: >-
+      The My Domain URL of your Salesforce org, e.g.
+      https://mycompany.my.salesforce.com. Must start with https://. Used
+      both to request an access token and as the base URL for all API calls.
+    example: https://mycompany.my.salesforce.com
+
+  client_id:
+    type: string
+    title: Client ID
+    description: >-
+      Consumer Key of the External Client App (or Connected App) enabled for
+      the OAuth 2.0 Client Credentials Flow.
+
+  client_secret:
+    type: string
+    title: Client Secret
+    description: >-
+      Consumer Secret of the External Client App (or Connected App) enabled
+      for the OAuth 2.0 Client Credentials Flow.
+    format: password
+
+  active_users:
+    type: boolean
+    title: Only Active Users?
+    description: >-
+      If enabled, only active Salesforce Users are imported. If disabled, all
+      Users (including deactivated Users) are imported. When enabled, records
+      that reference a deactivated User do not link to that User.
+    default: true
+
+  case_states:
+    type: string
+    title: Case States
+    description: >-
+      Import all Cases that match these states. A comma-separated list of
+      Salesforce Case Status values, including any custom statuses your org
+      uses, e.g. New, Working, Escalated. Find your org's values in Setup >
+      Object Manager > Case > Fields & Relationships > Status. For efficient
+      imports, avoid including Closed or any equivalent status (e.g. Resolved
+      or Cancelled), as closed Cases usually make up most of an org's Case
+      history. If empty, no Cases are imported.
+    example: New, Working, Escalated
+    default: New, Working, Escalated
+    nullable: true
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - iam
+  - asset_management
+
+# If true, when installing this connector in Surface Command, Rapid7
+# Orchestrator installation instructions will display.
+show_orchestrator_ui: false

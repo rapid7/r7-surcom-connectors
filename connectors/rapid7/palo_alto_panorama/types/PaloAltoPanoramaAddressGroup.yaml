@@ -1,0 +1,172 @@
+x-samos-type-name: PaloAltoPanoramaAddressGroup
+x-samos-namespace: palo.alto.panorama
+
+title: Palo Alto Address Group
+description: A static or dynamic group of address objects used in security rules
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.component-group
+    subtype-priority: 3
+
+$ref: https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-panorama-api/get-started-with-the-pan-os-rest-api#/components/schemas/objects-address-groups
+
+x-samos-keys:
+  - x_id
+
+required:
+  - x_id
+
+x-samos-table:
+  - name: '@name'
+  - name: d_group_type
+  - name: description
+  - name: d_scope
+
+x-samos-detail:
+  - name: '@name'
+  - name: d_group_type
+  - name: d_members
+  - name: dynamic.filter
+  - name: x_member_ids
+  - name: description
+  - name: d_tags
+  - name: d_scope
+  - name: '@location'
+  - name: x_vsys_id
+  - name: x_device_group_id
+  - name: x_panorama_id
+  - name: x_firewall_id
+
+x-samos-derived-properties:
+  # Table column: a group is either static (member list) or dynamic (tag filter)
+  d_group_type:
+    type: string
+    title: Type
+    syntax: jmespath
+    value: >-
+      static != null && 'Static' || dynamic != null && 'Dynamic' || null
+  # Detail view: the first 10 static member names as one string (full list is in x_member_ids)
+  d_members:
+    type: string
+    title: Members
+    syntax: jmespath
+    value: >-
+      static != null && (join(', ', static.member[:10] || `[]`) || null) || null
+  # Where the object lives: device group, virtual system, or "shared". One column instead of three @-prefixed properties
+  d_scope:
+    type: string
+    title: Scope
+    syntax: jmespath
+    value: >-
+      "@device-group" || "@vsys" || "@location"
+  # Detail view: the tag names as one string, instead of the raw "tag" object
+  d_tags:
+    type: string
+    title: Tags
+    syntax: jmespath
+    value: >-
+      join(', ', tag.member[:10] || `[]`) || null
+
+properties:
+  x_id:
+    type: string
+    title: ID
+    description: Firewall ID, vsys name and group name
+    x-samos-immutable: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+  '@name':
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  description:
+    type: string
+    title: Description
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: description
+  # The reference schema only defines this inside a oneOf (static or dynamic)
+  static:
+    type: object
+    title: Static Members
+  # Imported address objects and address groups (groups can be nested) named in static.member
+  x_member_ids:
+    type: array
+    title: Member Objects
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: PaloAltoPanoramaAddress
+          key-name: x_id
+        - type-name: PaloAltoPanoramaAddressGroup
+          key-name: x_id
+    x-samos-fulfills:
+      type-name: core.component-group
+      property-name: members
+  x_vsys_id:
+    type: string
+    title: Virtual System
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaVirtualSystem
+        key-name: x_id
+  x_device_group_id:
+    type: string
+    title: Device Group
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaDeviceGroup
+        key-name: x_id
+  # The vsys or device group that holds the object, or for "shared", Panorama or the firewall
+  x_parent_id:
+    type: string
+    title: Parent
+    x-samos-hidden: true
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaVirtualSystem
+        key-name: x_id
+      - type-name: PaloAltoPanoramaDeviceGroup
+        key-name: x_id
+      - type-name: PaloAltoPanoramaServer
+        key-name: x_id
+      - type-name: PaloAltoPanoramaFirewall
+        key-name: x_id
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: is_part_of_ref
+  # Set for objects in "shared" on Panorama
+  x_panorama_id:
+    type: string
+    title: Panorama
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaServer
+        key-name: x_id
+  # Set for objects in "shared" on a firewall read directly
+  x_firewall_id:
+    type: string
+    title: Firewall
+    x-samos-ref-types:
+      - type-name: PaloAltoPanoramaFirewall
+        key-name: x_id
+  '@location':
+    type: string
+    title: Location
+  '@vsys':
+    type: string
+    title: Virtual System Name
+  '@device-group':
+    type: string
+    title: Device Group Name
+  dynamic:
+    type: object
+    title: Dynamic Membership
+    properties:
+      filter:
+        type: string
+        title: Tag Filter
+  tag:
+    type: object
+    title: Tags (raw)
+    x-samos-hidden: true

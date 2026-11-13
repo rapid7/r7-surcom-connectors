@@ -1,0 +1,301 @@
+x-samos-type-name: DellOMEDevice
+x-samos-namespace: dell.ome
+title: Dell OpenManage Enterprise Device
+description: A device managed by Dell OpenManage Enterprise, representing servers and infrastructure components.
+
+x-samos-extends-types:
+  - type-name: Machine
+    subtype-priority: 3
+
+x-samos-keys:
+  - d_id
+
+required:
+  - Id
+
+x-samos-table:
+  - name: DeviceName
+  - name: Model
+  - name: DeviceServiceTag
+  - name: ConnectionState
+  - name: LastStatusTime
+
+x-samos-detail:
+  - name: DeviceName
+  - name: Model
+  - name: DeviceServiceTag
+  - name: ChassisServiceTag
+  - name: PowerState
+  - name: ConnectionState
+  - name: Identifier
+  - name: AssetTag
+  - name: Type
+  - name: SystemId
+  - name: Status
+  - name: ManagedState
+  - name: DeviceManagement
+  - name: DeviceCapabilities
+  - name: LastInventoryTime
+  - name: LastStatusTime
+
+x-samos-derived-properties:
+  d_id:
+    title: Object ID
+    x-samos-hidden: true
+    x-samos-immutable: true
+    type: string
+    syntax: jmespath
+    value: 'Id'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  d_make:
+    # Dell OME only manages Dell hardware; no vendor/make field exists in the API response.
+    title: Make
+    x-samos-hidden: true
+    type: string
+    syntax: expression
+    value: 'Dell'
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: make
+
+  d_hostnames:
+    title: Hostnames
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: '[DeviceName] | [?@]'
+    items:
+      type: string
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: hostnames
+
+  d_qualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'DeviceName && contains(DeviceName, `.`) && DeviceName || null'
+    x-samos-correlation:
+      correlation-key: Machine.qualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_unqualified_hostname:
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'DeviceName && !contains(DeviceName, `.`) && DeviceName || null'
+    x-samos-correlation:
+      correlation-key: Machine.unqualified-hostname
+      correlation-type: Machine
+      priority: 2
+
+  d_ips:
+    # Extracts NetworkAddress from each DeviceManagement interface (e.g. iDRAC).
+    title: IP Addresses
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: 'DeviceManagement[?NetworkAddress != ``].NetworkAddress'
+    items:
+      type: string
+      format: ip-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: ips
+
+  d_mac_addresses:
+    title: MAC Addresses
+    x-samos-hidden: true
+    type: array
+    syntax: jmespath
+    value: 'DeviceManagement[?MacAddress != ``].MacAddress'
+    items:
+      type: string
+      format: mac-addr
+    x-samos-fulfills:
+      type-name: Machine
+      property-name: mac_addresses
+    x-samos-correlation:
+      correlation-key: MacAddr.value
+      correlation-type: Machine
+      priority: 4
+
+  d_active:
+    # PowerState 17 = ON; device is considered active only when powered on.
+    title: Active?
+    x-samos-hidden: true
+    type: boolean
+    syntax: jmespath
+    value: 'PowerState == `17`'
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: active
+
+  d_asset_class:
+    # Type resolves via DellOMEDeviceType → map_to → NoeticEnumMachineAssetClass.
+    title: Asset Class
+    x-samos-hidden: true
+    type: string
+    syntax: jmespath
+    value: 'Type'
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_class
+    x-samos-ref-types:
+      - type-name: DellOMEDeviceType
+        key-name: id
+
+properties:
+  Id:
+    title: Id
+    type: integer
+    x-samos-hidden: true
+    x-samos-immutable: true
+
+  DeviceName:
+    title: Device Name
+    type: string
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  Identifier:
+    title: Identifier
+    type: string
+
+  DeviceServiceTag:
+    title: Device Service Tag
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: serial_number
+    x-samos-correlation:
+      correlation-key: core.managed.asset.serial_number
+      correlation-type: Machine
+      priority: 3
+
+  ChassisServiceTag:
+    # For rack/tower servers this equals DeviceServiceTag; for blades it is the chassis tag.
+    title: Chassis Service Tag
+    type: string
+
+  AssetTag:
+    title: Asset Tag
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: asset_tag
+
+  Model:
+    title: Model
+    type: string
+    x-samos-fulfills:
+      type-name: core.managed.asset
+      property-name: model
+
+  Type:
+    title: Device Type Code
+    type: string
+    description: >-
+      From GET /api/DeviceService/DeviceType:
+      1000 = SERVER, 2000 = CHASSIS, 3000 = STORAGE, 4000 = NETWORK_IOM,
+      8000 = STORAGE_IOM, 9000 = NETWORK_CONTROLLER.
+    x-samos-ref-types:
+      - type-name: DellOMEDeviceType
+        key-name: id
+
+  SystemId:
+    title: System ID
+    type: integer
+
+  PowerState:
+    title: Power State Code
+    type: integer
+    description: >-
+      From GET /api/DeviceService/PowerStates:
+      1 = Unknown, 17 = On, 18 = Off.
+
+  ManagedState:
+    title: Managed State Code
+    type: integer
+    description: >-
+      Vendor-defined management lifecycle state: 1000 = Discovered,
+      3000 = Managed, 5000 = Unmanaged.
+
+  Status:
+    title: Status Code
+    type: string
+    description: >-
+      From GET /api/DeviceService/DeviceStatuses:
+      1000 = Normal, 2000 = Unknown, 3000 = Warning, 4000 = Critical,
+      5000 = No Status (device/group has no valid status).
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: operational_status
+    x-samos-ref-types:
+      - type-name: DellOMEStatus
+        key-name: id
+
+  ConnectionState:
+    title: Connected?
+    type: boolean
+
+  LastInventoryTime:
+    title: Last Inventory Time
+    type: string
+    format: date-time
+
+  LastStatusTime:
+    title: Last Status Time
+    type: string
+    format: date-time
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: last_seen
+
+  DeviceCapabilities:
+    title: Device Capabilities
+    type: array
+    description: >-
+      Array of capability codes indicating features supported by this device.
+      Each code resolves to a named DellOMECapability record.
+    items:
+      type: string
+      x-samos-ref-types:
+        - type-name: DellOMECapability
+          key-name: id
+
+  DeviceManagement:
+    title: Device Management Interfaces
+    type: array
+    items:
+      type: object
+      properties:
+        ManagementId:
+          title: Management ID
+          type: integer
+        NetworkAddress:
+          title: Network Address
+          type: string
+        MacAddress:
+          title: MAC Address
+          type: string
+        ManagementURL:
+          title: Management URL
+          type: string
+        ManagementType:
+          title: Management Type Code
+          type: integer
+        InstrumentationName:
+          title: Instrumentation Name
+          type: string
+        DnsName:
+          title: DNS Name
+          type: string
+        Status:
+          title: Status Code
+          type: integer

@@ -10,6 +10,9 @@ x-samos-extends-types:
 x-samos-keys:
   - OrgId
 
+required:
+  - OrgId
+
 x-samos-table:
   - name: OrgName
   - name: OrgRef

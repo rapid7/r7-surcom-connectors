@@ -1,0 +1,58 @@
+id: imperva.cloud.waf
+name: Imperva Cloud WAF
+author: Rapid7
+version: 1.1.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+current_changes:
+  - Update dependencies
+
+types:
+  - ImpervaCloudWAFAccount
+  - ImpervaCloudWAFSite
+
+functions:
+  - id: test
+
+  - id: import_all
+    title: Imperva Accounts and Sites
+    description: Import Accounts and Sites from Imperva Cloud WAF.
+    return_types:
+      - ImpervaCloudWAFAccount
+      - ImpervaCloudWAFSite
+
+settings:
+  api_id:
+    type: string
+    title: API ID
+    description: API identifier generated for authenticating with the Imperva Cloud WAF API
+
+  api_key:
+    type: string
+    title: API Key
+    description: API key generated for authenticating with the Imperva Cloud WAF API.
+    format: password
+
+  account_id:
+    type: string
+    title: Account ID
+    description: >-
+      Optional Imperva account ID. When set, only that account and its websites are
+      imported. When left empty, the account belonging to the API credentials is
+      imported, along with any accounts it manages if it is a Reseller account.
+    example: '1234567'
+    nullable: true
+
+  verify_tls:
+    type: boolean
+    title: Verify TLS?
+    description: If enabled, verify the server's identity
+    default: true
+
+runtime: py311
+
+categories:
+  - external_attack_surface
+  - network_firewall
+
+show_orchestrator_ui: false

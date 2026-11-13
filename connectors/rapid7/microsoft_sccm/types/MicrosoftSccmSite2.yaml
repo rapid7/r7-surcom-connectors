@@ -1,0 +1,110 @@
+x-samos-type-name: MicrosoftSccmSite2
+x-samos-namespace: microsoft.sccm
+title: Microsoft SCCM Site
+
+# As this is a WMI dataset, there is no refdoc for it.
+
+x-samos-extends-types:
+  - type-name: core.named-object
+
+x-samos-keys: # TODO - these are not guids, and would not be unique across profiles
+  - SiteCode
+
+required:
+  - SiteCode
+
+x-samos-table:
+  - name: SiteCode
+  - name: SiteName
+  - name: ServerName
+  - name: BuildNumber
+  - name: Version
+
+properties:
+  BuildNumber:
+    type: number
+    title: Build Number
+  ContentLibraryLocation:
+    type: string
+  ContentLibraryMoveProgress:
+    type: number
+  ContentLibraryStatus:
+    type: number
+  Features:
+    type: string
+  InstallDir:
+    type: string
+    title: Install Directory
+  Mode:
+    type: number
+    Title: Mode
+  ReportingSiteCode:
+    type: string
+  RequestedStatus:
+    type: number
+  SecondarySiteCMUpdateStatus:
+    type: number
+  ServerName:
+    type: string
+    title: Server Name
+  SiteCode:
+    type: string
+    title: Site Code
+    x-samos-immutable: true
+  SiteName:
+    type: string
+    title: Site Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+  Status:
+    type: number
+    title: Status
+  TimeZoneInfo:
+    type: string
+  Type:
+    type: number
+  Version:
+    type: string
+    title: Version
+
+  # extra properties from SMS_Site:
+  __NAMESPACE:
+    type: json
+    x-samos-hidden: true
+  __PROPERTY_COUNT:
+    type: json
+    x-samos-hidden: true
+  __DYNASTY:
+    type: json
+    x-samos-hidden: true
+  __DERIVATION:
+    type: json
+    x-samos-hidden: true
+  __CLASS:
+    type: json
+    x-samos-hidden: true
+  __LAZYPROPERTIES:
+    type: json
+    x-samos-hidden: true
+  '@odata.etag':
+    type: json
+    x-samos-hidden: true
+  __QUALIFIER_SECURITYVERBS:
+    type: json
+    x-samos-hidden: true
+  __SERVER:
+    type: json
+    x-samos-hidden: true
+  __RELPATH:
+    type: json
+    x-samos-hidden: true
+  __PATH:
+    type: json
+    x-samos-hidden: true
+  __GENUS:
+    type: json
+    x-samos-hidden: true
+  __SUPERCLASS:
+    type: json
+    x-samos-hidden: true

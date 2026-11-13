@@ -1,0 +1,83 @@
+x-samos-type-name: AssetPandaModule
+x-samos-namespace: asset.panda
+title: Asset Panda Module
+description: A module managed in Asset Panda, sourced from GET /modules.
+  Modules group collections of assets within an account.
+x-samos-detail-prefer-type-title: true
+
+x-samos-extends-types:
+  - type-name: core.component-group
+    subtype-priority: 3
+
+# id and moduleId hold the same value in the API response
+x-samos-keys:
+  - id
+
+required:
+  - id
+
+x-samos-table:
+  - name: name
+  - name: mainCollectionName
+  - name: createdAt
+
+x-samos-detail:
+  - name: name
+  - name: mainCollectionName
+  - name: accountId
+  - name: orgId
+  - name: moduleId
+  - name: deleted
+  - name: createdAt
+
+properties:
+  id:
+    type: string
+    title: ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: id
+
+  # moduleId equals id in the API; kept for reference by entity types
+  moduleId:
+    type: string
+    title: Module ID
+    x-samos-immutable: true
+    x-samos-hidden: true
+
+  name:
+    type: string
+    title: Name
+    x-samos-fulfills:
+      type-name: core.named-object
+      property-name: name
+
+  mainCollectionName:
+    type: string
+    title: Main Collection Name
+    description: Name of the primary collection in this module (e.g. Assets).
+
+  accountId:
+    type: string
+    title: Account
+    x-samos-ref-types:
+      - type-name: AssetPandaAccount
+        key-name: id
+
+  orgId:
+    type: string
+    title: Org ID
+
+  deleted:
+    type: boolean
+    title: Deleted?
+
+  createdAt:
+    type: integer
+    title: Created At
+    format: epoch-millis
+    x-samos-fulfills:
+      type-name: core.component
+      property-name: first_seen

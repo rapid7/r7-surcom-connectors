@@ -1,0 +1,40 @@
+id: teamviewer.tensor
+name: TeamViewer Tensor
+author: Rapid7
+version: 0.2.0
+notice: Copyright © 2026 Rapid7. All rights reserved.
+
+# Add one or two entries that describe changes in this version.
+# The publishing process maintains prior changelog entries.
+current_changes:
+  - Update dependencies
+
+# Functions provided by this connector. Include a `test` function and at least
+# one other function that returns one or more types defined in `types`.
+functions:
+  - id: test
+
+# Configuration settings for this connector.
+settings:
+  url:
+    type: string
+    title: Base URL
+    description: Base URL of the TeamViewer Web API.
+    example: https://webapi.teamviewer.com
+    default: https://webapi.teamviewer.com
+
+  script_token:
+    type: string
+    format: password
+    title: Script Token
+    description: >-
+      Company-level Script Token created in the TeamViewer Management Console
+      with read permissions for User management, Group management and
+      company-managed devices.
+
+# Runtime platform for this connector.
+runtime: py311
+
+# Categories for this connector in the Extension Library.
+categories:
+  - endpoint_management

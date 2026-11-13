@@ -8,6 +8,9 @@ x-samos-extends-types:
 x-samos-keys:
   - Moid
 
+required:
+  - Moid
+
 x-samos-table:
   - name: Name
   - name: AlarmSummary.Health

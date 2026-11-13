@@ -13,7 +13,17 @@ class QualysEnumSeverity(dict):
         super().__init__(type=self.__class__.__name__, content=content)
 
 
+class QualysFinding(dict):
+    def __init__(self, content: dict):
+        super().__init__(type=self.__class__.__name__, content=content)
+
+
 class QualysFinding2(dict):
+    def __init__(self, content: dict):
+        super().__init__(type=self.__class__.__name__, content=content)
+
+
+class QualysHost(dict):
     def __init__(self, content: dict):
         super().__init__(type=self.__class__.__name__, content=content)
 
@@ -24,6 +34,11 @@ class QualysHost2(dict):
 
 
 class QualysQID(dict):
+    def __init__(self, content: dict):
+        super().__init__(type=self.__class__.__name__, content=content)
+
+
+class QualysQidDetail(dict):
     def __init__(self, content: dict):
         super().__init__(type=self.__class__.__name__, content=content)
 

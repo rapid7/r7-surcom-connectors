@@ -1,0 +1,182 @@
+[
+  {
+    "id": "1",
+    "value": "POWER_CONTROL_ON",
+    "description": "Power up"
+  },
+  {
+    "id": "2",
+    "value": "POWER_CONTROL_OFF",
+    "description": "Power Down hard/graceful"
+  },
+  {
+    "id": "3",
+    "value": "POWER_CONTROL_RESET",
+    "description": "Power reset hard/graceful"
+  },
+  {
+    "id": "4",
+    "value": "SENSOR_DETAILS",
+    "description": "Get Sensor Info, sub system health details"
+  },
+  {
+    "id": "5",
+    "value": "UNKNOWN_5",
+    "description": "Observed in device responses; name not documented in InventoryDetails API"
+  },
+  {
+    "id": "6",
+    "value": "UNKNOWN_6",
+    "description": "Observed in device responses; name not documented in InventoryDetails API"
+  },
+  {
+    "id": "7",
+    "value": "CONFIGURE",
+    "description": "Set attributes on the system"
+  },
+  {
+    "id": "8",
+    "value": "FW_UPDATE",
+    "description": "Remote Firmware update capability"
+  },
+  {
+    "id": "9",
+    "value": "BLINK",
+    "description": "Identify function on server"
+  },
+  {
+    "id": "10",
+    "value": "UNKNOWN_10",
+    "description": "Observed on blade/chassis servers; name not documented in InventoryDetails API"
+  },
+  {
+    "id": "11",
+    "value": "HW_LOGS",
+    "description": "System Hardware logs"
+  },
+  {
+    "id": "12",
+    "value": "DIAGS",
+    "description": "Diagnostics"
+  },
+  {
+    "id": "13",
+    "value": "TSR",
+    "description": "Tech Support Report"
+  },
+  {
+    "id": "14",
+    "value": "POWER_HISTORY",
+    "description": "Retrieve historical power data"
+  },
+  {
+    "id": "15",
+    "value": "TEMP_HISTORY",
+    "description": "Retrieve historical temperature data"
+  },
+  {
+    "id": "16",
+    "value": "VIRTUAL_CONSOLE",
+    "description": "Ability to execute RACADM tasks"
+  },
+  {
+    "id": "17",
+    "value": "FEATURES_14G",
+    "description": "14G specific features"
+  },
+  {
+    "id": "18",
+    "value": "DEVICE_ALERT",
+    "description": "Device capable of sending alerts"
+  },
+  {
+    "id": "30",
+    "value": "REMOTE_RACADM",
+    "description": "Remote RACADM access"
+  },
+  {
+    "id": "31",
+    "value": "REMOTE_IPMI",
+    "description": "Remote IPMI access"
+  },
+  {
+    "id": "32",
+    "value": "REMOTE_SSH",
+    "description": "Remote SSH access"
+  },
+  {
+    "id": "33",
+    "value": "UNKNOWN_33",
+    "description": "Observed in newer-generation servers; name not documented in InventoryDetails API"
+  },
+  {
+    "id": "41",
+    "value": "SHARED_STORAGE_ALLOWED",
+    "description": "Capability to share externally assigned Storage"
+  },
+  {
+    "id": "50",
+    "value": "UNKNOWN_50",
+    "description": "Observed in most modern servers; name not documented in InventoryDetails API"
+  },
+  {
+    "id": "201",
+    "value": "NGM_CHASSIS",
+    "description": "Next Generation Modular chassis capability"
+  },
+  {
+    "id": "202",
+    "value": "SERVER_PORTS_NIC_TEAMING",
+    "description": "MX chassis supports server ports NIC teaming"
+  },
+  {
+    "id": "203",
+    "value": "UNKNOWN_203",
+    "description": "Observed on some server models; name not documented in InventoryDetails API"
+  },
+  {
+    "id": "204",
+    "value": "UNKNOWN_204",
+    "description": "Observed on some server models; name not documented in InventoryDetails API"
+  },
+  {
+    "id": "205",
+    "value": "UNKNOWN_205",
+    "description": "Observed on some server models; name not documented in InventoryDetails API"
+  },
+  {
+    "id": "208",
+    "value": "UNKNOWN_208",
+    "description": "Observed in nearly all modern servers; name not documented in InventoryDetails API"
+  },
+  {
+    "id": "209",
+    "value": "UNKNOWN_209",
+    "description": "Observed in iDRAC 5.x+ servers; name not documented in InventoryDetails API"
+  },
+  {
+    "id": "211",
+    "value": "UNKNOWN_211",
+    "description": "Observed in most modern servers; name not documented in InventoryDetails API"
+  },
+  {
+    "id": "212",
+    "value": "UNKNOWN_212",
+    "description": "Observed in most modern servers; name not documented in InventoryDetails API"
+  },
+  {
+    "id": "1001",
+    "value": "UNKNOWN_1001",
+    "description": "Observed in newer-generation servers; name not documented in InventoryDetails API"
+  },
+  {
+    "id": "1009",
+    "value": "UNKNOWN_1009",
+    "description": "Observed in most modern servers; name not documented in InventoryDetails API"
+  },
+  {
+    "id": "1012",
+    "value": "UNKNOWN_1012",
+    "description": "Observed in newer-generation servers; name not documented in InventoryDetails API"
+  }
+]

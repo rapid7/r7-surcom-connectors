@@ -10,6 +10,7 @@ This file is generated from the connector.spec.yaml file, using codegen:
 from typing import Any, Optional, TypedDict  # noqa: F401
 
 Settings = TypedDict('Settings', {
+    'region': str,
     'username': str,
     'password': str,
     'tenant_id': Optional[str],

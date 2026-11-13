@@ -12,6 +12,9 @@ $ref: https://phosphorus.io/api/swagger/public/swagger.json#/components/schemas/
 x-samos-keys:
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: addr
   - name: hostname

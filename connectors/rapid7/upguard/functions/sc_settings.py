@@ -10,6 +10,7 @@ This file is generated from the connector.spec.yaml file, using codegen:
 from typing import Any, Optional, TypedDict  # noqa: F401
 
 Settings = TypedDict('Settings', {
+    'url': Optional[str],
     'api_key': str,
     'min_risk_severity': str,
     'active_domains_only': bool,

@@ -17,6 +17,9 @@ x-samos-keys:
   - d_id
   - id
 
+required:
+  - id
+
 x-samos-table:
   - name: name
   - name: device_type
